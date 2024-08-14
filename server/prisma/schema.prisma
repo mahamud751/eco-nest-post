@@ -1,0 +1,228 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(uuid())
+  name       String
+  email      String     @unique
+  phone      String?
+  userId     String?
+  refferCode String?
+  gender     Gender     @default(Other)
+  password   String
+  address    String?
+  role       UserRole   @default(user)
+  userStatus UserStatus @default(Active)
+  branchId   String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  branch     Branch?    @relation(fields: [branchId], references: [id])
+  advances   Advance[]  @relation("VendorAdvances")
+}
+
+model Vendor {
+  id        String       @id @default(uuid())
+  name      String
+  number    String
+  email     String
+  address   String
+  status    VendorStatus @default(Pending)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Product {
+  id            String       @id @default(uuid())
+  name          String
+  categoryId    String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  branchId      String?
+  colors        String[]
+  desc          String?
+  discountPrice String?
+  discountType  String       @default("no")
+  flashsale     String       @default("no")
+  fulldesc      String?
+  latest        String       @default("no")
+  reviewId      String?
+  sizes         String[]
+  status        String       @default("active")
+  stock         String       @default("yes")
+  subcategoryId String?
+  userInfo      Json?
+  views         Int          @default(0)
+  feature       String       @default("yes")
+  price         String
+  photos        Json[]
+  branch        Branch?      @relation(fields: [branchId], references: [id])
+  category      Category     @relation("CategoryProducts", fields: [categoryId], references: [id])
+  review        Review?      @relation(fields: [reviewId], references: [id])
+  subcategory   SubCategory? @relation("SubCategoryProducts", fields: [subcategoryId], references: [id])
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  name          String
+  createdAt     DateTime      @default(now())
+  status        String        @default("active")
+  updatedAt     DateTime      @updatedAt
+  photos        Json[]
+  products      Product[]     @relation("CategoryProducts")
+  subCategories SubCategory[] @relation("CategorySubCategories")
+}
+
+model SubCategory {
+  id         String    @id @default(uuid())
+  name       String
+  categoryId String
+  createdAt  DateTime  @default(now())
+  status     String    @default("active")
+  updatedAt  DateTime  @updatedAt
+  photos     Json[]
+  products   Product[] @relation("SubCategoryProducts")
+  category   Category  @relation("CategorySubCategories", fields: [categoryId], references: [id])
+}
+
+model Variant {
+  id        String   @id @default(uuid())
+  name      String
+  options   String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Branch {
+  id       String    @id @default(uuid())
+  name     String
+  products Product[]
+  User     User[]
+}
+
+model Banner {
+  id        String   @id @default(uuid())
+  name      String
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  photos    Json[]
+}
+
+model Review {
+  id       String    @id @default(uuid())
+  content  String
+  products Product[]
+}
+
+model Blog {
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  desc         String
+  name         String
+  status       String        @default("active")
+  photos       Json[]
+  blogComments BlogComment[] @relation("BlogComments")
+}
+
+model BlogComment {
+  id        String   @id @default(uuid())
+  userName  String
+  email     String?
+  comment   String
+  replies   Json?
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  blogId    String
+  blog      Blog     @relation("BlogComments", fields: [blogId], references: [id])
+}
+
+model Demo {
+  id              String    @id @default(uuid())
+  userName        String
+  email           String?
+  advanceId       String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  status          String    @default("Pending")
+  isDemoPublished Boolean   @default(false)
+  advance         Advance?  @relation(fields: [advanceId], references: [id])
+  files           File[]    @relation("DemoPhotos")
+  Advance         Advance[] @relation("AdvanceDemos")
+}
+
+model Advance {
+  id         String   @id @default(uuid())
+  name       String
+  number     String
+  email      String
+  students   String
+  ratio      String
+  topPart    String
+  topFab     String
+  bottomPart String
+  bottomFab  String
+  address    String
+  quantity   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  status     String   @default("pending")
+  fileId     String?
+  Demo       Demo[]
+  demo       Demo[]   @relation("AdvanceDemos")
+  files      File[]   @relation("AdvanceDetails")
+  vendors    User[]   @relation("VendorAdvances")
+}
+
+model File {
+  id      String    @id @default(uuid())
+  demoId  String?
+  src     String    @unique
+  title   String
+  demo    Demo?     @relation("DemoPhotos", fields: [demoId], references: [id])
+  Advance Advance[] @relation("AdvanceDetails")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  entityId   String
+  entityType String
+  action     String
+  oldValue   Json?
+  newValue   Json?
+  timestamp  DateTime @default(now())
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum UserRole {
+  superAdmin
+  admin
+  user
+  manager
+  vendor
+  schoolManager
+}
+
+enum UserStatus {
+  Active
+  Deactive
+  Blocked
+}
+
+enum VendorStatus {
+  Pending
+  Processing
+  Approved
+  Canceled
+}

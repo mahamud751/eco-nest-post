@@ -1,0 +1,42 @@
+.appBar {
+  background-color: transparent;
+  box-shadow: none;
+}
+.sidebar {
+  height: 100vh;
+}
+.listItemButton {
+  transition: background-color 0.3s ease;
+  margin: 0px 10px;
+  color: #637381;
+}
+
+.listItemButton:hover {
+  background-color: rgb(237, 231, 246);
+  color: rgb(103, 58, 183);
+}
+
+.submenuButton {
+  padding-left: 2.5rem;
+}
+
+.submenuButton:hover {
+  background-color: #e0e0e0;
+}
+
+.submenuItem {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.submenuItemButton {
+  width: 100%;
+  transition: background-color 0.3s ease;
+  color: #637381;
+}
+
+.submenuItemButton:hover {
+  background-color: none;
+  color: rgb(103, 58, 183);
+}
