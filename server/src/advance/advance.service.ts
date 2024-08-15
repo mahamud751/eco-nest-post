@@ -179,7 +179,14 @@ export class AdvanceService {
     // Handle file system operations if needed
     // You might want to manually handle file system updates here
 
-    return updatedAdvance;
+    await this.auditLogService.log(
+      id,
+      'Advance',
+      'UPDATE',
+      advance,
+      updatedAdvance,
+    );
+    return { message: 'Advance Order updated successfully', updatedAdvance };
   }
 
   async remove(id: string) {
