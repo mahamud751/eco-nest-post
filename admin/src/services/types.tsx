@@ -85,7 +85,7 @@ export interface Advance {
   bottomPart: string;
   bottomFab: string;
   address: string;
-  quantity: number;
+  quantity: string;
   createdAt: Date;
   updatedAt: Date;
   status: string;

@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsArray,
+  IsEnum,
+} from 'class-validator';
 import { FileDetailDto } from 'src/dto/FileDetailsDto';
 
 export class CreateAdvanceDto {
@@ -75,4 +81,12 @@ export class CreateAdvanceDto {
   @IsArray()
   @IsOptional()
   files?: FileDetailDto[];
+
+  @ApiPropertyOptional({
+    description: 'The status of the product',
+    enum: ['pending', 'processing', 'approve', 'reject'],
+  })
+  @IsEnum(['pending', 'processing', 'approve', 'reject'])
+  @IsOptional()
+  status?: string;
 }

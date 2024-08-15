@@ -1,46 +1,33 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import Image from "next/image";
-
 import FileUploadBox from "./FileUpload";
 
-interface MultipleImageUploadProps {
+interface ImagePdfUploadProps {
   files?: File[];
-  onRemoveImage?: (index: number) => void;
   onFilesChangePdf?: (files: File[]) => void;
   isMultiple?: boolean;
   isFile?: boolean;
 }
 
-const ImagePdfUpload: React.FC<MultipleImageUploadProps> = ({
+const ImagePdfUpload: React.FC<ImagePdfUploadProps> = ({
   files = [],
   onFilesChangePdf,
-  onRemoveImage,
   isMultiple,
   isFile,
 }) => {
-  const [fileUrls, setFileUrls] = useState<string[]>([]);
+  const [filePreviews, setFilePreviews] = useState<string[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(files)) {
-      // Clean up previous URLs
-      fileUrls.forEach((url) => URL.revokeObjectURL(url));
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setFilePreviews(previews);
 
-      // Generate new URLs
-      const urls = files.map((file) => {
-        if (file instanceof File) {
-          return URL.createObjectURL(file);
-        }
-        return "";
-      });
-      setFileUrls(urls);
-    }
-
-    // Clean up URLs when component unmounts
     return () => {
-      fileUrls.forEach((url) => URL.revokeObjectURL(url));
+      previews.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [files]);
+
+  console.log(filePreviews);
 
   const handlePdfChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onFilesChangePdf) {
@@ -48,20 +35,9 @@ const ImagePdfUpload: React.FC<MultipleImageUploadProps> = ({
       if (fileList) {
         const fileArray = Array.from(fileList);
         const urls = fileArray.map((file) => URL.createObjectURL(file));
-        setFileUrls((prevUrls) => [...prevUrls, ...urls]);
+        setFilePreviews((prev) => [...prev, ...urls]);
         onFilesChangePdf(fileArray);
       }
-    }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    setFileUrls((prevUrls) => {
-      const updatedUrls = prevUrls.filter((_, i) => i !== index);
-      return updatedUrls;
-    });
-
-    if (onRemoveImage) {
-      onRemoveImage(index);
     }
   };
 
@@ -73,18 +49,17 @@ const ImagePdfUpload: React.FC<MultipleImageUploadProps> = ({
         isFile={isFile}
       />
       <div className="mt-12 d-flex flex-wrap">
-        {fileUrls.map((fileUrl, index) => (
+        {filePreviews.map((preview, index) => (
           <div key={index} className="mt-3 relative inline-block mx-5">
-            {/* Conditionally render preview based on file type */}
-            {fileUrl.endsWith(".pdf") ? (
+            {preview.endsWith(".pdf") ? (
               <iframe
-                src={fileUrl}
+                src={preview}
                 title={`Preview ${index}`}
                 style={{ width: "200px", height: "200px" }}
               />
             ) : (
               <Image
-                src={fileUrl}
+                src={preview}
                 alt={`Preview ${index}`}
                 width={200}
                 height={200}
@@ -92,7 +67,9 @@ const ImagePdfUpload: React.FC<MultipleImageUploadProps> = ({
               />
             )}
             <ClearIcon
-              onClick={() => handleRemoveImage(index)}
+              onClick={() =>
+                setFilePreviews((prev) => prev.filter((_, i) => i !== index))
+              }
               className="absolute -top-2 -right-2 cursor-pointer text-white bg-red-500 rounded-full p-1"
             />
           </div>

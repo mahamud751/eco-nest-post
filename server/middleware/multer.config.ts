@@ -1,12 +1,12 @@
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
 
 // Define the Multer options
 export const multerOptions: MulterOptions = {
   storage: diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'public/uploads');
+      cb(null, 'public/uploads'); // Use relative path
     },
     filename: (req, file, cb) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -22,6 +22,6 @@ export const multerOptions: MulterOptions = {
     }
   },
   limits: {
-    fileSize: 5000000, // 5 MB
+    fileSize: 10 * 1024 * 1024, // 10 MB size limit
   },
 };

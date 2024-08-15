@@ -91,6 +91,32 @@ const AddForm: React.FC<AddFormProps> = ({
     }
   };
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFilesChange = (newFiles: File[]) => {
+    const fileObjects = newFiles.map((file) => ({
+      title: file.name,
+      src: URL.createObjectURL(file),
+    }));
+
+    // Set the files and update the preview if setFiles is defined
+    setFiles?.(newFiles);
+    setPreviews(fileObjects.map((file) => file.src));
+  };
+
+  useEffect(() => {
+    if (files.length > 0) {
+      handleFilesChange(files);
+    }
+  }, [files]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -145,29 +171,23 @@ const AddForm: React.FC<AddFormProps> = ({
       ];
 
       if (isFile === true && files) {
-        Array.from(files).forEach((file) => {
-          formData.append("file", file);
-        });
+        const base64Files: { [key: string]: any } = {};
+        for (const file of files) {
+          const base64 = await fileToBase64(file);
+          base64Files[file.name] = base64;
+        }
+        data.files = Object.entries(base64Files).map(([title, src]) => ({
+          title,
+          src,
+        }));
       } else {
         data.photos = combinedPhotos;
       }
 
       const response =
         id === ""
-          ? await axios.post(endpoint, isFile ? formData : data, {
-              headers: {
-                "Content-Type": isFile
-                  ? "multipart/form-data"
-                  : "application/json",
-              },
-            })
-          : await axios.patch(endpoint, isFile ? formData : data, {
-              headers: {
-                "Content-Type": isFile
-                  ? "multipart/form-data"
-                  : "application/json",
-              },
-            });
+          ? await axios.post(endpoint, data)
+          : await axios.patch(endpoint, data);
 
       MySwal.fire(
         "Success",
@@ -234,7 +254,6 @@ const AddForm: React.FC<AddFormProps> = ({
               {additionalFields}
               {isFile ? (
                 <Grid item xs={8}>
-                  {" "}
                   <ImagePdfUpload
                     onFilesChangePdf={setFiles}
                     isFile={true}

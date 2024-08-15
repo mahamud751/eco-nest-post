@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Advance } from "@/services/types";
 import {
   TextField,
@@ -11,27 +10,9 @@ import {
 
 interface AdvanceFormProps {
   advance: Advance | null;
-  onDetailsChange: (quantity: number) => void;
 }
 
-const AdvanceForm: React.FC<AdvanceFormProps> = ({
-  advance,
-  onDetailsChange,
-}) => {
-  const [quantity, setQuantity] = useState<number | "">(Number);
-
-  useEffect(() => {
-    if (advance) {
-      setQuantity(advance.quantity || 0);
-    }
-  }, [advance]);
-
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const parsedValue = parseInt(value, 10);
-    setQuantity(parsedValue);
-    onDetailsChange(parsedValue);
-  };
+const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
   return (
     <>
       <Grid item xs={4}>
@@ -169,9 +150,8 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({
           id="outlined-basic"
           label="Quantity"
           name="quantity"
-          value={quantity}
+          defaultValue={advance?.quantity || ""}
           fullWidth
-          onChange={handleQuantityChange}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>

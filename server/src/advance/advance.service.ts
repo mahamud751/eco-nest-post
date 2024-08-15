@@ -1,12 +1,13 @@
 import {
+  ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAdvanceDto } from './dto/create-advance.dto';
 import { UpdateAdvanceDto } from './dto/update-advance.dto';
 import { AuditLogService } from '../audit/audit.service';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AdvanceService {
@@ -28,10 +29,18 @@ export class AdvanceService {
       bottomFab,
       address,
       quantity,
-      files,
+      files, // Extract files here
     } = createAdvanceDto;
 
-    // Convert details to Prisma compatible format if needed
+    // Validate files if necessary
+    if (files) {
+      files.forEach((file) => {
+        if (!file.title || !file.src) {
+          throw new ConflictException('File must have title and src.');
+        }
+      });
+    }
+
     const advance = await this.prisma.advance.create({
       data: {
         name,
@@ -45,15 +54,21 @@ export class AdvanceService {
         bottomFab,
         address,
         quantity,
-        files: {
-          create: files?.map((detail) => ({
-            title: detail.title,
-            src: detail.src,
-          })),
-        },
+        files: files
+          ? {
+              create: files.map((file) => ({
+                title: file.title,
+                src: file.src,
+                srcHash: crypto
+                  .createHash('md5')
+                  .update(file.src)
+                  .digest('hex'), // Hashing the src
+              })),
+            }
+          : undefined,
       },
       include: {
-        files: true, // Ensure related files are included in the response
+        files: true,
       },
     });
 
@@ -83,58 +98,88 @@ export class AdvanceService {
 
     return advance;
   }
-
   async update(id: string, updateAdvanceDto: UpdateAdvanceDto) {
     const advance = await this.prisma.advance.findUnique({
       where: { id },
-      include: {
-        files: true, // Ensure related files are included
-      },
+      include: { files: true },
     });
 
     if (!advance) {
       throw new NotFoundException('Advance product not found');
     }
 
-    const { files, fileId, ...updateData } = updateAdvanceDto;
+    const { files, ...updateData } = updateAdvanceDto;
 
-    // Prepare file update operations
-    const updatePayload: any = {
-      ...updateData,
-      ...(fileId && {
-        files: {
-          connect: { id: fileId },
+    // Determine which files should be removed
+    const filesToRemove = advance.files.filter(
+      (file) => !files?.some((f) => f.id === file.id),
+    );
+
+    // Handle file upserts
+    const fileUpserts = (files || []).map((file) => {
+      const srcHash = file.src
+        ? crypto.createHash('md5').update(file.src).digest('hex')
+        : undefined;
+
+      // Check if the srcHash already exists for another file
+      const existingFile = advance.files.find(
+        (f) => f.srcHash === srcHash && f.id !== file.id,
+      );
+
+      if (existingFile) {
+        return {
+          where: {
+            id: existingFile.id, // Update existing file
+          },
+          update: {
+            title: file.title,
+            src: file.src,
+            srcHash,
+          },
+          create: {
+            title: file.title,
+            src: file.src,
+            srcHash,
+          },
+        };
+      }
+
+      // If no existing file with the same srcHash, create new
+      return {
+        where: {
+          id: file.id || undefined, // Use id if available
+          srcHash: srcHash || undefined, // Use srcHash if available
         },
-      }),
-    };
+        update: {
+          title: file.title,
+          src: file.src,
+          srcHash,
+        },
+        create: {
+          title: file.title,
+          src: file.src,
+          srcHash,
+        },
+      };
+    });
 
-    // Update the advance product with files handling
+    // Perform the update
     const updatedAdvance = await this.prisma.advance.update({
       where: { id },
       data: {
-        ...updatePayload,
-        files:
-          files?.length > 0
-            ? {
-                upsert: files.map((file) => ({
-                  where: { src: file.src }, // Assumes `src` is unique
-                  update: { title: file.title },
-                  create: file,
-                })),
-              }
-            : undefined,
+        ...updateData,
+        files: {
+          deleteMany: filesToRemove.map((file) => ({ id: file.id })),
+          upsert: fileUpserts,
+        },
       },
+      include: { files: true },
     });
 
-    await this.auditLogService.log(
-      id,
-      'AdvanceProduct',
-      'UPDATE',
-      advance,
-      updatedAdvance,
-    );
+    // Handle file system operations if needed
+    // You might want to manually handle file system updates here
 
-    return { message: 'Advance updated successfully', updatedAdvance };
+    return updatedAdvance;
   }
 
   async remove(id: string) {
@@ -145,6 +190,11 @@ export class AdvanceService {
     if (!advance) {
       throw new NotFoundException('Advance product not found');
     }
+
+    // Remove associated files before deleting the advance
+    await this.prisma.file.deleteMany({
+      where: { advanceId: id },
+    });
 
     await this.prisma.advance.delete({
       where: { id },
@@ -162,7 +212,7 @@ export class AdvanceService {
   async updateDemoStatus(id: string, demoId: string, isDemoPublished: boolean) {
     const advance = await this.prisma.advance.findUnique({
       where: { id },
-      include: { demo: true }, // Make sure to include related demos
+      include: { demo: true },
     });
 
     if (!advance) {
@@ -174,7 +224,6 @@ export class AdvanceService {
       throw new NotFoundException('Demo not found');
     }
 
-    // Update demo status
     const updatedAdvance = await this.prisma.advance.update({
       where: { id },
       data: {

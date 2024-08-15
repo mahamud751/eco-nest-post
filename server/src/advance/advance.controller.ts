@@ -8,7 +8,7 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
-  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,11 +17,14 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
+import { join } from 'path';
+import { writeFile } from 'fs/promises';
+import { v4 as uuidv4 } from 'uuid';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AdvanceService } from './advance.service';
 import { CreateAdvanceDto } from './dto/create-advance.dto';
 import { UpdateAdvanceDto } from './dto/update-advance.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from '../../middleware/multer.config'; // Ensure this matches the export from multer.config.ts
+import { multerOptions } from '../../middleware/multer.config';
 
 @ApiTags('Advance Products')
 @Controller('advance')
@@ -41,11 +44,89 @@ export class AdvanceController {
     @Body() createAdvanceDto: CreateAdvanceDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('Uploaded file:', file);
     if (file) {
-      createAdvanceDto.files = [{ title: file.originalname, src: file.path }];
+      createAdvanceDto.files = [
+        {
+          title: file.originalname,
+          src: `/uploads/${file.filename}`,
+          srcHash: '', // This will be set in the service
+          id: undefined,
+        },
+      ];
     }
+
+    if (createAdvanceDto.files) {
+      for (const fileDetail of createAdvanceDto.files) {
+        if (fileDetail.src.startsWith('data:')) {
+          const matches = fileDetail.src.match(/^data:(.+);base64,(.+)$/);
+          if (!matches) {
+            throw new BadRequestException('Invalid Base64 string');
+          }
+
+          const fileType = matches[1];
+          const base64Data = matches[2];
+          const buffer = Buffer.from(base64Data, 'base64');
+          const filename = `${uuidv4()}.${fileType.split('/')[1]}`;
+          const filePath = join('public', 'uploads', filename);
+
+          await writeFile(filePath, buffer);
+          fileDetail.src = `/${filename}`;
+        }
+      }
+    }
+
     return this.advanceService.create(createAdvanceDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update an advance product by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the advance product' })
+  @ApiBody({ type: UpdateAdvanceDto })
+  @ApiResponse({
+    status: 200,
+    description: 'The advance product has been successfully updated',
+  })
+  @ApiResponse({ status: 404, description: 'Advance product not found' })
+  @UseInterceptors(FileInterceptor('file', multerOptions))
+  async update(
+    @Param('id') id: string,
+    @Body() updateAdvanceDto: UpdateAdvanceDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // Handle Multer file upload
+    if (file) {
+      updateAdvanceDto.files = [
+        {
+          title: file.originalname,
+          src: `/uploads/${file.filename}`,
+          srcHash: '', // This will be set in the service
+          id: undefined,
+        },
+      ];
+    }
+
+    // Handle Base64 file uploads if provided
+    if (updateAdvanceDto.files) {
+      for (const fileDetail of updateAdvanceDto.files) {
+        if (fileDetail.src.startsWith('data:')) {
+          const matches = fileDetail.src.match(/^data:(.+);base64,(.+)$/);
+          if (!matches) {
+            throw new BadRequestException('Invalid Base64 string');
+          }
+
+          const fileType = matches[1];
+          const base64Data = matches[2];
+          const buffer = Buffer.from(base64Data, 'base64');
+          const filename = `${uuidv4()}.${fileType.split('/')[1]}`;
+          const filePath = join('public', 'uploads', filename);
+
+          await writeFile(filePath, buffer);
+          fileDetail.src = `/${filename}`; // Update the path to reflect the public URL
+        }
+      }
+    }
+
+    return this.advanceService.update(id, updateAdvanceDto);
   }
 
   @Get()
@@ -63,19 +144,6 @@ export class AdvanceController {
   @ApiResponse({ status: 404, description: 'Advance product not found' })
   findOne(@Param('id') id: string) {
     return this.advanceService.findOne(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update an advance product by ID' })
-  @ApiParam({ name: 'id', description: 'ID of the advance product' })
-  @ApiBody({ type: UpdateAdvanceDto })
-  @ApiResponse({
-    status: 200,
-    description: 'The advance product has been successfully updated',
-  })
-  @ApiResponse({ status: 404, description: 'Advance product not found' })
-  update(@Param('id') id: string, @Body() updateAdvanceDto: UpdateAdvanceDto) {
-    return this.advanceService.update(id, updateAdvanceDto);
   }
 
   @Delete(':id')

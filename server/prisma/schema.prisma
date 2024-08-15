@@ -175,18 +175,20 @@ model Advance {
   status     String   @default("pending")
   fileId     String?
   Demo       Demo[]
-  demo       Demo[]   @relation("AdvanceDemos")
   files      File[]   @relation("AdvanceDetails")
+  demo       Demo[]   @relation("AdvanceDemos")
   vendors    User[]   @relation("VendorAdvances")
 }
 
 model File {
-  id      String    @id @default(uuid())
-  demoId  String?
-  src     String    @unique
-  title   String
-  demo    Demo?     @relation("DemoPhotos", fields: [demoId], references: [id])
-  Advance Advance[] @relation("AdvanceDetails")
+  id        String   @id @default(uuid())
+  demoId    String?
+  src       String
+  title     String
+  srcHash   String?  @unique
+  advanceId String?
+  advance   Advance? @relation("AdvanceDetails", fields: [advanceId], references: [id])
+  demo      Demo?    @relation("DemoPhotos", fields: [demoId], references: [id])
 }
 
 model AuditLog {

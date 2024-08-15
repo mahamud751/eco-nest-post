@@ -4,15 +4,9 @@ import AddForm from "@/components/templates/AddForm";
 import AdvanceForm from "@/components/pageComponents/AdvanceForm";
 
 const AddAdvance: React.FC = () => {
-  const [quantity, setQuantity] = useState<number | null>(null);
   const [files, setFiles] = useState<File[]>([]);
 
-  const additionalFields = (
-    <AdvanceForm
-      advance={null}
-      onDetailsChange={(newDetails) => setQuantity(newDetails)}
-    />
-  );
+  const additionalFields = <AdvanceForm advance={null} />;
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
@@ -25,9 +19,6 @@ const AddAdvance: React.FC = () => {
       id=""
       link="advance-list"
       isFile={true}
-      additionalData={{
-        quantity: quantity,
-      }}
       isMultiple={true}
     />
   );
