@@ -48,42 +48,34 @@ const columns: GridColDef[] = [
     ),
   },
   {
-    field: "oldPic",
-    headerName: "Old Picture",
+    field: "OldFiles",
+    headerName: "Old Files",
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        {params.row.oldValue?.photos ? (
-          <Image
-            src={params.row.oldValue.photos}
-            alt={params.row.oldValue.name}
-            style={{ width: "36px" }}
-            width={36}
-            height={36}
-          />
-        ) : (
-          "No Image"
-        )}
+        {params.row.oldValue?.files && params.row.oldValue.files.length > 0
+          ? params.row.oldValue.files.map(
+              (file: { id: React.Key | null | undefined; title: any }) => (
+                <p key={file.id}>{file.title || "No Title"}</p>
+              )
+            )
+          : "No Files"}
       </div>
     ),
   },
   {
-    field: "newPic",
-    headerName: "New Picture",
+    field: "NewFiles",
+    headerName: "New Files",
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        {params.row.newValue?.photos ? (
-          <Image
-            src={params.row.newValue.photos}
-            alt={params.row.newValue.name}
-            style={{ width: "36px" }}
-            width={36}
-            height={36}
-          />
-        ) : (
-          "No Image"
-        )}
+        {params.row.newValue?.files && params.row.newValue.files.length > 0
+          ? params.row.newValue.files.map(
+              (file: { id: React.Key | null | undefined; title: any }) => (
+                <p key={file.id}>{file.title || "No Title"}</p>
+              )
+            )
+          : "No Files"}
       </div>
     ),
   },
