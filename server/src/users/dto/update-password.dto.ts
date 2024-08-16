@@ -1,6 +1,14 @@
 // update-password.dto.ts
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { PhotoDto } from 'src/dto/photoDto';
 
 export class UpdatePasswordDto {
   @IsNotEmpty()
@@ -37,4 +45,14 @@ export class UpdatePasswordDto {
   @IsString()
   @ApiProperty({ description: 'Address of the user', required: false })
   address?: string;
+
+  @ApiPropertyOptional({
+    description: 'Array of photo objects',
+    type: [PhotoDto],
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PhotoDto)
+  @IsOptional()
+  photos?: PhotoDto[];
 }

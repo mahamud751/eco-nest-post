@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Paper } from "@mui/material";
 import { Product } from "@/services/types";
 
 import CommonDataShow from "../molecules/CommonDataShow";
@@ -9,43 +10,65 @@ interface ProductShowProps {
 
 const ProductShow: React.FC<ProductShowProps> = ({ data }) => {
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Product Details</h2>
+    <Paper elevation={3} className="p-6 rounded-lg shadow-md">
       <div>
-        <CommonDataShow data={data} />
-      </div>
-      <br />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <h2 className="text-xl font-bold mb-4">Product Details</h2>
         <div>
-          <strong className="font-bold block mb-1">Category:</strong>
-          <span className="font-normal">{data.category?.name || "N/A"}</span>
+          <CommonDataShow data={data} />
         </div>
-        <div>
-          <strong className="font-bold block mb-1">Price:</strong>
-          <span className="font-normal">${data?.price}</span>
-        </div>
-        {data.discountPrice && (
+        <br />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           <div>
-            <strong className="font-bold block mb-1">Discount Price:</strong>
-            <span className="font-normal">${data?.discountPrice}</span>
+            <strong className="font-bold block mb-2 text-gray-700">
+              Category:
+            </strong>
+            <span className="font-normal text-gray-600">
+              {data.category?.name || "N/A"}
+            </span>
           </div>
-        )}
-        <div>
-          <strong className="font-bold block mb-1">Flashsale:</strong>
-          <span className="font-normal">{data.flashsale ? "Yes" : "No"}</span>
-        </div>
-        <div>
-          <strong className="font-bold block mb-1">Sizes:</strong>
-          <span className="font-normal">{data.sizes?.join(", ") || "N/A"}</span>
-        </div>
-        <div>
-          <strong className="font-bold block mb-1">Colors:</strong>
-          <span className="font-normal">
-            {data.colors?.join(", ") || "N/A"}
-          </span>
+          <div>
+            <strong className="font-bold block mb-2 text-gray-700">
+              Price:
+            </strong>
+            <span className="font-normal text-gray-600">${data?.price}</span>
+          </div>
+          {data.discountPrice && (
+            <div>
+              <strong className="font-bold block mb-2 text-gray-700">
+                Discount Price:
+              </strong>
+              <span className="font-normal text-gray-600">
+                ${data?.discountPrice}
+              </span>
+            </div>
+          )}
+          <div>
+            <strong className="font-bold block mb-2 text-gray-700">
+              Flashsale:
+            </strong>
+            <span className="font-normal text-gray-600">
+              {data.flashsale ? "Yes" : "No"}
+            </span>
+          </div>
+          <div>
+            <strong className="font-bold block mb-2 text-gray-700">
+              Sizes:
+            </strong>
+            <span className="font-normal text-gray-600">
+              {data.sizes?.join(", ") || "N/A"}
+            </span>
+          </div>
+          <div>
+            <strong className="font-bold block mb-2 text-gray-700">
+              Colors:
+            </strong>
+            <span className="font-normal text-gray-600">
+              {data.colors?.join(", ") || "N/A"}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </Paper>
   );
 };
 

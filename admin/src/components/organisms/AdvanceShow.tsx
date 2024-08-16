@@ -1,20 +1,14 @@
 import * as React from "react";
-import { Advance, Banner } from "@/services/types";
+import { Advance } from "@/services/types";
+import CommonShowComponent from "../molecules/CommonDataTitle";
 
-import CommonDataShow from "../molecules/CommonDataShow";
-
-interface BannerShowProps {
+interface AdvanceShowProps {
   data: Advance;
   isFile?: boolean;
 }
 
-const AdvanceShow: React.FC<BannerShowProps> = ({ data, isFile }) => {
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Banner Details</h2>
-      <CommonDataShow data={data} isFile={isFile} />
-    </div>
-  );
+const AdvanceShow: React.FC<AdvanceShowProps> = ({ data, isFile }) => {
+  return <CommonShowComponent title="Advance" data={data} isFile={isFile} />;
 };
 
 export default AdvanceShow;

@@ -2,13 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBannerDto } from './dto/create-banner.dto';
 import { UpdateBannerDto } from './dto/update-banner.dto';
-import { AuditLogService } from '../audit/audit.service'; // Import AuditLogService
+import { AuditLogService } from '../audit/audit.service';
 
 @Injectable()
 export class BannerService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly auditLogService: AuditLogService, // Inject AuditLogService
+    private readonly auditLogService: AuditLogService,
   ) {}
 
   async create(createBannerDto: CreateBannerDto) {

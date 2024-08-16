@@ -26,6 +26,8 @@ const StyledButton = styled(Button)<{ status: string }>(({ status }) => {
       break;
     case "inactive":
     case "reject":
+    case "deactive":
+    case "blocked":
       backgroundColor = "rgba(251, 233, 231, 0.8)";
       color = "rgb(216, 67, 21)";
       break;

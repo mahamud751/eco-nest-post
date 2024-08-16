@@ -12,19 +12,27 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@prisma/client';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { AuditLogService } from 'src/audit/audit.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
+    private readonly auditLogService: AuditLogService,
   ) {}
 
   async createUser(
     createUserDto: CreateUserDto,
   ): Promise<{ user: any; token: string }> {
-    const { name, address, email, phone, password, role, branch } =
+    const { name, address, email, phone, password, role, branch, photos } =
       createUserDto;
+    const photoObjects =
+      photos?.map((photo) => ({
+        title: photo.title,
+        src: photo.src,
+      })) || [];
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -45,6 +53,7 @@ export class UsersService {
         role: role as UserRole,
         password: hashedPassword,
         branchId: branch,
+        photos: photoObjects,
       },
     });
 
@@ -69,7 +78,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.userStatus === 'Blocked' || user.userStatus === 'Deactive') {
+    if (user.status === 'blocked' || user.status === 'deactive') {
       throw new UnauthorizedException(
         'User is blocked or deactivated and cannot log in',
       );
@@ -97,27 +106,29 @@ export class UsersService {
     return { token, user: userData };
   }
 
-  async updateUser(
-    id: string,
-    updateUserDto: any,
-  ): Promise<{ status: string; message: string }> {
-    try {
-      if (updateUserDto?.userStatus) {
-        await this.prisma.user.update({
-          where: { id },
-          data: { userStatus: updateUserDto?.userStatus },
-        });
-        return { status: 'success', message: 'Data updated successfully' };
-      } else {
-        await this.prisma.user.update({
-          where: { id },
-          data: updateUserDto,
-        });
-        return { status: 'success', message: 'Data updated successfully' };
-      }
-    } catch (error) {
-      throw new BadRequestException('Data not updated', error.message);
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const oldUser = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!oldUser) {
+      throw new NotFoundException('User not found');
     }
+    const { photos, ...rest } = updateUserDto;
+
+    const photoObjects =
+      photos?.map((photo) => ({
+        title: photo.title,
+        src: photo.src,
+      })) || [];
+    const userUpdate = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...rest,
+        photos: photoObjects.length > 0 ? photoObjects : undefined,
+      },
+    });
+
+    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+    return { message: 'User updated successfully', userUpdate };
   }
 
   async updatePassword(updatePasswordDto: any): Promise<{ message: string }> {

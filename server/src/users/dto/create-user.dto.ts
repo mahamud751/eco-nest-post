@@ -1,5 +1,16 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { PhotoDto } from 'src/dto/photoDto';
+import { Type } from 'class-transformer';
+import { UserStatus } from '@prisma/client';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'The name of the user' })
@@ -31,9 +42,28 @@ export class CreateUserDto {
   @IsString()
   role?: string;
 
+  @ApiPropertyOptional({
+    description: 'Array of photo objects',
+    type: [PhotoDto],
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PhotoDto)
+  @IsOptional()
+  photos?: PhotoDto[];
+
   @ApiProperty({ description: 'The branch of the user', required: false })
   @IsString()
   @IsOptional()
   branch?: string;
+
+  @ApiProperty({
+    description: 'The status of the user',
+    enum: UserStatus,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(UserStatus)
+  status?: UserStatus;
 }
 export default CreateUserDto;

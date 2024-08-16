@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Advance } from "@/services/types";
 import {
   TextField,
@@ -6,6 +7,7 @@ import {
   FormControl,
   Select,
   Grid,
+  SelectChangeEvent,
 } from "@mui/material";
 
 interface AdvanceFormProps {
@@ -13,27 +15,71 @@ interface AdvanceFormProps {
 }
 
 const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
+  const [students, setStudents] = useState<string | undefined>(undefined);
+  const [ratio, setRatio] = useState<string | undefined>(undefined);
+  const [topPart, setTopPart] = useState<string | undefined>(undefined);
+  const [topFab, setTopFab] = useState<string | undefined>(undefined);
+  const [bottomPart, setBottomPart] = useState<string | undefined>(undefined);
+  const [bottomFab, setBottomFab] = useState<string | undefined>(undefined);
+
+  const handleStudentsChange = (event: SelectChangeEvent<string>) => {
+    setStudents(event.target.value);
+  };
+
+  const handleRatioChange = (event: SelectChangeEvent<string>) => {
+    setRatio(event.target.value);
+  };
+
+  const handleTopPartChange = (event: SelectChangeEvent<string>) => {
+    setTopPart(event.target.value);
+  };
+
+  const handleTopFabChange = (event: SelectChangeEvent<string>) => {
+    setTopFab(event.target.value);
+  };
+
+  const handleBottomPartChange = (event: SelectChangeEvent<string>) => {
+    setBottomPart(event.target.value);
+  };
+
+  const handleBottomFabChange = (event: SelectChangeEvent<string>) => {
+    setBottomFab(event.target.value);
+  };
+
   return (
     <>
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Students</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={students}
+            onChange={handleStudentsChange}
             label="Students"
             name="students"
           >
             <MenuItem value="girl">Girl</MenuItem>
             <MenuItem value="boy">Boy</MenuItem>
             <MenuItem value="all">All</MenuItem>
+            <MenuItem value="others">Others</MenuItem>
           </Select>
+          {students === "others" && (
+            <TextField
+              label="Custom Student"
+              name="students"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Class Ratio</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={ratio}
+            onChange={handleRatioChange}
             label="Class Ratio"
             name="ratio"
           >
@@ -42,13 +88,24 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
             <MenuItem value="play-4">Play to Class 4</MenuItem>
             <MenuItem value="others">Others</MenuItem>
           </Select>
+          {ratio === "others" && (
+            <TextField
+              label="Custom Ratio"
+              name="ratio"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Top Part</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={topPart}
+            onChange={handleTopPartChange}
             label="Top Part"
             name="topPart"
           >
@@ -56,13 +113,24 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
             <MenuItem value="shirt">Shirt</MenuItem>
             <MenuItem value="others">Others</MenuItem>
           </Select>
+          {topPart === "others" && (
+            <TextField
+              label="Custom Top Part"
+              name="topPart"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Top Fabrication</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={topFab}
+            onChange={handleTopFabChange}
             label="Top Fabrication"
             name="topFab"
           >
@@ -73,13 +141,24 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
             <MenuItem value="TC">TC</MenuItem>
             <MenuItem value="others">Others</MenuItem>
           </Select>
+          {topFab === "others" && (
+            <TextField
+              label="Custom Top Fabrication"
+              name="topFab"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Bottom Part</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={bottomPart}
+            onChange={handleBottomPartChange}
             label="Bottom Part"
             name="bottomPart"
           >
@@ -88,13 +167,24 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
             <MenuItem value="skirt">Skirt</MenuItem>
             <MenuItem value="others">Others</MenuItem>
           </Select>
+          {bottomPart === "others" && (
+            <TextField
+              label="Custom Bottom Part"
+              name="bottomPart"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <FormControl fullWidth>
           <InputLabel>Bottom Fabrication</InputLabel>
           <Select
-            onChange={(e) => e.target.value}
+            value={bottomFab}
+            onChange={handleBottomFabChange}
             label="Bottom Fabrication"
             name="bottomFab"
           >
@@ -103,8 +193,18 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
             <MenuItem value="otherFab2">Other Fabric 2</MenuItem>
             <MenuItem value="others">Others</MenuItem>
           </Select>
+          {bottomFab === "others" && (
+            <TextField
+              label="Custom Bottom Fabrication"
+              name="bottomFab"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              style={{ marginTop: 16 }}
+            />
+          )}
         </FormControl>
       </Grid>
+
       <Grid item xs={4}>
         <TextField
           id="outlined-basic"

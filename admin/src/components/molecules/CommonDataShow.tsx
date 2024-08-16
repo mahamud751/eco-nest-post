@@ -15,29 +15,35 @@ interface CommonDataShowProps {
 const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         <div>
-          <strong className="font-bold block mb-1">ID:</strong>
-          <span className="font-normal">{data.id}</span>
+          <strong className="font-bold block mb-2 text-gray-700">ID:</strong>
+          <span className="font-normal text-gray-600">{data.id}</span>
         </div>
         <div>
-          <strong className="font-bold block mb-1">Name:</strong>
-          <span className="font-normal">{data.name}</span>
+          <strong className="font-bold block mb-2 text-gray-700">Name:</strong>
+          <span className="font-normal text-gray-600">{data.name}</span>
         </div>
 
         <div>
-          <strong className="font-bold block mb-1">Status:</strong>
+          <strong className="font-bold block mb-2 text-gray-700">
+            Status:
+          </strong>
           <StatusButton status={data.status} />
         </div>
         <div>
-          <strong className="font-bold block mb-1">Created At:</strong>
-          <span className="font-normal">
+          <strong className="font-bold block mb-2 text-gray-700">
+            Created At:
+          </strong>
+          <span className="font-normal text-gray-600">
             {useFormattedDate(data.createdAt)}
           </span>
         </div>
         <div>
-          <strong className="font-bold block mb-1">Updated At:</strong>
-          <span className="font-normal">
+          <strong className="font-bold block mb-2 text-gray-700">
+            Updated At:
+          </strong>
+          <span className="font-normal text-gray-600">
             {useFormattedDate(data.updatedAt)}
           </span>
         </div>

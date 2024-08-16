@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,12 +23,11 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@ApiTags('users') // Tag for grouping endpoints
+@ApiTags('users')
 @Controller('users')
 @UseGuards(RolesGuard)
-@ApiBearerAuth() // Add this if JWT authentication is used
+@ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -50,7 +50,7 @@ export class UsersController {
     return this.usersService.loginUser(loginUserDto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
@@ -64,7 +64,7 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Put('password')
+  @Patch('password')
   @ApiOperation({ summary: 'Update user password' })
   @ApiResponse({ status: 200, description: 'Password updated successfully.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })

@@ -18,10 +18,11 @@ model User {
   password   String
   address    String?
   role       UserRole   @default(user)
-  userStatus UserStatus @default(Active)
+  status     UserStatus @default(active)
   branchId   String?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  photos     Json[]
   branch     Branch?    @relation(fields: [branchId], references: [id])
   advances   Advance[]  @relation("VendorAdvances")
 }
@@ -32,7 +33,7 @@ model Vendor {
   number    String
   email     String
   address   String
-  status    VendorStatus @default(Pending)
+  status    VendorStatus @default(pending)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 }
@@ -217,14 +218,14 @@ enum UserRole {
 }
 
 enum UserStatus {
-  Active
-  Deactive
-  Blocked
+  active
+  deactive
+  blocked
 }
 
 enum VendorStatus {
-  Pending
-  Processing
-  Approved
-  Canceled
+  pending
+  processing
+  approved
+  canceled
 }

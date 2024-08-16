@@ -102,6 +102,37 @@ export interface CommonData {
   updatedAt: Date;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  userId?: string;
+  refferCode?: string;
+  gender: Gender;
+  password: string;
+  address?: string;
+  role: UserRole;
+  status: UserStatus;
+  branchId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  photos: Photo[];
+  advances?: Advance[];
+}
+
+export type Gender = "Male" | "Female" | "Other";
+
+export type UserRole =
+  | "superAdmin"
+  | "admin"
+  | "user"
+  | "manager"
+  | "vendor"
+  | "schoolManager";
+
+export type UserStatus = "active" | "deactive" | "blocked";
+
 export interface BaseEditProps {
   params: {
     [key: string]: string;
@@ -131,4 +162,10 @@ export interface ProductFormProps {
   setLatest: React.Dispatch<React.SetStateAction<string>>;
   discountType: string;
   setDiscountType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface UserFormProps {
+  user: User | null;
+  role: string;
+  setRole: React.Dispatch<React.SetStateAction<string>>;
 }
