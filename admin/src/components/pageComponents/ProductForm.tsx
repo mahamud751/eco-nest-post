@@ -38,15 +38,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
   setDiscountType,
 }) => {
   const {
-    data: categories,
+    data: responseData,
     loading: categoriesLoading,
     error: categoriesError,
-  } = useFetch<Category[]>("categories");
+  } = useFetch<{ data: Category[] }>("categories");
   const {
-    data: subcategories,
+    data: responseSubCategoryData,
     loading: subcategoriesLoading,
     error: subcategoriesError,
-  } = useFetch<Subcategory[]>("subCategories");
+  } = useFetch<{ data: Subcategory[] }>("subCategories");
+
+  const categories = responseData?.data || [];
+  const subcategories = responseSubCategoryData?.data || [];
 
   const [, setCategoryName] = useState("");
   const [, setSubCategoryName] = useState("");

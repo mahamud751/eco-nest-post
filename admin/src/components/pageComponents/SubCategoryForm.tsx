@@ -18,10 +18,12 @@ const SubCategoryForm: React.FC<SubCategoryFormProps> = ({
   setSelectedCategory,
 }) => {
   const {
-    data: categories,
+    data: responseData,
     loading,
     error,
-  } = useFetch<Category[]>("categories");
+  } = useFetch<{ data: Category[] }>("categories");
+
+  const categories = responseData?.data || [];
   const [, setCategoryName] = useState("");
 
   useEffect(() => {
