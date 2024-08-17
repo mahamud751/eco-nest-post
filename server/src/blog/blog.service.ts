@@ -31,13 +31,27 @@ export class BlogService {
     return { message: 'Blog created successfully', blog };
   }
 
-  async findAll() {
-    return this.prisma.blog.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+    const totalCountPromise = this.prisma.blog.count();
+
+    const dataPromise = this.prisma.blog.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
       include: {
         blogComments: true,
       },
-      orderBy: { createdAt: 'desc' },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string) {

@@ -25,7 +25,7 @@ interface AddFormProps {
   isFile?: boolean;
   photosData: Photo[];
   setPhotosData?: React.Dispatch<React.SetStateAction<Photo[]>>;
-  files?: File[]; // Change to File[]
+  files?: File[];
   setFiles?: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
@@ -106,7 +106,6 @@ const AddForm: React.FC<AddFormProps> = ({
       src: URL.createObjectURL(file),
     }));
 
-    // Set the files and update the preview if setFiles is defined
     setFiles?.(newFiles);
     setPreviews(fileObjects.map((file) => file.src));
   };
@@ -233,7 +232,7 @@ const AddForm: React.FC<AddFormProps> = ({
   };
 
   return (
-    <div className="mx-24 p-12">
+    <div className="md:mx-24 md:p-12">
       {id !== "" && (
         <div className="flex justify-end mb-5">
           <Link href={`${firstPart}-show/${id}`}>

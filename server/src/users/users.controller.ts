@@ -23,6 +23,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
+import { UserRole } from '@prisma/client';
 
 @ApiTags('users')
 @Controller('users')
@@ -94,8 +95,12 @@ export class UsersController {
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Users retrieved successfully.' })
-  async getUsers() {
-    return this.usersService.getUsers();
+  async getUsers(
+    @Query('role') role?: UserRole,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.usersService.getUsers(role, page, perPage);
   }
 
   @Get('admin')

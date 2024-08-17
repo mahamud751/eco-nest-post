@@ -121,6 +121,49 @@ export interface User {
   advances?: Advance[];
 }
 
+export interface School {
+  id: string;
+  name: string;
+  photos: Photo[];
+  email?: string;
+  password?: string;
+  location?: string;
+  status: SchoolStatus;
+  students: Student[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Student {
+  id: string;
+  name: string;
+  class: string;
+  mobile: string;
+  total: string;
+  category: string;
+  height: number;
+  chest: string;
+  chestSize: string;
+  shirtSize: string;
+  shoulder: number;
+  sleeveLength: number;
+  collar: number;
+  length: number;
+  armhole: number;
+  sleeveOpening: number;
+  waist: number;
+  waistSize: string;
+  halfBody?: number;
+  bottomHem?: number;
+  hips?: number;
+  schoolId: string;
+  school: School;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type SchoolStatus = "pending" | "processing" | "delivery" | "canceled";
+
 export type Gender = "Male" | "Female" | "Other";
 
 export type UserRole =

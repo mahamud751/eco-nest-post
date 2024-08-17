@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -38,8 +39,11 @@ export class BannerController {
   @Get()
   @ApiOperation({ summary: 'Get all banners' })
   @ApiResponse({ status: 200, description: 'Return all banners.' })
-  findAll() {
-    return this.bannerService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.bannerService.findAll(page, perPage);
   }
 
   @Get(':id')

@@ -39,8 +39,11 @@ export class CategoryController {
   @Get()
   @ApiOperation({ summary: 'Get all categories' })
   @ApiResponse({ status: 200, description: 'Return all categories.' })
-  findAll() {
-    return this.categoryService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.categoryService.findAll(page, perPage);
   }
 
   @Get(':id')

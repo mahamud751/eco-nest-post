@@ -44,7 +44,7 @@ const SubCategoryForm: React.FC<SubCategoryFormProps> = ({
 
   return (
     <LoadingError loading={loading} error={error}>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           id="outlined-basic"
           label="Sub Category Name"
@@ -54,7 +54,7 @@ const SubCategoryForm: React.FC<SubCategoryFormProps> = ({
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <CategorySelect
           categories={categories || []}
           selectedCategory={selectedCategory}

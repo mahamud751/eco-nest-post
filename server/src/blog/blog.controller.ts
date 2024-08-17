@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { BlogService } from './blog.service';
@@ -31,8 +32,11 @@ export class BlogController {
   @Get()
   @ApiOperation({ summary: 'Retrieve all blogs' })
   @ApiResponse({ status: 200, description: 'List of blogs' })
-  findAll() {
-    return this.blogService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.blogService.findAll(page, perPage);
   }
 
   @Get(':id')

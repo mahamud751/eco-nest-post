@@ -139,7 +139,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   return (
     <>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           id="outlined-basic"
           label="Name"
@@ -150,14 +150,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <CategorySelect
           categories={categories || []}
           selectedCategory={selectedCategory}
           onCategoryChange={handleCategoryChange}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <SubCategorySelect
           subcategories={filteredSubcategories || []}
           selectedSubCategory={selectedSubCategory}
@@ -165,7 +165,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         />
       </Grid>
 
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <TextField
           id="outlined-basic"
           label="Full Description"
@@ -176,7 +176,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <TextField
           id="outlined-basic"
           label="Short Description"
@@ -187,7 +187,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         {sizes.map((size, index) => (
           <Box
             key={index}
@@ -225,7 +225,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Button>
         </Box>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         {colors.map((color, index) => (
           <Box
             key={index}
@@ -263,7 +263,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Button>
         </Box>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <InputLabel id="feature-label">Feature</InputLabel>
           <Select
@@ -279,7 +279,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel id="flashsale-label">Flash Sale</InputLabel>
           <Select
@@ -295,7 +295,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel id="latest-label">Latest</InputLabel>
           <Select
@@ -311,7 +311,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel id="discount-type-label">Discount Type</InputLabel>
           <Select
@@ -329,7 +329,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="price"
           label="Price"
@@ -340,7 +340,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="discount-price"
           label="Discount Price"

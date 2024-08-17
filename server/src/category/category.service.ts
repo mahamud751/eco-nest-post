@@ -29,14 +29,28 @@ export class CategoryService {
     return { message: 'Category created successfully', category };
   }
 
-  async findAll() {
-    return this.prisma.category.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+    const totalCountPromise = this.prisma.category.count();
+
+    const dataPromise = this.prisma.category.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
       include: {
         subCategories: true,
         products: true,
       },
-      orderBy: { createdAt: 'desc' },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string, subcategory?: string) {

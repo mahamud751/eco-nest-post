@@ -8,7 +8,7 @@ interface BannerFormProps {
 
 const BannerForm: React.FC<BannerFormProps> = ({ banner }) => {
   return (
-    <Grid item xs={8}>
+    <Grid item xs={12} md={8}>
       <TextField
         id="banner-name"
         label="Banner Name"

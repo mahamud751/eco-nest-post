@@ -4,6 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client'; // Import Product type from Prisma client
 import { AuditLogService } from 'src/audit/audit.service';
+import { PaginatedResult } from './type';
 
 @Injectable()
 export class ProductService {
@@ -65,16 +66,30 @@ export class ProductService {
     };
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.prisma.product.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+    const totalCountPromise = this.prisma.product.count();
+
+    const dataPromise = this.prisma.product.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
       include: {
         category: true,
         subcategory: true,
         branch: true,
         review: true,
       },
-      orderBy: { createdAt: 'desc' },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string): Promise<Product> {

@@ -11,7 +11,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { UserRole } from '@prisma/client';
+import { Prisma, UserRole } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuditLogService } from 'src/audit/audit.service';
 
@@ -194,8 +194,28 @@ export class UsersService {
     return user;
   }
 
-  async getUsers(): Promise<any[]> {
-    return this.prisma.user.findMany();
+  async getUsers(
+    role?: UserRole,
+    page: number = 1,
+    perPage: number = 25,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+    const totalCountPromise = this.prisma.user.count();
+
+    const where: Prisma.UserWhereInput = role ? { role } : {};
+
+    const dataPromise = this.prisma.user.findMany({
+      skip,
+      take: perPageNumber,
+      where,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async getAdmin(email: string): Promise<any> {

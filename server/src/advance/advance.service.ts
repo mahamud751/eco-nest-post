@@ -75,13 +75,29 @@ export class AdvanceService {
     return { message: 'Advance product created successfully', advance };
   }
 
-  async findAll() {
-    return this.prisma.advance.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.advance.count();
+
+    const dataPromise = this.prisma.advance.findMany({
+      skip,
+      take: perPageNumber,
       orderBy: { createdAt: 'desc' },
       include: {
         files: true,
       },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string) {

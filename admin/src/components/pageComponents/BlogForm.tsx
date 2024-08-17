@@ -20,7 +20,7 @@ const BlogForm: React.FC<BlogFormProps> = ({ blog, onDetailsChange }) => {
 
   return (
     <>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8}>
         <TextField
           id="blog-name"
           label="Blog Name"

@@ -181,6 +181,47 @@ model Advance {
   vendors    User[]   @relation("VendorAdvances")
 }
 
+model School {
+  id        String       @id @default(uuid())
+  name      String
+  photos    Json[]
+  email     String?
+  password  String?
+  location  String?
+  status    SchoolStatus @default(pending)
+  students  Student[]    @relation("SchoolStudents")
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Student {
+  id            String   @id @default(uuid())
+  name          String
+  class         String
+  mobile        String
+  total         String
+  category      String
+  height        Float
+  chest         String
+  chestSize     String
+  shirtSize     String
+  shoulder      Float
+  sleeveLength  Float
+  collar        Float
+  length        Float
+  armhole       Float
+  sleeveOpening Float
+  waist         Float
+  waistSize     String
+  halfBody      Float?
+  bottomHem     Float?
+  hips          Float?
+  schoolId      String
+  school        School?   @relation("SchoolStudents", fields: [schoolId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 model File {
   id        String   @id @default(uuid())
   demoId    String?
@@ -227,5 +268,12 @@ enum VendorStatus {
   pending
   processing
   approved
+  canceled
+}
+
+enum SchoolStatus {
+  pending
+  processing
+  delivery
   canceled
 }

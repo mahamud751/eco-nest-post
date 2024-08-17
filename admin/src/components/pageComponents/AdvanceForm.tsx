@@ -48,7 +48,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
 
   return (
     <>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Students</InputLabel>
           <Select
@@ -74,7 +74,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Class Ratio</InputLabel>
           <Select
@@ -100,7 +100,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Top Part</InputLabel>
           <Select
@@ -125,7 +125,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Top Fabrication</InputLabel>
           <Select
@@ -153,7 +153,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Bottom Part</InputLabel>
           <Select
@@ -179,7 +179,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel>Bottom Fabrication</InputLabel>
           <Select
@@ -205,7 +205,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Name"
@@ -215,7 +215,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Email"
@@ -225,7 +225,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Number"
@@ -235,7 +235,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Address"
@@ -245,7 +245,7 @@ const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Quantity"

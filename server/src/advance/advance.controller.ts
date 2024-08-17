@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -133,8 +134,11 @@ export class AdvanceController {
   @ApiOperation({ summary: 'Get all advance products' })
   @ApiResponse({ status: 200, description: 'Return all advance products' })
   @ApiResponse({ status: 404, description: 'No advance products found' })
-  findAll() {
-    return this.advanceService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 25,
+  ) {
+    return this.advanceService.findAll(page, perPage);
   }
 
   @Get(':id')

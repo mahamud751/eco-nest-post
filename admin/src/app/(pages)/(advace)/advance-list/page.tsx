@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 import { GridColDef } from "@mui/x-data-grid";
-
 import StatusButton from "@/components/atoms/StatusButton";
 import DataTable from "@/components/templates/DataTable";
 import Link from "next/link";
 
-const BannerList = () => {
+const AdvanceList = () => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
@@ -17,7 +16,7 @@ const BannerList = () => {
       renderCell: (params) => <StatusButton status={params.value} />,
     },
     {
-      field: "files", // Field for file details
+      field: "files",
       headerName: "File Information",
       flex: 1,
       renderCell: (params) => {
@@ -32,26 +31,29 @@ const BannerList = () => {
                 href={`http://localhost:8080/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800"
               >
                 {detail.src.split("/").pop()}
               </Link>
             </div>
           )
         );
-        return <>{fileDetails}</>;
+        return <div className="space-y-1">{fileDetails}</div>;
       },
     },
   ];
 
   return (
-    <DataTable
-      fetchUrl="http://localhost:8080/v1/advance"
-      deleteUrl="http://localhost:8080/v1/advance"
-      columns={columns}
-      searchField="name"
-      link="advance-list"
-    />
+    <div className="bg-gray-100 min-h-screen p-6">
+      <DataTable
+        fetchUrl="http://localhost:8080/v1/advance"
+        deleteUrl="http://localhost:8080/v1/advance"
+        columns={columns}
+        searchField="name"
+        link="advance-list"
+      />
+    </div>
   );
 };
 
-export default BannerList;
+export default AdvanceList;

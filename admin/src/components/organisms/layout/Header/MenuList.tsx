@@ -18,6 +18,8 @@ import {
   DryCleaning as DryCleaningIcon,
   PhotoLibraryOutlined as PhotoLibraryOutlinedIcon,
   ManageAccounts,
+  AddBusiness,
+  School,
 } from "@mui/icons-material";
 
 import styles from "../../../../css/Header.module.css";
@@ -143,6 +145,36 @@ export default function MenuList({ open }: MenuListProps) {
         {
           text: "User List",
           path: "/user-list",
+        },
+      ],
+    },
+    {
+      text: "Vendors",
+      icon: <AddBusiness />,
+      path: "/vendors",
+      submenus: [
+        {
+          text: "Add Vendor",
+          path: "/add-user",
+        },
+        {
+          text: "Vendor List",
+          path: "/vendor-list",
+        },
+      ],
+    },
+    {
+      text: "Schools",
+      icon: <School />,
+      path: "/schools",
+      submenus: [
+        {
+          text: "Add School",
+          path: "/add-school",
+        },
+        {
+          text: "School List",
+          path: "/school-list",
         },
       ],
     },

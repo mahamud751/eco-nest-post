@@ -1,7 +1,12 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridPaginationModel,
+  GridRowSelectionModel,
+} from "@mui/x-data-grid";
 import { Paper, Button, TextField } from "@mui/material";
 import {
   Edit,
@@ -49,6 +54,8 @@ const DataTable: React.FC<DataTableProps> = ({
   const MySwal = withReactContent(Swal);
 
   const link2 = link;
+  console.log(link2);
+
   const firstPart = useExtractLinkPart(link2);
 
   const [rows, setRows] = useState<any[]>([]);
@@ -60,17 +67,33 @@ const DataTable: React.FC<DataTableProps> = ({
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 10,
+  });
+  const [totalRows, setTotalRows] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     fetchData();
     initializeColumnVisibility();
-  }, [fetchUrl]);
+  }, [fetchUrl, paginationModel.page, paginationModel.pageSize]);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(fetchUrl);
-      setRows(response.data);
+      const response = await axios.get(fetchUrl, {
+        params: {
+          page: paginationModel.page + 1,
+          perPage: paginationModel.pageSize,
+        },
+      });
+      setRows(response.data.data);
+      setTotalRows(response.data.total);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -226,6 +249,10 @@ const DataTable: React.FC<DataTableProps> = ({
     setSelectAll(!selectAll);
   };
 
+  const handlePaginationModelChange = (model: GridPaginationModel) => {
+    setPaginationModel(model);
+  };
+
   return (
     <>
       <div className="flex justify-end items-center mb-4">
@@ -234,15 +261,15 @@ const DataTable: React.FC<DataTableProps> = ({
           <Button
             variant="contained"
             startIcon={<AddCircleOutlined />}
-            className="mr-2 px-6 bg-neutral-950 text-white hover:bg-neutral-700"
+            className=" bg-neutral-950 text-white hover:bg-neutral-700"
           >
-            Ceate
+            Create
           </Button>
         </Link>
       </div>
 
-      <Paper className="p-4 m-4 shadow-lg">
-        <div className="flex justify-between items-center mb-4">
+      <Paper className="p-6 m-6 shadow-xl rounded-lg">
+        <div className="flex justify-between items-center mb-6">
           <TextField
             variant="outlined"
             size="small"
@@ -260,7 +287,7 @@ const DataTable: React.FC<DataTableProps> = ({
               startIcon={<Delete />}
               onClick={handleBulkDelete}
               disabled={selectedIds.length === 0}
-              className="mr-2 text-emerald-950"
+              className="bg-red-600 hover:bg-red-800 text-white"
             >
               Delete
             </Button>
@@ -316,12 +343,10 @@ const DataTable: React.FC<DataTableProps> = ({
               },
             ]}
             getRowId={(row) => row.id}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 10 },
-              },
-            }}
-            pageSizeOptions={[10, 20]}
+            pageSizeOptions={[15, 25, 50]}
+            rowCount={totalRows}
+            paginationMode="server"
+            loading={loading} // Set loading state
             checkboxSelection
             disableRowSelectionOnClick
             onRowSelectionModelChange={(
@@ -329,6 +354,8 @@ const DataTable: React.FC<DataTableProps> = ({
             ) => {
               setSelectedIds(newSelection as string[]);
             }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={handlePaginationModelChange}
             sx={{
               "& .MuiDataGrid-container--top [role=row]": {
                 backgroundColor: "#F4F6F8",

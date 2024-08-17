@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { SubCategoryService } from './subCategory.service';
@@ -29,10 +30,13 @@ export class SubCategoryController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all subcategories' })
-  @ApiResponse({ status: 200, description: 'List of subcategories' })
-  findAll() {
-    return this.subCategoryService.findAll();
+  @ApiOperation({ summary: 'Get all subcategories' })
+  @ApiResponse({ status: 200, description: 'Return all subcategories.' })
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.subCategoryService.findAll(page, perPage);
   }
 
   @Get(':id')

@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ProductService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginatedResult } from './type';
+import { Product } from '@prisma/client';
 
 @ApiTags('products')
 @Controller('products')
@@ -32,8 +35,11 @@ export class ProductController {
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({ status: 200, description: 'Return all products.' })
   @ApiResponse({ status: 404, description: 'Not Found.' })
-  findAll() {
-    return this.productService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    return this.productService.findAll(page, perPage);
   }
 
   @Get(':id')

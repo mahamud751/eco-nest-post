@@ -8,7 +8,7 @@ interface CategoryFormProps {
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ category }) => {
   return (
-    <Grid item xs={8}>
+    <Grid item xs={12} md={8}>
       <TextField
         id="category-name"
         label="Category Name"

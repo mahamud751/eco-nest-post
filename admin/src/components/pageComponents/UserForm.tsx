@@ -1,4 +1,3 @@
-import { UserFormProps } from "@/services/types";
 import {
   FormControl,
   Grid,
@@ -7,11 +6,21 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { useState, ChangeEvent } from "react";
+import { useBangladeshPhoneValidation } from "@/services/hooks/common";
+import { UserFormProps } from "@/services/types";
 
 const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
+  const [phone, setPhone] = useState<string>("");
+  const { error, validatePhoneNumber } = useBangladeshPhoneValidation();
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPhone(event.target.value);
+    validatePhoneNumber(event.target.value);
+  };
   return (
     <>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="User Name"
@@ -21,7 +30,7 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Email"
@@ -31,17 +40,20 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Phone Number"
           name="phone"
           fullWidth
           defaultValue={user?.phone || ""}
+          onChange={handlePhoneChange}
+          error={!!error}
+          helperText={error}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Address"
@@ -52,7 +64,7 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
         />
       </Grid>
       {!user?.id && (
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <TextField
             id="outlined-basic"
             label="Password"
@@ -64,7 +76,7 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
         </Grid>
       )}
 
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth>
           <InputLabel id="role-label">Role</InputLabel>
           <Select
