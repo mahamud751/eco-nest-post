@@ -7,7 +7,7 @@ import {
   GridPaginationModel,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import { Paper, Button, TextField } from "@mui/material";
+import { Paper, Button, TextField, IconButton, useTheme } from "@mui/material";
 import {
   Edit,
   AddCircleOutlined,
@@ -16,6 +16,8 @@ import {
   FileDownload,
   ViewColumn,
   Print,
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -31,6 +33,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import Link from "next/link";
 
 import useExtractLinkPart from "@/services/hooks/useExtractLinkPart";
+import { TablePaginationActionsProps } from "@mui/material/TablePagination/TablePaginationActions";
 
 interface DataTableProps {
   fetchUrl: string;
@@ -77,7 +80,7 @@ const DataTable: React.FC<DataTableProps> = ({
   useEffect(() => {
     fetchData();
     initializeColumnVisibility();
-  }, [fetchUrl, paginationModel.page, paginationModel.pageSize]);
+  }, [fetchUrl, paginationModel.page, paginationModel.pageSize, totalRows]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -133,6 +136,7 @@ const DataTable: React.FC<DataTableProps> = ({
         await axios.delete(`${deleteUrl}/${id}`);
         MySwal.fire("Deleted!", "The item has been deleted.", "success");
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+        setTotalRows((prevTotal) => prevTotal - 1);
       } catch (error) {
         console.error("Error deleting data:", error);
         MySwal.fire("Error", "Failed to delete", "error");
@@ -228,10 +232,6 @@ const DataTable: React.FC<DataTableProps> = ({
     }));
   };
 
-  const handleColumnModalOpen = () => {
-    setOpenColumnModal(true);
-  };
-
   const handleColumnModalClose = () => {
     setOpenColumnModal(false);
   };
@@ -307,11 +307,6 @@ const DataTable: React.FC<DataTableProps> = ({
             >
               Print
             </Button>
-            <Button
-              startIcon={<ViewColumn />}
-              onClick={handleColumnModalOpen}
-              className="mr-2 text-emerald-950"
-            ></Button>
           </div>
         </div>
         <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
@@ -346,7 +341,7 @@ const DataTable: React.FC<DataTableProps> = ({
             pageSizeOptions={[15, 25, 50]}
             rowCount={totalRows}
             paginationMode="server"
-            loading={loading} // Set loading state
+            loading={loading}
             checkboxSelection
             disableRowSelectionOnClick
             onRowSelectionModelChange={(
@@ -356,6 +351,12 @@ const DataTable: React.FC<DataTableProps> = ({
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={handlePaginationModelChange}
+            slotProps={{
+              pagination: {
+                showFirstButton: true,
+                showLastButton: true,
+              },
+            }}
             sx={{
               "& .MuiDataGrid-container--top [role=row]": {
                 backgroundColor: "#F4F6F8",
