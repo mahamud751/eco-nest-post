@@ -199,9 +199,15 @@ const DataTable: React.FC<DataTableProps> = ({
           )
           .map((col) => {
             let value = row[col.field];
-            if (col.field === "categoryName") {
+
+            // If the field is 'photos', join the src values
+            if (col.field === "photos") {
+              value =
+                row.photos?.map((photo: any) => photo.src).join(",") || "";
+            } else if (col.field === "categoryName") {
               value = categoryName;
             }
+
             if (Array.isArray(value)) {
               return escapeCsvValue(value.join(","));
             }
