@@ -142,9 +142,6 @@ export interface Student {
   total: string;
   category: string;
   height: number;
-  chest: string;
-  chestSize: string;
-  shirtSize: string;
   shoulder: number;
   sleeveLength: number;
   collar: number;
@@ -152,7 +149,7 @@ export interface Student {
   armhole: number;
   sleeveOpening: number;
   waist: number;
-  waistSize: string;
+  waistSize: number;
   halfBody?: number;
   bottomHem?: number;
   hips?: number;
@@ -211,4 +208,11 @@ export interface UserFormProps {
   user: User | null;
   role: string;
   setRole: React.Dispatch<React.SetStateAction<string>>;
+}
+export interface StudentFormProps {
+  student: Student | null;
+  category: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
+  selectedSchool: string;
+  setSelectedSchool: React.Dispatch<React.SetStateAction<string>>;
 }

@@ -7,17 +7,14 @@ import {
   GridPaginationModel,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import { Paper, Button, TextField, IconButton, useTheme } from "@mui/material";
+import { Paper, Button, TextField } from "@mui/material";
 import {
   Edit,
   AddCircleOutlined,
   Search,
   Delete,
   FileDownload,
-  ViewColumn,
   Print,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -33,7 +30,6 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import Link from "next/link";
 
 import useExtractLinkPart from "@/services/hooks/useExtractLinkPart";
-import { TablePaginationActionsProps } from "@mui/material/TablePagination/TablePaginationActions";
 
 interface DataTableProps {
   fetchUrl: string;
@@ -190,17 +186,13 @@ const DataTable: React.FC<DataTableProps> = ({
 
     const rowsCsv = rows
       .map((row) => {
-        // Extract the nested 'categoryName' value
         const categoryName = row.category?.name || "";
-
         return columns
           .filter(
             (col) => col.field !== "action" && columnVisibility[col.field]
           )
           .map((col) => {
             let value = row[col.field];
-
-            // If the field is 'photos', join the src values
             if (col.field === "photos") {
               value =
                 row.photos?.map((photo: any) => photo.src).join(",") || "";

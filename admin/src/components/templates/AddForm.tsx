@@ -23,10 +23,12 @@ interface AddFormProps {
   resetFields?: () => void;
   isMultiple?: boolean;
   isFile?: boolean;
+  isNoPhotoFile?: boolean;
   photosData: Photo[];
   setPhotosData?: React.Dispatch<React.SetStateAction<Photo[]>>;
   files?: File[];
   setFiles?: React.Dispatch<React.SetStateAction<File[]>>;
+  numberFields?: string[];
 }
 
 const AddForm: React.FC<AddFormProps> = ({
@@ -41,8 +43,10 @@ const AddForm: React.FC<AddFormProps> = ({
   additionalData,
   isMultiple = false,
   isFile = false,
+  isNoPhotoFile = false,
   files = [],
   setFiles,
+  numberFields = [],
 }) => {
   const [previews, setPreviews] = useState<string[]>([]);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -122,7 +126,6 @@ const AddForm: React.FC<AddFormProps> = ({
     const formData = new FormData(event.currentTarget);
 
     const data: { [key: string]: any } = {};
-
     formData.forEach((value, key) => {
       if (key === "sizes" || key === "colors") {
         try {
@@ -130,6 +133,8 @@ const AddForm: React.FC<AddFormProps> = ({
         } catch (e) {
           data[key] = value;
         }
+      } else if (numberFields.includes(key)) {
+        data[key] = parseFloat(value as string);
       } else {
         data[key] = value;
       }
@@ -138,49 +143,51 @@ const AddForm: React.FC<AddFormProps> = ({
     Object.assign(data, additionalData);
 
     try {
-      const photoData: Photo[] = [];
-      const validPhotos = photos.filter((photo) => photo instanceof File);
+      if (!isNoPhotoFile) {
+        const photoData: Photo[] = [];
+        const validPhotos = photos.filter((photo) => photo instanceof File);
 
-      if (validPhotos.length > 0) {
-        for (const photo of validPhotos) {
-          const uploadData = new FormData();
-          uploadData.append("file", photo);
-          uploadData.append("upload_preset", "upload");
+        if (validPhotos.length > 0) {
+          for (const photo of validPhotos) {
+            const uploadData = new FormData();
+            uploadData.append("file", photo);
+            uploadData.append("upload_preset", "upload");
 
-          const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/dtpvtjiry/image/upload",
-            uploadData
-          );
+            const uploadRes = await axios.post(
+              "https://api.cloudinary.com/v1_1/dtpvtjiry/image/upload",
+              uploadData
+            );
 
-          const { original_filename, secure_url } = uploadRes.data;
+            const { original_filename, secure_url } = uploadRes.data;
 
-          photoData.push({
-            title: original_filename,
-            src: secure_url,
-          });
+            photoData.push({
+              title: original_filename,
+              src: secure_url,
+            });
+          }
         }
-      }
 
-      const existingPhotos = Array.isArray(photosData) ? photosData : [];
-      const combinedPhotos: Photo[] = [
-        ...existingPhotos.filter(
-          (photo) => photo.src && !photo.src.startsWith("blob:")
-        ),
-        ...photoData,
-      ];
+        const existingPhotos = Array.isArray(photosData) ? photosData : [];
+        const combinedPhotos: Photo[] = [
+          ...existingPhotos.filter(
+            (photo) => photo.src && !photo.src.startsWith("blob:")
+          ),
+          ...photoData,
+        ];
 
-      if (isFile === true && files) {
-        const base64Files: { [key: string]: any } = {};
-        for (const file of files) {
-          const base64 = await fileToBase64(file);
-          base64Files[file.name] = base64;
+        if (isFile && files && files.length > 0) {
+          const base64Files: { [key: string]: any } = {};
+          for (const file of files) {
+            const base64 = await fileToBase64(file);
+            base64Files[file.name] = base64;
+          }
+          data.files = Object.entries(base64Files).map(([title, src]) => ({
+            title,
+            src,
+          }));
+        } else {
+          data.photos = combinedPhotos;
         }
-        data.files = Object.entries(base64Files).map(([title, src]) => ({
-          title,
-          src,
-        }));
-      } else {
-        data.photos = combinedPhotos;
       }
 
       const response =
@@ -251,23 +258,27 @@ const AddForm: React.FC<AddFormProps> = ({
           <Box sx={{ padding: 2 }}>
             <Grid container spacing={2}>
               {additionalFields}
-              {isFile ? (
-                <Grid item xs={8}>
-                  <ImagePdfUpload
-                    onFilesChangePdf={setFiles}
-                    isFile={true}
-                    files={files}
-                  />
-                </Grid>
+              {!isNoPhotoFile ? (
+                isFile ? (
+                  <Grid item xs={8}>
+                    <ImagePdfUpload
+                      onFilesChangePdf={setFiles}
+                      isFile={true}
+                      files={files}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid item xs={8}>
+                    <MultipleImageUpload
+                      photosData={previews}
+                      onImagesChange={handleImagesChange}
+                      onRemoveImage={handleRemoveImage}
+                      isMultiple={isMultiple}
+                    />
+                  </Grid>
+                )
               ) : (
-                <Grid item xs={8}>
-                  <MultipleImageUpload
-                    photosData={previews}
-                    onImagesChange={handleImagesChange}
-                    onRemoveImage={handleRemoveImage}
-                    isMultiple={isMultiple}
-                  />
-                </Grid>
+                ""
               )}
             </Grid>
             <AddButton buttonText={buttonText} />

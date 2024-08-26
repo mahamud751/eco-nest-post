@@ -48,9 +48,9 @@ export class CreateCategoryDto {
 
   @ApiPropertyOptional({
     description: 'The status of the product',
-    enum: ['active', 'inaActive'],
+    enum: ['active', 'inActive'],
   })
-  @IsEnum(['active', 'inaActive'])
+  @IsEnum(['active', 'inActive'])
   @IsOptional()
   status?: string;
 }

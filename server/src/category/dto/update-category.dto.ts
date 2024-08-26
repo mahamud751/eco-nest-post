@@ -35,13 +35,13 @@ export class UpdateCategoryDto {
     type: [String],
     description: 'List of subcategory IDs',
   })
-  subCategories?: string[]; // Assuming IDs are strings
+  subCategories?: string[];
 
   @IsOptional()
   @IsArray()
   @IsUUID('all', { each: true })
   @ApiPropertyOptional({ type: [String], description: 'List of product IDs' })
-  products?: string[]; // Assuming IDs are strings
+  products?: string[];
 
   @ApiPropertyOptional({
     description: 'The status of the product',

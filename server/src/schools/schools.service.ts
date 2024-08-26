@@ -6,10 +6,15 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import * as bcrypt from 'bcrypt';
+import { UpdateSchoolDto } from './dto/update-school.dto';
+import { AuditLogService } from 'src/audit/audit.service';
 
 @Injectable()
 export class SchoolService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLogService: AuditLogService,
+  ) {}
 
   async createSchoolAndManager(createSchoolDto: CreateSchoolDto) {
     const { email, name, location, photos, password } = createSchoolDto;
@@ -111,11 +116,38 @@ export class SchoolService {
     return school;
   }
 
-  // async updateSchool(id: string, updateSchoolDto: UpdateSchoolDto) {
-  //   const school = await this.prisma.school.update({
-  //     where: { id },
-  //     data: updateSchoolDto,
-  //   });
-  //   return school;
-  // }
+  async update(id: string, updateSchoolDto: UpdateSchoolDto) {
+    const school = await this.prisma.school.findUnique({
+      where: { id },
+    });
+
+    const { photos, ...updateData } = updateSchoolDto;
+
+    const photoObjects =
+      photos?.map((photo) => ({
+        title: photo.title,
+        src: photo.src,
+      })) || [];
+
+    const updatePayload: any = {
+      ...updateData,
+    };
+
+    const schoolUpdate = await this.prisma.school.update({
+      where: { id },
+      data: {
+        photos: photoObjects.length > 0 ? photoObjects : undefined,
+        ...updatePayload,
+      },
+    });
+
+    await this.auditLogService.log(
+      id,
+      'School',
+      'UPDATE',
+      school,
+      schoolUpdate,
+    );
+    return { message: 'School updated successfully', schoolUpdate };
+  }
 }

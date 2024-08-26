@@ -8,22 +8,32 @@ import Image from "next/image";
 
 import HistotyDataTable from "@/components/templates/HistoryDataTable";
 import StatusButton from "@/components/atoms/StatusButton";
-import { BaseEditProps, Photo, User } from "@/services/types";
+import { Advance, BaseEditProps } from "@/services/types";
 import useFormattedDate from "@/services/hooks/useFormattedDate";
-import LoadingError from "@/components/atoms/LoadingError";
 import useFetch from "@/services/hooks/UseRequest";
+import LoadingError from "@/components/atoms/LoadingError";
 import CustomTabs from "@/components/molecules/CustomTabs";
-import UserShow from "@/components/organisms/UserShow";
+import AdvanceShow from "@/components/organisms/AdvanceShow";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", flex: 1 },
   {
-    field: "OldStaus",
-    headerName: "Old Status",
+    field: "OldName",
+    headerName: "Old Name",
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <StatusButton status={params.row.oldValue?.status} />
+        <p>{params.row.oldValue?.name || "N/A"}</p>
+      </div>
+    ),
+  },
+  {
+    field: "NewName",
+    headerName: "New Name",
+    flex: 1,
+    renderCell: (params) => (
+      <div className="my-2">
+        <p>{params.row.newValue?.name || "N/A"}</p>
       </div>
     ),
   },
@@ -33,53 +43,39 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <>
-        <StatusButton status={params.row.newValue?.status} />
+        <StatusButton status={params.row.newValue?.status || "Unknown"} />
       </>
     ),
   },
   {
-    field: "oldPic",
-    headerName: "Old Picture",
+    field: "OldFiles",
+    headerName: "Old Files",
     flex: 1,
     renderCell: (params) => (
-      <div className="my-2 flex">
-        {params.row.oldValue?.photos && params.row.oldValue.photos.length > 0
-          ? params.row.oldValue.photos.map(
-              (photo: Photo, index: React.Key | null | undefined) => (
-                <div key={index} className="flex mr-2">
-                  <Image
-                    src={photo.src}
-                    alt={photo.title}
-                    width={36}
-                    height={36}
-                  />
-                </div>
+      <div className="my-2">
+        {params.row.oldValue?.files && params.row.oldValue.files.length > 0
+          ? params.row.oldValue.files.map(
+              (file: { id: React.Key | null | undefined; title: any }) => (
+                <p key={file.id}>{file.title || "No Title"}</p>
               )
             )
-          : "No Image"}
+          : "No Files"}
       </div>
     ),
   },
   {
-    field: "newPic",
-    headerName: "New Picture",
+    field: "NewFiles",
+    headerName: "New Files",
     flex: 1,
     renderCell: (params) => (
-      <div className="my-2 flex">
-        {params.row.newValue?.photos && params.row.newValue.photos.length > 0
-          ? params.row.newValue.photos.map(
-              (photo: Photo, index: React.Key | null | undefined) => (
-                <div key={index} className="flex mr-2">
-                  <Image
-                    src={photo.src}
-                    alt={photo.title}
-                    width={36}
-                    height={36}
-                  />
-                </div>
+      <div className="my-2">
+        {params.row.newValue?.files && params.row.newValue.files.length > 0
+          ? params.row.newValue.files.map(
+              (file: { id: React.Key | null | undefined; title: any }) => (
+                <p key={file.id}>{file.title || "No Title"}</p>
               )
             )
-          : "No Image"}
+          : "No Files"}
       </div>
     ),
   },
@@ -89,7 +85,7 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.oldValue?.createdAt)}</p>
+        <p>{useFormattedDate(params.row.oldValue?.createdAt) || "N/A"}</p>
       </div>
     ),
   },
@@ -99,23 +95,24 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.newValue?.updatedAt)}</p>
+        <p>{useFormattedDate(params.row.newValue?.updatedAt) || "N/A"}</p>
       </div>
     ),
   },
 ];
 
-const ShowUser: React.FC<BaseEditProps> = ({ params }) => {
-  const { data, loading, error } = useFetch<User>(`users/${params?.id}`);
+const ShowAvance: React.FC<BaseEditProps> = ({ params }) => {
+  const { data, loading, error } = useFetch<Advance>(`advance/${params?.id}`);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <LoadingError loading={loading} error={error}>
       <div className="flex justify-end mt-5">
-        <Link href={`/user-list/${params.id}`}>
+        <Link href={`/advance-list/${params.id}`}>
           <Button
             variant="contained"
             startIcon={<EditIcon />}
@@ -130,7 +127,13 @@ const ShowUser: React.FC<BaseEditProps> = ({ params }) => {
         value={value}
         onChange={handleChange}
       >
-        <>{data ? <UserShow data={data} /> : <p>No data available.</p>}</>
+        <>
+          {data ? (
+            <AdvanceShow data={data} isFile={true} />
+          ) : (
+            <p>No data available.</p>
+          )}
+        </>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
             fetchUrl={`http://localhost:8080/v1/audit-logs?entityId=${params.id}`}
@@ -142,4 +145,4 @@ const ShowUser: React.FC<BaseEditProps> = ({ params }) => {
   );
 };
 
-export default ShowUser;
+export default ShowAvance;

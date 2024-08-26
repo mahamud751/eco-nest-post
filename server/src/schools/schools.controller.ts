@@ -6,11 +6,17 @@ import {
   Param,
   Query,
   Delete,
-  Put,
   HttpCode,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 import { SchoolService } from './schools.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
@@ -54,12 +60,13 @@ export class SchoolsController {
     return this.schoolService.deleteSchool(id);
   }
 
-  // @Put(':id')
-  // @ApiOperation({ summary: 'Update a school' })
-  // async updateSchool(
-  //   @Param('id') id: string,
-  //   @Body() updateSchoolDto: UpdateSchoolDto,
-  // ) {
-  //   return this.schoolService.updateSchool(id, updateSchoolDto);
-  // }
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a School by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the School to update' })
+  @ApiBody({ type: UpdateSchoolDto })
+  @ApiResponse({ status: 200, description: 'The updated School' })
+  @ApiResponse({ status: 404, description: 'School not found' })
+  update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
+    return this.schoolService.update(id, updateSchoolDto);
+  }
 }

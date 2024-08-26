@@ -18,11 +18,11 @@ model User {
   password   String
   address    String?
   role       UserRole   @default(user)
-  status     UserStatus @default(active)
   branchId   String?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   photos     Json[]
+  status     UserStatus @default(active)
   branch     Branch?    @relation(fields: [branchId], references: [id])
   advances   Advance[]  @relation("VendorAdvances")
 }
@@ -182,16 +182,16 @@ model Advance {
 }
 
 model School {
-  id        String       @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
   photos    Json[]
   email     String?
   password  String?
   location  String?
-  status    SchoolStatus @default(pending)
-  students  Student[]    @relation("SchoolStudents")
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  status    String    @default("active")
+  students  Student[] @relation("SchoolStudents")
 }
 
 model Student {
@@ -199,12 +199,8 @@ model Student {
   name          String
   class         String
   mobile        String
-  total         String
   category      String
   height        Float
-  chest         String
-  chestSize     String
-  shirtSize     String
   shoulder      Float
   sleeveLength  Float
   collar        Float
@@ -212,14 +208,16 @@ model Student {
   armhole       Float
   sleeveOpening Float
   waist         Float
-  waistSize     String
   halfBody      Float?
   bottomHem     Float?
   hips          Float?
   schoolId      String
-  school        School?   @relation("SchoolStudents", fields: [schoolId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  total         Float
+  waistSize     Float
+  status        String   @default("active")
+  school        School   @relation("SchoolStudents", fields: [schoolId], references: [id])
 }
 
 model File {
@@ -268,12 +266,5 @@ enum VendorStatus {
   pending
   processing
   approved
-  canceled
-}
-
-enum SchoolStatus {
-  pending
-  processing
-  delivery
   canceled
 }

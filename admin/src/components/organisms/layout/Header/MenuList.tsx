@@ -178,6 +178,21 @@ export default function MenuList({ open }: MenuListProps) {
         },
       ],
     },
+    {
+      text: "Measurements",
+      icon: <School />,
+      path: "/measurements",
+      submenus: [
+        {
+          text: "Add Measurement",
+          path: "/add-measurement",
+        },
+        {
+          text: "Measurement List",
+          path: "/measurement-list",
+        },
+      ],
+    },
   ];
 
   return (

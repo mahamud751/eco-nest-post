@@ -6,12 +6,10 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
-  IsUUID,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { PhotoDto } from 'src/dto/photoDto';
-import { SchoolStatus } from '@prisma/client';
 
 export class CreateSchoolDto {
   @ApiProperty({ description: 'The name of the school' })
@@ -57,14 +55,13 @@ export class CreateSchoolDto {
   @IsString({ each: true })
   students?: string[];
 
-  @ApiProperty({
-    description: 'The status of the school',
-    enum: SchoolStatus,
-    required: false,
+  @ApiPropertyOptional({
+    description: 'The status of the School',
+    enum: ['active', 'inActive'],
   })
+  @IsEnum(['active', 'inActive'])
   @IsOptional()
-  @IsEnum(SchoolStatus)
-  status?: SchoolStatus;
+  status?: string;
 }
 
 export default CreateSchoolDto;
