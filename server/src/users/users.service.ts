@@ -106,31 +106,6 @@ export class UsersService {
     return { token, user: userData };
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const oldUser = await this.prisma.user.findUnique({ where: { id } });
-
-    if (!oldUser) {
-      throw new NotFoundException('User not found');
-    }
-    const { photos, ...rest } = updateUserDto;
-
-    const photoObjects =
-      photos?.map((photo) => ({
-        title: photo.title,
-        src: photo.src,
-      })) || [];
-    const userUpdate = await this.prisma.user.update({
-      where: { id },
-      data: {
-        ...rest,
-        photos: photoObjects.length > 0 ? photoObjects : undefined,
-      },
-    });
-
-    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
-    return { message: 'User updated successfully', userUpdate };
-  }
-
   async updatePassword(updatePasswordDto: any): Promise<{ message: string }> {
     const {
       userId,
@@ -186,14 +161,6 @@ export class UsersService {
     return 'Deleted successfully';
   }
 
-  async getUser(id: string): Promise<any> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
-  }
-
   async getUsers(
     role?: UserRole,
     page: number = 1,
@@ -211,6 +178,9 @@ export class UsersService {
       take: perPageNumber,
       where,
       orderBy: { createdAt: 'desc' },
+      include: {
+        advances: true,
+      },
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
@@ -241,6 +211,39 @@ export class UsersService {
       return { accessToken: token };
     }
     throw new NotFoundException('User not found');
+  }
+
+  async getUser(id: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const oldUser = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!oldUser) {
+      throw new NotFoundException('User not found');
+    }
+    const { photos, ...rest } = updateUserDto;
+
+    const photoObjects =
+      photos?.map((photo) => ({
+        title: photo.title,
+        src: photo.src,
+      })) || [];
+    const userUpdate = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...rest,
+        photos: photoObjects.length > 0 ? photoObjects : undefined,
+      },
+    });
+
+    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+    return { message: 'User updated successfully', userUpdate };
   }
 
   async updateUserAdmin(id: string, updateUserDto: any): Promise<any> {

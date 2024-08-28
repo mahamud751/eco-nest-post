@@ -71,5 +71,12 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(UserStatus)
   status?: UserStatus;
+
+  @ApiPropertyOptional({
+    description: 'Array of advance IDs associated with the advance',
+    type: [String],
+  })
+  @IsArray()
+  @IsOptional()
+  advances?: string[];
 }
-export default CreateUserDto;

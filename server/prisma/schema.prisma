@@ -23,8 +23,8 @@ model User {
   updatedAt  DateTime   @updatedAt
   photos     Json[]
   status     UserStatus @default(active)
-  branch     Branch?    @relation(fields: [branchId], references: [id])
   advances   Advance[]  @relation("VendorAdvances")
+  branch     Branch?    @relation(fields: [branchId], references: [id])
 }
 
 model Vendor {
@@ -175,10 +175,11 @@ model Advance {
   updatedAt  DateTime @updatedAt
   status     String   @default("pending")
   fileId     String?
+  vendorId   String?
+  vendor     User?    @relation("VendorAdvances", fields: [vendorId], references: [id])
   Demo       Demo[]
   files      File[]   @relation("AdvanceDetails")
   demo       Demo[]   @relation("AdvanceDemos")
-  vendors    User[]   @relation("VendorAdvances")
 }
 
 model School {

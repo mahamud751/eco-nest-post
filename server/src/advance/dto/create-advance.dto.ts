@@ -89,4 +89,8 @@ export class CreateAdvanceDto {
   @IsEnum(['pending', 'processing', 'approve', 'reject'])
   @IsOptional()
   status?: string;
+
+  @ApiProperty({ description: 'ID of the associated vendor' })
+  @IsString()
+  vendorId?: string;
 }

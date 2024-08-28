@@ -17,7 +17,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger'; // Import Swagger decorators
 import { UsersService } from './users.service';
-import CreateUserDto from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -51,20 +51,6 @@ export class UsersController {
     return this.usersService.loginUser(loginUserDto);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update user details' })
-  @ApiResponse({
-    status: 200,
-    description: 'The user has been successfully updated.',
-  })
-  @ApiResponse({ status: 404, description: 'User not found.' })
-  async updateUser(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.updateUser(id, updateUserDto);
-  }
-
   @Patch('password')
   @ApiOperation({ summary: 'Update user password' })
   @ApiResponse({ status: 200, description: 'Password updated successfully.' })
@@ -79,17 +65,6 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found.' })
   async deleteUser(@Param('id') id: string) {
     return this.usersService.deleteUser(id);
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get user details by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'User details retrieved successfully.',
-  })
-  @ApiResponse({ status: 404, description: 'User not found.' })
-  async getUser(@Param('id') id: string) {
-    return this.usersService.getUser(id);
   }
 
   @Get()
@@ -128,6 +103,31 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found.' })
   async getJWT(@Query('email') email: string) {
     return this.usersService.getJWT(email);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get user details by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'User details retrieved successfully.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async getUser(@Param('id') id: string) {
+    return this.usersService.getUser(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update user details' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Put('admin/:id')

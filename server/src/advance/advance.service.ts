@@ -8,6 +8,7 @@ import { CreateAdvanceDto } from './dto/create-advance.dto';
 import { UpdateAdvanceDto } from './dto/update-advance.dto';
 import { AuditLogService } from '../audit/audit.service';
 import * as crypto from 'crypto';
+import { Advance } from '@prisma/client';
 
 @Injectable()
 export class AdvanceService {
@@ -114,6 +115,28 @@ export class AdvanceService {
 
     return advance;
   }
+
+  async remove(id: string) {
+    const advance = await this.prisma.advance.findUnique({
+      where: { id },
+    });
+
+    if (!advance) {
+      throw new NotFoundException('Advance product not found');
+    }
+
+    // Remove associated files before deleting the advance
+    await this.prisma.file.deleteMany({
+      where: { advanceId: id },
+    });
+
+    await this.prisma.advance.delete({
+      where: { id },
+    });
+
+    return { message: 'Advance product deleted successfully' };
+  }
+
   async update(id: string, updateAdvanceDto: UpdateAdvanceDto) {
     const advance = await this.prisma.advance.findUnique({
       where: { id },
@@ -205,31 +228,60 @@ export class AdvanceService {
     return { message: 'Advance Order updated successfully', updatedAdvance };
   }
 
-  async remove(id: string) {
+  async assignVendorToAdvance(id: string, updateAdvanceDto: UpdateAdvanceDto) {
+    // Find the advance by ID
     const advance = await this.prisma.advance.findUnique({
       where: { id },
+      include: { vendor: true }, // Include the current vendors
     });
 
+    // If the advance doesn't exist, throw an error
     if (!advance) {
-      throw new NotFoundException('Advance product not found');
+      throw new NotFoundException('Advance not found');
     }
 
-    // Remove associated files before deleting the advance
-    await this.prisma.file.deleteMany({
-      where: { advanceId: id },
-    });
+    const { vendorId } = updateAdvanceDto;
 
-    await this.prisma.advance.delete({
+    // Prepare the update payload for the advance
+    const updatePayload: any = {
+      ...(vendorId && {
+        vendors: {
+          connect: { id: vendorId },
+        },
+      }),
+    };
+
+    // Update the advance with the new vendor
+    const advanceUpdate = await this.prisma.advance.update({
       where: { id },
+      data: {
+        ...updatePayload,
+      },
     });
+    console.log(vendorId);
 
-    return { message: 'Advance product deleted successfully' };
-  }
+    // Update the user data by connecting the advance to the user
+    if (vendorId) {
+      await this.prisma.user.update({
+        where: { id: vendorId },
+        data: {
+          advances: {
+            connect: { id: advanceUpdate.id },
+          },
+        },
+      });
+    }
 
-  async findByVendorId(vendorId: string) {
-    return this.prisma.advance.findMany({
-      where: { vendors: { some: { id: vendorId } } },
-    });
+    // Log the update in the audit log
+    await this.auditLogService.log(
+      id,
+      'Advance',
+      'UPDATE',
+      advance,
+      advanceUpdate,
+    );
+
+    return { message: 'Advance updated successfully', advanceUpdate };
   }
 
   async updateDemoStatus(id: string, demoId: string, isDemoPublished: boolean) {

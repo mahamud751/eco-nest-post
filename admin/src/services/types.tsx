@@ -90,6 +90,7 @@ export interface Advance {
   updatedAt: Date;
   status: string;
   photos: Photo[];
+  vendors: User[];
 }
 
 export interface CommonData {
