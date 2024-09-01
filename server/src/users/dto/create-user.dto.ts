@@ -76,6 +76,7 @@ export class CreateUserDto {
     description: 'Array of advance IDs associated with the advance',
     type: [String],
   })
+  @IsString({ each: true })
   @IsArray()
   @IsOptional()
   advances?: string[];

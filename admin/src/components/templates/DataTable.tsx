@@ -39,6 +39,7 @@ interface DataTableProps {
   defaultHiddenColumns?: string[];
   searchField?: string;
   enableExport?: boolean;
+  isJustData?: boolean;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -49,11 +50,11 @@ const DataTable: React.FC<DataTableProps> = ({
   defaultHiddenColumns = [],
   searchField = "name",
   enableExport = true,
+  isJustData = true,
 }) => {
   const MySwal = withReactContent(Swal);
 
   const link2 = link;
-  console.log(link2);
 
   const firstPart = useExtractLinkPart(link2);
 
@@ -250,21 +251,50 @@ const DataTable: React.FC<DataTableProps> = ({
   const handlePaginationModelChange = (model: GridPaginationModel) => {
     setPaginationModel(model);
   };
+  const modifiedColumns = [
+    ...columns.filter((col) => columnVisibility[col.field]),
+    ...(isJustData
+      ? [
+          {
+            field: "action",
+            headerName: "Action",
+            flex: 1,
+            renderCell: (params: { id: { toString: () => string } }) => (
+              <div>
+                <Link href={`${firstPart}-show/${params.id}`}>
+                  <RemoveRedEyeIcon color="success" />
+                </Link>
+                <Link href={`${link}/${params.id}`}>
+                  <Edit color="action" className="mx-2" />
+                </Link>
+                <Delete
+                  color="error"
+                  onClick={() => handleDelete(params.id.toString())}
+                  className="cursor-pointer"
+                />
+              </div>
+            ),
+          },
+        ]
+      : []),
+  ];
 
   return (
     <>
-      <div className="flex justify-end items-center mb-4">
-        {" "}
-        <Link href={`/add-${firstPart}`}>
-          <Button
-            variant="contained"
-            startIcon={<AddCircleOutlined />}
-            className=" bg-neutral-950 text-white hover:bg-neutral-700"
-          >
-            Create
-          </Button>
-        </Link>
-      </div>
+      {isJustData && (
+        <div className="flex justify-end items-center mb-4">
+          {" "}
+          <Link href={`/add-${firstPart}`}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlined />}
+              className=" bg-neutral-950 text-white hover:bg-neutral-700"
+            >
+              Create
+            </Button>
+          </Link>
+        </div>
+      )}
 
       <Paper className="p-6 m-6 shadow-xl rounded-lg">
         <div className="flex justify-between items-center mb-6">
@@ -310,31 +340,7 @@ const DataTable: React.FC<DataTableProps> = ({
         <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
           <DataGrid
             rows={rows}
-            columns={[
-              ...columns.filter((col) => columnVisibility[col.field]),
-              {
-                field: "action",
-                headerName: "Action",
-                flex: 1,
-                renderCell: (params) => (
-                  <div>
-                    <Link href={`${firstPart}-show/${params.id}`}>
-                      {" "}
-                      <RemoveRedEyeIcon color="success" />
-                    </Link>
-                    <Link href={`${link}/${params.id}`}>
-                      {" "}
-                      <Edit color="action" className="mx-2" />
-                    </Link>
-                    <Delete
-                      color="error"
-                      onClick={() => handleDelete(params.id.toString())}
-                      className="cursor-pointer"
-                    />
-                  </div>
-                ),
-              },
-            ]}
+            columns={modifiedColumns}
             getRowId={(row) => row.id}
             pageSizeOptions={[15, 25, 50]}
             rowCount={totalRows}

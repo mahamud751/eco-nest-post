@@ -90,7 +90,11 @@ export class CreateAdvanceDto {
   @IsOptional()
   status?: string;
 
-  @ApiProperty({ description: 'ID of the associated vendor' })
-  @IsString()
-  vendorId?: string;
+  @ApiPropertyOptional({
+    description: 'List of vendor IDs associated with the advance',
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  vendorIds?: string[];
 }

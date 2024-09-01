@@ -10,13 +10,14 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 
 interface User {
-  // Define the structure of your user object
   id: string;
   name: string;
   email: string;
-  // Add other fields as needed
+  role?: string;
 }
-interface AuthContextType {
+
+export interface AuthContextType {
+  // Export the type here
   user: User | null;
   token: string | null;
   loginUser: (email: string, password: string) => Promise<void>;
@@ -43,7 +44,7 @@ interface UserProviderProps {
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const MySwal = withReactContent(Swal);
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState<User | null>(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
       return storedUser ? JSON.parse(storedUser) : null;
@@ -51,14 +52,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     return null;
   });
 
-  const [token, setToken] = useState(() => {
+  const [token, setToken] = useState<string | null>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("token") || null;
     }
     return null;
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -74,7 +75,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         { email, password }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
@@ -111,6 +112,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         password,
         refferCode,
         photos,
+        role,
       });
 
       if (response.status === 200) {

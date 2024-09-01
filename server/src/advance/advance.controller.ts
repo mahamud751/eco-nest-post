@@ -10,6 +10,7 @@ import {
   UploadedFile,
   BadRequestException,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -98,6 +99,24 @@ export class AdvanceController {
   @ApiResponse({ status: 404, description: 'Advance product not found' })
   findOne(@Param('id') id: string) {
     return this.advanceService.findOne(id);
+  }
+
+  @Get(':id/myAdvance')
+  @ApiOperation({
+    summary: 'Get advance products assigned to a specific vendor (user)',
+  })
+  @ApiParam({ name: 'id', description: 'ID of the vendor (user)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return advance products assigned to the vendor',
+  })
+  @ApiResponse({ status: 404, description: 'Vendor or products not found' })
+  async getMyAdvanceProduct(
+    @Param('id') id: string,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 25,
+  ) {
+    return this.advanceService.getAdvanceProductsByVendorId(id, page, perPage);
   }
 
   @Delete(':id')

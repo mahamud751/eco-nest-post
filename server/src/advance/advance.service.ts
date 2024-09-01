@@ -8,10 +8,11 @@ import { CreateAdvanceDto } from './dto/create-advance.dto';
 import { UpdateAdvanceDto } from './dto/update-advance.dto';
 import { AuditLogService } from '../audit/audit.service';
 import * as crypto from 'crypto';
-import { Advance } from '@prisma/client';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AdvanceService {
+  private readonly logger = new Logger(AdvanceService.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly auditLogService: AuditLogService,
@@ -114,6 +115,43 @@ export class AdvanceService {
     }
 
     return advance;
+  }
+
+  async getAdvanceProductsByVendorId(
+    userId: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.advance.count({
+      where: {
+        vendorIds: {
+          has: userId,
+        },
+      },
+    });
+
+    const dataPromise = this.prisma.advance.findMany({
+      where: {
+        vendorIds: {
+          has: userId,
+        },
+      },
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        files: true,
+      },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async remove(id: string) {
@@ -229,50 +267,71 @@ export class AdvanceService {
   }
 
   async assignVendorToAdvance(id: string, updateAdvanceDto: UpdateAdvanceDto) {
+    console.log('Assigning vendor to advance:', { id, updateAdvanceDto }); // Log the initial input
+
     // Find the advance by ID
     const advance = await this.prisma.advance.findUnique({
       where: { id },
-      include: { vendor: true }, // Include the current vendors
+      include: { vendor: true }, // Include vendors to check current assignments
     });
+
+    console.log('Fetched advance:', advance); // Log the fetched advance
 
     // If the advance doesn't exist, throw an error
     if (!advance) {
       throw new NotFoundException('Advance not found');
     }
 
-    const { vendorId } = updateAdvanceDto;
+    const { vendorIds, files, ...updateData } = updateAdvanceDto;
 
-    // Prepare the update payload for the advance
-    const updatePayload: any = {
-      ...(vendorId && {
-        vendors: {
-          connect: { id: vendorId },
-        },
-      }),
-    };
+    console.log('Updating advance with:', { vendorIds, files, updateData }); // Log the update details
 
-    // Update the advance with the new vendor
+    // Update the advance with new vendors and files
     const advanceUpdate = await this.prisma.advance.update({
       where: { id },
       data: {
-        ...updatePayload,
-      },
-    });
-    console.log(vendorId);
-
-    // Update the user data by connecting the advance to the user
-    if (vendorId) {
-      await this.prisma.user.update({
-        where: { id: vendorId },
-        data: {
-          advances: {
-            connect: { id: advanceUpdate.id },
+        ...updateData,
+        ...(vendorIds && {
+          vendors: {
+            connect: vendorIds.map((vendorId) => ({ id: vendorId })),
           },
-        },
-      });
-    }
+        }),
+        ...(files && {
+          files: {
+            connectOrCreate: files.map((file) => ({
+              where: { id: file.id }, // Adjust as necessary for your file identification
+              create: {
+                src: file.src,
+                title: file.title,
+                // Add other necessary fields
+              },
+            })),
+          },
+        }),
+      },
+      include: { vendor: true, files: true }, // Include vendors and files in the response
+    });
+    this.logger.log('Creating advance...');
 
-    // Log the update in the audit log
+    console.log('Updated advance:', advanceUpdate); // Log the updated advance
+
+    // Update users' advances
+    await Promise.all(
+      vendorIds.map((vendorId) =>
+        this.prisma.user.update({
+          where: { id: vendorId },
+          data: {
+            advances: {
+              connect: { id: advanceUpdate.id },
+            },
+          },
+        }),
+      ),
+    );
+
+    console.log('User advances updated for vendor IDs:', vendorIds); // Log vendor updates
+
+    // Log the update in audit logs
     await this.auditLogService.log(
       id,
       'Advance',
@@ -280,6 +339,8 @@ export class AdvanceService {
       advance,
       advanceUpdate,
     );
+
+    console.log('Audit log entry created for advance update'); // Confirm audit log
 
     return { message: 'Advance updated successfully', advanceUpdate };
   }

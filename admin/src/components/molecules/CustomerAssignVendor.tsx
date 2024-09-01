@@ -35,13 +35,8 @@ const CustomerAssignVendor: React.FC<CustomerAssignVendorProps> = ({
 
   const handleSubmit = async () => {
     try {
-      // Convert selected vendor IDs into a single comma-separated string
-      const vendorIdString = selectedVendors
-        .map((vendor) => vendor.id)
-        .join(",");
-
       const updatedStatus = {
-        vendorId: vendorIdString, // Now a single string
+        vendorIds: selectedVendors.map((vendor) => vendor.id), // Map to IDs
       };
 
       await axios.patch(

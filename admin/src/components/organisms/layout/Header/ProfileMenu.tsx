@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import IconButton from "@mui/material/IconButton";
@@ -12,8 +12,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import Image from "next/image";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { Button } from "@mui/material";
+import { useAuth } from "@/services/hooks/auth";
 
 export default function SwipeableTemporaryDrawer() {
+  const { user, logoutUser } = useAuth();
+
+  const handleLogOut = () => {
+    logoutUser();
+  };
+
   const [state, setState] = React.useState({
     right: false,
   });
@@ -49,22 +57,25 @@ export default function SwipeableTemporaryDrawer() {
       >
         <CloseIcon />
       </IconButton>
-      <List className="mt-12">
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <Image
-                src={"https://i.ibb.co/t2JQT5q/girl.png"}
-                width={40}
-                height={40}
-                alt="profile image"
-                className="rounded-full"
-              />
-            </ListItemIcon>
-            Mahamud Pino
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <div className="flex justify-center">
+        <List className="mt-12 ">
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <Image
+                  src={"https://i.ibb.co/t2JQT5q/girl.png"}
+                  width={40}
+                  height={40}
+                  alt="profile image"
+                  className="rounded-full"
+                />
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </div>
+      <h2 className="text-center text-xl">{user?.name}</h2>
+      <p className="text-center mb-5 text-purple-600">{user?.email}</p>
       <Divider />
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
@@ -78,19 +89,16 @@ export default function SwipeableTemporaryDrawer() {
           </ListItem>
         ))}
       </List>
+
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <div className="flex justify-center">
+        <Button
+          className="bg-purple-800 text-white p-4 w-full mx-5 mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out"
+          onClick={handleLogOut}
+        >
+          Log Out
+        </Button>
+      </div>
     </Box>
   );
 
@@ -115,7 +123,7 @@ export default function SwipeableTemporaryDrawer() {
         onOpen={toggleDrawer(true)}
         BackdropProps={{ style: { background: "none" } }}
         PaperProps={{
-          style: { zIndex: 1400 }, // Ensure this is above the AppBar's zIndex
+          style: { zIndex: 1400 },
         }}
       >
         {list()}
