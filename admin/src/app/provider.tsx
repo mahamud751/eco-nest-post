@@ -13,8 +13,19 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
 
+  useEffect(() => {
+    const savedMode = localStorage.getItem("dark-mode") === "true";
+    setDarkMode(savedMode);
+    document.body.classList.toggle("dark", savedMode);
+  }, []);
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("dark-mode", newMode.toString());
+      document.body.classList.toggle("dark", newMode);
+      return newMode;
+    });
   };
 
   return (

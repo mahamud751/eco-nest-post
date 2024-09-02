@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles for light mode */
 body {
   width: 100%;
   max-width: 100%;
@@ -11,22 +12,40 @@ body {
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.57143;
-  color: #637381;
-  background-color: rgb(234, 239, 244);
+  color: #637381; /* Gray text color for light mode */
+  background-color: rgb(
+    234,
+    239,
+    244
+  ); /* Light gray background for light mode */
 }
+
 html {
   font-size: 0.875rem;
 }
-/* styles.css image upload*/
+
+/* Dark mode styles */
+body.dark {
+  color: #e5e7eb; /* Light text color for dark mode */
+  background-color: #1f2937; /* Dark background color for dark mode */
+}
+
+/* Ensure full width for DataGrid */
+.css-1ue1bo9-MuiDataGrid-root {
+  width: 100% !important;
+}
+
+/* Dark mode styles for DataGrid */
+body.dark .css-1ue1bo9-MuiDataGrid-root {
+  background-color: #1f2937; /* Dark background for DataGrid */
+  color: #e5e7eb; /* Light text color for DataGrid */
+}
+
+/* Styles for upload label */
 .label-upload:hover {
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1); /* Light shadow on hover */
 }
 
 .label-upload:focus-within {
-  border-color: #3b82f6;
-}
-
-/* Example CSS to ensure full width */
-.css-1ue1bo9-MuiDataGrid-root {
-  width: 100% !important;
+  border-color: #3b82f6; /* Blue border color when focused */
 }
