@@ -94,6 +94,7 @@ export class AdvanceService {
       orderBy: { createdAt: 'desc' },
       include: {
         files: true,
+        demo: true,
       },
     });
 
@@ -107,6 +108,11 @@ export class AdvanceService {
       where: { id },
       include: {
         files: true,
+        demo: {
+          include: {
+            files: true, // Include files related to each demo
+          },
+        },
       },
     });
 
@@ -146,6 +152,7 @@ export class AdvanceService {
       orderBy: { createdAt: 'desc' },
       include: {
         files: true,
+        demo: true,
       },
     });
 
@@ -253,9 +260,6 @@ export class AdvanceService {
       include: { files: true },
     });
 
-    // Handle file system operations if needed
-    // You might want to manually handle file system updates here
-
     await this.auditLogService.log(
       id,
       'Advance',
@@ -267,26 +271,16 @@ export class AdvanceService {
   }
 
   async assignVendorToAdvance(id: string, updateAdvanceDto: UpdateAdvanceDto) {
-    console.log('Assigning vendor to advance:', { id, updateAdvanceDto }); // Log the initial input
-
-    // Find the advance by ID
     const advance = await this.prisma.advance.findUnique({
       where: { id },
-      include: { vendor: true }, // Include vendors to check current assignments
+      include: { vendor: true },
     });
 
-    console.log('Fetched advance:', advance); // Log the fetched advance
-
-    // If the advance doesn't exist, throw an error
     if (!advance) {
       throw new NotFoundException('Advance not found');
     }
 
     const { vendorIds, files, ...updateData } = updateAdvanceDto;
-
-    console.log('Updating advance with:', { vendorIds, files, updateData }); // Log the update details
-
-    // Update the advance with new vendors and files
     const advanceUpdate = await this.prisma.advance.update({
       where: { id },
       data: {
@@ -299,11 +293,10 @@ export class AdvanceService {
         ...(files && {
           files: {
             connectOrCreate: files.map((file) => ({
-              where: { id: file.id }, // Adjust as necessary for your file identification
+              where: { id: file.id },
               create: {
                 src: file.src,
                 title: file.title,
-                // Add other necessary fields
               },
             })),
           },

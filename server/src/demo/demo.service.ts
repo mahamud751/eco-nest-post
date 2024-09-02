@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDemoDto } from './dto/create-demo.dto';
 import { UpdateDemoDto } from './dto/update-demo.dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DemoService {
@@ -11,23 +16,47 @@ export class DemoService {
   async create(createDemoDto: CreateDemoDto) {
     const { userName, email, files, advanceId } = createDemoDto;
 
+    if (files) {
+      files.forEach((file) => {
+        if (!file.title || !file.src) {
+          throw new ConflictException('File must have title and src.');
+        }
+      });
+    }
+
+    // Create the demo entry
     const demo = await this.prisma.demo.create({
       data: {
         userName,
         email,
-        files: {
-          create: files?.map((detail) => ({
-            title: detail.title,
-            src: detail.src,
-          })),
-        },
+        files: files
+          ? {
+              create: files.map((file) => ({
+                title: file.title,
+                src: file.src,
+                srcHash: crypto
+                  .createHash('md5')
+                  .update(file.src)
+                  .digest('hex'), // Hashing the src
+              })),
+            }
+          : undefined,
         advance: {
           connect: { id: advanceId },
         },
       },
     });
 
-    return { message: 'Demo created successfully', demo };
+    const updatedAdvance = await this.prisma.advance.update({
+      where: { id: advanceId },
+      data: {
+        demo: {
+          connect: { id: demo.id }, // Connect the newly created demo to the advance
+        },
+      },
+    });
+
+    return { message: 'Demo created successfully', demo, updatedAdvance };
   }
 
   async findAll() {

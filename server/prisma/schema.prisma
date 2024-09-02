@@ -145,17 +145,16 @@ model BlogComment {
 }
 
 model Demo {
-  id              String    @id @default(uuid())
+  id              String   @id @default(uuid())
   userName        String
   email           String?
   advanceId       String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  status          String    @default("Pending")
-  isDemoPublished Boolean   @default(false)
-  advance         Advance?  @relation(fields: [advanceId], references: [id])
-  files           File[]    @relation("DemoPhotos")
-  Advance         Advance[] @relation("AdvanceDemos")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  status          String   @default("Pending")
+  isDemoPublished Boolean  @default(false)
+  advance         Advance? @relation("AdvanceDemos", fields: [advanceId], references: [id])
+  files           File[]   @relation("DemoPhotos")
 }
 
 model Advance {
@@ -177,9 +176,8 @@ model Advance {
   fileId     String?
   vendorIds  String[]
   vendor     User[]   @relation("VendorAdvances")
-  Demo       Demo[]
-  files      File[]   @relation("AdvanceDetails")
   demo       Demo[]   @relation("AdvanceDemos")
+  files      File[]   @relation("AdvanceDetails")
 }
 
 model School {
