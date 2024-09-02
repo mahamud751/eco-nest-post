@@ -10,10 +10,13 @@ import {
   IconButton,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
+  Button, // Add this import for the button
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   ChevronRight as ChevronRightIcon,
+  Brightness4 as Brightness4Icon, // Add icon for dark mode toggle
+  Brightness7 as Brightness7Icon, // Add icon for light mode toggle
 } from "@mui/icons-material";
 import Image from "next/image";
 
@@ -46,7 +49,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: "space-between", // Update to space-between for better layout
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
@@ -105,9 +108,15 @@ const MainContent = styled(Box, {
 
 interface AppMenuProps {
   children: React.ReactNode;
+  darkMode: boolean;
+  toggleDarkMode: () => void;
 }
 
-export default function AppMenu({ children }: AppMenuProps) {
+export default function AppMenu({
+  children,
+  darkMode,
+  toggleDarkMode,
+}: AppMenuProps) {
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -152,18 +161,28 @@ export default function AppMenu({ children }: AppMenuProps) {
             alt="icon"
             className="ml-2"
           />
-          <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
-            {open ? (
-              <MenuIcon
-                className="relative flex items-center justify-center flex-shrink-0 font-sans 
+          <div className="flex items-center">
+            <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
+              {open ? (
+                <MenuIcon
+                  className="relative flex items-center justify-center flex-shrink-0 font-sans 
               bg-purple-50 cursor-pointer rounded-md w-[24px] h-[34px] 
               text-[1.2rem] overflow-hidden transition-transform 
               duration-200 ease-in-out text-purple-700 "
-              />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
+                />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+            {/* Add Dark Mode Toggle Button */}
+            <IconButton
+              onClick={toggleDarkMode}
+              color="inherit"
+              style={{ marginLeft: 8 }}
+            >
+              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+          </div>
         </DrawerHeader>
         <Divider />
         <MenuList open={open} />

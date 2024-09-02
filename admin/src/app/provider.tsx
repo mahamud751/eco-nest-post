@@ -1,21 +1,32 @@
-import React, { Suspense, useEffect } from "react";
-import { ThemeProvider } from "@emotion/react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
-import { UserProvider } from "@/services/contexts/UserProvider"; // Ensure UserProvider is imported
+import { UserProvider } from "@/services/contexts/UserProvider";
 import AppMenu from "@/components/organisms/layout/Header/AppMenu";
-import theme from "@/services/theme/theme";
+import { lightTheme, darkTheme } from "@/services/theme/theme";
 import Loading from "@/components/atoms/Loading";
 import { useAuth } from "@/services/hooks/auth";
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [darkMode, setDarkMode] = useState(false);
+
+  const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   return (
     <UserProvider>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <ProtectedRoutes>
           {pathname !== "/login" ? (
             <Suspense fallback={<Loading />}>
-              <AppMenu>{children}</AppMenu>
+              <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+                {children}
+              </AppMenu>
             </Suspense>
           ) : (
             children

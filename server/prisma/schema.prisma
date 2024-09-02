@@ -175,8 +175,8 @@ model Advance {
   updatedAt  DateTime @updatedAt
   status     String   @default("pending")
   fileId     String?
-  vendorIds   String[]
-  vendor     User[]    @relation("VendorAdvances")
+  vendorIds  String[]
+  vendor     User[]   @relation("VendorAdvances")
   Demo       Demo[]
   files      File[]   @relation("AdvanceDetails")
   demo       Demo[]   @relation("AdvanceDemos")

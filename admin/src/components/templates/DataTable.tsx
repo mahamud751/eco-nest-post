@@ -7,7 +7,7 @@ import {
   GridPaginationModel,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import { Paper, Button, TextField } from "@mui/material";
+import { Paper, Button, TextField, useTheme } from "@mui/material";
 import {
   Edit,
   AddCircleOutlined,
@@ -52,6 +52,20 @@ const DataTable: React.FC<DataTableProps> = ({
   enableExport = true,
   isJustData = true,
 }) => {
+  const theme = useTheme();
+
+  const customStyles = {
+    header: {
+      backgroundColor: theme.palette.mode === "dark" ? "#333" : "#F4F6F8",
+      color: theme.palette.mode === "dark" ? "#FFF" : "#000",
+    },
+    actionIcons: {
+      color: theme.palette.mode === "dark" ? "#FFF" : "#000",
+    },
+  };
+  const transitionStyles = {
+    transition: "background-color 0.3s ease, color 0.3s ease",
+  };
   const MySwal = withReactContent(Swal);
 
   const link2 = link;
@@ -362,8 +376,16 @@ const DataTable: React.FC<DataTableProps> = ({
               },
             }}
             sx={{
-              "& .MuiDataGrid-container--top [role=row]": {
-                backgroundColor: "#F4F6F8",
+              ...transitionStyles,
+              "& .MuiDataGrid-columnHeaders": customStyles.header,
+              "& .MuiDataGrid-cell": {
+                borderBottom: `1px solid ${
+                  theme.palette.mode === "dark" ? "#444" : "#E0E0E0"
+                }`,
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor:
+                  theme.palette.mode === "dark" ? "#444" : "#EEE",
               },
             }}
           />
