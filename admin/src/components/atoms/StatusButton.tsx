@@ -1,39 +1,43 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 
 interface StatusButtonProps {
   status: string;
 }
 
-const StyledButton = styled(Button)<{ status: string }>(({ status }) => {
+const StyledButton = styled(Button)<{ status: string }>(({ theme, status }) => {
+  const isDarkMode = theme.palette.mode === "dark";
+
   let backgroundColor;
   let color;
 
   switch (status) {
     case "active":
     case "approve":
-      backgroundColor = "rgba(185, 246, 202, 0.6)";
-      color = "rgb(20,170,156)";
+      backgroundColor = isDarkMode
+        ? "rgb(20,170,156)"
+        : "rgba(185, 246, 202, 0.6)";
+      color = isDarkMode ? "#fcfffe" : "rgb(20,170,156)";
       break;
     case "processing":
-      backgroundColor = "#006C9C";
+      backgroundColor = isDarkMode ? "#0288d1" : "#006C9C";
       color = "#FFFFFF";
       break;
     case "pending":
-      backgroundColor = "#FFAB00";
+      backgroundColor = isDarkMode ? "#ffb300" : "#FFAB00";
       color = "#FFFFFF";
       break;
     case "inactive":
     case "reject":
     case "deactive":
     case "blocked":
-      backgroundColor = "rgba(251, 233, 231, 0.8)";
-      color = "rgb(216, 67, 21)";
+      backgroundColor = isDarkMode ? "#f44336" : "rgba(251, 233, 231, 0.8)";
+      color = isDarkMode ? "#ffffff" : "rgb(216, 67, 21)";
       break;
     default:
-      backgroundColor = "rgba(251, 233, 231, 0.8)";
-      color = "rgb(216, 67, 21)";
+      backgroundColor = isDarkMode ? "#f44336" : "rgba(251, 233, 231, 0.8)";
+      color = isDarkMode ? "#ffffff" : "rgb(216, 67, 21)";
       break;
   }
 
@@ -67,8 +71,10 @@ const StyledButton = styled(Button)<{ status: string }>(({ status }) => {
 });
 
 const StatusButton: React.FC<StatusButtonProps> = ({ status }) => {
+  const theme = useTheme();
+
   return (
-    <StyledButton status={status}>
+    <StyledButton theme={theme} status={status}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </StyledButton>
   );
