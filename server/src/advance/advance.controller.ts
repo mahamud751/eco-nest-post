@@ -10,7 +10,6 @@ import {
   UploadedFile,
   BadRequestException,
   Query,
-  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -101,6 +100,22 @@ export class AdvanceController {
     return this.advanceService.findOne(id);
   }
 
+  @Get(':id/demos')
+  @ApiOperation({ summary: 'Get all demos for a specific advance product' })
+  @ApiParam({ name: 'id', description: 'ID of the advance product' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all demos for the advance product',
+  })
+  @ApiResponse({ status: 404, description: 'Advance product not found' })
+  async getAdvanceDemos(
+    @Param('id') id: string,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.advanceService.getAdvanceDemos(id, page, perPage);
+  }
+
   @Get(':id/myAdvance')
   @ApiOperation({
     summary: 'Get advance products assigned to a specific vendor (user)',
@@ -117,6 +132,35 @@ export class AdvanceController {
     @Query('perPage') perPage: number = 25,
   ) {
     return this.advanceService.getAdvanceProductsByVendorId(id, page, perPage);
+  }
+
+  @Get(':id/myAdvance/:advanceId')
+  @ApiOperation({
+    summary:
+      'Get a single advance product assigned to a specific vendor (user)',
+  })
+  @ApiParam({ name: 'id', description: 'ID of the vendor (user)' })
+  @ApiParam({ name: 'advanceId', description: 'ID of the advance product' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return a single advance product assigned to the vendor',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Vendor or advance product not found',
+  })
+  async getMyAdvanceProductDemo(
+    @Param('id') id: string,
+    @Param('advanceId') advanceId: string,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 25,
+  ) {
+    return this.advanceService.getAdvanceProductsByVendorIdDemo(
+      id,
+      advanceId,
+      page,
+      perPage,
+    );
   }
 
   @Delete(':id')

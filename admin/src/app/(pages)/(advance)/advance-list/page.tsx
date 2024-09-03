@@ -6,6 +6,7 @@ import DataTable from "@/components/templates/DataTable";
 import Link from "next/link";
 import CustomerAssignVendor from "@/components/molecules/CustomerAssignVendor";
 import { Advance } from "@/services/types";
+import { Edit } from "@mui/icons-material";
 
 const AdvanceList = () => {
   const [selectedAdvance, setSelectedAdvance] = useState<Advance | null>(null);
@@ -44,6 +45,18 @@ const AdvanceList = () => {
         );
         return <div className="space-y-1">{fileDetails}</div>;
       },
+    },
+    {
+      field: "demo",
+      headerName: "Demo",
+      flex: 1,
+      renderCell: (params: { id: { toString: () => string } }) => (
+        <div>
+          <Link href={`demo-details/${params.id}`}>
+            <Edit color="action" className="mx-2" />
+          </Link>
+        </div>
+      ),
     },
     {
       field: "assignVendor",

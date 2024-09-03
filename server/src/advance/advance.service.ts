@@ -110,7 +110,7 @@ export class AdvanceService {
         files: true,
         demo: {
           include: {
-            files: true, // Include files related to each demo
+            files: true,
           },
         },
       },
@@ -121,6 +121,44 @@ export class AdvanceService {
     }
 
     return advance;
+  }
+
+  async getAdvanceDemos(
+    id: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const advance = await this.prisma.advance.findUnique({
+      where: { id },
+      include: {
+        demo: {
+          include: {
+            files: true,
+          },
+          skip,
+          take: perPageNumber,
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    if (!advance) {
+      throw new NotFoundException('Advance product not found');
+    }
+
+    const total = await this.prisma.demo.count({
+      where: { advanceId: id },
+    });
+
+    return {
+      data: advance.demo,
+      total,
+    };
   }
 
   async getAdvanceProductsByVendorId(
@@ -152,13 +190,64 @@ export class AdvanceService {
       orderBy: { createdAt: 'desc' },
       include: {
         files: true,
-        demo: true,
+        demo: {
+          include: {
+            files: true,
+          },
+        },
       },
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
     return { data, total };
+  }
+
+  async getAdvanceProductsByVendorIdDemo(
+    userId: string,
+    advanceId: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const advance = await this.prisma.advance.findUnique({
+      where: {
+        id: advanceId,
+        vendorIds: {
+          has: userId,
+        },
+      },
+      include: {
+        demo: {
+          skip,
+          take: perPageNumber,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            files: true,
+          },
+        },
+        files: true,
+      },
+    });
+
+    if (!advance) {
+      throw new NotFoundException(
+        'Advance product not found or not assigned to this vendor.',
+      );
+    }
+
+    // Get the total count of demo items for pagination
+    const total = await this.prisma.demo.count({
+      where: { advanceId: advanceId },
+    });
+
+    return {
+      data: advance.demo,
+      total,
+    };
   }
 
   async remove(id: string) {

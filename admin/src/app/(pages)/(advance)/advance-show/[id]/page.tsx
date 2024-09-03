@@ -4,7 +4,6 @@ import { GridColDef } from "@mui/x-data-grid";
 import Link from "next/link";
 import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import Image from "next/image";
 
 import HistotyDataTable from "@/components/templates/HistoryDataTable";
 import StatusButton from "@/components/atoms/StatusButton";

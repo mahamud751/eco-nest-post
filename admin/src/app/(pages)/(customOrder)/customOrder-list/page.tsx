@@ -7,6 +7,7 @@ import BackupIcon from "@mui/icons-material/Backup";
 import DataTable from "@/components/templates/DataTable";
 import { useAuth } from "@/services/hooks/auth";
 import DemoSubmitModal from "@/components/pageComponents/DemoSubmitModal";
+import { Edit } from "@mui/icons-material";
 
 const CustomVendorOrder: React.FC = () => {
   const { user } = useAuth();
@@ -47,6 +48,18 @@ const CustomVendorOrder: React.FC = () => {
         );
         return <div className="space-y-1">{fileDetails}</div>;
       },
+    },
+    {
+      field: "demo",
+      headerName: "Demo",
+      flex: 1,
+      renderCell: (params: { id: { toString: () => string } }) => (
+        <div>
+          <Link href={`customOrderDemos-details/${params.id}`}>
+            <Edit color="action" className="mx-2" />
+          </Link>
+        </div>
+      ),
     },
     {
       field: "submit",

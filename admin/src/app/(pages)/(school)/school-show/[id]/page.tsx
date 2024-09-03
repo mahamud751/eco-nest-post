@@ -15,7 +15,7 @@ import useFetch from "@/services/hooks/UseRequest";
 import CustomTabs from "@/components/molecules/CustomTabs";
 import SchoolShow from "@/components/organisms/SchoolShow";
 import MeasurementColumns from "@/components/organisms/MeasurementColumns";
-import DetailsDataTable from "@/components/templates/DetailsDataTable copy";
+import DetailsDataTable from "@/components/templates/DetailsDataTable";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", flex: 1 },
