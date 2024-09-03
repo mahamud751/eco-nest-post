@@ -227,15 +227,15 @@ export class AdvanceController {
   }
 
   @Patch(':id/assign')
-  @ApiOperation({ summary: 'Update a advance by ID' })
+  @ApiOperation({ summary: 'Assign vendors to an advance by ID' })
   @ApiParam({ name: 'id', description: 'ID of the advance to update' })
   @ApiResponse({ status: 200, description: 'The updated advance' })
-  @ApiResponse({ status: 404, description: 'advance not found' })
-  assignVendorToAdvance(
+  @ApiResponse({ status: 404, description: 'Advance not found' })
+  async assignVendorToAdvance(
     @Param('id') id: string,
-    @Body() updateSubCategoryDto: UpdateAdvanceDto,
+    @Body() updateAdvanceDto: UpdateAdvanceDto,
   ) {
-    return this.advanceService.update(id, updateSubCategoryDto);
+    return this.advanceService.assignVendorToAdvance(id, updateAdvanceDto);
   }
 
   @Patch(':id/updateIsDemoPublished')

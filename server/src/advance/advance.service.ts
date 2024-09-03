@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -360,67 +361,20 @@ export class AdvanceService {
       where: { id },
       include: { vendor: true },
     });
-
     if (!advance) {
-      throw new NotFoundException('Advance not found');
+      throw new NotFoundException('Advance product not found');
     }
-
-    const { vendorIds, files, ...updateData } = updateAdvanceDto;
-    const advanceUpdate = await this.prisma.advance.update({
-      where: { id },
-      data: {
-        ...updateData,
-        ...(vendorIds && {
-          vendors: {
-            connect: vendorIds.map((vendorId) => ({ id: vendorId })),
+    if (updateAdvanceDto.vendorIds) {
+      await this.prisma.advance.update({
+        where: { id },
+        data: {
+          vendorIds: {
+            set: updateAdvanceDto.vendorIds,
           },
-        }),
-        ...(files && {
-          files: {
-            connectOrCreate: files.map((file) => ({
-              where: { id: file.id },
-              create: {
-                src: file.src,
-                title: file.title,
-              },
-            })),
-          },
-        }),
-      },
-      include: { vendor: true, files: true }, // Include vendors and files in the response
-    });
-    this.logger.log('Creating advance...');
-
-    console.log('Updated advance:', advanceUpdate); // Log the updated advance
-
-    // Update users' advances
-    await Promise.all(
-      vendorIds.map((vendorId) =>
-        this.prisma.user.update({
-          where: { id: vendorId },
-          data: {
-            advances: {
-              connect: { id: advanceUpdate.id },
-            },
-          },
-        }),
-      ),
-    );
-
-    console.log('User advances updated for vendor IDs:', vendorIds); // Log vendor updates
-
-    // Log the update in audit logs
-    await this.auditLogService.log(
-      id,
-      'Advance',
-      'UPDATE',
-      advance,
-      advanceUpdate,
-    );
-
-    console.log('Audit log entry created for advance update'); // Confirm audit log
-
-    return { message: 'Advance updated successfully', advanceUpdate };
+        },
+      });
+    }
+    return { message: 'Advance vendor assignment updated successfully' };
   }
 
   async updateDemoStatus(id: string, demoId: string, isDemoPublished: boolean) {
