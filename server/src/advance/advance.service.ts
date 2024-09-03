@@ -190,11 +190,7 @@ export class AdvanceService {
       orderBy: { createdAt: 'desc' },
       include: {
         files: true,
-        demo: {
-          include: {
-            files: true,
-          },
-        },
+        demo: true,
       },
     });
 
