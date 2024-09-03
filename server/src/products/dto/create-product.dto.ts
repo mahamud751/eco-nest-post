@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsEnum,
   IsUUID,
-  IsJSON,
+  IsObject,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -143,10 +143,11 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({
     description: 'User information related to the product',
+    type: Object,
   })
-  @IsJSON()
+  @IsObject()
   @IsOptional()
-  userInfo?: Record<string, any>;
+  userInfo?: any;
 
   @ApiPropertyOptional({
     description: 'The status of the product',

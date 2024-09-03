@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Adjust the import path according to your project structure
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -16,8 +20,11 @@ export class ProductService {
   async create(
     createProductDto: CreateProductDto,
   ): Promise<{ message: string; product: Product }> {
-    const { categoryId, subcategoryId, branchId, reviewId, ...rest } =
+    const { categoryId, subcategoryId, branchId, reviewId, userInfo, ...rest } =
       createProductDto;
+
+    // userInfo is already an object due to the DTO configuration
+    let parsedUserInfo = userInfo || null;
 
     const category = await this.prisma.category.findUnique({
       where: { id: categoryId },
@@ -45,6 +52,7 @@ export class ProductService {
     const product = await this.prisma.product.create({
       data: {
         ...rest,
+        userInfo: parsedUserInfo, // Store userInfo directly as an object
         category: { connect: { id: categoryId } },
         subcategory: subcategoryId
           ? { connect: { id: subcategoryId } }

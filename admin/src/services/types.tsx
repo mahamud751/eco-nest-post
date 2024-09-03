@@ -46,6 +46,7 @@ export interface Product {
   latest: string;
   discountType: string;
   discountPrice: number;
+  userInfo?: any;
   createdAt: Date;
   updatedAt: Date;
 }

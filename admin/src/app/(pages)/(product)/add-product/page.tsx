@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import AddForm from "@/components/templates/AddForm";
 import ProductForm from "@/components/pageComponents/ProductForm";
 import { Category } from "@/services/types";
+import { useAuth } from "@/services/hooks/auth";
 
 const AddProduct: React.FC = () => {
+  const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
   const [, setCategories] = useState<Category[]>([]);
@@ -58,6 +60,7 @@ const AddProduct: React.FC = () => {
         additionalData={{
           sizes: sizes,
           colors: colors,
+          userInfo: user,
         }}
         buttonText="Add Product"
         resetFields={resetFields}
