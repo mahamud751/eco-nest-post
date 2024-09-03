@@ -38,16 +38,20 @@ interface MenuListProps {
 
 export default function MenuList({ open }: MenuListProps) {
   const { user } = useAuth();
-  console.log(user);
-
   const router = useRouter();
   const [openSubmenu, setOpenSubmenu] = React.useState<string | null>(null);
+  const [isClient, setIsClient] = React.useState<boolean>(false);
+
+  // Set isClient to true after the initial render
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSubmenuClick = (text: string) => {
     setOpenSubmenu((prevState) => (prevState === text ? null : text));
   };
 
-  const menuItems: MenuItem[] = [
+  const commonMenuItems: MenuItem[] = [
     {
       text: "Home",
       icon: <InboxIcon />,
@@ -75,140 +79,145 @@ export default function MenuList({ open }: MenuListProps) {
       path: "/customOrder-list",
       submenus: [],
     },
-    // Add more menu items here based on user role
-    ...(user?.role === "superAdmin"
-      ? [
-          {
-            text: "Category",
-            icon: <CategoryIcon />,
-            path: "/category",
-            submenus: [
-              {
-                text: "Add Category",
-                path: "/add-category",
-              },
-              {
-                text: "Category List",
-                path: "/category-list",
-              },
-              {
-                text: "Add SubCategory",
-                path: "/add-subCategory",
-              },
-              {
-                text: "Subcategory List",
-                path: "/subCategory-list",
-              },
-            ],
-          },
-          {
-            text: "Product",
-            icon: <DryCleaningIcon />,
-            path: "/products",
-            submenus: [
-              {
-                text: "Add Product",
-                path: "/add-product",
-              },
-              {
-                text: "Product List",
-                path: "/product-list",
-              },
-            ],
-          },
-          {
-            text: "Blog",
-            icon: <Article />,
-            path: "/blogs",
-            submenus: [
-              {
-                text: "Add Blog",
-                path: "/add-blog",
-              },
-              {
-                text: "Blog List",
-                path: "/blog-list",
-              },
-            ],
-          },
-          {
-            text: "Advance Order",
-            icon: <PhotoLibraryOutlinedIcon />,
-            path: "/advance",
-            submenus: [
-              {
-                text: "Add Advance",
-                path: "/add-advance",
-              },
-              {
-                text: "Advance List",
-                path: "/advance-list",
-              },
-            ],
-          },
-          {
-            text: "Users",
-            icon: <ManageAccounts />,
-            path: "/users",
-            submenus: [
-              {
-                text: "Add Users",
-                path: "/add-user",
-              },
-              {
-                text: "User List",
-                path: "/user-list",
-              },
-            ],
-          },
-          {
-            text: "Vendors",
-            icon: <AddBusiness />,
-            path: "/vendors",
-            submenus: [
-              {
-                text: "Add Vendor",
-                path: "/add-user",
-              },
-              {
-                text: "Vendor List",
-                path: "/vendor-list",
-              },
-            ],
-          },
-          {
-            text: "Schools",
-            icon: <School />,
-            path: "/schools",
-            submenus: [
-              {
-                text: "Add School",
-                path: "/add-school",
-              },
-              {
-                text: "School List",
-                path: "/school-list",
-              },
-            ],
-          },
-          {
-            text: "Measurements",
-            icon: <School />,
-            path: "/measurements",
-            submenus: [
-              {
-                text: "Add Measurement",
-                path: "/add-measurement",
-              },
-              {
-                text: "Measurement List",
-                path: "/measurement-list",
-              },
-            ],
-          },
-        ]
-      : []),
   ];
+
+  const adminMenuItems: MenuItem[] = [
+    {
+      text: "Category",
+      icon: <CategoryIcon />,
+      path: "/category",
+      submenus: [
+        {
+          text: "Add Category",
+          path: "/add-category",
+        },
+        {
+          text: "Category List",
+          path: "/category-list",
+        },
+        {
+          text: "Add SubCategory",
+          path: "/add-subCategory",
+        },
+        {
+          text: "Subcategory List",
+          path: "/subCategory-list",
+        },
+      ],
+    },
+    {
+      text: "Product",
+      icon: <DryCleaningIcon />,
+      path: "/products",
+      submenus: [
+        {
+          text: "Add Product",
+          path: "/add-product",
+        },
+        {
+          text: "Product List",
+          path: "/product-list",
+        },
+      ],
+    },
+    {
+      text: "Blog",
+      icon: <Article />,
+      path: "/blogs",
+      submenus: [
+        {
+          text: "Add Blog",
+          path: "/add-blog",
+        },
+        {
+          text: "Blog List",
+          path: "/blog-list",
+        },
+      ],
+    },
+    {
+      text: "Advance Order",
+      icon: <PhotoLibraryOutlinedIcon />,
+      path: "/advance",
+      submenus: [
+        {
+          text: "Add Advance",
+          path: "/add-advance",
+        },
+        {
+          text: "Advance List",
+          path: "/advance-list",
+        },
+      ],
+    },
+    {
+      text: "Users",
+      icon: <ManageAccounts />,
+      path: "/users",
+      submenus: [
+        {
+          text: "Add Users",
+          path: "/add-user",
+        },
+        {
+          text: "User List",
+          path: "/user-list",
+        },
+      ],
+    },
+    {
+      text: "Vendors",
+      icon: <AddBusiness />,
+      path: "/vendors",
+      submenus: [
+        {
+          text: "Add Vendor",
+          path: "/add-user",
+        },
+        {
+          text: "Vendor List",
+          path: "/vendor-list",
+        },
+      ],
+    },
+    {
+      text: "Schools",
+      icon: <School />,
+      path: "/schools",
+      submenus: [
+        {
+          text: "Add School",
+          path: "/add-school",
+        },
+        {
+          text: "School List",
+          path: "/school-list",
+        },
+      ],
+    },
+    {
+      text: "Measurements",
+      icon: <School />,
+      path: "/measurements",
+      submenus: [
+        {
+          text: "Add Measurement",
+          path: "/add-measurement",
+        },
+        {
+          text: "Measurement List",
+          path: "/measurement-list",
+        },
+      ],
+    },
+  ];
+
+  const menuItems = isClient
+    ? [
+        ...commonMenuItems,
+        ...(user?.role === "superAdmin" ? adminMenuItems : []),
+      ]
+    : commonMenuItems;
 
   return (
     <List className={styles.sidebar}>
