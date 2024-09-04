@@ -105,6 +105,35 @@ export class ProductService {
     return { data, total };
   }
 
+  async findLatest(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Math.min(Number(perPage) || 10, 15);
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    // Fixed total count for pagination, not the actual count of products
+    const fixedTotalCount = 15;
+
+    // Fetch the latest products with pagination
+    const dataPromise = this.prisma.product.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        category: true,
+        subcategory: true,
+        branch: true,
+        review: true,
+      },
+    });
+
+    const data = await dataPromise;
+
+    return { data, total: fixedTotalCount };
+  }
+
   async findOne(id: string): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id },

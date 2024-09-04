@@ -43,6 +43,23 @@ export class ProductController {
     return this.productService.findAll(page, perPage, limit);
   }
 
+  @Get('/latest')
+  @ApiOperation({ summary: 'Get paginated latest products' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return paginated latest products.',
+  })
+  @ApiResponse({ status: 404, description: 'Not Found.' })
+  async findLatest(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    const maxPerPage = 20;
+    const validPerPage = Math.min(Number(perPage), maxPerPage);
+
+    return this.productService.findLatest(page, validPerPage);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a product by ID' })
   @ApiResponse({ status: 200, description: 'Return the product by ID.' })

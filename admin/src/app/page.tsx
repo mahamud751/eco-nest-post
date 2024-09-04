@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import React from "react";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
 const page = () => {
   return (
     <>
@@ -49,6 +50,11 @@ const page = () => {
         </Grid>
         <Grid item xs={4}>
           s
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <LatestProduct />
         </Grid>
       </Grid>
     </>

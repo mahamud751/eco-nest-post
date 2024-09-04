@@ -322,34 +322,36 @@ const DataTable: React.FC<DataTableProps> = ({
             }}
             className="mr-4"
           />
-          <div>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<Delete />}
-              onClick={handleBulkDelete}
-              disabled={selectedIds.length === 0}
-              className="bg-red-600 hover:bg-red-800 text-white"
-            >
-              Delete
-            </Button>
-            {enableExport && (
+          {isJustData && (
+            <div>
               <Button
-                startIcon={<FileDownload />}
-                onClick={handleExport}
+                variant="contained"
+                color="secondary"
+                startIcon={<Delete />}
+                onClick={handleBulkDelete}
+                disabled={selectedIds.length === 0}
+                className="bg-red-600 hover:bg-red-800 text-white"
+              >
+                Delete
+              </Button>
+              {enableExport && (
+                <Button
+                  startIcon={<FileDownload />}
+                  onClick={handleExport}
+                  className="mr-2 text-emerald-950"
+                >
+                  Export
+                </Button>
+              )}
+              <Button
+                startIcon={<Print />}
+                onClick={handlePrint}
                 className="mr-2 text-emerald-950"
               >
-                Export
+                Print
               </Button>
-            )}
-            <Button
-              startIcon={<Print />}
-              onClick={handlePrint}
-              className="mr-2 text-emerald-950"
-            >
-              Print
-            </Button>
-          </div>
+            </div>
+          )}
         </div>
         <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
           <DataGrid
