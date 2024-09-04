@@ -4,10 +4,21 @@ import React, { useEffect, useState } from "react";
 import {
   DataGrid,
   GridColDef,
+  gridPageCountSelector,
+  gridPageSelector,
+  GridPagination,
   GridPaginationModel,
   GridRowSelectionModel,
+  useGridApiContext,
+  useGridSelector,
 } from "@mui/x-data-grid";
-import { Paper, Button, TextField, useTheme } from "@mui/material";
+import {
+  Paper,
+  Button,
+  TextField,
+  useTheme,
+  TablePaginationProps,
+} from "@mui/material";
 import {
   Edit,
   AddCircleOutlined,
@@ -28,6 +39,7 @@ import {
 } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import Link from "next/link";
+import MuiPagination from "@mui/material/Pagination";
 
 import useExtractLinkPart from "@/services/hooks/useExtractLinkPart";
 
@@ -40,6 +52,31 @@ interface DataTableProps {
   searchField?: string;
   enableExport?: boolean;
   isJustData?: boolean;
+}
+function Pagination({
+  page,
+  onPageChange,
+  className,
+}: Pick<TablePaginationProps, "page" | "onPageChange" | "className">) {
+  const apiRef = useGridApiContext();
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <MuiPagination
+      color="secondary"
+      className={className}
+      shape="rounded"
+      count={pageCount}
+      page={page + 1}
+      onChange={(event, newPage) => {
+        onPageChange(event as any, newPage - 1);
+      }}
+    />
+  );
+}
+
+function CustomPagination(props: any) {
+  return <GridPagination ActionsComponent={Pagination} {...props} />;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -356,9 +393,10 @@ const DataTable: React.FC<DataTableProps> = ({
         <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
           <DataGrid
             rows={rows}
+            pagination
             columns={modifiedColumns}
             getRowId={(row) => row.id}
-            pageSizeOptions={[15, 25, 50]}
+            pageSizeOptions={[10, 20, 30]}
             rowCount={totalRows}
             paginationMode="server"
             loading={loading}
@@ -369,13 +407,13 @@ const DataTable: React.FC<DataTableProps> = ({
             ) => {
               setSelectedIds(newSelection as string[]);
             }}
-            paginationModel={paginationModel}
             onPaginationModelChange={handlePaginationModelChange}
-            slotProps={{
-              pagination: {
-                showFirstButton: true,
-                showLastButton: true,
-              },
+            slots={{
+              pagination: CustomPagination,
+            }}
+            {...rows}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 10 } },
             }}
             sx={{
               ...transitionStyles,
