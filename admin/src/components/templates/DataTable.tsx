@@ -5,7 +5,7 @@ import {
   DataGrid,
   GridColDef,
   gridPageCountSelector,
-  gridPageSelector,
+  // gridPageSelector,
   GridPagination,
   GridPaginationModel,
   GridRowSelectionModel,
@@ -18,6 +18,7 @@ import {
   TextField,
   useTheme,
   TablePaginationProps,
+  // PaginationItem,
 } from "@mui/material";
 import {
   Edit,
@@ -26,6 +27,8 @@ import {
   Delete,
   FileDownload,
   Print,
+  // ArrowBack,
+  // ArrowForward,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -71,6 +74,12 @@ function Pagination({
       onChange={(event, newPage) => {
         onPageChange(event as any, newPage - 1);
       }}
+      // renderItem={(item) => (
+      //   <PaginationItem
+      //     slots={{ previous: ArrowBack, next: ArrowForward }}
+      //     {...item}
+      //   />
+      // )}
     />
   );
 }
