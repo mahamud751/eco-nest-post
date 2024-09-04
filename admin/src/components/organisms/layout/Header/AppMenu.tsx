@@ -148,6 +148,13 @@ export default function AppMenu({
           </IconButton>
 
           <div className="flex justify-end w-full">
+            {/* Add Dark Mode Toggle Button */}
+            <IconButton
+              onClick={toggleDarkMode}
+              style={{ marginLeft: 8, color: "black" }}
+            >
+              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
             <ProfileMenu />
           </div>
         </Toolbar>
@@ -173,14 +180,6 @@ export default function AppMenu({
               ) : (
                 <ChevronRightIcon />
               )}
-            </IconButton>
-            {/* Add Dark Mode Toggle Button */}
-            <IconButton
-              onClick={toggleDarkMode}
-              color="inherit"
-              style={{ marginLeft: 8 }}
-            >
-              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </div>
         </DrawerHeader>
