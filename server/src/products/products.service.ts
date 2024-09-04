@@ -77,15 +77,20 @@ export class ProductService {
   async findAll(
     page: number = 1,
     perPage: number = 10,
+    limit?: number,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
+    const limitNumber = Number(limit);
+
     const skip = (pageNumber - 1) * perPageNumber;
+    const take = limitNumber || perPageNumber; // Use limit if provided, otherwise use perPage
+
     const totalCountPromise = this.prisma.product.count();
 
     const dataPromise = this.prisma.product.findMany({
       skip,
-      take: perPageNumber,
+      take,
       orderBy: { createdAt: 'desc' },
       include: {
         category: true,
