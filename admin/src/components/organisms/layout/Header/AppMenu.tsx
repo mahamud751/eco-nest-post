@@ -10,13 +10,12 @@ import {
   IconButton,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
-  Button, // Add this import for the button
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   ChevronRight as ChevronRightIcon,
-  Brightness4 as Brightness4Icon, // Add icon for dark mode toggle
-  Brightness7 as Brightness7Icon, // Add icon for light mode toggle
+  DarkMode,
+  LightMode,
 } from "@mui/icons-material";
 import Image from "next/image";
 
@@ -49,7 +48,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-between", // Update to space-between for better layout
+  justifyContent: "space-between",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
@@ -60,7 +59,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer, // Set z-index slightly lower than the drawer
+  zIndex: theme.zIndex.drawer,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -153,7 +152,7 @@ export default function AppMenu({
               onClick={toggleDarkMode}
               style={{ marginLeft: 8, color: "black" }}
             >
-              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              {darkMode ? <LightMode /> : <DarkMode />}
             </IconButton>
             <ProfileMenu />
           </div>
