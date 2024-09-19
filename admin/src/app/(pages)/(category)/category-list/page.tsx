@@ -8,8 +8,8 @@ const CategoryList = () => {
 
   return (
     <DataTable
-      fetchUrl="http://localhost:8080/v1/categories"
-      deleteUrl="http://localhost:8080/v1/categories"
+      fetchUrl="https://api.korbojoy.shop/v1/categories"
+      deleteUrl="https://api.korbojoy.shop/v1/categories"
       columns={columns}
       searchField="name"
       link="category-list"

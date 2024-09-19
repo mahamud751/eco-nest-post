@@ -29,7 +29,7 @@ const AdvanceList: React.FC<BaseEditProps> = ({ params }) => {
           (detail: { src: any; id: React.Key | null | undefined }) => (
             <div key={detail.id}>
               <Link
-                href={`http://localhost:8080/public/uploads/${detail.src}`}
+                href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800"
@@ -47,8 +47,8 @@ const AdvanceList: React.FC<BaseEditProps> = ({ params }) => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <DataTable
-        fetchUrl={`http://localhost:8080/v1/advance/${params.id}/demos`}
-        deleteUrl="http://localhost:8080/v1/advance"
+        fetchUrl={`https://api.korbojoy.shop/v1/advance/${params.id}/demos`}
+        deleteUrl="https://api.korbojoy.shop/v1/advance"
         columns={columns}
         searchField="name"
         link="advance-list"

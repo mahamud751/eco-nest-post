@@ -133,7 +133,7 @@ const ShowUser: React.FC<BaseEditProps> = ({ params }) => {
         <>{data ? <UserShow data={data} /> : <p>No data available.</p>}</>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
-            fetchUrl={`http://localhost:8080/v1/audit-logs?entityId=${params.id}`}
+            fetchUrl={`https://api.korbojoy.shop/v1/audit-logs?entityId=${params.id}`}
             columns={columns}
           />
         </div>

@@ -147,7 +147,7 @@ const ShowSubCategory: React.FC<BaseEditProps> = ({ params }) => {
         </>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
-            fetchUrl={`http://localhost:8080/v1/audit-logs?entityId=${params.id}`}
+            fetchUrl={`https://api.korbojoy.shop/v1/audit-logs?entityId=${params.id}`}
             columns={columns}
           />
         </div>

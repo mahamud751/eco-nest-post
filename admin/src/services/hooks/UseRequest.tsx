@@ -18,7 +18,7 @@ const useFetch = <T,>(path: string) => {
     const fetchData = async () => {
       setState({ data: null, loading: true, error: null });
       try {
-        const res = await axios.get<T>(`http://localhost:8080/v1/${path}`);
+        const res = await axios.get<T>(`https://api.korbojoy.shop/v1/${path}`);
         setState({ data: res.data, loading: false, error: null });
       } catch (err) {
         setState({ data: null, loading: false, error: err as AxiosError });
@@ -31,7 +31,7 @@ const useFetch = <T,>(path: string) => {
   const reFetch = async () => {
     setState({ data: null, loading: true, error: null });
     try {
-      const res = await axios.get<T>(`http://localhost:8080/v1/${path}`);
+      const res = await axios.get<T>(`https://api.korbojoy.shop/v1/${path}`);
       setState({ data: res.data, loading: false, error: null });
     } catch (err) {
       setState({ data: null, loading: false, error: err as AxiosError });

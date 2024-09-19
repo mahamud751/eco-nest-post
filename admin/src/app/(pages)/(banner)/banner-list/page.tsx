@@ -8,8 +8,8 @@ const BannerList = () => {
 
   return (
     <DataTable
-      fetchUrl="http://localhost:8080/v1/banners"
-      deleteUrl="http://localhost:8080/v1/banners"
+      fetchUrl="https://api.korbojoy.shop/v1/banners"
+      deleteUrl="https://api.korbojoy.shop/v1/banners"
       columns={columns}
       searchField="name"
       link="banner-list"

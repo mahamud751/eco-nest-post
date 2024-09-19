@@ -16,7 +16,7 @@ const AddBlog: React.FC = () => {
 
   return (
     <AddForm
-      endpoint="http://localhost:8080/v1/blogs"
+      endpoint="https://api.korbojoy.shop/v1/blogs"
       additionalFields={additionalFields}
       buttonText="Add Blog"
       id=""

@@ -38,7 +38,7 @@ const EditBanner: React.FC<BaseEditProps> = ({ params }) => {
   return (
     <LoadingError loading={loading} error={error}>
       <AddForm
-        endpoint={`http://localhost:8080/v1/banners/${params.id}`}
+        endpoint={`https://api.korbojoy.shop/v1/banners/${params.id}`}
         id={params.id}
         additionalFields={additionalFields}
         buttonText="Edit Banner"

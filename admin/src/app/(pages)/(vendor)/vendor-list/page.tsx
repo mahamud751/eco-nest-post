@@ -12,8 +12,8 @@ const VendorList = () => {
 
   return (
     <DataTable
-      fetchUrl="http://localhost:8080/v1/users?role=vendor"
-      deleteUrl="http://localhost:8080/v1/users"
+      fetchUrl="https://api.korbojoy.shop/v1/users?role=vendor"
+      deleteUrl="https://api.korbojoy.shop/v1/users"
       columns={columns}
       searchField="name"
       // defaultHiddenColumns={["id"]}

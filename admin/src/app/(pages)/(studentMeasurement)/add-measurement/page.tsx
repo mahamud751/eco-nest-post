@@ -35,7 +35,7 @@ const AddMeasurement: React.FC = () => {
 
   return (
     <AddForm
-      endpoint="http://localhost:8080/v1/students"
+      endpoint="https://api.korbojoy.shop/v1/students"
       additionalFields={additionalFields}
       buttonText="Add Measurement"
       photosData={[]}

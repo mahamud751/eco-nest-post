@@ -7,8 +7,8 @@ const MeasurementList = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <DataTable
-        fetchUrl="http://localhost:8080/v1/students"
-        deleteUrl="http://localhost:8080/v1/students"
+        fetchUrl="https://api.korbojoy.shop/v1/students"
+        deleteUrl="https://api.korbojoy.shop/v1/students"
         columns={MeasurementColumns}
         searchField="name"
         link="measurement-list"

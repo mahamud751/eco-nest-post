@@ -73,7 +73,7 @@ const EditProduct: React.FC<BaseEditProps> = ({ params }) => {
   return (
     <LoadingError loading={loading} error={error}>
       <AddForm
-        endpoint={`http://localhost:8080/v1/products/${params.id}`}
+        endpoint={`https://api.korbojoy.shop/v1/products/${params.id}`}
         additionalFields={additionalFields}
         additionalData={{
           sizes: sizes,

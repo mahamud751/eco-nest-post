@@ -10,8 +10,8 @@ const SchoolList = () => {
   ]);
   return (
     <DataTable
-      fetchUrl="http://localhost:8080/v1/schools"
-      deleteUrl="http://localhost:8080/v1/schools"
+      fetchUrl="https://api.korbojoy.shop/v1/schools"
+      deleteUrl="https://api.korbojoy.shop/v1/schools"
       columns={columns}
       searchField="name"
       // defaultHiddenColumns={["id"]}

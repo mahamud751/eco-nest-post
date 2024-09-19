@@ -19,8 +19,8 @@ const SubCategoryList = () => {
 
   return (
     <DataTable
-      fetchUrl="http://localhost:8080/v1/subCategories"
-      deleteUrl="http://localhost:8080/v1/subCategories"
+      fetchUrl="https://api.korbojoy.shop/v1/subCategories"
+      deleteUrl="https://api.korbojoy.shop/v1/subCategories"
       columns={columns}
       searchField="name"
       // defaultHiddenColumns={["id"]}

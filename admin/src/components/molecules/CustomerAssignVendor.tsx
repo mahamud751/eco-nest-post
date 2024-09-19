@@ -40,7 +40,7 @@ const CustomerAssignVendor: React.FC<CustomerAssignVendorProps> = ({
       };
 
       await axios.patch(
-        `http://localhost:8080/v1/advance/${id}/assign`,
+        `https://api.korbojoy.shop/v1/advance/${id}/assign`,
         updatedStatus
       );
 

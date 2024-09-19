@@ -60,7 +60,7 @@ const EditUser: React.FC<BaseEditProps> = ({ params }) => {
   return (
     <LoadingError loading={loading} error={error}>
       <AddForm
-        endpoint={`http://localhost:8080/v1/users/${params.id}`}
+        endpoint={`https://api.korbojoy.shop/v1/users/${params.id}`}
         additionalFields={additionalFields}
         buttonText="Edit User"
         id={params.id}

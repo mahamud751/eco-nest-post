@@ -54,7 +54,7 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
           <div className="flex">
             {data?.files?.map((detail: { src: string }) => (
               <Link
-                href={`http://localhost:8080/public/uploads/${detail.src}`}
+                href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

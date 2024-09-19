@@ -9,7 +9,7 @@ const AddCategory: React.FC = () => {
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
-      endpoint="http://localhost:8080/v1/categories"
+      endpoint="https://api.korbojoy.shop/v1/categories"
       additionalFields={additionalFields}
       buttonText="Add Category"
       id=""
