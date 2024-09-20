@@ -44,6 +44,23 @@ export class ProductController {
     return this.productService.findAll(page, perPage, limit, flashsale);
   }
 
+  @Get('/popular')
+  @ApiOperation({ summary: 'Get paginated popular products based on views' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return paginated popular products.',
+  })
+  @ApiResponse({ status: 404, description: 'Not Found.' })
+  async findPopular(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    const maxPerPage = 15;
+    const validPerPage = Math.min(Number(perPage), maxPerPage);
+
+    return this.productService.findPopular(page, validPerPage);
+  }
+
   @Get('/latest')
   @ApiOperation({ summary: 'Get paginated latest products' })
   @ApiResponse({
