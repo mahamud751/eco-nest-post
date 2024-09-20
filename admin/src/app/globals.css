@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles for light mode */
 body {
   width: 100%;
   max-width: 100%;
@@ -12,40 +11,48 @@ body {
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.57143;
-  color: #637381; /* Gray text color for light mode */
-  background-color: rgb(
-    234,
-    239,
-    244
-  ); /* Light gray background for light mode */
+  color: #637381;
+  background-color: rgb(234, 239, 244);
 }
 
 html {
   font-size: 0.875rem;
 }
 
-/* Dark mode styles */
 body.dark {
-  color: #e5e7eb; /* Light text color for dark mode */
-  background-color: #1f2937; /* Dark background color for dark mode */
+  color: #e5e7eb;
+  background-color: #1f2937;
 }
 
-/* Ensure full width for DataGrid */
 .css-1ue1bo9-MuiDataGrid-root {
   width: 100% !important;
 }
 
-/* Dark mode styles for DataGrid */
 body.dark .css-1ue1bo9-MuiDataGrid-root {
-  background-color: #1f2937; /* Dark background for DataGrid */
-  color: #e5e7eb; /* Light text color for DataGrid */
+  background-color: #1f2937;
+  color: #e5e7eb;
 }
 
-/* Styles for upload label */
 .label-upload:hover {
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1); /* Light shadow on hover */
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 }
 
 .label-upload:focus-within {
-  border-color: #3b82f6; /* Blue border color when focused */
+  border-color: #3b82f6;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }

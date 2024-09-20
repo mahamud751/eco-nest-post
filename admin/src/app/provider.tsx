@@ -1,16 +1,16 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import { UserProvider } from "@/services/contexts/UserProvider";
 import AppMenu from "@/components/organisms/layout/Header/AppMenu";
 import { lightTheme, darkTheme } from "@/services/theme/theme";
-import Loading from "@/components/atoms/Loading";
+import AnimatedImage from "@/components/atoms/AnimatedImage";
 import { useAuth } from "@/services/hooks/auth";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
 
   useEffect(() => {
@@ -28,13 +28,35 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     });
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        bgcolor="background.default"
+      >
+        <AnimatedImage />
+      </Box>
+    );
+  }
+
   return (
     <UserProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ProtectedRoutes>
           {pathname !== "/login" ? (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<div>Loading...</div>}>
               <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
                 {children}
               </AppMenu>

@@ -40,12 +40,9 @@ export default function Navbar() {
   return (
     <AppBar position="static" className="bg-white text-black shadow-md">
       <Toolbar className="flex justify-between">
-        {/* Company Name */}
         <Link href="/" className="text-xl font-bold">
           KorboJoy
         </Link>
-
-        {/* Search Bar */}
         <div className="hidden sm:flex w-1/2 items-center bg-gray-100 p-2 rounded">
           <InputBase
             placeholder="Search products..."
@@ -54,18 +51,15 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Cart Icon */}
         <IconButton color="inherit" onClick={toggleCart}>
           <Badge badgeContent={2} color="primary">
             <ShoppingCart />
           </Badge>
         </IconButton>
 
-        {/* Cart Modal */}
         <Drawer anchor="right" open={cartOpen} onClose={toggleCart}>
           <div className="w-80 p-4">
             <h2 className="text-lg font-bold">Your Cart</h2>
-            {/* Cart items */}
             <div className="mt-4">
               <div className="flex justify-between items-center">
                 <div>
@@ -82,7 +76,6 @@ export default function Navbar() {
           </div>
         </Drawer>
 
-        {/* Sign Up Button */}
         <Link href="/signup">
           <Button variant="outlined" color="inherit" startIcon={<FiUser />}>
             Sign Up
@@ -90,9 +83,7 @@ export default function Navbar() {
         </Link>
       </Toolbar>
 
-      {/* Second Row for Categories */}
       <Toolbar className="bg-gray-100">
-        {/* Category Dropdown */}
         <div className="relative category-dropdown">
           <Button
             onClick={toggleCategories}
@@ -106,7 +97,6 @@ export default function Navbar() {
           {categoriesOpen && <CategoryMenu />}
         </div>
 
-        {/* Static Links */}
         <div className="ml-auto flex space-x-4">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
