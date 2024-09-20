@@ -39,8 +39,9 @@ export class ProductController {
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('limit') limit?: number,
+    @Query('flashsale') flashsale?: string,
   ): Promise<PaginatedResult<Product>> {
-    return this.productService.findAll(page, perPage, limit);
+    return this.productService.findAll(page, perPage, limit, flashsale);
   }
 
   @Get('/latest')

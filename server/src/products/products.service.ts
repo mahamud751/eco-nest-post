@@ -78,19 +78,26 @@ export class ProductService {
     page: number = 1,
     perPage: number = 10,
     limit?: number,
+    flashsale?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const limitNumber = Number(limit);
 
     const skip = (pageNumber - 1) * perPageNumber;
-    const take = limitNumber || perPageNumber; // Use limit if provided, otherwise use perPage
+    const take = limitNumber || perPageNumber;
 
-    const totalCountPromise = this.prisma.product.count();
+    const where: any = {};
+    if (flashsale) {
+      where.flashsale = flashsale;
+    }
+
+    const totalCountPromise = this.prisma.product.count({ where });
 
     const dataPromise = this.prisma.product.findMany({
       skip,
       take,
+      where,
       orderBy: { createdAt: 'desc' },
       include: {
         category: true,
