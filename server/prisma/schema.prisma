@@ -8,24 +8,24 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  name       String
-  email      String     @unique
-  phone      String?
-  userId     String?
-  refferCode String?
-  gender     Gender     @default(Other)
-  password   String
-  address    String?
-  role       UserRole   @default(user)
-  branchId   String?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  photos     Json[]
-  status     UserStatus @default(active)
-  branch     Branch?    @relation(fields: [branchId], references: [id])
-  advances   Advance[]  @relation("VendorAdvances")
- lastVisited String[] @default([])
+  id          String     @id @default(uuid())
+  name        String
+  email       String     @unique
+  phone       String?
+  userId      String?
+  refferCode  String?
+  gender      Gender     @default(Other)
+  password    String
+  address     String?
+  role        UserRole   @default(user)
+  branchId    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  photos      Json[]
+  status      UserStatus @default(active)
+  branch      Branch?    @relation(fields: [branchId], references: [id])
+  advances    Advance[]  @relation("VendorAdvances")
+  lastVisited String[]   @default([])
 }
 
 model Vendor {

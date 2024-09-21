@@ -221,7 +221,7 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
-    // Update views and last visited
+    // Update views
     await this.prisma.product.update({
       where: { id },
       data: { views: { increment: 1 }, updatedAt: new Date() },
@@ -229,7 +229,27 @@ export class ProductService {
 
     // If userId is provided, log the last visit
     if (userId) {
-      await this.userService.addLastVisit(userId, id);
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      // Ensure lastVisited is an array if not already
+      const updatedLastVisited = user.lastVisited || [];
+
+      // Add the product ID if it doesn't already exist
+      if (!updatedLastVisited.includes(id)) {
+        updatedLastVisited.push(id);
+      }
+
+      // Update the user with the new lastVisited array
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: { lastVisited: updatedLastVisited },
+      });
     }
 
     return product;

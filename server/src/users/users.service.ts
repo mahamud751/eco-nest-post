@@ -188,35 +188,11 @@ export class UsersService {
     return { data, total };
   }
 
-  async addLastVisit(userId: string, productId: string): Promise<void> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    // Ensure lastVisited is an array if not already
-    const updatedLastVisited = user.lastVisited || [];
-
-    // Add the product ID if it doesn't already exist
-    if (!updatedLastVisited.includes(productId)) {
-      updatedLastVisited.push(productId);
-    }
-
-    // Update the user with the new lastVisited array
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { lastVisited: updatedLastVisited },
-    });
-  }
-
   async getLastVisitedProducts(userId: string): Promise<Product[]> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
-        lastVisited: true, // Make sure you're accessing the correct field name
+        lastVisited: true,
       },
     });
 

@@ -78,15 +78,6 @@ export class UsersController {
     return this.usersService.getUsers(role, page, perPage);
   }
 
-  @Patch(':userId/last-visit/:productId')
-  async addLastVisit(
-    @Param('userId') userId: string,
-    @Param('productId') productId: string,
-  ) {
-    await this.usersService.addLastVisit(userId, productId);
-    return { message: 'Product added to last visited' };
-  }
-
   @Get(':userId/last-visit')
   async getLastVisitedProducts(
     @Param('userId') userId: string,
