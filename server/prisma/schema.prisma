@@ -25,7 +25,7 @@ model User {
   status     UserStatus @default(active)
   branch     Branch?    @relation(fields: [branchId], references: [id])
   advances   Advance[]  @relation("VendorAdvances")
-  lastVisit  Product[] @relation("LastVisitedProducts")
+ lastVisited String[] @default([])
 }
 
 model Vendor {
@@ -67,7 +67,6 @@ model Product {
   category      Category     @relation("CategoryProducts", fields: [categoryId], references: [id])
   review        Review?      @relation(fields: [reviewId], references: [id])
   subcategory   SubCategory? @relation("SubCategoryProducts", fields: [subcategoryId], references: [id])
-  lastVisitedBy User[] @relation("LastVisitedProducts")
 }
 
 model Category {

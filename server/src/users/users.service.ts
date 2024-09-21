@@ -189,28 +189,38 @@ export class UsersService {
   }
 
   async addLastVisit(userId: string, productId: string): Promise<void> {
-    const product = await this.prisma.product.findUnique({
-      where: { id: productId },
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
     });
-    if (!product) {
-      throw new NotFoundException('Product not found');
+
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
 
+    // Add the product ID to the user's last visited products
+    const lastVisited = user.lastVisited || [];
+
+    // Check if the product is already in the last visited list
+    if (!lastVisited.includes(productId)) {
+      // Limit to a certain number of last visited products if needed
+      if (lastVisited.length >= 10) {
+        lastVisited.shift(); // Remove the oldest if reaching limit
+      }
+      lastVisited.push(productId);
+    }
+
+    // Update the user record with the new last visited array
     await this.prisma.user.update({
       where: { id: userId },
-      data: {
-        lastVisit: {
-          connect: { id: productId },
-        },
-      },
+      data: { lastVisited },
     });
   }
 
   async getLastVisitedProducts(userId: string): Promise<Product[]> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        lastVisit: true, // Include last visited products
+      select: {
+        lastVisited: true, // Make sure you're accessing the correct field name
       },
     });
 
@@ -218,7 +228,20 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return user.lastVisit;
+    const productIds = user.lastVisited;
+
+    // Fetch the products based on the IDs in lastVisited
+    const products = await this.prisma.product.findMany({
+      where: { id: { in: productIds } },
+      include: {
+        category: true,
+        subcategory: true,
+        branch: true,
+        review: true,
+      },
+    });
+
+    return products;
   }
 
   async getAdmin(email: string): Promise<any> {

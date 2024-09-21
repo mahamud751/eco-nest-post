@@ -9,12 +9,14 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client'; // Import Product type from Prisma client
 import { AuditLogService } from 'src/audit/audit.service';
 import { PaginatedResult } from './type';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly auditLogService: AuditLogService,
+    private readonly userService: UsersService,
   ) {}
 
   async create(
@@ -204,7 +206,7 @@ export class ProductService {
     return { data, total };
   }
 
-  async findOne(id: string): Promise<Product> {
+  async findOne(id: string, userId?: string): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id },
       include: {
@@ -219,10 +221,16 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
+    // Update views and last visited
     await this.prisma.product.update({
       where: { id },
       data: { views: { increment: 1 }, updatedAt: new Date() },
     });
+
+    // If userId is provided, log the last visit
+    if (userId) {
+      await this.userService.addLastVisit(userId, id);
+    }
 
     return product;
   }
