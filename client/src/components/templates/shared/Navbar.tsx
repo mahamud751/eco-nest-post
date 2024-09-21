@@ -15,7 +15,15 @@ import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 import Link from "next/link";
 import { CategoryMenu } from "@/components/templates/shared/CategoryMenu";
 
+import { useAuth } from "@/services/hooks/auth";
+
 export default function Navbar() {
+  const { user, logoutUser } = useAuth();
+
+  const handleLogOut = () => {
+    logoutUser();
+  };
+
   const [cartOpen, setCartOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
 
@@ -43,6 +51,7 @@ export default function Navbar() {
         <Link href="/" className="text-xl font-bold">
           KorboJoy
         </Link>
+
         <div className="hidden sm:flex w-1/2 items-center bg-gray-100 p-2 rounded">
           <InputBase
             placeholder="Search products..."
@@ -76,11 +85,24 @@ export default function Navbar() {
           </div>
         </Drawer>
 
-        <Link href="/signup">
-          <Button variant="outlined" color="inherit" startIcon={<FiUser />}>
-            Sign Up
-          </Button>
-        </Link>
+        {/* Conditional rendering for user login state */}
+        {user ? (
+          <div className="flex items-center space-x-4">
+            <span>Welcome, {user.name}</span>
+            <span
+              onClick={handleLogOut}
+              className="cursor-pointer text-gray-700 hover:text-blue-500"
+            >
+              Log Out
+            </span>
+          </div>
+        ) : (
+          <Link href="/login">
+            <span className="cursor-pointer text-gray-700 hover:text-blue-500">
+              Sign Up / Log In
+            </span>
+          </Link>
+        )}
       </Toolbar>
 
       <Toolbar className="bg-gray-100">

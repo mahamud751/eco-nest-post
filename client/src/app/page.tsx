@@ -4,13 +4,12 @@ import CategoryProduct from "@/components/pageComponents/home/CategoryProduct";
 import HomeFavouriteTab from "@/components/pageComponents/home/HomeFavouriteTab";
 import ProductPage from "@/components/pageComponents/home/Products";
 import VerticalProductSlider from "@/components/pageComponents/home/VerticalPordoucSlider";
-import Navbar from "@/components/templates/shared/Navbar";
+
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <Navbar />
       <Banner />
       <CategoryPage />
       {/* <ProductPage /> */}

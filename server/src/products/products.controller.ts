@@ -14,11 +14,15 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginatedResult } from './type';
 import { Product } from '@prisma/client';
+import { UsersService } from 'src/users/users.service';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new product' })
@@ -52,7 +56,7 @@ export class ProductController {
   })
   @ApiResponse({ status: 404, description: 'Not Found.' })
   async findRecentlyVisited(
-    @Query('userId') userId: string, // optional: could track by user
+    @Query('userId') userId: string,
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
   ): Promise<PaginatedResult<Product>> {
@@ -97,8 +101,17 @@ export class ProductController {
   @ApiOperation({ summary: 'Get a product by ID' })
   @ApiResponse({ status: 200, description: 'Return the product by ID.' })
   @ApiResponse({ status: 404, description: 'Product not found.' })
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @Query('userId') userId?: string, // Optional user ID
+  ) {
+    const product = await this.productService.findOne(id);
+
+    if (userId) {
+      await this.userService.addLastVisit(userId, id);
+    }
+
+    return product;
   }
 
   @Patch(':id')

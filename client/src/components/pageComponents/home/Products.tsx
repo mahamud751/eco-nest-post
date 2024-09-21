@@ -7,7 +7,7 @@ import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
 
 interface Product {
-  _id: string;
+  id: string;
   name: string;
   fulldesc: string;
   price: string;
@@ -62,9 +62,9 @@ const Products = () => {
         </div>
 
         {products?.map((product) => (
-          <SwiperSlide key={product._id}>
+          <SwiperSlide key={product.id}>
             <ProductCard
-              key={product._id}
+              key={product.id}
               imageUrl1={product.photos[0]?.src || ""}
               imageUrl2={product.photos[1]?.src || ""}
               productName={product.name}

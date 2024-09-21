@@ -11,7 +11,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { Prisma, UserRole } from '@prisma/client';
+import { Prisma, Product, UserRole } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuditLogService } from 'src/audit/audit.service';
 
@@ -186,6 +186,39 @@ export class UsersService {
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
     return { data, total };
+  }
+
+  async addLastVisit(userId: string, productId: string): Promise<void> {
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        lastVisit: {
+          connect: { id: productId },
+        },
+      },
+    });
+  }
+
+  async getLastVisitedProducts(userId: string): Promise<Product[]> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        lastVisit: true, // Include last visited products
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user.lastVisit;
   }
 
   async getAdmin(email: string): Promise<any> {

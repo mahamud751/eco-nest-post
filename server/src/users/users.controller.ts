@@ -23,7 +23,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
-import { UserRole } from '@prisma/client';
+import { Product, UserRole } from '@prisma/client';
 
 @ApiTags('users')
 @Controller('users')
@@ -76,6 +76,22 @@ export class UsersController {
     @Query('perPage') perPage: number = 10,
   ) {
     return this.usersService.getUsers(role, page, perPage);
+  }
+
+  @Patch(':userId/last-visit/:productId')
+  async addLastVisit(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ) {
+    await this.usersService.addLastVisit(userId, productId);
+    return { message: 'Product added to last visited' };
+  }
+
+  @Get(':userId/last-visit')
+  async getLastVisitedProducts(
+    @Param('userId') userId: string,
+  ): Promise<Product[]> {
+    return this.usersService.getLastVisitedProducts(userId);
   }
 
   @Get('admin')

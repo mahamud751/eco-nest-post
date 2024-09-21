@@ -9,7 +9,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 
 interface Category {
-  _id: string;
+  id: string;
   name: string;
   photos: { src: string }[];
 }
@@ -97,7 +97,7 @@ const CategoriesPage: FC = () => {
         </div>
 
         {categories?.map((category) => (
-          <SwiperSlide key={category._id}>
+          <SwiperSlide key={category.id}>
             <CategoryCard
               photos={category.photos[0]?.src || ""}
               categoryName={category.name}

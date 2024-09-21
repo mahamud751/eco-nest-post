@@ -9,7 +9,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import UseFetch from "@/services/hooks/useFetch";
 
 interface Product {
-  _id: string;
+  id: string;
   name: string;
   price: string;
   photos: { src: string }[];
@@ -104,7 +104,7 @@ const VerticalProductSlider: FC = () => {
           style={{ height: 600 }}
         >
           {products?.map((product) => (
-            <SwiperSlide key={product._id} style={{ height: 90 }}>
+            <SwiperSlide key={product.id} style={{ height: 90 }}>
               <ProductCard
                 photo={product.photos[0]?.src || ""}
                 productName={product.name}
