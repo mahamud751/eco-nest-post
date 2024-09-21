@@ -197,22 +197,18 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    // Add the product ID to the user's last visited products
-    const lastVisited = user.lastVisited || [];
+    // Ensure lastVisited is an array if not already
+    const updatedLastVisited = user.lastVisited || [];
 
-    // Check if the product is already in the last visited list
-    if (!lastVisited.includes(productId)) {
-      // Limit to a certain number of last visited products if needed
-      if (lastVisited.length >= 10) {
-        lastVisited.shift(); // Remove the oldest if reaching limit
-      }
-      lastVisited.push(productId);
+    // Add the product ID if it doesn't already exist
+    if (!updatedLastVisited.includes(productId)) {
+      updatedLastVisited.push(productId);
     }
 
-    // Update the user record with the new last visited array
+    // Update the user with the new lastVisited array
     await this.prisma.user.update({
       where: { id: userId },
-      data: { lastVisited },
+      data: { lastVisited: updatedLastVisited },
     });
   }
 
