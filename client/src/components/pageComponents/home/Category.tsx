@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
-import { Card, Typography, IconButton } from "@mui/material";
-import Image from "next/image";
-import UseFetch from "@/services/hooks/useFetch";
+import { Card, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Image from "next/image";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import UseFetch from "@/services/hooks/useFetch";
 
 interface Category {
   _id: string;

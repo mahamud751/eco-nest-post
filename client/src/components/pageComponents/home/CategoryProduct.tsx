@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Tabs, Tab, Box, Grid } from "@mui/material";
+import { Tabs, Tab, Box } from "@mui/material";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
 
@@ -61,24 +65,55 @@ const CategoryProduct = () => {
 
         <Box sx={{ marginLeft: 3, marginTop: 5 }}>
           {selectedCategory ? (
-            <Grid container spacing={2}>
-              {selectedCategory.products.length > 0 ? (
-                selectedCategory.products.map((product) => (
-                  <Grid item xs={12} sm={6} md={3} key={product._id}>
-                    <ProductCard
-                      key={product._id}
-                      imageUrl1={product.photos[0]?.src || ""}
-                      imageUrl2={product.photos[1]?.src || ""}
-                      productName={product.name}
-                      description={product.fulldesc}
-                      price={`$${product.price}`}
-                    />
-                  </Grid>
-                ))
-              ) : (
-                <div>No products available in this category</div>
-              )}
-            </Grid>
+            selectedCategory.products.length > 0 ? (
+              <Swiper
+                modules={[Autoplay, Navigation, Pagination]}
+                spaceBetween={30}
+                slidesPerView={3}
+                navigation={{
+                  nextEl: ".swiper-button-prev",
+                  prevEl: ".swiper-button-next",
+                }}
+                pagination={{ clickable: true }}
+                breakpoints={{
+                  640: { slidesPerView: 1 },
+                  768: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                  1280: { slidesPerView: 5 },
+                }}
+              >
+                <div
+                  className="navigation-buttons"
+                  style={{
+                    position: "absolute",
+                    top: "22px",
+                    right: "60px",
+                    zIndex: 10,
+                    display: "flex",
+                    gap: "10px",
+                  }}
+                >
+                  <ArrowForwardIosIcon className="swiper-button-prev p-3" />
+                  <ArrowBackIosIcon className="swiper-button-next p-3" />
+                </div>
+                {selectedCategory.products.map((product) => (
+                  <SwiperSlide key={product._id}>
+                    <div className="mt-16">
+                      <ProductCard
+                        key={product._id}
+                        imageUrl1={product.photos[0]?.src || ""}
+                        imageUrl2={product.photos[1]?.src || ""}
+                        productName={product.name}
+                        description={product.fulldesc}
+                        price={`$${product.price}`}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <div>No products available in this category</div>
+            )
           ) : (
             <div>Select a category to view products</div>
           )}

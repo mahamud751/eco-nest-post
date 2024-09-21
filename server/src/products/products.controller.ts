@@ -44,6 +44,21 @@ export class ProductController {
     return this.productService.findAll(page, perPage, limit, flashsale);
   }
 
+  @Get('/recentVisit')
+  @ApiOperation({ summary: 'Get recently visited products' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return recently visited products.',
+  })
+  @ApiResponse({ status: 404, description: 'Not Found.' })
+  async findRecentlyVisited(
+    @Query('userId') userId: string, // optional: could track by user
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    return this.productService.findRecentlyVisited(userId, page, perPage);
+  }
+
   @Get('/popular')
   @ApiOperation({ summary: 'Get paginated popular products based on views' })
   @ApiResponse({

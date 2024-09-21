@@ -168,6 +168,42 @@ export class ProductService {
     return { data, total: fixedTotalCount };
   }
 
+  async findRecentlyVisited(
+    userId: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<PaginatedResult<Product>> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Math.min(Number(perPage) || 10, 20);
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const where: any = {};
+    if (userId) {
+      where.userId = userId;
+    }
+
+    const totalCountPromise = this.prisma.product.count({
+      where,
+    });
+
+    const dataPromise = this.prisma.product.findMany({
+      skip,
+      take: perPageNumber,
+      where,
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        category: true,
+        subcategory: true,
+        branch: true,
+        review: true,
+      },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
+  }
+
   async findOne(id: string): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id },
@@ -185,7 +221,7 @@ export class ProductService {
 
     await this.prisma.product.update({
       where: { id },
-      data: { views: { increment: 1 } },
+      data: { views: { increment: 1 }, updatedAt: new Date() },
     });
 
     return product;
