@@ -15,6 +15,15 @@ export interface Banner {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface Faq {
+  id: string;
+  title: string;
+  desc: string;
+  position: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface Subcategory {
   id: string;

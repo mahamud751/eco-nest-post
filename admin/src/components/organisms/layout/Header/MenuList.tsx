@@ -210,6 +210,21 @@ export default function MenuList({ open }: MenuListProps) {
         },
       ],
     },
+    {
+      text: "Faq",
+      icon: <School />,
+      path: "/faq",
+      submenus: [
+        {
+          text: "Add Faq",
+          path: "/add-faq",
+        },
+        {
+          text: "Faq List",
+          path: "/faq-list",
+        },
+      ],
+    },
   ];
 
   const menuItems = isClient
