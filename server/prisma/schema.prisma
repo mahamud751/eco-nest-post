@@ -145,6 +145,16 @@ model BlogComment {
   blog      Blog     @relation("BlogComments", fields: [blogId], references: [id])
 }
 
+model Faq {
+  id        String   @id @default(uuid())
+  title     String
+  desc      String
+  position  String
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Demo {
   id              String   @id @default(uuid())
   userName        String
