@@ -1,12 +1,11 @@
+// In your rootReducer.ts or reducers/index.ts
 import { combineReducers } from "redux";
-import cartReducer from "./cartReducer";
-import { categoryReducer, selectedCategoryReducer } from "./ctegoryReducer";
-import { productsReducer, selectedProductsReducer } from "./productReducer";
+import cartReducer from "./cartReducer"; // Example reducer
 
-export default combineReducers({
-  cartReducer,
-  allProducts: productsReducer,
-  product: selectedProductsReducer,
-  allCategory: categoryReducer,
-  category: selectedCategoryReducer,
+const rootReducer = combineReducers({
+  cart: cartReducer,
+  // other reducers
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
+export default rootReducer;

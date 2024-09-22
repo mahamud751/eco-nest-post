@@ -15,7 +15,7 @@ const page = () => {
       {/* <ProductPage /> */}
       <HomeFavouriteTab />
       <CategoryProduct />
-      <VerticalProductSlider />
+      {/* <VerticalProductSlider /> */}
     </div>
   );
 };

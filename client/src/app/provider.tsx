@@ -3,7 +3,6 @@
 import { Provider } from "react-redux";
 import { usePathname } from "next/navigation";
 import ScrollToTop from "react-scroll-to-top";
-import { store } from "./redux/store";
 
 import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
@@ -12,6 +11,7 @@ import { UserProvider } from "@/services/contexts/UserProvider";
 import Navbar from "@/components/templates/shared/Navbar";
 import AnimatedImage from "@/components/atoms/AnimatedImage";
 import { Box } from "@mui/material";
+import store from "./redux/store";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);

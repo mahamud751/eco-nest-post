@@ -11,13 +11,8 @@ const HomeFavouriteTab = () => {
   };
 
   const tabData = [
-    {
-      label: "Flashsale",
-      apiEndpoint: "products?flashsale=yes",
-      hasCountdown: true,
-    },
-    { label: "Latest", apiEndpoint: "products/latest", hasCountdown: false },
-    { label: "Popular", apiEndpoint: "products/popular", hasCountdown: false },
+    { label: "Latest", apiEndpoint: "products/latest" },
+    { label: "Popular", apiEndpoint: "products/popular" },
   ];
 
   return (
@@ -55,7 +50,6 @@ const HomeFavouriteTab = () => {
             <HomeFavouriteTabContent
               title={`${tab.label} Products`}
               apiEndpoint={tab.apiEndpoint}
-              hasCountdown={tab.hasCountdown}
             />
           </TabPanel>
         ))}

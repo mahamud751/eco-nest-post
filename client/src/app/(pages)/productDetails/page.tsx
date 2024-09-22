@@ -163,9 +163,7 @@ const ProductDetails = () => {
           </Card>
 
           {/* Second Card: Just Hello */}
-          <Card className="border">
-            <VerticalProductSlider />
-          </Card>
+          <Card className="border">{/* <VerticalProductSlider /> */}</Card>
 
           {/* Image Card */}
           <Card className="border">

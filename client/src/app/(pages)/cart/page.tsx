@@ -14,13 +14,14 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-
-interface CartItem {
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-}
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/app/redux/reducers"; // Adjust path as needed
+import { CartItem } from "@/app/redux/types"; // Adjust path as needed
+import {
+  delete_item,
+  remove_item,
+  update_quantity,
+} from "@/app/redux/actions/cartAction"; // Adjust path as needed
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -42,17 +43,14 @@ const ShoppingCartStep: React.FC<{
         </TableHead>
         <TableBody>
           {cartItems.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <img src={item.image} alt={item.name} className="w-20" />
-                {item.name}
-              </TableCell>
+            <TableRow key={item.productId}>
+              <TableCell>{item.productName}</TableCell>
               <TableCell>
                 <Button onClick={() => onUpdate(index, -1)}>-</Button>
                 <span>{item.quantity}</span>
                 <Button onClick={() => onUpdate(index, 1)}>+</Button>
               </TableCell>
-              <TableCell>{item.price * item.quantity}</TableCell>
+              <TableCell>{(item.price * item.quantity).toFixed(2)}</TableCell>
               <TableCell>
                 <Button onClick={() => onRemove(index)}>Remove</Button>
               </TableCell>
@@ -63,7 +61,9 @@ const ShoppingCartStep: React.FC<{
     </TableContainer>
     <div>
       Total:{" "}
-      {cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+      {cartItems
+        .reduce((acc, item) => acc + item.price * item.quantity, 0)
+        .toFixed(2)}
     </div>
   </Card>
 );
@@ -71,13 +71,13 @@ const ShoppingCartStep: React.FC<{
 const CheckoutStep: React.FC = () => (
   <div className="flex justify-between">
     <div className="w-1/2 p-4">
-      <h2>User Details</h2>
+      <h2 className="font-bold mb-2">User Details</h2>
       <TextField label="Name" fullWidth margin="normal" />
       <TextField label="Email" fullWidth margin="normal" />
       <TextField label="Phone" fullWidth margin="normal" />
     </div>
     <div className="w-1/2 p-4">
-      <h2>Billing Information</h2>
+      <h2 className="font-bold mb-2">Billing Information</h2>
       <TextField label="Address" fullWidth margin="normal" />
       <TextField label="City" fullWidth margin="normal" />
       <TextField label="Postal Code" fullWidth margin="normal" />
@@ -87,65 +87,73 @@ const CheckoutStep: React.FC = () => (
 
 const OrderCompleteStep: React.FC = () => (
   <div>
-    <h2>Thank you for your order!</h2>
+    <h2 className="text-xl font-bold">Thank you for your order!</h2>
     <p>Your order has been placed successfully.</p>
   </div>
 );
 
 const CustomizedStepper: React.FC = () => {
+  const dispatch = useDispatch();
+  const cartItemsFromRedux = useSelector(
+    (state: RootState) => state.cart.cartItems
+  );
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    { name: "Item 1", image: "/path/to/image1.jpg", price: 20, quantity: 1 },
-    // Add more items as needed
-  ]);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  const handleNext = () => setActiveStep((prev) => prev + 1);
+  const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const updateQuantity = (index: number, change: number) => {
-    const newItems = [...cartItems];
-    newItems[index].quantity = Math.max(0, newItems[index].quantity + change);
-    setCartItems(newItems);
+    const item = cartItemsFromRedux[index];
+
+    if (item) {
+      const newQuantity = item.quantity + change;
+
+      if (newQuantity <= 0) {
+        dispatch(remove_item(item.productId));
+      } else {
+        dispatch(update_quantity(item.productId, newQuantity));
+      }
+    }
   };
 
   const removeItem = (index: number) => {
-    const newItems = cartItems.filter((_, i) => i !== index);
-    setCartItems(newItems);
+    const item = cartItemsFromRedux[index];
+    if (item) {
+      dispatch(delete_item(item.productId));
+    }
   };
 
   return (
-    <div className="p-6">
-      <Stepper activeStep={activeStep} alternativeLabel>
+    <div>
+      <Stepper activeStep={activeStep}>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
       </Stepper>
-
-      {activeStep === 0 && (
-        <ShoppingCartStep
-          cartItems={cartItems}
-          onUpdate={updateQuantity}
-          onRemove={removeItem}
-        />
-      )}
-      {activeStep === 1 && <CheckoutStep />}
-      {activeStep === 2 && <OrderCompleteStep />}
-
-      <div className="flex justify-between mt-4">
-        {activeStep > 0 && <Button onClick={handleBack}>Back</Button>}
-        {activeStep < steps.length - 1 && (
-          <Button onClick={handleNext}>Next</Button>
+      <div>
+        {activeStep === 0 && (
+          <ShoppingCartStep
+            cartItems={cartItemsFromRedux}
+            onUpdate={updateQuantity}
+            onRemove={removeItem}
+          />
         )}
-        {activeStep === steps.length - 1 && (
-          <Button onClick={() => alert("Order placed!")}>Finish</Button>
-        )}
+        {activeStep === 1 && <CheckoutStep />}
+        {activeStep === 2 && <OrderCompleteStep />}
+      </div>
+      <div>
+        <Button disabled={activeStep === 0} onClick={handleBack}>
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={activeStep === steps.length - 1 ? undefined : handleNext}
+        >
+          {activeStep === steps.length - 1 ? "Finish" : "Next"}
+        </Button>
       </div>
     </div>
   );

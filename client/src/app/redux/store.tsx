@@ -1,8 +1,14 @@
 import { createStore } from "redux";
-import rootReducer from "./reducers"; // Your combined reducers
-
-// Define the RootState type
-export type RootState = ReturnType<typeof rootReducer>;
+import { composeWithDevTools } from "redux-devtools-extension";
+import rootReducer from "./reducers"; // Import your combined reducers
 
 const initialStore = {};
-export const store = createStore(rootReducer, initialStore);
+
+// Create the store without `redux-thunk`
+const store = createStore(
+  rootReducer,
+  initialStore,
+  composeWithDevTools() // Still use dev tools, just no middleware
+);
+
+export default store;

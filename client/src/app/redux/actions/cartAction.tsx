@@ -1,58 +1,46 @@
-import { ThunkAction } from "redux-thunk";
-import { AnyAction } from "redux";
-import { ADD_ITEM, DELETE_CART, REMOVE_ITEM, CLEAR_CART } from "../types";
-import { RootState } from "../store"; // Adjust this import based on your store file
-import { CartItem } from "../types"; // Adjust this import based on your types file
+import {
+  CartItem,
+  CartActionTypes,
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  DELETE_FROM_CART,
+  CLEAR_CART,
+  UPDATE_QUANTITY,
+} from "../types";
 
-// Define the types for actions
-type ThunkResult<R> = ThunkAction<R, RootState, undefined, AnyAction>;
-
-// Add item action
-export const add_item = (item: CartItem): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: ADD_ITEM,
-      payload: item,
-    });
-
-    const { cartReducer } = getState(); // Access cartReducer from state
-    localStorage.setItem("cart", JSON.stringify(cartReducer.cart)); // Save cart in localStorage
+export const add_item = (product: CartItem): CartActionTypes => {
+  return {
+    type: ADD_TO_CART,
+    payload: product,
   };
 };
 
-// Remove item action
-export const remove_item = (item: CartItem): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: REMOVE_ITEM,
-      payload: item,
-    });
-
-    const { cartReducer } = getState(); // Access cartReducer from state
-    localStorage.setItem("cart", JSON.stringify(cartReducer.cart)); // Save updated cart in localStorage
+export const remove_item = (productId: string): CartActionTypes => {
+  return {
+    type: REMOVE_FROM_CART,
+    payload: productId,
   };
 };
 
-// Delete cart item by id action
-export const delete_cart = (id: string): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: DELETE_CART,
-      payload: id,
-    });
-
-    const { cartReducer } = getState(); // Access cartReducer from state
-    localStorage.setItem("cart", JSON.stringify(cartReducer.cart)); // Save updated cart in localStorage
+export const delete_item = (productId: string): CartActionTypes => {
+  return {
+    type: DELETE_FROM_CART,
+    payload: productId,
   };
 };
 
-// Clear cart action
-export const clear_cart = (): ThunkResult<void> => {
-  return (dispatch) => {
-    dispatch({
-      type: CLEAR_CART,
-    });
+export const clear_cart = (): CartActionTypes => {
+  return {
+    type: CLEAR_CART,
+  };
+};
 
-    localStorage.removeItem("cart"); // Clear the cart from localStorage
+export const update_quantity = (
+  productId: string,
+  quantity: number
+): CartActionTypes => {
+  return {
+    type: UPDATE_QUANTITY,
+    payload: { productId, quantity },
   };
 };

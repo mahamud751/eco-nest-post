@@ -122,7 +122,7 @@ export default function Navbar() {
         <div className="ml-auto flex space-x-4">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
-          <Link href="/checkout">Checkout</Link>
+          <Link href="/cart">Cart</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/contact">Contact</Link>
         </div>

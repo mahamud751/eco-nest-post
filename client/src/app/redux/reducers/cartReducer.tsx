@@ -1,79 +1,126 @@
-import { ADD_ITEM, DELETE_CART, REMOVE_ITEM, CLEAR_CART } from "../types";
-import { CartState, CartItem } from "../types"; // Adjust this import path if necessary
+import {
+  CartItem,
+  CartActionTypes,
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  DELETE_FROM_CART,
+  CLEAR_CART,
+  UPDATE_QUANTITY,
+} from "../types";
 
-// Initial state
-const initialState: CartState = {
-  cart: [],
+interface CartState {
+  cartItems: CartItem[];
+}
+
+// Load initial state from localStorage
+const loadCartFromLocalStorage = (): CartItem[] => {
+  if (typeof window !== "undefined") {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  }
+  return [];
 };
 
-export default function cartReducer(
+const initialState: CartState = {
+  cartItems: loadCartFromLocalStorage(),
+};
+const cartReducer = (
   state = initialState,
-  action: { type: string; payload: any }
-): CartState {
+  action: CartActionTypes
+): CartState => {
   switch (action.type) {
-    case ADD_ITEM:
-      const findItemIndex = state.cart.findIndex(
-        (item) => item.id === action.payload.id
+    case ADD_TO_CART: {
+      const existingItem = state.cartItems.find(
+        (item) => item.productId === action.payload.productId
       );
+      const updatedCartItems = existingItem
+        ? state.cartItems.map((item) =>
+            item.productId === action.payload.productId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        : [...state.cartItems, { ...action.payload, quantity: 1 }];
 
-      if (findItemIndex >= 0) {
-        const updatedCart = [...state.cart];
-        updatedCart[findItemIndex] = {
-          ...updatedCart[findItemIndex],
-          qtn: updatedCart[findItemIndex].qtn + 1,
-        };
-
-        return {
-          ...state,
-          cart: updatedCart,
-        };
-      } else {
-        const newItem: CartItem = { ...action.payload, qtn: 1 };
-        return {
-          ...state,
-          cart: [...state.cart, newItem],
-        };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCartItems));
       }
 
-    case REMOVE_ITEM:
-      const itemIndexToRemove = state.cart.findIndex(
-        (item) => item.id === action.payload.id
-      );
+      return {
+        ...state,
+        cartItems: updatedCartItems,
+      };
+    }
 
-      if (itemIndexToRemove >= 0) {
-        const updatedCart = [...state.cart];
-        updatedCart[itemIndexToRemove] = {
-          ...updatedCart[itemIndexToRemove],
-          qtn: Math.max(0, updatedCart[itemIndexToRemove].qtn - 1),
-        };
+    case UPDATE_QUANTITY: {
+      const updatedCartItems = state.cartItems
+        .map((item) => {
+          if (item.productId === action.payload.productId) {
+            return { ...item, quantity: action.payload.quantity };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0);
 
-        if (updatedCart[itemIndexToRemove].qtn === 0) {
-          updatedCart.splice(itemIndexToRemove, 1);
-        }
-
-        return {
-          ...state,
-          cart: updatedCart,
-        };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCartItems));
       }
-      return state;
 
-    case DELETE_CART:
-      const updatedCartAfterDelete = state.cart.filter(
-        (item) => item.id !== action.payload
+      return {
+        ...state,
+        cartItems: updatedCartItems,
+      };
+    }
+
+    case REMOVE_FROM_CART: {
+      const updatedCartItems = state.cartItems
+        .map((item) => {
+          if (item.productId === action.payload) {
+            const newQuantity = item.quantity - 1;
+            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
+          }
+          return item;
+        })
+        .filter((item) => item !== null);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      }
+
+      return {
+        ...state,
+        cartItems: updatedCartItems,
+      };
+    }
+
+    case DELETE_FROM_CART: {
+      const updatedCartItems = state.cartItems.filter(
+        (item) => item.productId !== action.payload
       );
-      return {
-        ...state,
-        cart: updatedCartAfterDelete,
-      };
 
-    case CLEAR_CART:
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      }
+
       return {
         ...state,
-        cart: [],
+        cartItems: updatedCartItems,
       };
+    }
+
+    case CLEAR_CART: {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("cart");
+      }
+
+      return {
+        ...state,
+        cartItems: [],
+      };
+    }
 
     default:
       return state;
   }
-}
+};
+
+export default cartReducer;

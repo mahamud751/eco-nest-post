@@ -39,7 +39,7 @@ const CategoryProduct = () => {
     return <div>Failed to load categories or no categories available</div>;
   }
 
-  const selectedCategory = categories[selectedCategoryIndex] || null;
+  const selectedCategory = categories[selectedCategoryIndex];
 
   return (
     <Box className="container mx-auto py-10">
@@ -54,7 +54,6 @@ const CategoryProduct = () => {
             borderColor: "divider",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-start",
             alignItems: "flex-end",
           }}
         >
@@ -64,58 +63,48 @@ const CategoryProduct = () => {
         </Tabs>
 
         <Box sx={{ marginLeft: 3, marginTop: 5 }}>
-          {selectedCategory ? (
-            selectedCategory.products.length > 0 ? (
-              <Swiper
-                modules={[Autoplay, Navigation, Pagination]}
-                spaceBetween={30}
-                slidesPerView={3}
-                navigation={{
-                  nextEl: ".swiper-button-prev",
-                  prevEl: ".swiper-button-next",
-                }}
-                pagination={{ clickable: true }}
-                breakpoints={{
-                  640: { slidesPerView: 1 },
-                  768: { slidesPerView: 2 },
-                  1024: { slidesPerView: 3 },
-                  1280: { slidesPerView: 5 },
+          {selectedCategory.products.length > 0 ? (
+            <Swiper
+              modules={[Autoplay, Navigation, Pagination]}
+              spaceBetween={30}
+              slidesPerView={3}
+              navigation={{
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }}
+              pagination={{ clickable: true }}
+              breakpoints={{
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1280: { slidesPerView: 5 },
+              }}
+            >
+              <div
+                className="navigation-buttons"
+                style={{
+                  position: "absolute",
+                  top: "22px",
+                  right: "60px",
+                  zIndex: 10,
+                  display: "flex",
+                  gap: "10px",
                 }}
               >
-                <div
-                  className="navigation-buttons"
-                  style={{
-                    position: "absolute",
-                    top: "22px",
-                    right: "60px",
-                    zIndex: 10,
-                    display: "flex",
-                    gap: "10px",
-                  }}
-                >
-                  <ArrowForwardIosIcon className="swiper-button-prev p-3" />
-                  <ArrowBackIosIcon className="swiper-button-next p-3" />
-                </div>
-                {selectedCategory.products.map((product) => (
-                  <SwiperSlide key={product.id}>
-                    <div className="mt-16">
-                      <ProductCard
-                        key={product.id}
-                        imageUrl1={product.photos[0]?.src || ""}
-                        imageUrl2={product.photos[1]?.src || ""}
-                        productName={product.name}
-                        description={product.fulldesc}
-                        price={`$${product.price}`}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <div>No products available in this category</div>
-            )
+                <ArrowForwardIosIcon className="swiper-button-next p-3" />
+                <ArrowBackIosIcon className="swiper-button-prev p-3" />
+              </div>
+              {selectedCategory.products.map((product) => (
+                <SwiperSlide key={product.id}>
+                  <div className="mt-16">
+                    <ProductCard product={product} />{" "}
+                    {/* Pass the whole product object */}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           ) : (
-            <div>Select a category to view products</div>
+            <div>No products available in this category</div>
           )}
         </Box>
       </div>
