@@ -20,7 +20,7 @@ const FaqForm: React.FC<FaqFormProps> = ({ faq }) => {
       <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
-          label="Faq Name"
+          label="Faq Description"
           name="desc"
           fullWidth
           defaultValue={faq?.desc || ""}
