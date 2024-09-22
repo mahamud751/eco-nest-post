@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Faq from "@/components/pageComponents/about/Faq";
 
 const About: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const About: React.FC = () => {
           <div className="flex flex-wrap justify-between">
             <div className="w-full md:w-1/2">
               <h2 className="part-title text-xl font-bold">Why Choose Us?</h2>
+              <Faq />
             </div>
             <div className="w-full md:w-1/2">
               <Image
