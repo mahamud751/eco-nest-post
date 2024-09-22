@@ -12,6 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Image from "next/image";
 import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
+import VerticalProductSlider from "@/components/pageComponents/home/VerticalPordoucSlider";
 
 const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState<string>("image1.jpg");
@@ -163,11 +164,7 @@ const ProductDetails = () => {
 
           {/* Second Card: Just Hello */}
           <Card className="border">
-            <CardContent>
-              <Typography variant="h6" className="font-bold">
-                Hello
-              </Typography>
-            </CardContent>
+            <VerticalProductSlider />
           </Card>
 
           {/* Image Card */}
