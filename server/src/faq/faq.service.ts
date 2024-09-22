@@ -20,10 +20,26 @@ export class FaqService {
     return { message: 'Faq comment created successfully', faq };
   }
 
-  async findAll() {
-    return this.prisma.faq.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.faq.count();
+
+    const dataPromise = this.prisma.faq.findMany({
+      skip,
+      take: perPageNumber,
       orderBy: { createdAt: 'desc' },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string) {

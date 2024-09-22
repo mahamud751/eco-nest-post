@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
@@ -30,10 +31,13 @@ export class FaqController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all faq comments' })
-  @ApiResponse({ status: 200, description: 'List of faq comments' })
-  findAll() {
-    return this.faqService.findAll();
+  @ApiOperation({ summary: 'Get all faq' })
+  @ApiResponse({ status: 200, description: 'Return all faq.' })
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.faqService.findAll(page, perPage);
   }
 
   @Get(':id')
