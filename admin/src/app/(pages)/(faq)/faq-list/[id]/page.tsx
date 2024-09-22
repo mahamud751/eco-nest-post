@@ -1,18 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Grid, SelectChangeEvent } from "@mui/material";
 import { Faq, BaseEditProps } from "@/services/types";
 import AddForm from "@/components/templates/AddForm";
 import useFetch from "@/services/hooks/UseRequest";
 import LoadingError from "@/components/atoms/LoadingError";
 import FaqForm from "@/components/pageComponents/FaqForm";
+import StatusSelect from "@/components/molecules/StatusSelect";
 
 const EditFaq: React.FC<BaseEditProps> = ({ params }) => {
   const { data, loading, error } = useFetch<Faq>(`faq/${params.id}`);
@@ -31,22 +25,7 @@ const EditFaq: React.FC<BaseEditProps> = ({ params }) => {
     <>
       <FaqForm faq={data} />
       <Grid item xs={4}>
-        <FormControl fullWidth>
-          <InputLabel id="status-select-label">Status</InputLabel>
-          <Select
-            labelId="status-select-label"
-            id="status-select"
-            label="Select Status"
-            name="status"
-            value={status}
-            onChange={handleStatusChange}
-          >
-            <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="processing">Processing</MenuItem>
-            <MenuItem value="approve">Approve</MenuItem>
-            <MenuItem value="reject">Reject</MenuItem>
-          </Select>
-        </FormControl>
+        <StatusSelect status={status} handleStatusChange={handleStatusChange} />
       </Grid>
     </>
   );

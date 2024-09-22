@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateFaqDto } from './dto/create-faq.dto';
 import { UpdateFaqDto } from './dto/update-faq.dto';
+import { AuditLogService } from 'src/audit/audit.service';
 
 @Injectable()
 export class FaqService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLogService: AuditLogService,
+  ) {}
 
   async create(createFaqDto: CreateFaqDto) {
     const { title, desc, position } = createFaqDto;
@@ -60,18 +64,17 @@ export class FaqService {
     });
 
     if (!faq) {
-      throw new NotFoundException('Faq comment not found');
+      throw new NotFoundException('Faq not found');
     }
 
-    const updatedFaqComment = await this.prisma.faq.update({
+    const updatedFaq = await this.prisma.faq.update({
       where: { id },
       data: updateFaqDto,
     });
 
-    return {
-      message: 'Faq comment updated successfully',
-      updatedFaqComment,
-    };
+    await this.auditLogService.log(id, 'Faq', 'UPDATE', faq, updatedFaq);
+
+    return { message: 'Faq updated successfully', updatedFaq };
   }
 
   async remove(id: string) {
