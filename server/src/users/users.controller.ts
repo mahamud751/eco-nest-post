@@ -78,13 +78,6 @@ export class UsersController {
     return this.usersService.getUsers(role, page, perPage);
   }
 
-  @Get(':userId/last-visit')
-  async getLastVisitedProducts(
-    @Param('userId') userId: string,
-  ): Promise<Product[]> {
-    return this.usersService.getLastVisitedProducts(userId);
-  }
-
   @Get('admin')
   @Roles('admin')
   @ApiOperation({ summary: 'Get admin user by email' })
@@ -135,6 +128,13 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.updateUser(id, updateUserDto);
+  }
+
+  @Get(':userId/last-visit')
+  async getLastVisitedProducts(
+    @Param('userId') userId: string,
+  ): Promise<Product[]> {
+    return this.usersService.getLastVisitedProducts(userId);
   }
 
   @Put('admin/:id')

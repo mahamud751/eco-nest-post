@@ -188,34 +188,6 @@ export class UsersService {
     return { data, total };
   }
 
-  async getLastVisitedProducts(userId: string): Promise<Product[]> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        lastVisited: true,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const productIds = user.lastVisited;
-
-    // Fetch the products based on the IDs in lastVisited
-    const products = await this.prisma.product.findMany({
-      where: { id: { in: productIds } },
-      include: {
-        category: true,
-        subcategory: true,
-        branch: true,
-        review: true,
-      },
-    });
-
-    return products;
-  }
-
   async getAdmin(email: string): Promise<any> {
     const adminUser = await this.prisma.user.findUnique({
       where: { email, role: 'admin' },
@@ -272,6 +244,34 @@ export class UsersService {
 
     await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
     return { message: 'User updated successfully', userUpdate };
+  }
+
+  async getLastVisitedProducts(userId: string): Promise<Product[]> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        lastVisited: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const productIds = user.lastVisited;
+
+    // Fetch the products based on the IDs in lastVisited
+    const products = await this.prisma.product.findMany({
+      where: { id: { in: productIds } },
+      include: {
+        category: true,
+        subcategory: true,
+        branch: true,
+        review: true,
+      },
+    });
+
+    return products;
   }
 
   async updateUserAdmin(id: string, updateUserDto: any): Promise<any> {
