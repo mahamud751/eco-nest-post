@@ -39,6 +39,7 @@ const EditFaq: React.FC<BaseEditProps> = ({ params }) => {
         photosData={[]}
         buttonText="Edit Faq"
         link="/faq-list"
+        isNoPhotoFile={true}
       />
     </LoadingError>
   );
