@@ -24,6 +24,7 @@ const loadCartFromLocalStorage = (): CartItem[] => {
 const initialState: CartState = {
   cartItems: loadCartFromLocalStorage(),
 };
+
 const cartReducer = (
   state = initialState,
   action: CartActionTypes
@@ -31,15 +32,21 @@ const cartReducer = (
   switch (action.type) {
     case ADD_TO_CART: {
       const existingItem = state.cartItems.find(
-        (item) => item.productId === action.payload.productId
+        (item) =>
+          item.product.id === action.payload.product.id &&
+          item.color === action.payload.color &&
+          item.size === action.payload.size
       );
+
       const updatedCartItems = existingItem
         ? state.cartItems.map((item) =>
-            item.productId === action.payload.productId
-              ? { ...item, quantity: item.quantity + 1 }
+            item.product.id === action.payload.product.id &&
+            item.color === action.payload.color &&
+            item.size === action.payload.size
+              ? { ...item, quantity: item.quantity + action.payload.quantity }
               : item
           )
-        : [...state.cartItems, { ...action.payload, quantity: 1 }];
+        : [...state.cartItems, { ...action.payload }];
 
       if (typeof window !== "undefined") {
         localStorage.setItem("cart", JSON.stringify(updatedCartItems));
@@ -50,11 +57,14 @@ const cartReducer = (
         cartItems: updatedCartItems,
       };
     }
-
     case UPDATE_QUANTITY: {
       const updatedCartItems = state.cartItems
         .map((item) => {
-          if (item.productId === action.payload.productId) {
+          if (
+            item.product.id === action.payload.product.id &&
+            item.color === action.payload.color &&
+            item.size === action.payload.size
+          ) {
             return { ...item, quantity: action.payload.quantity };
           }
           return item;
@@ -74,7 +84,7 @@ const cartReducer = (
     case REMOVE_FROM_CART: {
       const updatedCartItems = state.cartItems
         .map((item) => {
-          if (item.productId === action.payload) {
+          if (item.product.productId === action.payload) {
             const newQuantity = item.quantity - 1;
             return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
           }
@@ -94,7 +104,7 @@ const cartReducer = (
 
     case DELETE_FROM_CART: {
       const updatedCartItems = state.cartItems.filter(
-        (item) => item.productId !== action.payload
+        (item) => item.product.id !== action.payload // Ensure product.id is used
       );
 
       if (typeof window !== "undefined") {

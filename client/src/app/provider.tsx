@@ -12,6 +12,7 @@ import Navbar from "@/components/templates/shared/Navbar";
 import AnimatedImage from "@/components/atoms/AnimatedImage";
 import { Box } from "@mui/material";
 import store from "./redux/store";
+import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <SnackbarProvider>
       <ScrollToTop
         //@ts-ignore
         height={27} // This should be fine if the component accepts a number.
@@ -61,7 +62,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           {showHeader && <Footer />}
         </UserProvider>
       </Provider>
-    </>
+    </SnackbarProvider>
   );
 }
 

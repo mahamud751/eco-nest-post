@@ -14,7 +14,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/reducers"; // Adjust path as needed
 import { CartItem } from "@/app/redux/types"; // Adjust path as needed
 import {
@@ -22,6 +22,7 @@ import {
   remove_item,
   update_quantity,
 } from "@/app/redux/actions/cartAction"; // Adjust path as needed
+import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -43,14 +44,18 @@ const ShoppingCartStep: React.FC<{
         </TableHead>
         <TableBody>
           {cartItems.map((item, index) => (
-            <TableRow key={item.productId}>
-              <TableCell>{item.productName}</TableCell>
+            <TableRow key={item.product.id}>
+              <TableCell>{item.product.name}</TableCell>{" "}
+              {/* Update to access product's name */}
               <TableCell>
                 <Button onClick={() => onUpdate(index, -1)}>-</Button>
                 <span>{item.quantity}</span>
                 <Button onClick={() => onUpdate(index, 1)}>+</Button>
               </TableCell>
-              <TableCell>{(item.price * item.quantity).toFixed(2)}</TableCell>
+              <TableCell>
+                {(item.product.price * item.quantity).toFixed(2)}
+              </TableCell>{" "}
+              {/* Update to access product's price */}
               <TableCell>
                 <Button onClick={() => onRemove(index)}>Remove</Button>
               </TableCell>
@@ -62,7 +67,7 @@ const ShoppingCartStep: React.FC<{
     <div>
       Total:{" "}
       {cartItems
-        .reduce((acc, item) => acc + item.price * item.quantity, 0)
+        .reduce((acc, item) => acc + item.product.price * item.quantity, 0) // Update to access product's price
         .toFixed(2)}
     </div>
   </Card>
@@ -93,7 +98,7 @@ const OrderCompleteStep: React.FC = () => (
 );
 
 const CustomizedStepper: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
@@ -103,23 +108,25 @@ const CustomizedStepper: React.FC = () => {
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const updateQuantity = (index: number, change: number) => {
+    if (index < 0 || index >= cartItemsFromRedux.length) return; // Validate index
     const item = cartItemsFromRedux[index];
 
     if (item) {
       const newQuantity = item.quantity + change;
 
       if (newQuantity <= 0) {
-        dispatch(remove_item(item.productId));
+        dispatch(remove_item(item.product.id)); // Use product.id
       } else {
-        dispatch(update_quantity(item.productId, newQuantity));
+        dispatch(update_quantity(item.product.id, newQuantity)); // Use product.id
       }
     }
   };
 
   const removeItem = (index: number) => {
+    if (index < 0 || index >= cartItemsFromRedux.length) return;
     const item = cartItemsFromRedux[index];
     if (item) {
-      dispatch(delete_item(item.productId));
+      dispatch(delete_item(item.product.id)); // Make sure item.product.id is correct
     }
   };
 

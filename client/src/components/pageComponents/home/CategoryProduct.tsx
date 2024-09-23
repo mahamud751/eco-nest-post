@@ -11,15 +11,7 @@ import ProductCard from "@/components/organisms/Product/ProductCard";
 interface Category {
   id: string;
   name: string;
-  products: Product[];
-}
-
-interface Product {
-  id: string;
-  name: string;
-  price: string;
-  fulldesc: string;
-  photos: { src: string }[];
+  products: any[];
 }
 
 const CategoryProduct = () => {
@@ -98,7 +90,6 @@ const CategoryProduct = () => {
                 <SwiperSlide key={product.id}>
                   <div className="mt-16">
                     <ProductCard product={product} />{" "}
-                    {/* Pass the whole product object */}
                   </div>
                 </SwiperSlide>
               ))}

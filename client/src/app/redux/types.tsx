@@ -5,10 +5,10 @@ export const CLEAR_CART = "CLEAR_CART";
 export const UPDATE_QUANTITY = "UPDATE_QUANTITY";
 
 export interface CartItem {
-  productId: string;
-  productName: string;
-  price: string;
+  product: any;
   quantity: number;
+  size: string;
+  color: string;
 }
 
 interface AddToCartAction {
@@ -18,12 +18,12 @@ interface AddToCartAction {
 
 interface RemoveFromCartAction {
   type: typeof REMOVE_FROM_CART;
-  payload: string; // productId
+  payload: string;
 }
 
 interface DeleteFromCartAction {
   type: typeof DELETE_FROM_CART;
-  payload: string; // productId
+  payload: string;
 }
 
 interface ClearCartAction {
@@ -32,7 +32,11 @@ interface ClearCartAction {
 
 interface UpdateQuantityAction {
   type: typeof UPDATE_QUANTITY;
-  payload: { productId: string; quantity: number };
+  payload: {
+    [x: string]: any;
+    productId: string;
+    quantity: number;
+  };
 }
 
 export type CartActionTypes =

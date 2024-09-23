@@ -35,12 +35,18 @@ export const clear_cart = (): CartActionTypes => {
   };
 };
 
+// In your actions file
 export const update_quantity = (
   productId: string,
-  quantity: number
-): CartActionTypes => {
-  return {
-    type: UPDATE_QUANTITY,
-    payload: { productId, quantity },
-  };
-};
+  quantity: number,
+  size: string,
+  color: string
+) => ({
+  type: UPDATE_QUANTITY,
+  payload: {
+    product: { id: productId },
+    quantity,
+    size,
+    color,
+  },
+});
