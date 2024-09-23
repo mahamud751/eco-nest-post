@@ -32,8 +32,8 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
   const [selectedImage, setSelectedImage] = useState<string>("");
-  const [color, setColor] = useState<string>("");
-  const [size, setSize] = useState<string>("");
+  const [color, setColor] = useState<string>(""); // Default to empty string
+  const [size, setSize] = useState<string>(""); // Default to empty string
   const [quantity, setQuantity] = useState<number>(1); // State for quantity
 
   const fetchProducts = async () => {
@@ -60,9 +60,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const handleImageSelect = (src: string) => {
     setSelectedImage(src);
   };
+
   const notify = () => toast.success("Successfully added your item!");
+
   const handleAddItem = (item: CartItem) => {
-    if (!size || !color) {
+    if ((sizes.length > 0 && !size) || (colors.length > 0 && !color)) {
       toast.error("Please select a size and color");
       return;
     }
@@ -71,8 +73,8 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
       add_item({
         product: item.product,
         quantity: quantity,
-        size: size,
-        color: color,
+        size: size || "N/A", // Set 'N/A' if no size is available
+        color: color || "N/A", // Set 'N/A' if no color is available
       })
     );
     notify();
@@ -116,43 +118,48 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
           <div>
             <h1 className="text-3xl font-bold mb-4">{product?.name}</h1>
             <p className="font-bold mb-4"> Category: {categoryName}</p>
-
             <p className="text-gray-600 mb-6">{product?.desc}</p>
 
-            <div className="mb-4">
-              <p className="text-lg font-semibold mb-2">Select Color</p>
-              <div className="flex gap-4">
-                {colors.map((clr) => (
-                  <button
-                    key={clr}
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      color === clr ? "border-blue-500" : "border-gray-300"
-                    }`}
-                    style={{ backgroundColor: clr }}
-                    onClick={() => setColor(clr)}
-                  ></button>
-                ))}
+            {/* Conditionally render color selection if colors are available */}
+            {colors.length > 0 && (
+              <div className="mb-4">
+                <p className="text-lg font-semibold mb-2">Select Color</p>
+                <div className="flex gap-4">
+                  {colors.map((clr) => (
+                    <button
+                      key={clr}
+                      className={`w-8 h-8 rounded-full border-2 ${
+                        color === clr ? "border-blue-500" : "border-gray-300"
+                      }`}
+                      style={{ backgroundColor: clr }}
+                      onClick={() => setColor(clr)}
+                    ></button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="mb-4">
-              <p className="text-lg font-semibold mb-2">Select Size</p>
-              <div className="flex gap-2">
-                {sizes.map((sz) => (
-                  <button
-                    key={sz}
-                    className={`w-10 h-10 text-sm font-bold border-2 ${
-                      size === sz
-                        ? "border-blue-500 bg-blue-100"
-                        : "border-gray-300"
-                    } rounded-lg`}
-                    onClick={() => setSize(sz)}
-                  >
-                    {sz}
-                  </button>
-                ))}
+            {/* Conditionally render size selection if sizes are available */}
+            {sizes.length > 0 && (
+              <div className="mb-4">
+                <p className="text-lg font-semibold mb-2">Select Size</p>
+                <div className="flex gap-2">
+                  {sizes.map((sz) => (
+                    <button
+                      key={sz}
+                      className={`w-10 h-10 text-sm font-bold border-2 ${
+                        size === sz
+                          ? "border-blue-500 bg-blue-100"
+                          : "border-gray-300"
+                      } rounded-lg`}
+                      onClick={() => setSize(sz)}
+                    >
+                      {sz}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Quantity Control */}
             <div className="flex items-center space-x-2 mb-4">
@@ -184,14 +191,15 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                 <AddIcon className="text-[#088178] group-hover:text-white" />
               </IconButton>
             </div>
+
             <Button
               variant="contained"
               onClick={() =>
                 handleAddItem({
                   product,
                   quantity: quantity,
-                  size: size,
-                  color: color,
+                  size: size || "N/A",
+                  color: color || "N/A",
                 })
               }
               className="bg-[#088178] px-5 rounded-lg shadow-md transition-transform duration-300 ease-in-out group-hover:scale-110"

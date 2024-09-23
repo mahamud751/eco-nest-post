@@ -15,17 +15,25 @@ export const add_item = (product: CartItem): CartActionTypes => {
   };
 };
 
-export const remove_item = (productId: string): CartActionTypes => {
+export const remove_item = (
+  productId: string,
+  size: string,
+  color: string
+): CartActionTypes => {
   return {
     type: REMOVE_FROM_CART,
-    payload: productId,
+    payload: { productId, size, color },
   };
 };
 
-export const delete_item = (productId: string): CartActionTypes => {
+export const delete_item = (
+  productId: string,
+  size: string,
+  color: string
+): CartActionTypes => {
   return {
     type: DELETE_FROM_CART,
-    payload: productId,
+    payload: { productId, size, color }, // Updated payload to include size and color
   };
 };
 

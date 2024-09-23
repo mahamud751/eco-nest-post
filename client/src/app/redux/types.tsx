@@ -18,12 +18,20 @@ interface AddToCartAction {
 
 interface RemoveFromCartAction {
   type: typeof REMOVE_FROM_CART;
-  payload: string;
+  payload: {
+    productId: string;
+    size: string;
+    color: string;
+  };
 }
 
 interface DeleteFromCartAction {
   type: typeof DELETE_FROM_CART;
-  payload: string;
+  payload: {
+    productId: string;
+    size: string;
+    color: string;
+  };
 }
 
 interface ClearCartAction {

@@ -37,6 +37,8 @@ const ShoppingCartStep: React.FC<{
         <TableHead>
           <TableRow>
             <TableCell>Item</TableCell>
+            <TableCell>Color</TableCell>
+            <TableCell>Size</TableCell>
             <TableCell>Quantity</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Action</TableCell>
@@ -45,8 +47,25 @@ const ShoppingCartStep: React.FC<{
         <TableBody>
           {cartItems.map((item, index) => (
             <TableRow key={item.product.id}>
-              <TableCell>{item.product.name}</TableCell>{" "}
-              {/* Update to access product's name */}
+              <TableCell>{item.product.name}</TableCell>
+              <TableCell>
+                {item.color ? (
+                  <span
+                    style={{
+                      backgroundColor: item.color,
+                      color: "#fff",
+                      padding: "2px 8px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    {item.color}
+                  </span>
+                ) : (
+                  <span style={{ color: "red" }}>N/A</span>
+                )}
+              </TableCell>
+              {/* Add color */}
+              <TableCell>{item.size || "N/A"}</TableCell> {/* Add size */}
               <TableCell>
                 <Button onClick={() => onUpdate(index, -1)}>-</Button>
                 <span>{item.quantity}</span>
@@ -54,8 +73,7 @@ const ShoppingCartStep: React.FC<{
               </TableCell>
               <TableCell>
                 {(item.product.price * item.quantity).toFixed(2)}
-              </TableCell>{" "}
-              {/* Update to access product's price */}
+              </TableCell>
               <TableCell>
                 <Button onClick={() => onRemove(index)}>Remove</Button>
               </TableCell>
@@ -67,7 +85,7 @@ const ShoppingCartStep: React.FC<{
     <div>
       Total:{" "}
       {cartItems
-        .reduce((acc, item) => acc + item.product.price * item.quantity, 0) // Update to access product's price
+        .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
         .toFixed(2)}
     </div>
   </Card>
@@ -107,6 +125,14 @@ const CustomizedStepper: React.FC = () => {
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
+  const removeItem = (index: number) => {
+    if (index < 0 || index >= cartItemsFromRedux.length) return;
+    const item = cartItemsFromRedux[index];
+    if (item) {
+      dispatch(delete_item(item.product.id, item.size, item.color)); // Pass size and color
+    }
+  };
+
   const updateQuantity = (index: number, change: number) => {
     if (index < 0 || index >= cartItemsFromRedux.length) return; // Validate index
     const item = cartItemsFromRedux[index];
@@ -115,18 +141,12 @@ const CustomizedStepper: React.FC = () => {
       const newQuantity = item.quantity + change;
 
       if (newQuantity <= 0) {
-        dispatch(remove_item(item.product.id)); // Use product.id
+        dispatch(remove_item(item.product.id, item.size, item.color)); // Pass size and color
       } else {
-        dispatch(update_quantity(item.product.id, newQuantity)); // Use product.id
+        dispatch(
+          update_quantity(item.product.id, newQuantity, item.size, item.color)
+        ); // Pass size and color
       }
-    }
-  };
-
-  const removeItem = (index: number) => {
-    if (index < 0 || index >= cartItemsFromRedux.length) return;
-    const item = cartItemsFromRedux[index];
-    if (item) {
-      dispatch(delete_item(item.product.id)); // Make sure item.product.id is correct
     }
   };
 

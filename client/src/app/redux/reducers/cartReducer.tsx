@@ -82,9 +82,15 @@ const cartReducer = (
     }
 
     case REMOVE_FROM_CART: {
+      const { productId, size, color } = action.payload;
+
       const updatedCartItems = state.cartItems
         .map((item) => {
-          if (item.product.productId === action.payload) {
+          if (
+            item.product.id === productId &&
+            item.size === size &&
+            item.color === color
+          ) {
             const newQuantity = item.quantity - 1;
             return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
           }
@@ -103,8 +109,15 @@ const cartReducer = (
     }
 
     case DELETE_FROM_CART: {
+      const { productId, size, color } = action.payload;
+
       const updatedCartItems = state.cartItems.filter(
-        (item) => item.product.id !== action.payload // Ensure product.id is used
+        (item) =>
+          !(
+            item.product.id === productId &&
+            item.size === size &&
+            item.color === color
+          )
       );
 
       if (typeof window !== "undefined") {
