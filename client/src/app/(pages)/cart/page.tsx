@@ -17,6 +17,9 @@ import {
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/reducers";
 import { CartItem } from "@/app/redux/types";
@@ -89,10 +92,32 @@ const ShoppingCartStep: React.FC<{
               </TableCell>
               <TableCell>{item.size || "N/A"}</TableCell>
               <TableCell>
-                <Button onClick={() => onUpdate(index, -1)}>-</Button>
-                <span>{item.quantity}</span>
-                <Button onClick={() => onUpdate(index, 1)}>+</Button>
+                <div className="flex items-center">
+                  <Button
+                    variant="outlined"
+                    className="flex items-center justify-between w-20 border-gray-400 text-black p-1"
+                  >
+                    <span className="flex-grow text-center text-black">
+                      {item.quantity}
+                    </span>
+
+                    <div className="flex flex-col ml-1">
+                      <KeyboardArrowUpIcon
+                        onClick={() => onUpdate(index, 1)}
+                        className="text-black"
+                      />
+                      <KeyboardArrowDownIcon
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onUpdate(index, -1);
+                        }}
+                        className="text-black mt-[-4px]"
+                      />
+                    </div>
+                  </Button>
+                </div>
               </TableCell>
+
               <TableCell>
                 {(item.product.price * item.quantity).toFixed(2)}
               </TableCell>
@@ -163,7 +188,7 @@ const CustomizedStepper: React.FC = () => {
       dispatch(delete_item(item.product.id, item.size, item.color));
       openSnackbar(
         `${item.product.name} Item removed from cart!`,
-        "error",
+        "success",
         "#f44336"
       );
     }
