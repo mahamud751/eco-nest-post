@@ -3,7 +3,11 @@ import React, { createContext, useContext, useState } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
 interface SnackbarContextProps {
-  openSnackbar: (message: string) => void;
+  openSnackbar: (
+    message: string,
+    severity?: "success" | "error" | "warning" | "info",
+    color?: string
+  ) => void;
 }
 
 const SnackbarContext = createContext<SnackbarContextProps | undefined>(
@@ -23,9 +27,19 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning" | "info"
+  >("success");
+  const [snackbarColor, setSnackbarColor] = useState<string>("#088178");
 
-  const openSnackbar = (message: string) => {
+  const openSnackbar = (
+    message: string,
+    severity: "success" | "error" | "warning" | "info" = "success",
+    color: string = "#088178"
+  ) => {
     setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarColor(color);
     setSnackbarOpen(true);
   };
 
@@ -44,11 +58,11 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({
       >
         <Alert
           onClose={handleSnackbarClose}
-          severity="success"
+          severity={snackbarSeverity}
           variant="filled"
           sx={{
             width: "100%",
-            backgroundColor: "#088178",
+            backgroundColor: snackbarColor,
             color: "white",
           }}
         >

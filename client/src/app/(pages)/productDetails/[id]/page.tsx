@@ -78,7 +78,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
       })
     );
     notify();
-    openSnackbar("Item added to cart!");
+    openSnackbar("Item added to cart!", "success", "#088178");
   };
 
   return (

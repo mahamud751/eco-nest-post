@@ -13,16 +13,21 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Box,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/redux/reducers"; // Adjust path as needed
-import { CartItem } from "@/app/redux/types"; // Adjust path as needed
+import { RootState } from "@/app/redux/reducers";
+import { CartItem } from "@/app/redux/types";
 import {
   delete_item,
   remove_item,
   update_quantity,
-} from "@/app/redux/actions/cartAction"; // Adjust path as needed
+} from "@/app/redux/actions/cartAction";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
+import Image from "next/image";
+import { useSnackbar } from "@/services/contexts/useSnackbar";
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -31,12 +36,13 @@ const ShoppingCartStep: React.FC<{
   onUpdate: (index: number, change: number) => void;
   onRemove: (index: number) => void;
 }> = ({ cartItems, onUpdate, onRemove }) => (
-  <Card className="p-4">
+  <Card className="p-4 mt-10">
     <TableContainer>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Item</TableCell>
+            <TableCell>Image</TableCell>
+            <TableCell>Product Name</TableCell>
             <TableCell>Color</TableCell>
             <TableCell>Size</TableCell>
             <TableCell>Quantity</TableCell>
@@ -47,6 +53,23 @@ const ShoppingCartStep: React.FC<{
         <TableBody>
           {cartItems.map((item, index) => (
             <TableRow key={item.product.id}>
+              <TableCell>
+                {item.product.photos.length > 0 ? (
+                  <Image
+                    width={400}
+                    height={400}
+                    src={item.product.photos[0].src}
+                    alt={item.product.name}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <span>No Image</span>
+                )}
+              </TableCell>
               <TableCell>{item.product.name}</TableCell>
               <TableCell>
                 {item.color ? (
@@ -64,8 +87,7 @@ const ShoppingCartStep: React.FC<{
                   <span style={{ color: "red" }}>N/A</span>
                 )}
               </TableCell>
-              {/* Add color */}
-              <TableCell>{item.size || "N/A"}</TableCell> {/* Add size */}
+              <TableCell>{item.size || "N/A"}</TableCell>
               <TableCell>
                 <Button onClick={() => onUpdate(index, -1)}>-</Button>
                 <span>{item.quantity}</span>
@@ -75,7 +97,15 @@ const ShoppingCartStep: React.FC<{
                 {(item.product.price * item.quantity).toFixed(2)}
               </TableCell>
               <TableCell>
-                <Button onClick={() => onRemove(index)}>Remove</Button>
+                <IconButton
+                  onClick={() => {
+                    onRemove(index);
+                  }}
+                  aria-label="delete"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
@@ -117,6 +147,7 @@ const OrderCompleteStep: React.FC = () => (
 
 const CustomizedStepper: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { openSnackbar } = useSnackbar();
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
@@ -129,29 +160,34 @@ const CustomizedStepper: React.FC = () => {
     if (index < 0 || index >= cartItemsFromRedux.length) return;
     const item = cartItemsFromRedux[index];
     if (item) {
-      dispatch(delete_item(item.product.id, item.size, item.color)); // Pass size and color
+      dispatch(delete_item(item.product.id, item.size, item.color));
+      openSnackbar(
+        `${item.product.name} Item removed from cart!`,
+        "error",
+        "#f44336"
+      );
     }
   };
 
   const updateQuantity = (index: number, change: number) => {
-    if (index < 0 || index >= cartItemsFromRedux.length) return; // Validate index
+    if (index < 0 || index >= cartItemsFromRedux.length) return;
     const item = cartItemsFromRedux[index];
 
     if (item) {
       const newQuantity = item.quantity + change;
 
       if (newQuantity <= 0) {
-        dispatch(remove_item(item.product.id, item.size, item.color)); // Pass size and color
+        dispatch(remove_item(item.product.id, item.size, item.color));
       } else {
         dispatch(
           update_quantity(item.product.id, newQuantity, item.size, item.color)
-        ); // Pass size and color
+        );
       }
     }
   };
 
   return (
-    <div>
+    <Box className="container mx-auto py-10">
       <Stepper activeStep={activeStep}>
         {steps.map((label) => (
           <Step key={label}>
@@ -182,7 +218,7 @@ const CustomizedStepper: React.FC = () => {
           {activeStep === steps.length - 1 ? "Finish" : "Next"}
         </Button>
       </div>
-    </div>
+    </Box>
   );
 };
 
