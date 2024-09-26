@@ -14,13 +14,32 @@ export class WishlistService {
     return this.prisma.wishlist.create({
       data: {
         ...rest,
-        productId: productId, // Pass productId directly
+        productId: productId,
       },
     });
   }
 
-  findAll() {
-    return this.prisma.wishlist.findMany();
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+    const skip = (pageNumber - 1) * perPageNumber;
+    const totalCountPromise = this.prisma.wishlist.count();
+
+    const dataPromise = this.prisma.wishlist.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        products: true,
+      },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   findOne(id: string) {

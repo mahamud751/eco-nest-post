@@ -50,10 +50,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const email = user?.email;
   const exactWishList = wishlist?.filter(
     (wishListItem) => wishListItem?.product?.id === id
-  ); // Properly typed wishListItem
+  );
   const userWishList = exactWishList?.find(
     (wishListItem) => wishListItem?.email === email
-  ); // Properly typed wishListItem
+  );
+  console.log("wishlist", wishlist);
 
   const fetchProducts = async () => {
     try {
@@ -79,7 +80,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
     try {
       const wishlistItem = {
         userName,
-        products: productId,
+        productId: productId,
         email,
       };
       await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { WishlistService } from './wishlist.service';
@@ -28,10 +29,13 @@ export class WishlistController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all wishlists' })
-  @ApiResponse({ status: 200, description: 'Return all wishlists.' })
-  findAll() {
-    return this.wishlistService.findAll();
+  @ApiOperation({ summary: 'Get all subcategories' })
+  @ApiResponse({ status: 200, description: 'Return all subcategories.' })
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.wishlistService.findAll(page, perPage);
   }
 
   @Get(':id')
