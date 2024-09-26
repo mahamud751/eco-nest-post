@@ -67,6 +67,8 @@ model Product {
   category      Category     @relation("CategoryProducts", fields: [categoryId], references: [id])
   review        Review?      @relation(fields: [reviewId], references: [id])
   subcategory   SubCategory? @relation("SubCategoryProducts", fields: [subcategoryId], references: [id])
+
+  Wishlist Wishlist[] @relation("WishlistProducts")
 }
 
 model Category {
@@ -90,6 +92,15 @@ model SubCategory {
   photos     Json[]
   products   Product[] @relation("SubCategoryProducts")
   category   Category  @relation("CategorySubCategories", fields: [categoryId], references: [id])
+}
+
+model Wishlist {
+  id        String    @id @default(uuid())
+  userName  String
+  email     String    @unique
+  products  Product[] @relation("WishlistProducts")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Variant {

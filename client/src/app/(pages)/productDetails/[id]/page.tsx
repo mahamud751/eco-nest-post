@@ -1,16 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  IconButton,
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import { Button, Box, Card, CardContent, Typography } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Image from "next/image";
 import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
 import axios from "axios";
@@ -21,6 +13,7 @@ import { useSnackbar } from "@/services/contexts/useSnackbar";
 import toast from "react-hot-toast";
 import { CartItem } from "@/app/redux/types";
 import UseFetch from "@/services/hooks/useFetch";
+import { useAuth } from "@/services/hooks/auth";
 
 interface ProductDetailsProps {
   params: {
@@ -29,11 +22,13 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
+  const { user } = useAuth();
   const {
     data: categories,
     loading,
     error,
   } = UseFetch<Category[]>("categories");
+  const { data: wishlist, reFetch: wishlistRefetch } = UseFetch(`wishlist`);
   const [product, setProduct] = useState<Product | null>(null);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
@@ -70,8 +65,13 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const notify = () => toast.success("Successfully added your item!");
 
   const handleAddItem = (item: CartItem) => {
-    if ((sizes.length > 0 && !size) || (colors.length > 0 && !color)) {
-      toast.error("Please select a size and color");
+    if (sizes.length > 0 && !size) {
+      openSnackbar("Please select a size", "error", "#f44336");
+      return;
+    }
+
+    if (colors.length > 0 && !color) {
+      openSnackbar("Please select a color", "error", "#f44336");
       return;
     }
 
@@ -83,6 +83,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
         color: color || "N/A",
       })
     );
+
     notify();
     openSnackbar("Item added to cart!", "success", "#088178");
   };
@@ -168,51 +169,43 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
               </div>
             )}
 
-            <div className="flex items-center space-x-2 mb-4">
-              <IconButton
-                className="bg-[#edf2ee] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110"
-                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-              >
-                <RemoveIcon className="text-[#088178] group-hover:text-white" />
-              </IconButton>
-
-              <TextField
-                type="number"
+            <div className="flex items-center">
+              <Button
                 variant="outlined"
-                value={quantity}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value, 10);
-                  setQuantity(isNaN(value) ? 1 : Math.max(1, value));
-                }}
-                inputProps={{ min: 1 }}
-                className="w-16 text-center bg-white border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                size="small"
-              />
-
-              <IconButton
-                className="bg-[#edf2ee] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110"
-                onClick={() => setQuantity((prev) => prev + 1)}
+                className="flex items-center justify-between w-20 border-gray-400 text-black p-1 h-10"
               >
-                <AddIcon className="text-[#088178] group-hover:text-white" />
-              </IconButton>
-            </div>
+                <span className="flex-grow text-center text-black">
+                  {quantity}
+                </span>
 
-            <Button
-              variant="contained"
-              onClick={() =>
-                handleAddItem({
-                  product,
-                  quantity: quantity,
-                  size: size || "N/A",
-                  color: color || "N/A",
-                })
-              }
-              className="bg-[#088178] px-5 rounded-lg shadow-md transition-transform duration-300 ease-in-out group-hover:scale-110"
-            >
-              Add to Cart
-            </Button>
+                <div className="flex flex-col ml-1">
+                  <KeyboardArrowUpIcon
+                    onClick={() => setQuantity((prev) => prev + 1)}
+                    className="text-black"
+                  />
+                  <KeyboardArrowDownIcon
+                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                    className="text-black mt-[-4px]"
+                  />
+                </div>
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() =>
+                  handleAddItem({
+                    product,
+                    quantity: quantity,
+                    size: size || "N/A",
+                    color: color || "N/A",
+                  })
+                }
+                className="bg-[#088178] px-5 ms-3 shadow-md transition-transform duration-300 ease-in-out group-hover:scale-110 h-10"
+              >
+                Add to Cart
+              </Button>
+            </div>
           </div>
-          <AdditionalTab />
+          {product && <AdditionalTab product={product} />}
         </div>
 
         <div className="col-span-12 md:col-span-3 grid grid-cols-1 gap-6">

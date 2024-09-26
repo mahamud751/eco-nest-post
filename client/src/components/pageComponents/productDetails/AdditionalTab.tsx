@@ -2,8 +2,14 @@
 "use client";
 import { useState } from "react";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
+import { Product } from "@/services/types";
+import Image from "next/image";
 
-const AdditionalTab = () => {
+interface AdditionalTabProps {
+  product: Product;
+}
+
+const AdditionalTab = ({ product }: AdditionalTabProps) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -14,17 +20,24 @@ const AdditionalTab = () => {
     switch (value) {
       case 0:
         return (
-          <Typography variant="body1">
-            This is the product description. It provides details about the
-            product, its features, specifications, and other relevant
-            information.
-          </Typography>
+          <div className="flex justify-between items-center">
+            <Image
+              src={product?.photos[0]?.src || ""}
+              alt="Selected Image"
+              width={500}
+              height={500}
+              className="object-cover"
+            />
+
+            <div className="ms-12">
+              <Typography variant="body1">{product?.fulldesc}</Typography>
+            </div>
+          </div>
         );
       case 1:
         return (
           <Typography variant="body1">
-            Additional information about the product, including dimensions,
-            materials used, and other technical details.
+            Category: {product?.category?.name}
           </Typography>
         );
       case 2:
