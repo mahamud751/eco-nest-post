@@ -98,6 +98,7 @@ model Wishlist {
   id        String    @id @default(uuid())
   userName  String
   email     String    @unique
+  productId String
   products  Product[] @relation("WishlistProducts")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

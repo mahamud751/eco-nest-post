@@ -1,12 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Button,
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Image from "next/image";
 import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
 import axios from "axios";
-import { Category, Product } from "@/services/types";
+import { Category, Product, WishlistItem } from "@/services/types";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { add_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
@@ -29,7 +37,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
     error,
   } = UseFetch<Category[]>("categories");
   const { data: wishlist, reFetch: wishlistRefetch } =
-    UseFetch<WishlistItem[]>(`wishlist`); // Properly typed wishlist
+    UseFetch<WishlistItem[]>(`wishlist`);
   const [product, setProduct] = useState<Product | null>(null);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
@@ -41,7 +49,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const userName = user?.name;
   const email = user?.email;
   const exactWishList = wishlist?.filter(
-    (wishListItem) => wishListItem?.product?._id === id
+    (wishListItem) => wishListItem?.product?.id === id
   ); // Properly typed wishListItem
   const userWishList = exactWishList?.find(
     (wishListItem) => wishListItem?.email === email
@@ -67,17 +75,16 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const handleAddToWishlist = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // Added type
     event.preventDefault();
     try {
       const wishlistItem = {
         userName,
-        productId,
+        products: productId,
         email,
       };
       await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);
       toast.success("Product added to wishlist!");
-      wishlistRefetch(); // Refresh the wishlist data
+      wishlistRefetch();
     } catch (err) {
       toast.error("Error adding product to wishlist");
     }
@@ -87,11 +94,10 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const handleRemoveFromWishlist = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // Added type
     event.preventDefault();
     try {
       await axios.delete(
-        `https://api.korbojoy.shop/v1/wishlist/${userWishList?._id}`
+        `https://api.korbojoy.shop/v1/wishlist/${userWishList?.id}`
       );
       toast.success("Product removed from wishlist!");
       wishlistRefetch(); // Refresh the wishlist data
@@ -250,6 +256,21 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
               >
                 Add to Cart
               </Button>
+              <div className="flex justify-between items-center">
+                <IconButton
+                  onClick={
+                    userWishList
+                      ? handleRemoveFromWishlist
+                      : handleAddToWishlist
+                  }
+                >
+                  <FavoriteIcon
+                    className={`transition-all duration-300 ${
+                      userWishList ? "text-red-500" : "text-gray-300"
+                    }`}
+                  />
+                </IconButton>
+              </div>
             </div>
           </div>
           {product && <AdditionalTab product={product} />}

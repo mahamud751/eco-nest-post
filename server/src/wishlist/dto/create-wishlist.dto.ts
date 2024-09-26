@@ -19,12 +19,8 @@ export class CreateWishlistDto {
   @IsEmail()
   email: string;
 
-  @ApiPropertyOptional({
-    description: 'Array of product IDs to add to the wishlist',
-    type: [String],
-  })
-  @IsArray()
-  @IsUUID('all', { each: true })
-  @IsOptional()
-  products?: string[];
+  @ApiProperty({ description: 'ID of the associated product' })
+  @IsUUID()
+  @IsNotEmpty()
+  productId: string;
 }

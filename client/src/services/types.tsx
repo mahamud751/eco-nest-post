@@ -60,6 +60,14 @@ export interface Product {
   updatedAt: Date;
 }
 
+export interface WishlistItem {
+  id: string;
+  product: Product;
+  userName: string;
+  email: string;
+  updatedAt: Date;
+}
+
 export interface BlogComment {
   id: string;
   userName: string;

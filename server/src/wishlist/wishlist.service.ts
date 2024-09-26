@@ -9,18 +9,12 @@ export class WishlistService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createWishlistDto: CreateWishlistDto) {
-    const { products, ...rest } = createWishlistDto;
-
-    const productData: Prisma.ProductCreateNestedManyWithoutWishlistInput = {
-      connect: products?.map((productId) => ({
-        id: productId,
-      })),
-    };
+    const { productId, ...rest } = createWishlistDto;
 
     return this.prisma.wishlist.create({
       data: {
         ...rest,
-        products: productData,
+        productId: productId, // Pass productId directly
       },
     });
   }
@@ -37,19 +31,15 @@ export class WishlistService {
   }
 
   async update(id: string, updateWishlistDto: UpdateWishlistDto) {
-    const { products, ...rest } = updateWishlistDto;
-
-    const productData: Prisma.ProductUpdateManyWithoutWishlistNestedInput = {
-      connect: products?.map((productId) => ({
-        id: productId,
-      })),
-    };
+    const { productId, ...rest } = updateWishlistDto;
 
     return this.prisma.wishlist.update({
       where: { id },
       data: {
         ...rest,
-        products: productData,
+        products: {
+          connect: { id: productId },
+        },
       },
     });
   }
