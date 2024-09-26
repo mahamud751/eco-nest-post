@@ -28,7 +28,8 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
     loading,
     error,
   } = UseFetch<Category[]>("categories");
-  const { data: wishlist, reFetch: wishlistRefetch } = UseFetch(`wishlist`);
+  const { data: wishlist, reFetch: wishlistRefetch } =
+    UseFetch<WishlistItem[]>(`wishlist`); // Properly typed wishlist
   const [product, setProduct] = useState<Product | null>(null);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
@@ -36,6 +37,15 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const [color, setColor] = useState<string>("");
   const [size, setSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
+  const productId = product?.id;
+  const userName = user?.name;
+  const email = user?.email;
+  const exactWishList = wishlist?.filter(
+    (wishListItem) => wishListItem?.product?._id === id
+  ); // Properly typed wishListItem
+  const userWishList = exactWishList?.find(
+    (wishListItem) => wishListItem?.email === email
+  ); // Properly typed wishListItem
 
   const fetchProducts = async () => {
     try {
@@ -52,6 +62,43 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   useEffect(() => {
     fetchProducts();
   }, [id]);
+
+  // Add product to wishlist
+  const handleAddToWishlist = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    // Added type
+    event.preventDefault();
+    try {
+      const wishlistItem = {
+        userName,
+        productId,
+        email,
+      };
+      await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);
+      toast.success("Product added to wishlist!");
+      wishlistRefetch(); // Refresh the wishlist data
+    } catch (err) {
+      toast.error("Error adding product to wishlist");
+    }
+  };
+
+  // Remove product from wishlist
+  const handleRemoveFromWishlist = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    // Added type
+    event.preventDefault();
+    try {
+      await axios.delete(
+        `https://api.korbojoy.shop/v1/wishlist/${userWishList?._id}`
+      );
+      toast.success("Product removed from wishlist!");
+      wishlistRefetch(); // Refresh the wishlist data
+    } catch (err) {
+      toast.error("Error removing product from wishlist");
+    }
+  };
 
   const images = product?.photos || [];
   const colors = product?.colors || [];

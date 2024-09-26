@@ -2,14 +2,26 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class WishlistService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createWishlistDto: CreateWishlistDto) {
+  async create(createWishlistDto: CreateWishlistDto) {
+    const { products, ...rest } = createWishlistDto;
+
+    const productData: Prisma.ProductCreateNestedManyWithoutWishlistInput = {
+      connect: products?.map((productId) => ({
+        id: productId,
+      })),
+    };
+
     return this.prisma.wishlist.create({
-      data: createWishlistDto,
+      data: {
+        ...rest,
+        products: productData,
+      },
     });
   }
 
@@ -24,10 +36,21 @@ export class WishlistService {
     });
   }
 
-  update(id: string, updateWishlistDto: UpdateWishlistDto) {
+  async update(id: string, updateWishlistDto: UpdateWishlistDto) {
+    const { products, ...rest } = updateWishlistDto;
+
+    const productData: Prisma.ProductUpdateManyWithoutWishlistNestedInput = {
+      connect: products?.map((productId) => ({
+        id: productId,
+      })),
+    };
+
     return this.prisma.wishlist.update({
       where: { id },
-      data: updateWishlistDto,
+      data: {
+        ...rest,
+        products: productData,
+      },
     });
   }
 
