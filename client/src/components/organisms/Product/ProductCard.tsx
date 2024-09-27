@@ -9,6 +9,7 @@ import withReactContent from "sweetalert2-react-content";
 
 import { useAuth } from "@/services/hooks/auth";
 import UseFetch from "@/services/hooks/useFetch";
+import { WishlistItem } from "@/services/types";
 
 interface ProductCardProps {
   product: any;
@@ -19,7 +20,8 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const { user } = useAuth();
   const MySwal = withReactContent(Swal);
 
-  const { data: wishlist, reFetch: wishlistRefetch } = UseFetch(`wishlist`);
+  const { data: wishlist, reFetch: wishlistRefetch } =
+    UseFetch<WishlistItem[]>(`wishlist`);
 
   const handleAddToWishlist = async () => {
     if (!user) {
@@ -33,10 +35,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         productId: product.id,
         email: user.email,
       };
-      await axios.post(
-        "https://api.dsmartuniforms.com/api/wishlist",
-        wishlistItem
-      );
+      await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);
       wishlistRefetch();
     } catch (error) {
       MySwal.fire("Error", "Something went wrong!", "error");
@@ -52,7 +51,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
 
     try {
       await axios.delete(
-        `https://api.dsmartuniforms.com/api/wishlist/${userWishList._id}`
+        `https://api.korbojoy.shop/v1/wishlist/${userWishList.id}`
       );
       wishlistRefetch();
     } catch (error) {
@@ -75,7 +74,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         New
       </span>
 
-      <Link href={`productDetails/${product.id}`}>
+      <Link href={`/productDetails/${product.id}`}>
         <div
           className="relative h-64 overflow-hidden m-4"
           style={{ borderTopLeftRadius: "25px", borderTopRightRadius: "25px" }}
@@ -94,27 +93,30 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             }`}
           >
             <div className="relative flex space-x-4">
-              <div className="relative group">
-                <IconButton
-                  className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110"
-                  onClick={
-                    checkInWishlist
-                      ? handleRemoveFromWishlist
-                      : handleAddToWishlist
-                  }
-                >
-                  <Favorite
-                    className={`${
-                      checkInWishlist ? "text-red-500" : "text-[#088178]"
-                    } group-hover:text-white`}
-                  />
-                </IconButton>
-                <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
-                  {checkInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-                  <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
-                </span>
-              </div>
-
+              <Link href={``} passHref>
+                <div className="relative group">
+                  <IconButton
+                    className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110"
+                    onClick={
+                      checkInWishlist
+                        ? handleRemoveFromWishlist
+                        : handleAddToWishlist
+                    }
+                  >
+                    <Favorite
+                      className={`${
+                        checkInWishlist ? "text-red-500" : "text-[#088178]"
+                      } group-hover:text-white`}
+                    />
+                  </IconButton>
+                  <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
+                    {checkInWishlist
+                      ? "Remove from Wishlist"
+                      : "Add to Wishlist"}
+                    <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
+                  </span>
+                </div>
+              </Link>
               <div className="relative group">
                 <IconButton className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110">
                   <Info className="text-[#088178] group-hover:text-white" />

@@ -19,6 +19,7 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { FilterProductDto } from './dto/fIlter-product.dto';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -58,6 +59,40 @@ export class CategoryController {
   @ApiResponse({ status: 404, description: 'Category not found.' })
   findOne(@Param('id') id: string, @Query('subcategory') subcategory?: string) {
     return this.categoryService.findOne(id, subcategory);
+  }
+
+  @Get(':id/products')
+  @ApiOperation({
+    summary: 'Get products in a category with pagination and filters',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID of the category to retrieve products for',
+  })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number' })
+  @ApiQuery({
+    name: 'perPage',
+    required: false,
+    description: 'Number of items per page',
+  })
+  @ApiQuery({
+    name: 'priceRange',
+    required: false,
+    description: 'Price range filter',
+  })
+  @ApiQuery({ name: 'sizes', required: false, description: 'Size filter' })
+  @ApiQuery({ name: 'colors', required: false, description: 'Color filter' })
+  @ApiQuery({
+    name: 'sortPrice',
+    required: false,
+    enum: ['asc', 'desc'],
+    description: 'Sort by price',
+  })
+  async getCategoryProducts(
+    @Param('id') id: string,
+    @Query() filterProductDto: FilterProductDto,
+  ) {
+    return this.categoryService.findOneWithProducts(id, filterProductDto);
   }
 
   @Get(':id/user')

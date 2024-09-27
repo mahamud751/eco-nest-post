@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { AuditLogService } from 'src/audit/audit.service';
+import { FilterProductDto } from './dto/fIlter-product.dto';
 
 @Injectable()
 export class CategoryService {
@@ -68,6 +69,61 @@ export class CategoryService {
       throw new NotFoundException('Category not found');
     }
     return category;
+  }
+
+  async findOneWithProducts(
+    categoryId: string,
+    filterProductDto: FilterProductDto,
+  ) {
+    const {
+      page = 1,
+      perPage = 10,
+      priceRange,
+      sizes,
+      colors,
+      sortPrice,
+    } = filterProductDto;
+
+    const skip = (page - 1) * perPage;
+
+    const whereClause: any = {
+      categoryId: categoryId,
+      ...(priceRange && {
+        price: {
+          gte: priceRange[0],
+          lte: priceRange[1],
+        },
+      }),
+      ...(sizes && {
+        sizes: {
+          hasSome: sizes,
+        },
+      }),
+      ...(colors && {
+        colors: {
+          hasSome: colors,
+        },
+      }),
+    };
+
+    const products = await this.prisma.product.findMany({
+      where: whereClause,
+      skip,
+      take: perPage,
+      orderBy: sortPrice ? { price: sortPrice } : undefined,
+    });
+
+    const totalProducts = await this.prisma.product.count({
+      where: whereClause,
+    });
+
+    return {
+      data: products,
+      total: totalProducts,
+      page,
+      perPage,
+      totalPages: Math.ceil(totalProducts / perPage),
+    };
   }
 
   async findOneForUser(id: string, subcategory?: string) {

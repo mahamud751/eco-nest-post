@@ -7,6 +7,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
+import Link from "next/link";
 
 interface Category {
   id: string;
@@ -98,10 +99,12 @@ const CategoriesPage: FC = () => {
 
         {categories?.map((category) => (
           <SwiperSlide key={category.id}>
-            <CategoryCard
-              photos={category.photos[0]?.src || ""}
-              categoryName={category.name}
-            />
+            <Link href={`category/${category.id}`}>
+              <CategoryCard
+                photos={category.photos[0]?.src || ""}
+                categoryName={category.name}
+              />
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -54,7 +54,6 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const userWishList = exactWishList?.find(
     (wishListItem) => wishListItem?.email === email
   );
-  console.log("wishlist", exactWishList);
 
   const fetchProducts = async () => {
     try {
@@ -257,13 +256,17 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
               >
                 Add to Cart
               </Button>
-              <div className="flex justify-between items-center">
+              <Button
+                variant="outlined"
+                className="ms-2 border-gray-400 h-10 w-1.5 "
+              >
                 <IconButton
                   onClick={
                     userWishList
                       ? handleRemoveFromWishlist
                       : handleAddToWishlist
                   }
+                  className="focus:outline-none"
                 >
                   <FavoriteIcon
                     className={`transition-all duration-300 ${
@@ -271,7 +274,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                     }`}
                   />
                 </IconButton>
-              </div>
+              </Button>
             </div>
           </div>
           {product && <AdditionalTab product={product} />}
