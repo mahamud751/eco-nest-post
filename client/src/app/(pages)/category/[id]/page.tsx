@@ -1,10 +1,12 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   Card,
   CardContent,
-  Checkbox,
+  Radio,
   FormControlLabel,
   Grid,
   Pagination,
@@ -12,10 +14,13 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  TextField,
+  Typography,
+  Box,
+  SelectChangeEvent,
 } from "@mui/material";
 import ProductCard from "@/components/organisms/Product/ProductCard";
 import { Category, Product } from "@/services/types";
+import UseFetch from "@/services/hooks/useFetch";
 
 interface CategoryDetailsProps {
   params: {
@@ -24,41 +29,39 @@ interface CategoryDetailsProps {
 }
 
 const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
+  const {
+    data: categories,
+    loading,
+    error,
+  } = UseFetch<Category[]>("categories");
   const [categoryData, setCategoryData] = useState<{
-    data: Category[];
+    data: Product[];
     total: number;
     perPage: number;
     totalPages: number;
   } | null>(null);
-  const [sort, setSort] = useState<number>(5);
+  const [sort, setSort] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const [filters, setFilters] = useState({
     priceRange: { min: 0, max: 1000 },
-    colors: [] as string[],
-    sizes: [] as string[],
+    color: "",
+    size: "",
   });
 
   const fetchCategory = async () => {
     try {
       const queryParams = new URLSearchParams();
 
-      // Add colors to the query params if any colors are selected
-      if (filters.colors.length > 0) {
-        filters.colors.forEach((color) => {
-          queryParams.append("colors[]", color);
-        });
+      if (filters.color) {
+        queryParams.append("color", filters.color);
       }
 
-      // Add sizes to the query params if any sizes are selected
-      if (filters.sizes.length > 0) {
-        filters.sizes.forEach((size) => {
-          queryParams.append("sizes[]", size);
-        });
+      if (filters.size) {
+        queryParams.append("size", filters.size);
       }
 
-      // Fetch the category products
       const response = await axios.get<{
-        data: Category[];
+        data: Product[];
         total: number;
         perPage: number;
         totalPages: number;
@@ -83,144 +86,191 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
     setPage(value);
   };
 
-  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSortChange = (event: SelectChangeEvent<number>) => {
     setSort(event.target.value as number);
   };
 
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({
-      ...filters,
-      priceRange: {
-        ...filters.priceRange,
-        [event.target.name]: Number(event.target.value),
-      },
-    });
-  };
-
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked, name } = event.target;
-    const newColors = checked
-      ? [...filters.colors, name]
-      : filters.colors.filter((color) => color !== name);
-
-    setFilters({ ...filters, colors: newColors });
+    const value = event.target.value;
+    if (value === "All") {
+      setFilters({ ...filters, color: "" });
+    } else {
+      setFilters({ ...filters, color: value });
+    }
   };
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked, name } = event.target;
-    const newSizes = checked
-      ? [...filters.sizes, name]
-      : filters.sizes.filter((size) => size !== name);
-
-    setFilters({ ...filters, sizes: newSizes });
+    const value = event.target.value;
+    if (value === "All") {
+      setFilters({ ...filters, size: "" });
+    } else {
+      setFilters({ ...filters, size: value });
+    }
   };
 
-  // Filter products based on price, colors, and sizes
   const filteredProducts =
     categoryData?.data.filter((product) => {
-      const isWithinPriceRange =
-        product.price >= filters.priceRange.min &&
-        product.price <= filters.priceRange.max;
-
-      const matchesColor = filters.colors.length
-        ? filters.colors.includes(product.colors[0]) // Assuming colors[0] is the primary color
+      const matchesColor = filters.color
+        ? product.colors.includes(filters.color)
         : true;
-
-      const matchesSize = filters.sizes.length
-        ? filters.sizes.includes(product.sizes[0]) // Assuming sizes[0] is the primary size
+      const matchesSize = filters.size
+        ? product.sizes.includes(filters.size)
         : true;
-
-      return isWithinPriceRange && matchesColor && matchesSize;
+      return matchesColor && matchesSize;
     }) || [];
-  console.log(categoryData);
 
   return (
-    <div className="p-6 flex">
-      <div className="w-1/4 mr-4">
-        {/* Filter Sidebar */}
-        <Card>
-          <CardContent>
-            <h2 className="text-lg font-bold">Filters</h2>
+    <Box className="container mx-auto py-10">
+      <div className="grid grid-cols-12 gap-8">
+        <div className="col-span-12 md:col-span-3 grid grid-cols-1 md:grid-cols-1 gap-8">
+          <div className="max-h-[80vh] overflow-y-auto scrollbar-custom">
+            <Card className="border">
+              <CardContent>
+                {categories?.map((category) => (
+                  <Link href={`${category.id}`} key={category.id}>
+                    <div className="flex items-center space-x-4 mt-6">
+                      <Image
+                        src={category.photos[0]?.src || "/default-image.jpg"}
+                        alt={category.photos[0]?.title || category.name}
+                        width={20}
+                        height={20}
+                        className="rounded-full"
+                      />
+                      <Typography variant="body2">{category.name}</Typography>
+                    </div>
+                  </Link>
+                ))}
+              </CardContent>
+            </Card>
 
-            <h2 className="text-lg font-bold mt-4">Price Range</h2>
-            <TextField
-              label="Min Price"
-              name="min"
-              value={filters.priceRange.min}
-              onChange={handlePriceChange}
-              fullWidth
-              className="mb-2"
-            />
-            <TextField
-              label="Max Price"
-              name="max"
-              value={filters.priceRange.max}
-              onChange={handlePriceChange}
-              fullWidth
-            />
+            <Card className="mt-5 border">
+              <CardContent>
+                <h2 className="text-lg font-bold">Filters</h2>
 
-            <h2 className="text-lg font-bold mt-4">Color</h2>
-            {["Red", "Blue", "Black", "White"].map((color) => (
-              <FormControlLabel
-                key={color}
-                control={
-                  <Checkbox
-                    name={color}
-                    checked={filters.colors.includes(color)}
-                    onChange={handleColorChange}
+                <h2 className="text-lg font-bold mt-4">Color</h2>
+                <div className="flex items-center space-x-4">
+                  <FormControlLabel
+                    control={
+                      <Radio
+                        value="All"
+                        checked={filters.color === ""}
+                        onChange={handleColorChange}
+                      />
+                    }
+                    label="All"
                   />
-                }
-                label={color}
-              />
-            ))}
+                </div>
+                {["Red", "Blue", "Black", "White"].map((color) => (
+                  <div className="flex items-center space-x-4" key={color}>
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          value={color}
+                          checked={filters.color === color}
+                          onChange={handleColorChange}
+                        />
+                      }
+                      label={color}
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
 
-            <h2 className="text-lg font-bold mt-4">Size</h2>
-            {["Small", "Medium", "Large", "XL"].map((size) => (
-              <FormControlLabel
-                key={size}
-                control={
-                  <Checkbox
-                    name={size}
-                    checked={filters.sizes.includes(size)}
-                    onChange={handleSizeChange}
+            {/* Size Filter */}
+            <Card className="mt-5 border">
+              <CardContent>
+                <h2 className="text-lg font-bold mt-4">Size</h2>
+                <div className="flex items-center space-x-4">
+                  <FormControlLabel
+                    control={
+                      <Radio
+                        value="All"
+                        checked={filters.size === ""}
+                        onChange={handleSizeChange}
+                      />
+                    }
+                    label="All"
                   />
-                }
-                label={size}
-              />
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Right Side Product List */}
-      <div className="w-3/4">
-        {/* Sorting Options */}
-        <div className="flex justify-between mb-4">
-          <FormControl variant="outlined" className="w-1/3">
-            <InputLabel>Sort By</InputLabel>
-            <Select value={sort} onChange={handleSortChange} label="Sort By">
-              <MenuItem value={10}>Show 10 per page</MenuItem>
-              <MenuItem value={25}>Show 25 per page</MenuItem>
-              <MenuItem value={50}>Show 50 per page</MenuItem>
-            </Select>
-          </FormControl>
-          <Pagination
-            count={categoryData?.totalPages || 0}
-            page={page}
-            onChange={handleChangePage}
-          />
+                </div>
+                {["Small", "Medium", "Large", "XL"].map((size) => (
+                  <div className="flex items-center space-x-4" key={size}>
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          value={size}
+                          checked={filters.size === size}
+                          onChange={handleSizeChange}
+                        />
+                      }
+                      label={size}
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        {/* Product Grid */}
-        <Grid container spacing={3}>
-          {filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-              <ProductCard product={product} />
+        {/* Right Side Product List */}
+        <div className="col-span-12 md:col-span-9 grid grid-cols-1 gap-6">
+          <div>
+            <div className="flex justify-between mb-4">
+              <FormControl variant="outlined" className="w-1/3">
+                <InputLabel>Sort By</InputLabel>
+                <Select
+                  value={sort}
+                  onChange={handleSortChange}
+                  label="Sort By"
+                >
+                  <MenuItem value={10}>Show 10 per page</MenuItem>
+                  <MenuItem value={25}>Show 25 per page</MenuItem>
+                  <MenuItem value={50}>Show 50 per page</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
+            {/* Product Grid */}
+            <Grid container spacing={3}>
+              {filteredProducts.map((product) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                  <ProductCard product={product} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
+
+            <div className="flex justify-center mt-4">
+              <Pagination
+                count={categoryData?.totalPages || 0}
+                page={page}
+                onChange={handleChangePage}
+                variant="outlined"
+                shape="rounded"
+                className="pagination"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    backgroundColor: "rgba(0, 0, 0, 0.54)",
+                    color: "white",
+                    border: "none",
+                    "&:hover": {
+                      backgroundColor: "#888888",
+                    },
+                  },
+                  "& .Mui-selected": {
+                    backgroundColor: "#088178",
+                    color: "white",
+                    border: "none",
+                    "&:hover": {
+                      backgroundColor: "#088178",
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import { CartItem } from "@/app/redux/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useAuth } from "@/services/hooks/auth";
+import Link from "next/link";
 
 interface ProductDetailsProps {
   params: {
@@ -284,16 +285,18 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
           <Card className="border">
             <CardContent>
               {categories?.map((category) => (
-                <div className="flex items-center space-x-4 mt-6">
-                  <Image
-                    src={category.photos[0]?.src || "/default-image.jpg"}
-                    alt={category.photos[0]?.title || category.name}
-                    width={20}
-                    height={20}
-                    className="rounded-full"
-                  />
-                  <Typography variant="body2">{category.name}</Typography>
-                </div>
+                <Link href={`/category/${category.id}`} key={category.id}>
+                  <div className="flex items-center space-x-4 mt-6">
+                    <Image
+                      src={category.photos[0]?.src || "/default-image.jpg"}
+                      alt={category.photos[0]?.title || category.name}
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                    />
+                    <Typography variant="body2">{category.name}</Typography>
+                  </div>
+                </Link>
               ))}
             </CardContent>
           </Card>

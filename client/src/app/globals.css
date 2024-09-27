@@ -19,6 +19,30 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Custom Scrollbar Styles */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #a1dad6;
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background-color: #066f67;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:active {
+  background-color: #055c57;
+}
+
 /* Custom Swiper Styles */
 
 .swiper-button-next,
