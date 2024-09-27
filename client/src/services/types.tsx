@@ -2,7 +2,7 @@ export interface Category {
   id: string;
   name: string;
   photos: Photo[];
-  products: Product[];
+
   status: string;
   createdAt: Date;
   updatedAt: Date;

@@ -13,13 +13,9 @@ import {
   InputLabel,
   FormControl,
   TextField,
-  Typography,
 } from "@mui/material";
-import { Category } from "@/services/types";
 import ProductCard from "@/components/organisms/Product/ProductCard";
-import Image from "next/image";
-import UseFetch from "@/services/hooks/useFetch";
-import Link from "next/link";
+import { Category, Product } from "@/services/types";
 
 interface CategoryDetailsProps {
   params: {
@@ -28,15 +24,14 @@ interface CategoryDetailsProps {
 }
 
 const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
-  const [category, setCategory] = useState<Category | null>(null);
+  const [categoryData, setCategoryData] = useState<{
+    data: Category[];
+    total: number;
+    perPage: number;
+    totalPages: number;
+  } | null>(null);
   const [sort, setSort] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
-
   const [filters, setFilters] = useState({
     priceRange: { min: 0, max: 1000 },
     colors: [] as string[],
@@ -45,44 +40,41 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
 
   const fetchCategory = async () => {
     try {
-      const response = await axios.get<Category>(
-        `https://api.korbojoy.shop/v1/categories/${id}`
+      const queryParams = new URLSearchParams();
+
+      // Add colors to the query params if any colors are selected
+      if (filters.colors.length > 0) {
+        filters.colors.forEach((color) => {
+          queryParams.append("colors[]", color);
+        });
+      }
+
+      // Add sizes to the query params if any sizes are selected
+      if (filters.sizes.length > 0) {
+        filters.sizes.forEach((size) => {
+          queryParams.append("sizes[]", size);
+        });
+      }
+
+      // Fetch the category products
+      const response = await axios.get<{
+        data: Category[];
+        total: number;
+        perPage: number;
+        totalPages: number;
+      }>(
+        `https://api.korbojoy.shop/v1/categories/${id}/products?page=${page}&perPage=${sort}&${queryParams.toString()}`
       );
-      setCategory(response.data);
+      setCategoryData(response.data);
     } catch (error) {
-      console.error("Error fetching product:", error);
-      setCategory(null);
+      console.error("Error fetching products:", error);
+      setCategoryData(null);
     }
   };
 
   useEffect(() => {
     fetchCategory();
-  }, [id]);
-
-  const indexOfLastProduct = page * sort;
-  const indexOfFirstProduct = indexOfLastProduct - sort;
-
-  const filteredProducts =
-    category?.products.filter((product) => {
-      const isWithinPriceRange =
-        product.price >= filters.priceRange.min &&
-        product.price <= filters.priceRange.max;
-
-      const matchesColor = filters.colors.length
-        ? filters.colors.includes(product.color)
-        : true;
-
-      const matchesSize = filters.sizes.length
-        ? filters.sizes.includes(product.size)
-        : true;
-
-      return isWithinPriceRange && matchesColor && matchesSize;
-    }) || [];
-
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  }, [id, filters, sort, page]);
 
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
@@ -123,28 +115,32 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
     setFilters({ ...filters, sizes: newSizes });
   };
 
+  // Filter products based on price, colors, and sizes
+  const filteredProducts =
+    categoryData?.data.filter((product) => {
+      const isWithinPriceRange =
+        product.price >= filters.priceRange.min &&
+        product.price <= filters.priceRange.max;
+
+      const matchesColor = filters.colors.length
+        ? filters.colors.includes(product.colors[0]) // Assuming colors[0] is the primary color
+        : true;
+
+      const matchesSize = filters.sizes.length
+        ? filters.sizes.includes(product.sizes[0]) // Assuming sizes[0] is the primary size
+        : true;
+
+      return isWithinPriceRange && matchesColor && matchesSize;
+    }) || [];
+  console.log(categoryData);
+
   return (
     <div className="p-6 flex">
       <div className="w-1/4 mr-4">
+        {/* Filter Sidebar */}
         <Card>
           <CardContent>
             <h2 className="text-lg font-bold">Filters</h2>
-            <div>
-              {categories?.map((category) => (
-                <Link href={`${category.id}`} key={category.id}>
-                  <div className="flex items-center space-x-4 mt-6">
-                    <Image
-                      src={category.photos[0]?.src || "/default-image.jpg"}
-                      alt={category.photos[0]?.title || category.name}
-                      width={20}
-                      height={20}
-                      className="rounded-full"
-                    />
-                    <Typography variant="body2">{category.name}</Typography>
-                  </div>
-                </Link>
-              ))}
-            </div>
 
             <h2 className="text-lg font-bold mt-4">Price Range</h2>
             <TextField
@@ -164,48 +160,34 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
             />
 
             <h2 className="text-lg font-bold mt-4">Color</h2>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="Red"
-                  checked={filters.colors.includes("Red")}
-                  onChange={handleColorChange}
-                />
-              }
-              label="Red"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="Blue"
-                  checked={filters.colors.includes("Blue")}
-                  onChange={handleColorChange}
-                />
-              }
-              label="Blue"
-            />
+            {["Red", "Blue", "Black", "White"].map((color) => (
+              <FormControlLabel
+                key={color}
+                control={
+                  <Checkbox
+                    name={color}
+                    checked={filters.colors.includes(color)}
+                    onChange={handleColorChange}
+                  />
+                }
+                label={color}
+              />
+            ))}
 
             <h2 className="text-lg font-bold mt-4">Size</h2>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="Small"
-                  checked={filters.sizes.includes("Small")}
-                  onChange={handleSizeChange}
-                />
-              }
-              label="Small"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="Large"
-                  checked={filters.sizes.includes("Large")}
-                  onChange={handleSizeChange}
-                />
-              }
-              label="Large"
-            />
+            {["Small", "Medium", "Large", "XL"].map((size) => (
+              <FormControlLabel
+                key={size}
+                control={
+                  <Checkbox
+                    name={size}
+                    checked={filters.sizes.includes(size)}
+                    onChange={handleSizeChange}
+                  />
+                }
+                label={size}
+              />
+            ))}
           </CardContent>
         </Card>
       </div>
@@ -222,32 +204,21 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
               <MenuItem value={50}>Show 50 per page</MenuItem>
             </Select>
           </FormControl>
+          <Pagination
+            count={categoryData?.totalPages || 0}
+            page={page}
+            onChange={handleChangePage}
+          />
         </div>
 
-        <Grid container spacing={2}>
-          {currentProducts.map((product) => (
-            <Grid item xs={3} key={product.id}>
+        {/* Product Grid */}
+        <Grid container spacing={3}>
+          {filteredProducts.map((product) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
               <ProductCard product={product} />
             </Grid>
           ))}
         </Grid>
-
-        <div className="flex justify-center mt-4">
-          <Pagination
-            count={Math.ceil((filteredProducts.length || 0) / sort)}
-            page={page}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            className="pagination"
-            sx={{
-              "& .Mui-selected": {
-                backgroundColor: "#088178",
-                color: "white",
-              },
-            }}
-          />
-        </div>
       </div>
     </div>
   );

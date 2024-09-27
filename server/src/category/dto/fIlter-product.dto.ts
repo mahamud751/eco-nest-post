@@ -1,4 +1,10 @@
-import { IsOptional, IsArray, IsNumber, IsEnum } from 'class-validator';
+import {
+  IsOptional,
+  IsArray,
+  IsNumber,
+  IsEnum,
+  IsString,
+} from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FilterProductDto {
@@ -8,7 +14,7 @@ export class FilterProductDto {
   })
   @IsOptional()
   @IsNumber()
-  page?: number = 1;
+  page?: number;
 
   @ApiPropertyOptional({
     description: 'Number of products per page',
@@ -16,7 +22,7 @@ export class FilterProductDto {
   })
   @IsOptional()
   @IsNumber()
-  perPage?: number = 10;
+  perPage?: number;
 
   @ApiPropertyOptional({
     description: 'Price range filter',

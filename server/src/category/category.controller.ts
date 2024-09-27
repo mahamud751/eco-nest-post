@@ -78,10 +78,18 @@ export class CategoryController {
   @ApiQuery({
     name: 'priceRange',
     required: false,
-    description: 'Price range filter',
+    description: 'Price range filter, e.g., [min,max]',
   })
-  @ApiQuery({ name: 'sizes', required: false, description: 'Size filter' })
-  @ApiQuery({ name: 'colors', required: false, description: 'Color filter' })
+  @ApiQuery({
+    name: 'sizes',
+    required: false,
+    description: 'Size filter, e.g., [small,medium]',
+  })
+  @ApiQuery({
+    name: 'colors',
+    required: false,
+    description: 'Color filter, e.g., [red,blue]',
+  })
   @ApiQuery({
     name: 'sortPrice',
     required: false,
@@ -90,8 +98,21 @@ export class CategoryController {
   })
   async getCategoryProducts(
     @Param('id') id: string,
-    @Query() filterProductDto: FilterProductDto,
+    @Query() query: any, // using `any` to capture query params directly
   ) {
+    const filterProductDto = new FilterProductDto();
+
+    filterProductDto.page = query.page ? Number(query.page) : 1; // convert to number
+    filterProductDto.perPage = query.perPage ? Number(query.perPage) : 10; // convert to number
+    filterProductDto.priceRange = query.priceRange
+      ? JSON.parse(query.priceRange)
+      : undefined; // parse JSON if necessary
+    filterProductDto.sizes = query.sizes ? query.sizes.split(',') : undefined; // assume comma-separated
+    filterProductDto.colors = query.colors
+      ? query.colors.split(',')
+      : undefined; // assume comma-separated
+    filterProductDto.sortPrice = query.sortPrice;
+
     return this.categoryService.findOneWithProducts(id, filterProductDto);
   }
 
