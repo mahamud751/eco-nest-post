@@ -97,7 +97,7 @@ model SubCategory {
 model Wishlist {
   id        String    @id @default(uuid())
   userName  String
-  email     String    @unique
+  email     String
   productId String
   products  Product[] @relation("WishlistProducts")
   createdAt DateTime  @default(now())
