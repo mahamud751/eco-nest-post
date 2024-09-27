@@ -9,12 +9,27 @@ export class WishlistService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createWishlistDto: CreateWishlistDto) {
-    const { productId, ...rest } = createWishlistDto;
+    const { productId, email } = createWishlistDto;
 
+    // Check if the product already exists in the user's wishlist
+    const existingWishlist = await this.prisma.wishlist.findFirst({
+      where: {
+        email: email, // Check for the specific user by email
+        productId: productId, // Check if the product is already in the wishlist
+      },
+    });
+
+    // If the product already exists in the wishlist, throw an error
+    if (existingWishlist) {
+      throw new Error('Product already exists in your wishlist.');
+    }
+
+    // If the product is not in the wishlist, create a new wishlist entry
     return this.prisma.wishlist.create({
       data: {
-        ...rest,
-        productId: productId,
+        email,
+        userName: createWishlistDto.userName,
+        productId, // Directly pass productId
       },
     });
   }
