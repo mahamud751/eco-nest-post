@@ -49,12 +49,12 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const userName = user?.name;
   const email = user?.email;
   const exactWishList = wishlist?.filter(
-    (wishListItem) => wishListItem?.product?.id === id
+    (wishListItem) => wishListItem?.productId === id
   );
   const userWishList = exactWishList?.find(
     (wishListItem) => wishListItem?.email === email
   );
-  console.log("wishlist", wishlist);
+  console.log("wishlist", exactWishList);
 
   const fetchProducts = async () => {
     try {

@@ -20,7 +20,6 @@ export class CreateWishlistDto {
   email: string;
 
   @ApiProperty({ description: 'ID of the associated product' })
-  @IsUUID()
   @IsNotEmpty()
   productId: string;
 }

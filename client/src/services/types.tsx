@@ -62,6 +62,7 @@ export interface Product {
 
 export interface WishlistItem {
   id: string;
+  productId: String;
   product: Product;
   userName: string;
   email: string;
