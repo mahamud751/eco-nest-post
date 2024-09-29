@@ -31,6 +31,7 @@ import {
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import Image from "next/image";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
+import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -150,16 +151,26 @@ const CheckoutStep: React.FC = () => (
   <div className="flex justify-between">
     <div className="w-1/2 p-4">
       <h2 className="font-bold mb-2">User Details</h2>
-      <TextField label="Name" fullWidth margin="normal" />
-      <TextField label="Email" fullWidth margin="normal" />
+      <TextField label="Enter your first name" fullWidth margin="normal" />
+      <TextField label="Enter your last name" fullWidth margin="normal" />
+      <TextField label="Enter your email" fullWidth margin="normal" />
       <TextField label="Phone" fullWidth margin="normal" />
     </div>
     <div className="w-1/2 p-4">
       <h2 className="font-bold mb-2">Billing Information</h2>
-      <TextField label="Address" fullWidth margin="normal" />
-      <TextField label="City" fullWidth margin="normal" />
-      <TextField label="Postal Code" fullWidth margin="normal" />
+      <TextField
+        label="House number and street address"
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Apartment, suie, unit, etc. (optional)"
+        fullWidth
+        margin="normal"
+      />
+      <TextField label="Town / City" fullWidth margin="normal" />
     </div>
+    <PaymentCheckout />
   </div>
 );
 
