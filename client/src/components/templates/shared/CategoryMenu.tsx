@@ -1,7 +1,9 @@
-import UseFetch from "@/services/hooks/useFetch";
 import { MenuItem, Paper, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+
+import UseFetch from "@/services/hooks/useFetch";
 
 interface Category {
   id: string;
@@ -56,22 +58,23 @@ export const CategoryMenu = () => {
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={handleMouseLeave}
         >
-          <MenuItem
-            onClick={() => handleCategoryClick(index)}
-            className="flex justify-between items-center px-4 py-2 hover:bg-[#EEF5FF] hover:text-[#088178]"
-          >
-            <span className="flex items-center space-x-2">
-              <Image
-                src={category.photos[0]?.src || "/default-image.jpg"} // Default image if no photo
-                alt={category.photos[0]?.title || category.name}
-                width={20}
-                height={20}
-                className="rounded-full"
-              />
-              <Typography variant="body2">{category.name}</Typography>
-            </span>
-          </MenuItem>
-
+          <Link href={`/category/${category.id}`}>
+            <MenuItem
+              onClick={() => handleCategoryClick(index)}
+              className="flex justify-between items-center px-4 py-2 hover:bg-[#EEF5FF] hover:text-[#088178]"
+            >
+              <span className="flex items-center space-x-2">
+                <Image
+                  src={category.photos[0]?.src || "/default-image.jpg"} // Default image if no photo
+                  alt={category.photos[0]?.title || category.name}
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                />
+                <Typography variant="body2">{category.name}</Typography>
+              </span>
+            </MenuItem>
+          </Link>
           {(hoverCategory === index || openSubMenu === index) &&
             category.subCategories.length > 0 && (
               <Paper className="absolute left-full top-0 p-4 bg-gray-100 shadow-md w-[400px]">
