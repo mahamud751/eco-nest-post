@@ -21,7 +21,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Total price of the order',
     example: '1500',
-    required: true,
   })
   @IsOptional()
   @IsString()
@@ -48,7 +47,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: "Customer's first name",
     example: 'John',
-    required: true,
   })
   @IsString()
   firstName: string;
@@ -74,7 +72,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Customer email address',
     example: 'john.doe@example.com',
-    required: true,
   })
   @IsString()
   email: string;
@@ -82,7 +79,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Customer phone number',
     example: '+880123456789',
-    required: true,
   })
   @IsString()
   phone: string;
@@ -90,15 +86,20 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'City for delivery',
     example: 'Dhaka',
-    required: true,
   })
   @IsString()
   city: string;
 
   @ApiProperty({
+    description: "Customer's  address",
+    example: '123 Main St',
+  })
+  @IsString()
+  address: string;
+
+  @ApiProperty({
     description: "Customer's street address",
     example: '123 Main St',
-    required: true,
   })
   @IsString()
   streetAddress: string;
@@ -106,7 +107,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Country of the customer',
     example: 'Bangladesh',
-    required: true,
   })
   @IsString()
   country: string;
@@ -132,7 +132,6 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Postal code for delivery',
     example: '1212',
-    required: true,
   })
   @IsString()
   postCode: string;

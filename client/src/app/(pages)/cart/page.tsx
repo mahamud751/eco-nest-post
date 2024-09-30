@@ -149,8 +149,7 @@ const ShoppingCartStep: React.FC<{
 
 const CheckoutStep: React.FC<{
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>; // Updated to match the type
-  handleOnBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-}> = ({ handleFormSubmit, handleOnBlur }) => (
+}> = ({ handleFormSubmit }) => (
   <form onSubmit={handleFormSubmit}>
     <div className="flex justify-between">
       <div className="w-1/2 p-4">
@@ -158,59 +157,36 @@ const CheckoutStep: React.FC<{
         <TextField
           label="Enter your first name"
           name="firstName"
-          onBlur={handleOnBlur}
           fullWidth
           margin="normal"
         />
         <TextField
           label="Enter your last name"
           name="lastName"
-          onBlur={handleOnBlur}
           fullWidth
           margin="normal"
         />
         <TextField
           label="Enter your email"
           name="email"
-          onBlur={handleOnBlur}
           fullWidth
           margin="normal"
         />
-        <TextField
-          label="Phone"
-          name="phone"
-          onBlur={handleOnBlur}
-          fullWidth
-          margin="normal"
-        />
+        <TextField label="Phone" name="phone" fullWidth margin="normal" />
       </div>
       <div className="w-1/2 p-4">
         <h2 className="font-bold mb-2">Billing Information</h2>
         <TextField
           label="House number and street address"
-          name="address"
-          onBlur={handleOnBlur}
+          name="streetAddress"
           fullWidth
           margin="normal"
         />
-        <TextField
-          label="Town / City"
-          name="city"
-          onBlur={handleOnBlur}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Country"
-          name="country"
-          onBlur={handleOnBlur}
-          fullWidth
-          margin="normal"
-        />
+        <TextField label="Town / City" name="city" fullWidth margin="normal" />
+        <TextField label="Country" name="country" fullWidth margin="normal" />
         <TextField
           label="Postal Code"
-          name="citpostCode"
-          onBlur={handleOnBlur}
+          name="postCode"
           fullWidth
           margin="normal"
         />
@@ -242,7 +218,7 @@ const CustomizedStepper: React.FC = () => {
     lastName: "",
     email: "",
     phone: "",
-    address: "",
+    streetAddress: "",
     city: "",
     country: "",
     postCode: "",
@@ -250,11 +226,6 @@ const CustomizedStepper: React.FC = () => {
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
-
-  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const removeItem = (index: number) => {
     if (index < 0 || index >= cartItemsFromRedux.length) return;
@@ -291,8 +262,16 @@ const CustomizedStepper: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const formData = new FormData(event.currentTarget);
     const orderData = {
-      ...formData,
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      streetAddress: formData.get("streetAddress"),
+      city: formData.get("city"),
+      country: formData.get("country"),
+      postCode: formData.get("postCode"),
       grandPrice: grandTotal,
       getState: cartItemsFromRedux,
     };
@@ -312,10 +291,10 @@ const CustomizedStepper: React.FC = () => {
 
       const data = await response.json();
       openSnackbar("Order placed successfully!", "success", "#4caf50");
-      setActiveStep((prev) => prev + 1); // Move to "Order Complete" step
+      setActiveStep(2); // Go to Order Complete step
     } catch (error) {
-      openSnackbar("Order submission failed!", "error", "#f44336");
-      console.error("Order submission error:", error);
+      console.error("Error placing order:", error);
+      openSnackbar("Failed to place order!", "error", "#f44336");
     }
   };
 
@@ -336,12 +315,7 @@ const CustomizedStepper: React.FC = () => {
             onRemove={removeItem}
           />
         )}
-        {activeStep === 1 && (
-          <CheckoutStep
-            handleFormSubmit={handleSubmit}
-            handleOnBlur={handleOnBlur}
-          />
-        )}
+        {activeStep === 1 && <CheckoutStep handleFormSubmit={handleSubmit} />}
         {activeStep === 2 && <OrderCompleteStep />}
       </div>
       <div>
