@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import {
   Stepper,
   Step,
@@ -147,31 +147,66 @@ const ShoppingCartStep: React.FC<{
   </Card>
 );
 
-const CheckoutStep: React.FC = () => (
-  <div className="flex justify-between">
-    <div className="w-1/2 p-4">
-      <h2 className="font-bold mb-2">User Details</h2>
-      <TextField label="Enter your first name" fullWidth margin="normal" />
-      <TextField label="Enter your last name" fullWidth margin="normal" />
-      <TextField label="Enter your email" fullWidth margin="normal" />
-      <TextField label="Phone" fullWidth margin="normal" />
+const CheckoutStep: React.FC<{
+  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>; // Updated to match the type
+  handleOnBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+}> = ({ handleFormSubmit, handleOnBlur }) => (
+  <form onSubmit={handleFormSubmit}>
+    <div className="flex justify-between">
+      <div className="w-1/2 p-4">
+        <h2 className="font-bold mb-2">User Details</h2>
+        <TextField
+          label="Enter your first name"
+          name="firstName"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Enter your last name"
+          name="lastName"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Enter your email"
+          name="email"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Phone"
+          name="phone"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+      </div>
+      <div className="w-1/2 p-4">
+        <h2 className="font-bold mb-2">Billing Information</h2>
+        <TextField
+          label="House number and street address"
+          name="address"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Town / City"
+          name="city"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+      </div>
     </div>
-    <div className="w-1/2 p-4">
-      <h2 className="font-bold mb-2">Billing Information</h2>
-      <TextField
-        label="House number and street address"
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Apartment, suie, unit, etc. (optional)"
-        fullWidth
-        margin="normal"
-      />
-      <TextField label="Town / City" fullWidth margin="normal" />
-    </div>
-    <PaymentCheckout />
-  </div>
+
+    <Button type="submit" variant="contained" color="primary">
+      Submit Order
+    </Button>
+  </form>
 );
 
 const OrderCompleteStep: React.FC = () => (
@@ -188,9 +223,22 @@ const CustomizedStepper: React.FC = () => {
     (state: RootState) => state.cart.cartItems
   );
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
+
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const removeItem = (index: number) => {
     if (index < 0 || index >= cartItemsFromRedux.length) return;
@@ -222,6 +270,38 @@ const CustomizedStepper: React.FC = () => {
     }
   };
 
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const orderData = {
+      cartItems: cartItemsFromRedux,
+      totalPrice: cartItemsFromRedux
+        .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+        .toFixed(2),
+    };
+
+    try {
+      const response = await fetch("https://api.korbojoy.shop/v1/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      openSnackbar("Order placed successfully!", "success", "#4caf50");
+      setActiveStep((prev) => prev + 1); // Move to "Order Complete" step
+    } catch (error) {
+      openSnackbar("Order submission failed!", "error", "#f44336");
+      console.error("Order submission error:", error);
+    }
+  };
+
   return (
     <Box className="container mx-auto py-10">
       <Stepper activeStep={activeStep}>
@@ -239,7 +319,12 @@ const CustomizedStepper: React.FC = () => {
             onRemove={removeItem}
           />
         )}
-        {activeStep === 1 && <CheckoutStep />}
+        {activeStep === 1 && (
+          <CheckoutStep
+            handleFormSubmit={handleSubmit}
+            handleOnBlur={handleOnBlur}
+          />
+        )}
         {activeStep === 2 && <OrderCompleteStep />}
       </div>
       <div>
