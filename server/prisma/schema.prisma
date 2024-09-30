@@ -242,6 +242,50 @@ model Student {
   school        School   @relation("SchoolStudents", fields: [schoolId], references: [id])
 }
 
+model Order {
+  id            String  @id @default(uuid())
+  getState      Json?
+  grandPrice    String?
+  selectedSize  String?
+  selectedColor String?
+  firstName     String?
+  lastName      String?
+  userId        String?
+  email         String?
+  phone         String?
+  city          String?
+  streetAddress String?
+  country       String?
+  district      String?
+  apartment     String?
+  postCode      String?
+  address       String?
+  gender        Gender?
+  paymentType   String?
+  paymentNumber String?
+  transactionId String?
+  bkashNumber   String?
+  bkashTrx      String?
+  rocketNumber  String?
+  rocketTrx     String?
+  dutchNumber   String?
+  dutchTrx      String?
+
+  status         OrderStatus  @default(PENDING)
+  totalAmount    Float?
+  receivedTk     Float?
+  dueAmount      Float?
+  totalReceiveTk Float?
+  unReceivedTk   Float?
+  paymentStatus  String?
+  bookingExtend  Boolean?
+  isCancel       CancelStatus @default(NO)
+  userCancel     Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model File {
   id        String   @id @default(uuid())
   demoId    String?
@@ -289,4 +333,16 @@ enum VendorStatus {
   processing
   approved
   canceled
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  APPROVED
+  CANCELED
+}
+
+enum CancelStatus {
+  YES
+  NO
 }
