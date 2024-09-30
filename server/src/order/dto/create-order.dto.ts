@@ -1,21 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsOptional,
   IsString,
   IsEnum,
   IsNumber,
   IsBoolean,
+  IsObject,
 } from 'class-validator';
 import { Gender, OrderStatus, CancelStatus } from '@prisma/client';
 
 export class CreateOrderDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'State of the order',
-    type: 'object',
-    required: false,
+    type: Object,
   })
+  @IsObject()
   @IsOptional()
-  getState: any;
+  getState?: any;
 
   @ApiProperty({
     description: 'Total price of the order',

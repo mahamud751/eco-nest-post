@@ -200,6 +200,20 @@ const CheckoutStep: React.FC<{
           fullWidth
           margin="normal"
         />
+        <TextField
+          label="Country"
+          name="country"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Postal Code"
+          name="citpostCode"
+          onBlur={handleOnBlur}
+          fullWidth
+          margin="normal"
+        />
       </div>
     </div>
 
@@ -230,6 +244,8 @@ const CustomizedStepper: React.FC = () => {
     phone: "",
     address: "",
     city: "",
+    country: "",
+    postCode: "",
   });
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -269,19 +285,20 @@ const CustomizedStepper: React.FC = () => {
       }
     }
   };
-
+  const grandTotal = cartItemsFromRedux
+    .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+    .toFixed(2);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const orderData = {
-      cartItems: cartItemsFromRedux,
-      totalPrice: cartItemsFromRedux
-        .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-        .toFixed(2),
+      ...formData,
+      grandPrice: grandTotal,
+      getState: cartItemsFromRedux,
     };
 
     try {
-      const response = await fetch("https://api.korbojoy.shop/v1/order", {
+      const response = await fetch("https://api.korbojoy.shop/v1/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
