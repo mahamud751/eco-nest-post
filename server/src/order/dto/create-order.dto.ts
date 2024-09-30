@@ -5,18 +5,18 @@ import {
   IsEnum,
   IsNumber,
   IsBoolean,
-  IsObject,
+  IsArray,
 } from 'class-validator';
 import { Gender, OrderStatus, CancelStatus } from '@prisma/client';
 
 export class CreateOrderDto {
   @ApiPropertyOptional({
     description: 'State of the order',
-    type: Object,
+    type: [Object],
   })
-  @IsObject()
+  @IsArray()
   @IsOptional()
-  getState?: any;
+  getState?: any[];
 
   @ApiProperty({
     description: 'Total price of the order',
