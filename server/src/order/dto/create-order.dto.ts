@@ -94,8 +94,9 @@ export class CreateOrderDto {
     description: "Customer's  address",
     example: '123 Main St',
   })
+  @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 
   @ApiProperty({
     description: "Customer's street address",

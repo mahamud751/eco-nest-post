@@ -142,19 +142,19 @@ export default function Navbar() {
                   {cartItemsFromRedux.length > 0 ? (
                     cartItemsFromRedux.map((item, index) => (
                       <Link
-                        href={`/productDetails/${item.product.id}`}
+                        href={`/productDetails/${item?.product?.id}`}
                         key={index}
                       >
                         <div
                           key={index}
                           className="flex items-center justify-between p-3"
                         >
-                          {item.product.photos.length > 0 ? (
+                          {item?.product?.photos?.length > 0 ? (
                             <Image
                               width={50}
                               height={50}
-                              src={item.product.photos[0].src}
-                              alt={item.product.name}
+                              src={item?.product?.photos[0]?.src}
+                              alt={item?.product?.name}
                               className="rounded-md object-cover"
                             />
                           ) : (
@@ -165,11 +165,11 @@ export default function Navbar() {
 
                           <div className="flex-1 mx-3">
                             <p className="font-medium text-gray-800">
-                              {item.product.name}
+                              {item?.product?.name}
                             </p>
                             <div className="text-sm text-gray-600">
-                              <span>{item.quantity}</span> x{" "}
-                              <span>৳{item.product.price}</span>
+                              <span>{item?.quantity}</span> x{" "}
+                              <span>৳{item?.product?.price}</span>
                             </div>
                           </div>
 
@@ -198,7 +198,7 @@ export default function Navbar() {
                   ৳
                   {cartItemsFromRedux
                     .reduce(
-                      (acc, item) => acc + item.product.price * item.quantity,
+                      (acc, item) => acc + item.product?.price * item?.quantity,
                       0
                     )
                     .toFixed(2)}
