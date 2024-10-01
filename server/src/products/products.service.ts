@@ -129,7 +129,10 @@ export class ProductService {
         })
       : data;
 
-    return { data: filteredData, total };
+    // If filtering is applied, update the total count accordingly
+    const filteredTotal = email ? filteredData.length : total;
+
+    return { data: filteredData, total: filteredTotal }; // Return the filtered total
   }
 
   async findPopular(
