@@ -46,16 +46,16 @@ export class ProductController {
     @Request() req, // Move this up to ensure it's before any optional parameters
     @Query('limit') limit?: number,
     @Query('flashsale') flashsale?: string,
+    @Query('email') email?: string,
     @Query('name') name?: string,
   ): Promise<PaginatedResult<Product>> {
-    const userEmail = req.userInfo?.email; // Adjust based on how you retrieve user info
     return this.productService.findAll(
       page,
       perPage,
       limit,
       flashsale,
       name,
-      userEmail,
+      email,
     );
   }
 

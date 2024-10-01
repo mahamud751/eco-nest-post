@@ -82,7 +82,7 @@ export class ProductService {
     limit?: number,
     flashsale?: string,
     name?: string,
-    userEmail?: string,
+    email?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -101,10 +101,8 @@ export class ProductService {
         mode: 'insensitive', // Case-insensitive search
       };
     }
-    if (userEmail) {
-      where.userInfo = {
-        email: userEmail, // Filter by user's email
-      };
+    if (email) {
+      where.userInfo.email = email;
     }
 
     const totalCountPromise = this.prisma.product.count({ where });
