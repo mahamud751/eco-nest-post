@@ -40,14 +40,26 @@ export class OrderService {
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
-    const filteredData = email
-      ? data.filter((order) => {
-          return order.getState.some((stateItem: any) => {
+    let filteredData = data;
+
+    if (email) {
+      filteredData = data
+        .map((order) => {
+          const filteredState = order.getState.filter((stateItem: any) => {
             const userInfo = stateItem.product.userInfo;
             return userInfo?.email ? userInfo.email.includes(email) : false;
           });
+
+          if (filteredState.length > 0) {
+            return {
+              ...order,
+              getState: filteredState,
+            };
+          }
+          return null;
         })
-      : data;
+        .filter((order) => order !== null);
+    }
 
     const filteredTotal = email ? filteredData.length : total;
 
