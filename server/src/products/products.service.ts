@@ -81,6 +81,7 @@ export class ProductService {
     perPage: number = 10,
     limit?: number,
     flashsale?: string,
+    name?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -92,6 +93,12 @@ export class ProductService {
     const where: any = {};
     if (flashsale) {
       where.flashsale = flashsale;
+    }
+    if (name) {
+      where.name = {
+        contains: name, // Use `contains` for partial matching
+        mode: 'insensitive', // Case-insensitive search
+      };
     }
 
     const totalCountPromise = this.prisma.product.count({ where });
