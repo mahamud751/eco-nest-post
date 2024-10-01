@@ -102,7 +102,12 @@ export class ProductService {
       };
     }
     if (email) {
-      where.userInfo.email = email;
+      where.userInfo = {
+        email: {
+          contains: email,
+          mode: 'insensitive', // Case-insensitive search
+        },
+      };
     }
 
     const totalCountPromise = this.prisma.product.count({ where });

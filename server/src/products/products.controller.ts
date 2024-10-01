@@ -49,14 +49,7 @@ export class ProductController {
     @Query('email') email?: string,
     @Query('name') name?: string,
   ): Promise<PaginatedResult<Product>> {
-    return this.productService.findAll(
-      page,
-      perPage,
-      limit,
-      flashsale,
-      name,
-      email,
-    );
+    return this.productService.findAll(page, perPage, limit, flashsale, name);
   }
 
   @Get('/recentVisit')
