@@ -21,6 +21,7 @@ export class OrderService {
   async findAll(
     page: number = 1,
     perPage: number = 10,
+    vendor?: string,
     email?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
@@ -32,6 +33,12 @@ export class OrderService {
 
     const where: any = {}; // Add any other filters if needed
 
+    if (email) {
+      where.email = {
+        contains: email,
+        mode: 'insensitive',
+      };
+    }
     const dataPromise = this.prisma.order.findMany({
       skip,
       take: perPageNumber,
@@ -42,7 +49,7 @@ export class OrderService {
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
     // Filter based on userInfo.email if the email query is provided
-    const filteredData = email
+    const filteredData = vendor
       ? data.filter((order) => {
           // Iterate over the getState array in each order
           return order.getState.some((stateItem: any) => {
@@ -53,7 +60,7 @@ export class OrderService {
       : data;
 
     // If filtering is applied, update the total count accordingly
-    const filteredTotal = email ? filteredData.length : total;
+    const filteredTotal = vendor ? filteredData.length : total;
 
     return { data: filteredData, total: filteredTotal };
   }

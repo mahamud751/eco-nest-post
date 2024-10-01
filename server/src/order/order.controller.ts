@@ -41,8 +41,9 @@ export class OrderController {
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('email') email?: string,
+    @Query('vendor') vendor?: string,
   ) {
-    return this.orderService.findAll(page, perPage, email);
+    return this.orderService.findAll(page, perPage, email, vendor);
   }
 
   @Get('/totalGrandPrice')
