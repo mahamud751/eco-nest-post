@@ -8,6 +8,7 @@ import {
   IsUUID,
   IsObject,
 } from 'class-validator';
+import { UserInfoDto } from './user-info.dts';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -143,11 +144,11 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({
     description: 'User information related to the product',
-    type: Object,
+    type: UserInfoDto, // Use UserInfoDto here
   })
   @IsObject()
   @IsOptional()
-  userInfo?: any;
+  userInfo?: UserInfoDto;
 
   @ApiPropertyOptional({
     description: 'The status of the product',

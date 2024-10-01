@@ -10,6 +10,7 @@ import { Product } from '@prisma/client'; // Import Product type from Prisma cli
 import { AuditLogService } from 'src/audit/audit.service';
 import { PaginatedResult } from './type';
 import { UsersService } from 'src/users/users.service';
+import { UserInfoDto } from './dto/user-info.dts';
 
 @Injectable()
 export class ProductService {
@@ -25,8 +26,8 @@ export class ProductService {
     const { categoryId, subcategoryId, branchId, reviewId, userInfo, ...rest } =
       createProductDto;
 
-    // userInfo is already an object due to the DTO configuration
-    let parsedUserInfo = userInfo || null;
+    // Ensure userInfo is a plain object or null
+    const parsedUserInfo = userInfo ? { ...userInfo } : null;
 
     const category = await this.prisma.category.findUnique({
       where: { id: categoryId },
@@ -54,7 +55,7 @@ export class ProductService {
     const product = await this.prisma.product.create({
       data: {
         ...rest,
-        userInfo: parsedUserInfo, // Store userInfo directly as an object
+        userInfo: parsedUserInfo, // Ensure this is a plain object
         category: { connect: { id: categoryId } },
         subcategory: subcategoryId
           ? { connect: { id: subcategoryId } }
@@ -81,7 +82,7 @@ export class ProductService {
     perPage: number = 10,
     limit?: number,
     flashsale?: string,
-    email?: string,
+    email?: string, // Email from userInfo JSON
     name?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
@@ -95,18 +96,14 @@ export class ProductService {
     if (flashsale) {
       where.flashsale = flashsale;
     }
-    if (email) {
-      where.userInfo = {
-        email: email,
-      };
-    }
     if (name) {
       where.name = {
-        contains: name, // Use `contains` for partial matching
-        mode: 'insensitive', // Case-insensitive search
+        contains: name,
+        mode: 'insensitive',
       };
     }
 
+    // Fetch all products
     const totalCountPromise = this.prisma.product.count({ where });
 
     const dataPromise = this.prisma.product.findMany({
@@ -124,7 +121,15 @@ export class ProductService {
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
-    return { data, total };
+    // Filter products based on userInfo.email if the email query is provided
+    const filteredData = email
+      ? data.filter((product) => {
+          const userInfo = product.userInfo as UserInfoDto; // Cast to UserInfo
+          return userInfo?.email ? userInfo.email.includes(email) : false;
+        })
+      : data;
+
+    return { data: filteredData, total };
   }
 
   async findPopular(
