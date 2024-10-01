@@ -54,19 +54,24 @@ export class OrderService {
     return { data: filteredData, total: filteredTotal };
   }
 
-  async myBooking(
+  async findOrdersByEmail(
     page: number = 1,
     perPage: number = 10,
-    email?: string,
+    email: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
 
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const totalCountPromise = this.prisma.order.count();
+    const where: any = {
+      email: {
+        contains: email,
+        mode: 'insensitive',
+      },
+    };
 
-    const where: any = {}; // Add any other filters if needed
+    const totalCountPromise = this.prisma.order.count({ where });
 
     const dataPromise = this.prisma.order.findMany({
       skip,
@@ -77,21 +82,7 @@ export class OrderService {
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
-    // Filter based on userInfo.email if the email query is provided
-    const filteredData = email
-      ? data.filter((order) => {
-          // Iterate over the getState array in each order
-          return order.getState.some((stateItem: any) => {
-            const userInfo = stateItem.product.userInfo;
-            return userInfo?.email ? userInfo.email.includes(email) : false;
-          });
-        })
-      : data;
-
-    // If filtering is applied, update the total count accordingly
-    const filteredTotal = email ? filteredData.length : total;
-
-    return { data: filteredData, total: filteredTotal };
+    return { data, total };
   }
 
   async getOrderById(id: string) {
