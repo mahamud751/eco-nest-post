@@ -30,7 +30,7 @@ export class OrderService {
 
     const totalCountPromise = this.prisma.order.count();
 
-    const where: any = {}; // Define additional filters if necessary
+    const where: any = {}; // Add any other filters if needed
 
     const dataPromise = this.prisma.order.findMany({
       skip,
@@ -41,24 +41,14 @@ export class OrderService {
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
-    // Filter products based on userInfo.email if the email query is provided
+    // Filter based on userInfo.email if the email query is provided
     const filteredData = email
-      ? data.filter((product) => {
-          const userInfoList = product.getState.map((pd) => {
-            try {
-              // Parse the JSON string if userInfo is stored as JsonValue
-              const userInfo = typeof pd === 'string' ? JSON.parse(pd) : pd;
-              return userInfo as UserInfoDto;
-            } catch (error) {
-              // If JSON parsing fails, skip this entry
-              return null;
-            }
+      ? data.filter((order) => {
+          // Iterate over the getState array in each order
+          return order.getState.some((stateItem: any) => {
+            const userInfo = stateItem.product.userInfo;
+            return userInfo?.email ? userInfo.email.includes(email) : false;
           });
-
-          // Check if userInfo has email and if it matches the filter
-          return userInfoList.some(
-            (userInfo) => userInfo?.email && userInfo.email.includes(email),
-          );
         })
       : data;
 
