@@ -82,6 +82,7 @@ export class ProductService {
     limit?: number,
     flashsale?: string,
     name?: string,
+    userEmail?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -98,6 +99,11 @@ export class ProductService {
       where.name = {
         contains: name, // Use `contains` for partial matching
         mode: 'insensitive', // Case-insensitive search
+      };
+    }
+    if (userEmail) {
+      where.userInfo = {
+        email: userEmail, // Filter by user's email
       };
     }
 
