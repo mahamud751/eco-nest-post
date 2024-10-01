@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Query, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Put,
+  Request,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import {
@@ -8,6 +17,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
+import { PaginatedResult } from 'src/products/type';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -27,8 +37,12 @@ export class OrderController {
   @Get()
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'List of all orders' })
-  getOrders() {
-    return this.orderService.getOrders();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+    @Query('email') email?: string,
+  ) {
+    return this.orderService.findAll(page, perPage, email);
   }
 
   @Get('/totalGrandPrice')
