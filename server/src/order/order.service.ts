@@ -31,7 +31,13 @@ export class OrderService {
 
   async getOrdersByEmail(email: string) {
     return await this.prisma.order.findMany({
-      where: { email },
+      where: {
+        getState: {
+          userInfo: {
+            email: email,
+          },
+        },
+      },
     });
   }
 
