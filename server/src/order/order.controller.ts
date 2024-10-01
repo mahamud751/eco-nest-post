@@ -41,9 +41,19 @@ export class OrderController {
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('email') email?: string,
-    @Query('vendor') vendor?: string,
   ) {
-    return this.orderService.findAll(page, perPage, email, vendor);
+    return this.orderService.findAll(page, perPage, email);
+  }
+
+  @Get('/myBooking')
+  @ApiOperation({ summary: 'Get all orders' })
+  @ApiResponse({ status: 200, description: 'List of all orders' })
+  async findOrdersByEmail(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+    @Query('email') email?: string,
+  ) {
+    return this.orderService.findOrdersByEmail(page, perPage, email);
   }
 
   @Get('/totalGrandPrice')
