@@ -29,18 +29,6 @@ export class OrderService {
     });
   }
 
-  async getOrdersByEmail(email: string) {
-    return await this.prisma.order.findMany({
-      where: {
-        getState: {
-          userInfo: {
-            email: email,
-          },
-        },
-      },
-    });
-  }
-
   async updateOrder(id: string, updateData: any) {
     return await this.prisma.order.update({
       where: { id: id },

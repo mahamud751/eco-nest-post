@@ -46,21 +46,6 @@ export class OrderController {
     return this.orderService.getOrderById(id);
   }
 
-  @Get('/myBooking')
-  @ApiOperation({ summary: 'Get orders by email' })
-  @ApiQuery({
-    name: 'email',
-    required: true,
-    description: 'Email address of the user',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'List of orders associated with the user email',
-  })
-  getOrdersByEmail(@Query('email') email: string) {
-    return this.orderService.getOrdersByEmail(email);
-  }
-
   @Put('/:id')
   @ApiOperation({ summary: 'Update an order' })
   @ApiParam({ name: 'id', description: 'Order ID' })
