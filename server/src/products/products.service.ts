@@ -97,9 +97,7 @@ export class ProductService {
     }
     if (email) {
       where.userInfo = {
-        email: {
-          contains: email,
-        },
+        email: email,
       };
     }
     if (name) {
