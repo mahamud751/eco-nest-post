@@ -54,8 +54,8 @@ export class ProductController {
       perPage,
       limit,
       flashsale,
-      name,
       email,
+      name,
     );
   }
 

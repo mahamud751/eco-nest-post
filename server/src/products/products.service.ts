@@ -81,8 +81,8 @@ export class ProductService {
     perPage: number = 10,
     limit?: number,
     flashsale?: string,
-    name?: string,
     email?: string,
+    name?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -95,18 +95,17 @@ export class ProductService {
     if (flashsale) {
       where.flashsale = flashsale;
     }
-    if (name) {
-      where.name = {
-        contains: name, // Use `contains` for partial matching
-        mode: 'insensitive', // Case-insensitive search
-      };
-    }
     if (email) {
       where.userInfo = {
         email: {
           contains: email,
-          mode: 'insensitive', // Case-insensitive search
         },
+      };
+    }
+    if (name) {
+      where.name = {
+        contains: name, // Use `contains` for partial matching
+        mode: 'insensitive', // Case-insensitive search
       };
     }
 
