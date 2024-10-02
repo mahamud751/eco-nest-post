@@ -99,8 +99,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     name: string,
     email: string,
     phone: string,
-    password: string,
-    refferCode: string
+    password: string
   ) => {
     try {
       const response = await axios.post(
@@ -110,7 +109,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           email,
           phone,
           password,
-          refferCode,
         }
       );
 

@@ -316,7 +316,9 @@ export default function Navbar() {
               {user ? (
                 <div className="flex items-center space-x-4">
                   <span>
-                    Welcome, <Link href={"/account"}>{user.name}</Link>
+                    <Link href={"/account"} className="text-red-500 uppercase">
+                      {user.name}
+                    </Link>
                   </span>
                   <span
                     onClick={handleLogOut}

@@ -17,7 +17,6 @@ interface FormInputs {
   email: string;
   phone?: string;
   password: string;
-  refferCode?: string;
 }
 
 const Auth: React.FC = () => {
@@ -44,17 +43,10 @@ const Auth: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    const { name, email, phone, password, refferCode } = data;
+    const { name, email, phone, password } = data;
     try {
       if (isSignup) {
-        await registerUser(
-          name!,
-          email,
-          phone!,
-          password,
-          refferCode || "",
-          ""
-        );
+        await registerUser(name!, email, phone!, password, "", "");
         router.push("/");
       } else {
         await loginUser(email, password);
@@ -115,14 +107,7 @@ const Auth: React.FC = () => {
               helperText={errors.phone ? errors.phone.message : ""}
             />
           )}
-          {isSignup && (
-            <TextField
-              label="Referral Code"
-              variant="outlined"
-              fullWidth
-              {...register("refferCode")}
-            />
-          )}
+
           <TextField
             label="Password"
             variant="outlined"

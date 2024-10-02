@@ -93,7 +93,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             }`}
           >
             <div className="relative flex space-x-4">
-              <Link href={``} passHref>
+              <Link href={`/account`} passHref>
                 <div className="relative group">
                   <IconButton
                     className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110"
