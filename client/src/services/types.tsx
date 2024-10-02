@@ -180,6 +180,54 @@ export interface Student {
   updatedAt: Date;
 }
 
+export interface Order {
+  id: string;
+  getState: any[]; // Assuming this will hold any data type. Adjust based on actual type.
+  grandPrice?: string;
+  selectedSize?: string;
+  selectedColor?: string;
+  firstName?: string;
+  lastName?: string;
+  userId?: string;
+  email?: string;
+  phone?: string;
+  city?: string;
+  streetAddress?: string;
+  country?: string;
+  district?: string;
+  apartment?: string;
+  postCode?: string;
+  address?: string;
+  gender?: Gender;
+  paymentType?: string;
+  paymentNumber?: string;
+  transactionId?: string;
+  bkashNumber?: string;
+  bkashTrx?: string;
+  rocketNumber?: string;
+  rocketTrx?: string;
+  dutchNumber?: string;
+  dutchTrx?: string;
+
+  status: OrderStatus;
+  totalAmount?: number;
+  receivedTk?: number;
+  dueAmount?: number;
+  totalReceiveTk?: number;
+  unReceivedTk?: number;
+  paymentStatus?: string;
+  bookingExtend?: boolean;
+  isCancel: CancelStatus;
+  userCancel?: any;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";
+
+export type CancelStatus = "YES" | "NO";
+
 export type SchoolStatus = "pending" | "processing" | "delivery" | "canceled";
 
 export type Gender = "Male" | "Female" | "Other";

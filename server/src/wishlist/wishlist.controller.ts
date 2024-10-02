@@ -34,8 +34,9 @@ export class WishlistController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
+    @Query('email') email?: string,
   ) {
-    return this.wishlistService.findAll(page, perPage);
+    return this.wishlistService.findAll(page, perPage, email);
   }
 
   @Get(':id')

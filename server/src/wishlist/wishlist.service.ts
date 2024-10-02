@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
@@ -22,15 +22,23 @@ export class WishlistService {
   async findAll(
     page: number = 1,
     perPage: number = 10,
+    email?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
     const totalCountPromise = this.prisma.wishlist.count();
 
+    const where: any = {
+      email: {
+        contains: email,
+        mode: 'insensitive',
+      },
+    };
     const dataPromise = this.prisma.wishlist.findMany({
       skip,
       take: perPageNumber,
+      where,
       orderBy: { createdAt: 'desc' },
       include: {
         products: true,

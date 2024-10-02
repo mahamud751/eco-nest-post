@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service'; // Adjust the import path according to your project structure
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from '@prisma/client'; // Import Product type from Prisma client
+import { Product } from '@prisma/client';
 import { AuditLogService } from 'src/audit/audit.service';
 import { PaginatedResult } from './type';
 import { UsersService } from 'src/users/users.service';
@@ -26,7 +22,6 @@ export class ProductService {
     const { categoryId, subcategoryId, branchId, reviewId, userInfo, ...rest } =
       createProductDto;
 
-    // Ensure userInfo is a plain object or null
     const parsedUserInfo = userInfo ? { ...userInfo } : null;
 
     const category = await this.prisma.category.findUnique({
@@ -55,7 +50,7 @@ export class ProductService {
     const product = await this.prisma.product.create({
       data: {
         ...rest,
-        userInfo: parsedUserInfo, // Ensure this is a plain object
+        userInfo: parsedUserInfo,
         category: { connect: { id: categoryId } },
         subcategory: subcategoryId
           ? { connect: { id: subcategoryId } }
@@ -82,7 +77,7 @@ export class ProductService {
     perPage: number = 10,
     limit?: number,
     flashsale?: string,
-    email?: string, // Email from userInfo JSON
+    email?: string,
     name?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
@@ -103,7 +98,6 @@ export class ProductService {
       };
     }
 
-    // Fetch all products
     const totalCountPromise = this.prisma.product.count({ where });
 
     const dataPromise = this.prisma.product.findMany({
@@ -121,18 +115,16 @@ export class ProductService {
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
 
-    // Filter products based on userInfo.email if the email query is provided
     const filteredData = email
       ? data.filter((product) => {
-          const userInfo = product.userInfo as UserInfoDto; // Cast to UserInfo
+          const userInfo = product.userInfo as UserInfoDto;
           return userInfo?.email ? userInfo.email.includes(email) : false;
         })
       : data;
 
-    // If filtering is applied, update the total count accordingly
     const filteredTotal = email ? filteredData.length : total;
 
-    return { data: filteredData, total: filteredTotal }; // Return the filtered total
+    return { data: filteredData, total: filteredTotal };
   }
 
   async findPopular(
@@ -170,10 +162,8 @@ export class ProductService {
     const perPageNumber = Math.min(Number(perPage) || 10, 15);
     const skip = (pageNumber - 1) * perPageNumber;
 
-    // Fixed total count for pagination, not the actual count of products
     const fixedTotalCount = 15;
 
-    // Fetch the latest products with pagination
     const dataPromise = this.prisma.product.findMany({
       skip,
       take: perPageNumber,
@@ -242,13 +232,11 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
-    // Update views
     await this.prisma.product.update({
       where: { id },
       data: { views: { increment: 1 }, updatedAt: new Date() },
     });
 
-    // If userId is provided, log the last visit
     if (userId) {
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
@@ -258,15 +246,12 @@ export class ProductService {
         throw new NotFoundException('User not found');
       }
 
-      // Ensure lastVisited is an array if not already
       const updatedLastVisited = user.lastVisited || [];
 
-      // Add the product ID if it doesn't already exist
       if (!updatedLastVisited.includes(id)) {
         updatedLastVisited.push(id);
       }
 
-      // Update the user with the new lastVisited array
       await this.prisma.user.update({
         where: { id: userId },
         data: { lastVisited: updatedLastVisited },
