@@ -27,7 +27,6 @@ export class WishlistService {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
-    const totalCountPromise = this.prisma.wishlist.count();
 
     const where: any = {
       email: {
@@ -35,6 +34,11 @@ export class WishlistService {
         mode: 'insensitive',
       },
     };
+
+    const totalCountPromise = this.prisma.wishlist.count({
+      where,
+    });
+
     const dataPromise = this.prisma.wishlist.findMany({
       skip,
       take: perPageNumber,
@@ -44,9 +48,7 @@ export class WishlistService {
         products: true,
       },
     });
-
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
-
     return { data, total };
   }
 
