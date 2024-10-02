@@ -20,8 +20,9 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({ description: 'The address of the user', required: false })
+  @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 
   @ApiProperty({ description: 'The email of the user' })
   @IsNotEmpty()

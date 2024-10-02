@@ -67,6 +67,7 @@ export interface WishlistItem {
   product: Product;
   userName: string;
   email: string;
+  createdAt: Date;
   updatedAt: Date;
 }
 

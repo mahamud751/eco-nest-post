@@ -61,8 +61,8 @@ const CategoryProduct = () => {
               spaceBetween={30}
               slidesPerView={3}
               navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+                nextEl: ".swiper-button-prev",
+                prevEl: ".swiper-button-next",
               }}
               pagination={{ clickable: true }}
               breakpoints={{
@@ -83,8 +83,8 @@ const CategoryProduct = () => {
                   gap: "10px",
                 }}
               >
-                <ArrowForwardIosIcon className="swiper-button-next p-3" />
-                <ArrowBackIosIcon className="swiper-button-prev p-3" />
+                <ArrowForwardIosIcon className="swiper-button-prev p-3" />
+                <ArrowBackIosIcon className="swiper-button-next p-3" />
               </div>
               {selectedCategory.products.map((product) => (
                 <SwiperSlide key={product.id}>

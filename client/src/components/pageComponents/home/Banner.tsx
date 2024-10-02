@@ -14,8 +14,8 @@ const ProductsPage = () => {
     return (
       <div className="mt-5">
         <Image
-          width={4000}
-          height={850}
+          width={2000}
+          height={640}
           src={product.photos[0].src}
           alt={product.name || "Product Image"}
           style={{

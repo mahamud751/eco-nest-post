@@ -99,6 +99,7 @@ const DataTable: React.FC<DataTableProps> = ({
   isJustData = true,
 }) => {
   const theme = useTheme();
+  console.log(link);
 
   const customStyles = {
     header: {

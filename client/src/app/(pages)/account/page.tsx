@@ -1,9 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import { Tabs, Tab, Box, Paper } from "@mui/material";
-import { Home, Settings, Info, ShoppingCart } from "@mui/icons-material";
+import { Tabs, Tab, Box, Paper, IconButton } from "@mui/material";
+import {
+  Home,
+  Settings,
+  Info,
+  ShoppingCart,
+  ExitToApp,
+} from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
+import Wishlist from "@/components/pageComponents/account/Wishlist";
+import { useAuth } from "@/services/hooks/auth";
 
 const useStyles = makeStyles(() => ({
   tab: {
@@ -26,12 +34,16 @@ const useStyles = makeStyles(() => ({
     "&.orders": {
       color: "#9C27B0",
     },
-    "&.settings": {
+    "&.wishlist": {
       color: "#2196F3",
     },
     "&.feedback": {
       color: "#FF9800",
     },
+  },
+  logoutIcon: {
+    color: "#F44336",
+    marginLeft: 8,
   },
   tabLabel: {
     display: "flex",
@@ -45,11 +57,16 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VerticalTabsWithIcons: React.FC = () => {
+  const { user, logoutUser } = useAuth();
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
+  };
+
+  const handleLogOut = () => {
+    logoutUser();
   };
 
   return (
@@ -63,7 +80,7 @@ const VerticalTabsWithIcons: React.FC = () => {
           value={selectedTab}
           onChange={handleTabChange}
           aria-label="Vertical tabs"
-          TabIndicatorProps={{ className: "bg-blue-900 rounded-full" }} // Tailwind 'blue-900'
+          TabIndicatorProps={{ className: "bg-blue-900 rounded-full" }}
           className="space-y-2"
           variant="fullWidth"
         >
@@ -88,7 +105,7 @@ const VerticalTabsWithIcons: React.FC = () => {
           <Tab
             label={
               <span className={classes.tabLabel}>
-                <Settings className={`${classes.icon} settings`} />
+                <Settings className={`${classes.icon} wishlist`} />
                 <span className={classes.tabText}>Wishlists</span>
               </span>
             }
@@ -104,6 +121,14 @@ const VerticalTabsWithIcons: React.FC = () => {
             className={classes.tab}
           />
         </Tabs>
+        <IconButton
+          className={classes.logoutIcon}
+          aria-label="Logout"
+          onClick={handleLogOut}
+        >
+          <ExitToApp />
+          <span className="ms-2 text-[14px] text-gray-500">Log Out</span>
+        </IconButton>
       </Paper>
 
       <Paper
@@ -116,7 +141,11 @@ const VerticalTabsWithIcons: React.FC = () => {
             <OrderDetails />
           </div>
         )}
-        {selectedTab === 2 && <div>Settings Content</div>}
+        {selectedTab === 2 && (
+          <div>
+            <Wishlist />
+          </div>
+        )}
         {selectedTab === 3 && <div>Info Content</div>}
       </Paper>
     </Box>

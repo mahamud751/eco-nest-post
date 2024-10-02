@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -42,7 +43,6 @@ export default function MenuList({ open }: MenuListProps) {
   const [openSubmenu, setOpenSubmenu] = React.useState<string | null>(null);
   const [isClient, setIsClient] = React.useState<boolean>(false);
 
-  // Set isClient to true after the initial render
   React.useEffect(() => {
     setIsClient(true);
   }, []);
@@ -54,13 +54,13 @@ export default function MenuList({ open }: MenuListProps) {
   const commonMenuItems: MenuItem[] = [
     {
       text: "Home",
-      icon: <InboxIcon />,
+      icon: <InboxIcon className="text-green-500" />,
       path: "/",
       submenus: [],
     },
     {
       text: "Banner",
-      icon: <PhotoLibraryOutlinedIcon />,
+      icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
       path: "/banners",
       submenus: [
         {
@@ -75,7 +75,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Custom Order",
-      icon: <InboxIcon />,
+      icon: <InboxIcon className="text-purple-500" />,
       path: "/customOrder-list",
       submenus: [],
     },
@@ -84,7 +84,7 @@ export default function MenuList({ open }: MenuListProps) {
   const adminMenuItems: MenuItem[] = [
     {
       text: "Category",
-      icon: <CategoryIcon />,
+      icon: <CategoryIcon className="text-yellow-500" />,
       path: "/category",
       submenus: [
         {
@@ -107,7 +107,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Product",
-      icon: <DryCleaningIcon />,
+      icon: <DryCleaningIcon className="text-red-500" />,
       path: "/products",
       submenus: [
         {
@@ -122,7 +122,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Blog",
-      icon: <Article />,
+      icon: <Article className="text-teal-500" />,
       path: "/blogs",
       submenus: [
         {
@@ -137,7 +137,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Advance Order",
-      icon: <PhotoLibraryOutlinedIcon />,
+      icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
       path: "/advance",
       submenus: [
         {
@@ -152,7 +152,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Users",
-      icon: <ManageAccounts />,
+      icon: <ManageAccounts className="text-blue-600" />,
       path: "/users",
       submenus: [
         {
@@ -167,7 +167,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Vendors",
-      icon: <AddBusiness />,
+      icon: <AddBusiness className="text-indigo-600" />,
       path: "/vendors",
       submenus: [
         {
@@ -182,7 +182,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Schools",
-      icon: <School />,
+      icon: <School className="text-gray-600" />,
       path: "/schools",
       submenus: [
         {
@@ -197,7 +197,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Measurements",
-      icon: <School />,
+      icon: <School className="text-pink-600" />,
       path: "/measurements",
       submenus: [
         {
@@ -212,7 +212,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Faq",
-      icon: <School />,
+      icon: <School className="text-orange-600" />,
       path: "/faq",
       submenus: [
         {

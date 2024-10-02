@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/services/hooks/auth";
-import { Order } from "@/services/types";
+import { WishlistItem } from "@/services/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,24 +13,22 @@ import {
   Paper,
   Pagination,
   CircularProgress,
-  Button,
 } from "@mui/material";
 import dayjs from "dayjs";
 
-const OrderDetails = () => {
+const Wishlist = () => {
   const { user } = useAuth();
   const [data, setData] = useState<{
-    data: Order[];
+    data: WishlistItem[];
     total: number;
     perPage: number;
   } | null>(null);
 
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-
   const perPage = 10;
 
-  const fetchOrders = async () => {
+  const fetchWishlist = async () => {
     if (!user || !user.email) {
       console.error("User is not logged in");
       return;
@@ -39,15 +37,15 @@ const OrderDetails = () => {
     try {
       setLoading(true);
       const response = await axios.get<{
-        data: Order[];
+        data: WishlistItem[];
         total: number;
         perPage: number;
       }>(
-        `https://api.korbojoy.shop/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${perPage}`
+        `https://api.korbojoy.shop/v1/wishlist?email=${user.email}&page=${page}&perPage=${perPage}`
       );
       setData(response.data);
     } catch (error) {
-      console.error("Error fetching orders:", error);
+      console.error("Error fetching wishlist:", error);
       setData(null);
     } finally {
       setLoading(false);
@@ -55,7 +53,7 @@ const OrderDetails = () => {
   };
 
   useEffect(() => {
-    fetchOrders();
+    fetchWishlist();
   }, [page]);
 
   const handleChangePage = (
@@ -78,29 +76,26 @@ const OrderDetails = () => {
   return (
     <div className="w-full">
       <h1 className="text-3xl font-semibold text-center mb-6 text-green-600">
-        My Orders
+        My Wishlist
       </h1>
 
       <div className="text-right mb-4">
-        <p className="text-gray-600">Total Orders: {data?.total}</p>
+        <p className="text-gray-600">Total Wishlist: {data?.total}</p>
       </div>
 
       {data?.data.length ? (
         <TableContainer component={Paper} className="shadow-lg">
           <Table>
-            <TableHead className="bg-[#9C27B0]">
+            <TableHead className="bg-[#2196F3]">
               <TableRow>
                 <TableCell className="p-4 text-white font-bold">
-                  Order ID
+                  Wishlist ID
                 </TableCell>
                 <TableCell className="p-4 text-white font-bold">Name</TableCell>
                 <TableCell className="p-4 text-white font-bold">
                   Email
                 </TableCell>
                 <TableCell className="p-4 text-white font-bold">Date</TableCell>
-                <TableCell className="p-4 text-white font-bold">
-                  Status
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -110,27 +105,10 @@ const OrderDetails = () => {
                   className="hover:bg-gray-100 transition duration-300"
                 >
                   <TableCell className="p-4">{item.id}</TableCell>
-                  <TableCell className="p-4">
-                    {item.firstName} {item.lastName}
-                  </TableCell>
+                  <TableCell className="p-4">{item.userName}</TableCell>
                   <TableCell className="p-4">{item.email}</TableCell>
                   <TableCell className="p-4">
                     {dayjs(item.createdAt).format("MMM D, YYYY")}
-                  </TableCell>
-                  <TableCell className="p-4">
-                    <Button
-                      variant="contained"
-                      color={item.status === "APPROVED" ? "success" : "error"}
-                      size="small"
-                      style={{
-                        borderRadius: "5px",
-                        padding: "2px 12px",
-                        textTransform: "none",
-                        border: "none",
-                      }}
-                    >
-                      {item.status === "APPROVED" ? "Completed" : "Pending"}
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -149,10 +127,10 @@ const OrderDetails = () => {
           </div>
         </TableContainer>
       ) : (
-        <p className="text-center text-gray-500">No orders found.</p>
+        <p className="text-center text-gray-500">No wishlist found.</p>
       )}
     </div>
   );
 };
 
-export default OrderDetails;
+export default Wishlist;

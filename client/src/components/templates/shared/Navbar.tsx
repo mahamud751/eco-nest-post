@@ -12,9 +12,11 @@ import {
   Badge,
   Button,
   Box,
+  Typography,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import DensityMediumIcon from "@mui/icons-material/DensityMedium";
+import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
@@ -26,21 +28,24 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { RootState } from "@/app/redux/reducers";
 import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
   const [cartOpen, setCartOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const toggleCart = () => setCartOpen(!cartOpen);
   const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
-
-  console.log(cartItemsFromRedux);
 
   const handleLogOut = () => {
     logoutUser();
@@ -74,6 +79,22 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.dsmartuniforms.com/api/product/user?query=${searchQuery}`
+      );
+
+      setSearchResults(response.data);
+
+      // Use router.push to redirect without page reload
+      const searchUrl = `/product?search=${encodeURIComponent(searchQuery)}`;
+      router.push(searchUrl); // Redirects without reloading
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <AppBar
       position="static"
@@ -105,20 +126,51 @@ export default function Navbar() {
       <Toolbar className="flex justify-between">
         <Box className="container mx-auto">
           <div className="flex justify-between">
-            <Link href="/" className="text-xl font-bold">
-              KorboJoy
+            <Link href="/" className="flex mt-5">
+              <div>
+                <Image
+                  src={"https://i.ibb.co/CMkLbff/Icon.png"}
+                  width={30}
+                  height={20}
+                  alt="icon"
+                  className="ml-2"
+                />
+              </div>
+              <Typography
+                variant="h6"
+                component="div"
+                className="font-semibold mb-2 mt-1 ms-1 text-2xl"
+              >
+                KorboJoy
+              </Typography>
             </Link>
 
-            <div className="hidden sm:flex w-1/2 items-center bg-gray-100 p-2 rounded">
-              <InputBase
-                placeholder="Search products..."
-                fullWidth
-                className="text-black"
-              />
+            <div className="hidden sm:flex w-[75%] px-12 items-center rounded">
+              <div className="flex justify-end items-center w-full p-2 mt-2">
+                <div className="relative w-full flex items-center">
+                  <InputBase
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search your favorite products"
+                    className="px-3 py-2 w-full rounded-l-md border border-gray-300 focus:outline-none"
+                    sx={{
+                      paddingRight: "50px",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSearch}
+                    className="absolute right-0 bg-red-500 hover:bg-red-600 text-white px-3 py-[13px]"
+                  >
+                    <SearchIcon />
+                  </button>
+                </div>
+              </div>
             </div>
 
             <IconButton color="inherit" onClick={toggleCart}>
-              <Badge badgeContent={cartItemsFromRedux?.length} color="success">
+              <Badge badgeContent={cartItemsFromRedux?.length} color="error">
                 <HiOutlineShoppingBag />
               </Badge>
             </IconButton>
@@ -257,12 +309,15 @@ export default function Navbar() {
                 <Link href="/cart">Cart</Link>
                 <Link href="/blog">Blog</Link>
                 <Link href="/contact">Contact</Link>
+                {user && <Link href="/account">Account</Link>}
               </div>
             </div>
             <div className="mt-6">
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <span>Welcome, {user.name}</span>
+                  <span>
+                    Welcome, <Link href={"/account"}>{user.name}</Link>
+                  </span>
                   <span
                     onClick={handleLogOut}
                     className="cursor-pointer text-gray-700 hover:text-blue-500"

@@ -10,44 +10,59 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
 import { useAuth } from "@/services/hooks/auth";
 
-interface LoginFormInputs {
+interface FormInputs {
+  name?: string;
   email: string;
+  phone?: string;
   password: string;
+  refferCode?: string;
 }
 
-const Login: React.FC = () => {
+const Auth: React.FC = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<LoginFormInputs>();
+  } = useForm<FormInputs>();
   const router = useRouter();
-  const [loginError, setLoginError] = useState("");
-  const { loginUser } = useAuth();
+  const [authError, setAuthError] = useState("");
+  const { loginUser, registerUser } = useAuth();
 
-  if (!loginUser) {
+  if (!loginUser || !registerUser) {
     throw new Error(
       "AuthContext is undefined. Please ensure you are using UserProvider."
     );
   }
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    try {
-      const { email, password } = data;
-      await loginUser(email, password);
-      router.push("/"); // Navigate to the homepage on successful login
-    } catch (error) {
-      setLoginError("Failed to login. Please check your credentials.");
-    }
-  };
-
   const [showPassword, setShowPassword] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    const { name, email, phone, password, refferCode } = data;
+    try {
+      if (isSignup) {
+        await registerUser(
+          name!,
+          email,
+          phone!,
+          password,
+          refferCode || "",
+          ""
+        );
+        router.push("/");
+      } else {
+        await loginUser(email, password);
+        router.push("/");
+      }
+    } catch (error) {
+      setAuthError("Failed to authenticate. Please check your credentials.");
+    }
   };
 
   return (
@@ -68,10 +83,20 @@ const Login: React.FC = () => {
           </h2>
         </div>
         <h2 className="text-2xl font-bold text-purple-800 text-center mb-5">
-          Hi, Welcome Back
+          {isSignup ? "Create Account" : "Hi, Welcome Back"}
         </h2>
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          {isSignup && (
+            <TextField
+              label="Name"
+              variant="outlined"
+              fullWidth
+              {...register("name", { required: "Name is required" })}
+              error={!!errors.name}
+              helperText={errors.name ? errors.name.message : ""}
+            />
+          )}
           <TextField
             label="Email"
             variant="outlined"
@@ -80,6 +105,24 @@ const Login: React.FC = () => {
             error={!!errors.email}
             helperText={errors.email ? errors.email.message : ""}
           />
+          {isSignup && (
+            <TextField
+              label="Phone Number"
+              variant="outlined"
+              fullWidth
+              {...register("phone", { required: "Phone number is required" })}
+              error={!!errors.phone}
+              helperText={errors.phone ? errors.phone.message : ""}
+            />
+          )}
+          {isSignup && (
+            <TextField
+              label="Referral Code"
+              variant="outlined"
+              fullWidth
+              {...register("refferCode")}
+            />
+          )}
           <TextField
             label="Password"
             variant="outlined"
@@ -104,17 +147,28 @@ const Login: React.FC = () => {
               ),
             }}
           />
-          {loginError && <p className="text-red-500">{loginError}</p>}
+          {authError && <p className="text-red-500">{authError}</p>}
           <Button
             className="bg-purple-800 text-white p-4 w-full mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out"
             type="submit"
           >
-            Sign In
+            {isSignup ? "Sign Up" : "Sign In"}
           </Button>
         </form>
+        <div className="text-center mt-4">
+          <p className="text-sm">
+            {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+            <button
+              className="text-purple-800 font-bold"
+              onClick={() => setIsSignup(!isSignup)}
+            >
+              {isSignup ? "Sign In" : "Sign Up"}
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Auth;

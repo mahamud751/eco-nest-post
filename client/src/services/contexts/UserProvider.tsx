@@ -100,22 +100,21 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     email: string,
     phone: string,
     password: string,
-    refferCode: string,
-    photos: string,
-    role?: string
+    refferCode: string
   ) => {
     try {
-      const response = await axios.post("https://api.korbojoy.shop/v1/users", {
-        name,
-        email,
-        phone,
-        password,
-        refferCode,
-        photos,
-        role,
-      });
+      const response = await axios.post(
+        "https://api.korbojoy.shop/v1/users/register",
+        {
+          name,
+          email,
+          phone,
+          password,
+          refferCode,
+        }
+      );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
