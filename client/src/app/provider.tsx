@@ -2,7 +2,7 @@ import { Provider } from "react-redux";
 // import { usePathname } from "next/navigation";
 // import ScrollToTop from "react-scroll-to-top";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Footer from "@/components/templates/shared/Footer";
 import { UserProvider } from "@/services/contexts/UserProvider";
@@ -11,16 +11,32 @@ import AnimatedImage from "@/components/atoms/AnimatedImage";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import store from "./redux/store";
 import { SnackbarProvider } from "@/services/contexts/useSnackbar";
-import theme from "@/services/theme/theme";
+import { darkTheme, lightTheme } from "@/services/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
+  const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("dark-mode") === "true";
+    setDarkMode(savedMode);
+    document.body.classList.toggle("dark", savedMode);
+  }, []);
   // const pathname = usePathname();
   // const showHeader = pathname !== "/login" && pathname !== "/signup" && (
   //   <Suspense fallback={<div>Loading...</div>}>
   //     <Navbar />
   //   </Suspense>
   // );
+  const toggleDarkMode = () => {
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("dark-mode", newMode.toString());
+      document.body.classList.toggle("dark", newMode);
+      return newMode;
+    });
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
