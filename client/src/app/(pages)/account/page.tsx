@@ -13,8 +13,7 @@ import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
 
-// Styled components using Material UI's styled API
-const StyledTab = styled(Tab)(({ theme }) => ({
+const StyledTab = styled(Tab)(({}) => ({
   minWidth: 150,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -28,7 +27,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
+const StyledIconButton = styled(IconButton)(({}) => ({
   color: "#F44336",
   marginLeft: 8,
 }));
