@@ -100,24 +100,6 @@ export const darkTheme = createTheme({
   components: componentOverrides,
 });
 
-const theme = createTheme({
-  palette: {
-    mode: "light",
-  },
-  typography: {
-    fontFamily: roboto.style.fontFamily,
-  },
-  components: {
-    MuiAlert: {
-      styleOverrides: {
-        root: ({ ownerState }) => ({
-          ...(ownerState.severity === "info" && {
-            backgroundColor: "#60a5fa",
-          }),
-        }),
-      },
-    },
-  },
-});
+const theme = createTheme({});
 
 export default theme;
