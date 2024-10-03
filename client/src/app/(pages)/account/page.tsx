@@ -8,57 +8,48 @@ import {
   ShoppingCart,
   ExitToApp,
 } from "@mui/icons-material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
 
-const useStyles = makeStyles(() => ({
-  tab: {
-    minWidth: 150,
-    textTransform: "none",
-    justifyContent: "flex-start",
-    "&.Mui-selected": {
-      color: "#1E3A8A",
-      backgroundColor: "#E0F2FE",
-    },
-    "&:hover": {
-      backgroundColor: "#F1F5F9",
-      borderRadius: "0.5rem",
-    },
+// Styled components using Material UI's styled API
+const StyledTab = styled(Tab)(({ theme }) => ({
+  minWidth: 150,
+  textTransform: "none",
+  justifyContent: "flex-start",
+  "&.Mui-selected": {
+    color: "#1E3A8A",
+    backgroundColor: "#E0F2FE",
   },
-  icon: {
-    "&.home": {
-      color: "#4CAF50",
-    },
-    "&.orders": {
-      color: "#9C27B0",
-    },
-    "&.wishlist": {
-      color: "#2196F3",
-    },
-    "&.feedback": {
-      color: "#FF9800",
-    },
+  "&:hover": {
+    backgroundColor: "#F1F5F9",
+    borderRadius: "0.5rem",
   },
-  logoutIcon: {
-    color: "#F44336",
-    marginLeft: 8,
-  },
-  tabLabel: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-  },
-  tabText: {
-    marginLeft: 8,
-  },
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  color: "#F44336",
+  marginLeft: 8,
+}));
+
+const StyledTabLabel = styled("span")({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  width: "100%",
+});
+
+const StyledTabText = styled("span")({
+  marginLeft: 8,
+});
+
+const StyledIcon = styled("span")(({ theme, color }) => ({
+  color: color || theme.palette.text.primary,
 }));
 
 const VerticalTabsWithIcons: React.FC = () => {
   const { logoutUser } = useAuth();
-  const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -84,51 +75,43 @@ const VerticalTabsWithIcons: React.FC = () => {
           className="space-y-2"
           variant="fullWidth"
         >
-          <Tab
+          <StyledTab
             label={
-              <span className={classes.tabLabel}>
-                <Home className={`${classes.icon} home`} />
-                <span className={classes.tabText}>Dashboard</span>
-              </span>
+              <StyledTabLabel>
+                <StyledIcon as={Home} color="#4CAF50" />
+                <StyledTabText>Dashboard</StyledTabText>
+              </StyledTabLabel>
             }
-            className={classes.tab}
           />
-          <Tab
+          <StyledTab
             label={
-              <span className={classes.tabLabel}>
-                <ShoppingCart className={`${classes.icon} orders`} />
-                <span className={classes.tabText}>Orders</span>
-              </span>
+              <StyledTabLabel>
+                <StyledIcon as={ShoppingCart} color="#9C27B0" />
+                <StyledTabText>Orders</StyledTabText>
+              </StyledTabLabel>
             }
-            className={classes.tab}
           />
-          <Tab
+          <StyledTab
             label={
-              <span className={classes.tabLabel}>
-                <Settings className={`${classes.icon} wishlist`} />
-                <span className={classes.tabText}>Wishlists</span>
-              </span>
+              <StyledTabLabel>
+                <StyledIcon as={Settings} color="#2196F3" />
+                <StyledTabText>Wishlists</StyledTabText>
+              </StyledTabLabel>
             }
-            className={classes.tab}
           />
-          <Tab
+          <StyledTab
             label={
-              <span className={classes.tabLabel}>
-                <Info className={`${classes.icon} feedback`} />
-                <span className={classes.tabText}>Feedback</span>
-              </span>
+              <StyledTabLabel>
+                <StyledIcon as={Info} color="#FF9800" />
+                <StyledTabText>Feedback</StyledTabText>
+              </StyledTabLabel>
             }
-            className={classes.tab}
           />
         </Tabs>
-        <IconButton
-          className={classes.logoutIcon}
-          aria-label="Logout"
-          onClick={handleLogOut}
-        >
+        <StyledIconButton aria-label="Logout" onClick={handleLogOut}>
           <ExitToApp />
           <span className="ms-2 text-[14px] text-gray-500">Log Out</span>
-        </IconButton>
+        </StyledIconButton>
       </Paper>
 
       <Paper
