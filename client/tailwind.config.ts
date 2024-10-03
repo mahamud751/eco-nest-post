@@ -11,7 +11,23 @@ const config: Config = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
+        light: {
+          primary: "#637381",
+          background: "rgb(234, 239, 244)",
+        },
+        dark: {
+          primary: "#ffffff",
+          background: "#121212",
+        },
+      },
+    },
   },
   plugins: [],
 };
