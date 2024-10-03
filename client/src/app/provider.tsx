@@ -44,10 +44,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <SnackbarProvider>
-        {/* <ScrollToTop
+    <UserProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SnackbarProvider>
+          {/* <ScrollToTop
           // @ts-expect-error - Custom properties for ScrollToTop not typed in library
           height={27}
           smooth
@@ -56,14 +57,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           color="#ffffff"
           style={{ background: "#000000", height: "44px", boxShadow: "none" }} // Set the background color to black
         /> */}
-        <Provider store={store}>
-          <UserProvider>
+          <Provider store={store}>
             <Navbar />
             {children}
             <Footer />
-          </UserProvider>
-        </Provider>
-      </SnackbarProvider>
-    </ThemeProvider>
+          </Provider>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </UserProvider>
   );
 }
