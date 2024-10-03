@@ -85,6 +85,7 @@ export const lightTheme = createTheme({
 
 // Dark theme
 export const darkTheme = createTheme({
+  cssVariables: true,
   palette: {
     mode: "dark",
     background: {

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import localFont from "next/font/local";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
+
 import "./globals.css";
 import Provider from "./provider";
 
@@ -34,7 +36,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider>{children}</Provider>
+        <AppRouterCacheProvider options={{ key: "css", enableCssLayer: true }}>
+          <Provider>{children}</Provider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
