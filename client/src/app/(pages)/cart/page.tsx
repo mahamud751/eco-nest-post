@@ -1,5 +1,6 @@
 "use client";
 import React, { FormEvent, useState } from "react";
+import Image from "next/image";
 import {
   Stepper,
   Step,
@@ -29,9 +30,8 @@ import {
   update_quantity,
 } from "@/app/redux/actions/cartAction";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
-import Image from "next/image";
+
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -213,16 +213,6 @@ const CustomizedStepper: React.FC = () => {
     (state: RootState) => state.cart.cartItems
   );
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    streetAddress: "",
-    city: "",
-    country: "",
-    postCode: "",
-  });
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
@@ -288,10 +278,8 @@ const CustomizedStepper: React.FC = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const data = await response.json();
       openSnackbar("Order placed successfully!", "success", "#4caf50");
-      setActiveStep(2); // Go to Order Complete step
+      setActiveStep(2);
     } catch (error) {
       console.error("Error placing order:", error);
       openSnackbar("Failed to place order!", "error", "#f44336");

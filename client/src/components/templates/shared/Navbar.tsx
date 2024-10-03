@@ -28,7 +28,7 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { RootState } from "@/app/redux/reducers";
 import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function Navbar() {
@@ -36,7 +36,7 @@ export default function Navbar() {
   const [cartOpen, setCartOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [, setSearchResults] = useState([]);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();

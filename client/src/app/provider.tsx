@@ -47,10 +47,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SnackbarProvider>
       <ScrollToTop
-        //@ts-ignore
-        height={27} // This should be fine if the component accepts a number.
+        // @ts-expect-error - Custom properties for ScrollToTop not typed in library
+        height={27}
         smooth
-        //@ts-ignore
+        // @ts-expect-error - Custom properties for ScrollToTop not typed in library
         width={40}
         color="#ffffff"
         style={{ background: "#000000", height: "44px", boxShadow: "none" }} // Set the background color to black

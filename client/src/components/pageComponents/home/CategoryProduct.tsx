@@ -7,11 +7,12 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
+import { Product } from "@/services/types";
 
 interface Category {
   id: string;
   name: string;
-  products: any[];
+  products: Product[];
 }
 
 const CategoryProduct = () => {
@@ -89,7 +90,7 @@ const CategoryProduct = () => {
               {selectedCategory.products.map((product) => (
                 <SwiperSlide key={product.id}>
                   <div className="mt-16">
-                    <ProductCard product={product} />{" "}
+                    <ProductCard product={product} />
                   </div>
                 </SwiperSlide>
               ))}

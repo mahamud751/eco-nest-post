@@ -57,7 +57,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VerticalTabsWithIcons: React.FC = () => {
-  const { user, logoutUser } = useAuth();
+  const { logoutUser } = useAuth();
   const classes = useStyles();
   const [selectedTab, setSelectedTab] = useState(0);
 

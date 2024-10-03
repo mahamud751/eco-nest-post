@@ -11,8 +11,16 @@ import { useAuth } from "@/services/hooks/auth";
 import UseFetch from "@/services/hooks/useFetch";
 import { WishlistItem } from "@/services/types";
 
+interface Product {
+  id: string;
+  name: string;
+  fulldesc: string;
+  price: number;
+  photos: { src: string }[];
+}
+
 interface ProductCardProps {
-  product: any;
+  product: Product;
 }
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
@@ -44,7 +52,8 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
 
   const handleRemoveFromWishlist = async () => {
     const userWishList = wishlist?.find(
-      (wish: any) => wish?.product?.id === product && wish.email === user?.email
+      (wish: WishlistItem) =>
+        wish?.product?.id === product.id && wish.email === user?.email
     );
 
     if (!userWishList) return;
@@ -60,7 +69,8 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   };
 
   const checkInWishlist = wishlist?.some(
-    (wish: any) => wish?.product?.id === product && wish?.email === user?.email
+    (wish: WishlistItem) =>
+      wish?.product?.id === product.id && wish?.email === user?.email
   );
 
   return (
@@ -153,7 +163,6 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             </Typography>
           </div>
           <Link href={`productDetails/${product.id}`}>
-            {" "}
             <div className="relative group">
               <IconButton className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110">
                 <AddShoppingCart className="text-[#088178] group-hover:text-white" />

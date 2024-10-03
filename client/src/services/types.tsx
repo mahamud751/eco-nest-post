@@ -37,8 +37,8 @@ export interface Subcategory {
 }
 
 export interface Product {
-  categoryId(categoryId: any): unknown;
-  subCategoryId(subCategoryId: any): unknown;
+  categoryId(categoryId: string): unknown;
+  subCategoryId(subCategoryId: string): unknown;
   id: string;
   name: string;
   price: number;
@@ -56,14 +56,14 @@ export interface Product {
   latest: string;
   discountType: string;
   discountPrice: number;
-  userInfo?: any;
+  userInfo?: { [key: string]: unknown };
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface WishlistItem {
   id: string;
-  productId: String;
+  productId: string;
   product: Product;
   userName: string;
   email: string;
@@ -94,7 +94,7 @@ export interface Blog {
 }
 
 export interface Advance {
-  files: File[];
+  files?: File[];
   id: string;
   name: string;
   number: string;
@@ -115,7 +115,7 @@ export interface Advance {
 }
 
 export interface CommonData {
-  files?: any;
+  files?: File[];
   id: string;
   name: string;
   photos: Photo[];
@@ -183,7 +183,7 @@ export interface Student {
 
 export interface Order {
   id: string;
-  getState: any[]; // Assuming this will hold any data type. Adjust based on actual type.
+  getState: unknown[];
   grandPrice?: string;
   selectedSize?: string;
   selectedColor?: string;
@@ -219,7 +219,7 @@ export interface Order {
   paymentStatus?: string;
   bookingExtend?: boolean;
   isCancel: CancelStatus;
-  userCancel?: any;
+  userCancel?: unknown;
 
   createdAt: Date;
   updatedAt: Date;

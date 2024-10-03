@@ -246,6 +246,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
               <Button
                 variant="contained"
                 onClick={() =>
+                  product &&
                   handleAddItem({
                     product,
                     quantity: quantity,
@@ -254,9 +255,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                   })
                 }
                 className="bg-[#088178] px-5 ms-3 shadow-md transition-transform duration-300 ease-in-out group-hover:scale-110 h-10"
+                disabled={!product} // Disable button if product is null
               >
                 Add to Cart
               </Button>
+
               <Button
                 variant="outlined"
                 className="ms-2 border-gray-400 h-10 w-1.5 "

@@ -1,7 +1,7 @@
 "use client";
 
 import { Autoplay, Navigation, Pagination, Scrollbar } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 
 import Link from "next/link";
 import UseFetch from "@/services/hooks/useFetch";
@@ -9,7 +9,7 @@ import UseFetch from "@/services/hooks/useFetch";
 interface CommonSliderProps<T> {
   title?: string;
   endpoint: string;
-  swiperOptions: any;
+  swiperOptions: SwiperProps;
   link?: {
     href: string;
     label: string;

@@ -5,19 +5,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
-
-interface Product {
-  id: string;
-  name: string;
-  fulldesc: string;
-  price: string;
-  photos: { src: string }[];
-}
+import { Product } from "@/services/types";
 
 const HomeFavouriteTabContent = ({
   title,
   apiEndpoint,
-  hasCountdown,
 }: {
   title: string;
   apiEndpoint: string;

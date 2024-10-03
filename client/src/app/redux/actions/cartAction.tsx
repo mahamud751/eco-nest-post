@@ -49,10 +49,10 @@ export const update_quantity = (
   quantity: number,
   size: string,
   color: string
-) => ({
+): CartActionTypes => ({
   type: UPDATE_QUANTITY,
   payload: {
-    product: { id: productId },
+    productId,
     quantity,
     size,
     color,

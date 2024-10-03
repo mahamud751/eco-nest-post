@@ -6,14 +6,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
-
-interface Product {
-  id: string;
-  name: string;
-  fulldesc: string;
-  price: string;
-  photos: { src: string }[];
-}
+import { Product } from "@/services/types";
 
 const useCountdown = (targetDate: string) => {
   const countDownDate = new Date(targetDate).getTime();
@@ -131,15 +124,8 @@ const Flashsale = () => {
           </div>
           {products?.map((product) => (
             <SwiperSlide key={product.id}>
-              <div className="mt-20">
-                <ProductCard
-                  key={product.id}
-                  imageUrl1={product.photos[0]?.src || ""}
-                  imageUrl2={product.photos[1]?.src || ""}
-                  productName={product.name}
-                  description={product.fulldesc}
-                  price={`$${product.price}`}
-                />
+              <div className="mt-20" key={product.id}>
+                <ProductCard product={product} />
               </div>
             </SwiperSlide>
           ))}

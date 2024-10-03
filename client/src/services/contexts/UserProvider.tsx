@@ -16,8 +16,11 @@ interface User {
   role?: string;
 }
 
+interface ApiError {
+  message: string;
+}
+
 export interface AuthContextType {
-  // Export the type here
   user: User | null;
   token: string | null;
   loginUser: (email: string, password: string) => Promise<void>;
@@ -83,10 +86,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       } else {
         throw new Error("Invalid email or password");
       }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "An error occurred. Please try again later.";
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.message
+        : "An error occurred. Please try again later.";
       MySwal.fire({
         icon: "error",
         title: "Login Error",
@@ -120,16 +123,20 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       } else {
         throw new Error("Registration failed");
       }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "An error occurred. Please try again later.";
+    } catch (error: unknown) {
+      const errorMessage = isApiError(error)
+        ? error.message
+        : "An error occurred. Please try again later.";
       MySwal.fire({
         icon: "error",
         title: "Registration Error",
         text: errorMessage,
       });
     }
+  };
+
+  const isApiError = (error: unknown): error is ApiError => {
+    return (error as ApiError).message !== undefined;
   };
 
   const logoutUser = () => {

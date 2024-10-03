@@ -42,7 +42,6 @@ export const CategoryMenu = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading categories</div>;
 
-  // Ensure categories is not null or undefined before mapping
   if (!categories || categories.length === 0) {
     return <div>No categories available</div>;
   }
@@ -80,7 +79,7 @@ export const CategoryMenu = () => {
               <Paper className="absolute left-full top-0 p-4 bg-gray-100 shadow-md w-[400px]">
                 <div className="flex space-x-4">
                   <div className="flex-1">
-                    {category.subCategories.map((sub, idx) => (
+                    {category.subCategories.map((sub) => (
                       <MenuItem
                         key={sub.id}
                         className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-200 hover:text-[#088178]"

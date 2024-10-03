@@ -57,12 +57,13 @@ const cartReducer = (
         cartItems: updatedCartItems,
       };
     }
+
     case UPDATE_QUANTITY: {
       const updatedCartItems = state.cartItems
         .map((item) => {
           if (
-            item.product.id === action.payload.product.id &&
-            item.color === action.payload.color &&
+            item.product.id === action.payload.productId && // This should work
+            item.color === action.payload.color && // Ensure item has a color property
             item.size === action.payload.size
           ) {
             return { ...item, quantity: action.payload.quantity };

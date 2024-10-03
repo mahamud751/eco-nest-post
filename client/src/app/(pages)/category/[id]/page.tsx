@@ -29,11 +29,7 @@ interface CategoryDetailsProps {
 }
 
 const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
+  const { data: categories } = UseFetch<Category[]>("categories");
   const [categoryData, setCategoryData] = useState<{
     data: Product[];
     total: number;
