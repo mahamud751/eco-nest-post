@@ -1,8 +1,8 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { usePathname } from "next/navigation";
-import ScrollToTop from "react-scroll-to-top";
+// import { usePathname } from "next/navigation";
+// import ScrollToTop from "react-scroll-to-top";
 
 import { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ import theme from "@/services/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
-  const pathname = usePathname();
+  // const pathname = usePathname();
   // const showHeader = pathname !== "/login" && pathname !== "/signup" && (
   //   <Suspense fallback={<div>Loading...</div>}>
   //     <Navbar />
