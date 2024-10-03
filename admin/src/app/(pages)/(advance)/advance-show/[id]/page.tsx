@@ -8,7 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import HistotyDataTable from "@/components/templates/HistoryDataTable";
 import StatusButton from "@/components/atoms/StatusButton";
 import { Advance, BaseEditProps } from "@/services/types";
-import useFormattedDate from "@/services/hooks/useFormattedDate";
+import UseFormattedDate from "@/services/hooks/UseFormattedDate";
 import useFetch from "@/services/hooks/UseRequest";
 import LoadingError from "@/components/atoms/LoadingError";
 import CustomTabs from "@/components/molecules/CustomTabs";
@@ -84,7 +84,7 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.oldValue?.createdAt) || "N/A"}</p>
+        <p>{UseFormattedDate(params.row.oldValue?.createdAt) || "N/A"}</p>
       </div>
     ),
   },
@@ -94,7 +94,7 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.newValue?.updatedAt) || "N/A"}</p>
+        <p>{UseFormattedDate(params.row.newValue?.updatedAt) || "N/A"}</p>
       </div>
     ),
   },

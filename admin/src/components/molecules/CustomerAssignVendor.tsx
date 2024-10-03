@@ -9,7 +9,7 @@ import useFetch from "@/services/hooks/UseRequest";
 interface CustomerAssignVendorProps {
   data: {
     id: string;
-    vendors: User[]; // Should be User[] since vendors are users
+    vendors: User[];
   };
   onClose: () => void;
 }
@@ -20,42 +20,43 @@ const CustomerAssignVendor: React.FC<CustomerAssignVendorProps> = ({
 }) => {
   const MySwal = withReactContent(Swal);
   const { id, vendors: userVendors } = data;
+
   const [selectedVendors, setSelectedVendors] = useState<User[]>(
     userVendors || []
   );
 
-  const { data: vendorOptions } = useFetch<User>(`users/vendors`);
+  const { data: vendorOptions } = useFetch<User[]>(`users/vendors`);
 
   const handleVendorChange = (
-    event: React.ChangeEvent<{}>,
-    newValue: User[] // Use the correct type here
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: User[]
   ) => {
     setSelectedVendors(newValue);
   };
 
   const handleSubmit = async () => {
     try {
-      const updatedStatus = {
-        vendorIds: selectedVendors.map((vendor) => vendor.id), // Map to IDs
+      const updatedVendors = {
+        vendorIds: selectedVendors.map((vendor) => vendor.id),
       };
 
       await axios.patch(
         `https://api.korbojoy.shop/v1/advance/${id}/assign`,
-        updatedStatus
+        updatedVendors
       );
 
-      MySwal.fire("Updated", "Success");
+      MySwal.fire("Updated", "Vendors successfully assigned!", "success");
       onClose();
-    } catch (err) {
-      console.error(err);
-      MySwal.fire("Something went wrong.", "Error");
+    } catch (error) {
+      console.error(error);
+      MySwal.fire("Error", "Something went wrong during assignment.", "error");
     }
   };
 
   return (
     <Modal open={!!data} onClose={onClose}>
-      <Box className="p-4 bg-white rounded shadow-md mx-auto my-20 w-3/4">
-        <h2 className="text-lg font-bold mb-4">Assign Vendor</h2>
+      <Box className="p-6 bg-white rounded-lg shadow-lg mx-auto mt-20 w-full sm:w-3/4 lg:w-1/2">
+        <h2 className="text-xl font-bold mb-4">Assign Vendor</h2>
         <Autocomplete
           multiple
           options={vendorOptions || []}
@@ -66,9 +67,14 @@ const CustomerAssignVendor: React.FC<CustomerAssignVendorProps> = ({
             <TextField {...params} label="Select Vendors" variant="outlined" />
           )}
         />
-        <div className="mt-4 flex justify-end">
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Assign
+        <div className="mt-6 flex justify-end">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={!selectedVendors.length}
+          >
+            Assign Vendors
           </Button>
         </div>
       </Box>

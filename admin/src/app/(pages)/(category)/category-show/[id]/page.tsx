@@ -9,7 +9,7 @@ import Image from "next/image";
 import HistotyDataTable from "@/components/templates/HistoryDataTable";
 import StatusButton from "@/components/atoms/StatusButton";
 import { BaseEditProps, Category, Photo } from "@/services/types";
-import useFormattedDate from "@/services/hooks/useFormattedDate";
+import UseFormattedDate from "@/services/hooks/UseFormattedDate";
 import LoadingError from "@/components/atoms/LoadingError";
 import useFetch from "@/services/hooks/UseRequest";
 import CategoryShow from "@/components/organisms/CategoryShow";
@@ -99,7 +99,7 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.oldValue?.createdAt)}</p>
+        <p>{UseFormattedDate(params.row.oldValue?.createdAt)}</p>
       </div>
     ),
   },
@@ -109,7 +109,7 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="my-2">
-        <p>{useFormattedDate(params.row.newValue?.updatedAt)}</p>
+        <p>{UseFormattedDate(params.row.newValue?.updatedAt)}</p>
       </div>
     ),
   },

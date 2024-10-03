@@ -32,14 +32,20 @@ const ProductList = () => {
       field: "sizes",
       headerName: "Sizes",
       flex: 1,
-      valueParser: (params) => params?.value?.map((item: any) => <p>{item}</p>),
+      valueParser: (params) =>
+        params?.value?.map((item: any, index: number) => (
+          <p key={index}>{item}</p>
+        )),
     },
 
     {
       field: "colors",
       headerName: "Colors",
       flex: 1,
-      valueParser: (params) => params?.value?.map((item: any) => <p>{item}</p>),
+      valueParser: (params) =>
+        params?.value?.map((item: any, index: number) => (
+          <p key={index}>{item}</p>
+        )),
     },
   ]);
 

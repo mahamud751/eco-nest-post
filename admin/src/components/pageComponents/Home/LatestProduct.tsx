@@ -15,16 +15,6 @@ const LatestProduct = () => {
         </div>
       ),
     },
-    {
-      field: "categoryName",
-      headerName: "Category Name",
-      flex: 1,
-      renderCell: (params) => (
-        <div className="my-2">
-          <p>{params.row.category?.name}</p>
-        </div>
-      ),
-    },
     { field: "price", headerName: "Price", flex: 1 },
     { field: "discountPrice", headerName: "Discount Price", flex: 1 },
     { field: "flashsale", headerName: "Flashsale", flex: 1 },
@@ -32,14 +22,19 @@ const LatestProduct = () => {
       field: "sizes",
       headerName: "Sizes",
       flex: 1,
-      valueParser: (params) => params?.value?.map((item: any) => <p>{item}</p>),
+      valueParser: (params) =>
+        params?.value?.map((item: any, index: number) => (
+          <p key={index}>{item}</p>
+        )),
     },
-
     {
       field: "colors",
       headerName: "Colors",
       flex: 1,
-      valueParser: (params) => params?.value?.map((item: any) => <p>{item}</p>),
+      valueParser: (params) =>
+        params?.value?.map((item: any, index: number) => (
+          <p key={index}>{item}</p>
+        )),
     },
   ]);
 

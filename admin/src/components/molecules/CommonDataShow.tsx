@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 
-import useFormattedDate from "@/services/hooks/useFormattedDate";
+import UseFormattedDate from "@/services/hooks/UseFormattedDate";
 import { CommonData } from "@/services/types";
 import StatusButton from "../atoms/StatusButton";
 import Image from "next/image";
@@ -36,7 +36,7 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
             Created At:
           </strong>
           <span className="font-normal text-gray-600">
-            {useFormattedDate(data.createdAt)}
+            {UseFormattedDate(data.createdAt)}
           </span>
         </div>
         <div>
@@ -44,7 +44,7 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
             Updated At:
           </strong>
           <span className="font-normal text-gray-600">
-            {useFormattedDate(data.updatedAt)}
+            {UseFormattedDate(data.updatedAt)}
           </span>
         </div>
       </div>
@@ -52,8 +52,9 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
         <>
           <h3 className="text-lg font-bold mt-2">Files:</h3>
           <div className="flex">
-            {data?.files?.map((detail: { src: string }) => (
+            {data?.files?.map((detail: { src: string }, index: number) => (
               <Link
+                key={index}
                 href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -67,8 +68,10 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
         <>
           <h3 className="text-lg font-bold mt-2">Photo:</h3>
           <div className="flex">
-            {data?.photos?.map((photo) => (
-              <div className="mt-4 flex">
+            {data?.photos?.map((photo, index) => (
+              <div key={index} className="mt-4 flex">
+                {" "}
+                {/* key added here */}
                 <Image
                   src={photo.src}
                   alt={data.name}
