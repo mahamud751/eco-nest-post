@@ -1,7 +1,8 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
+import ScrollToTop from "react-scroll-to-top";
 
 import { Suspense, useEffect, useState } from "react";
 
@@ -16,12 +17,12 @@ import theme from "@/services/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
-  const pathname = usePathname();
-  const showHeader = pathname !== "/login" && pathname !== "/signup" && (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Navbar />
-    </Suspense>
-  );
+  // const pathname = usePathname();
+  // const showHeader = pathname !== "/login" && pathname !== "/signup" && (
+  //   <Suspense fallback={<div>Loading...</div>}>
+  //     <Navbar />
+  //   </Suspense>
+  // );
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -48,11 +49,22 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider>
+        <ScrollToTop
+          // @ts-expect-error - Custom properties for ScrollToTop not typed in library
+          height={27}
+          smooth
+          // @ts-expect-error - Custom properties for ScrollToTop not typed in library
+          width={40}
+          color="#ffffff"
+          style={{ background: "#000000", height: "44px", boxShadow: "none" }} // Set the background color to black
+        />
         <Provider store={store}>
           <UserProvider>
-            {showHeader}
-            {children}
-            {showHeader && <Footer />}
+            <Suspense fallback={<div>Loading...</div>}>
+              <Navbar />
+              {children}
+              <Footer />
+            </Suspense>
           </UserProvider>
         </Provider>
       </SnackbarProvider>
