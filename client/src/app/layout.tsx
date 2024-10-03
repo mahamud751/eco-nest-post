@@ -36,7 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppRouterCacheProvider options={{ key: "css", enableCssLayer: true }}>
+        <AppRouterCacheProvider options={{ prepend: true }}>
           <Provider>{children}</Provider>
         </AppRouterCacheProvider>
       </body>

@@ -1,12 +1,6 @@
 "use client";
 import { createTheme } from "@mui/material/styles";
-import { Roboto } from "next/font/google";
 
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
 // Common component overrides
 const componentOverrides = {
   MuiTextField: {
@@ -100,6 +94,8 @@ export const darkTheme = createTheme({
   components: componentOverrides,
 });
 
-const theme = createTheme({});
+const theme = createTheme({
+  cssVariables: true,
+});
 
 export default theme;
