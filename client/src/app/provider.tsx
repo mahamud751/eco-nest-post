@@ -1,7 +1,7 @@
 "use client";
 
 import { Provider } from "react-redux";
-// import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import ScrollToTop from "react-scroll-to-top";
 
 import { Suspense, useEffect, useState } from "react";
@@ -17,12 +17,12 @@ import theme from "@/services/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
-  // const pathname = usePathname();
-  // const showHeader = pathname !== "/login" && pathname !== "/signup" && (
-  //   <Suspense fallback={<div>Loading...</div>}>
-  //     <Navbar />
-  //   </Suspense>
-  // );
+  const pathname = usePathname();
+  const showHeader = pathname !== "/login" && pathname !== "/signup" && (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Navbar />
+    </Suspense>
+  );
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -60,11 +60,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         />
         <Provider store={store}>
           <UserProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Navbar />
-              {children}
-              <Footer />
-            </Suspense>
+            {showHeader}
+            {children}
+            {showHeader && <Footer />}
           </UserProvider>
         </Provider>
       </SnackbarProvider>
