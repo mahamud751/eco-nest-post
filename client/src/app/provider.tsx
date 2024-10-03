@@ -29,14 +29,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   //     <Navbar />
   //   </Suspense>
   // );
-  const toggleDarkMode = () => {
-    setDarkMode((prevMode) => {
-      const newMode = !prevMode;
-      localStorage.setItem("dark-mode", newMode.toString());
-      document.body.classList.toggle("dark", newMode);
-      return newMode;
-    });
-  };
+  // const toggleDarkMode = () => {
+  //   setDarkMode((prevMode) => {
+  //     const newMode = !prevMode;
+  //     localStorage.setItem("dark-mode", newMode.toString());
+  //     document.body.classList.toggle("dark", newMode);
+  //     return newMode;
+  //   });
+  // };
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
