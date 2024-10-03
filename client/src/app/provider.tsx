@@ -1,5 +1,3 @@
-"use client";
-
 import { Provider } from "react-redux";
 // import { usePathname } from "next/navigation";
 // import ScrollToTop from "react-scroll-to-top";
