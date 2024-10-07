@@ -3,7 +3,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import axios from 'axios';
 
 const handler = NextAuth({
-    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -11,26 +10,13 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ profile }) {
-            if (profile) {
-                try {
-                    // Replace the URL with your registration endpoint
-                    await axios.post("https://api.korbojoy.shop/v1/users/register", {
-                        name: profile.name || "",
-                        email: profile.email || "",
-                        phone: "",
-                        password: "",
-                        refferCode: "",
-                        photos: "",
-                    });
-                } catch (error) {
-                    console.error("Error registering user:", error);
-                    return false; // Prevent sign-in if registration fails
-                }
+        async signIn({ account, profile }) {
+            if (account.provider === "google") {
+                return profile.email_verified && profile.email.endsWith("@example.com")
             }
-            return true; // Allow sign-in if registration is successful
+            return true // Do different verification for other providers that don't have `email_verified`
         },
-    },
+    }
 });
 
 export { handler as GET, handler as POST };
