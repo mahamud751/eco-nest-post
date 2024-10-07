@@ -170,7 +170,7 @@ const Auth: React.FC = () => {
           </Button>
         </form>
         <Button
-          onClick={handleGoogleSignIn}
+          onClick={() => signIn("google")}
           className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
           disabled={loading} // Disable Google sign-in button while loading
         >
