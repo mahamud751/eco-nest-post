@@ -44,20 +44,20 @@ const Auth: React.FC = () => {
     setShowPassword(!showPassword);
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     const result = await signIn("google", { redirect: false });
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signIn("google", { redirect: false });
 
-  //     if (result?.error) {
-  //       setAuthError("Failed to sign in with Google. Please try again.");
-  //     } else {
-  //       // User is successfully signed in; handle accordingly
-  //       router.push("/");
-  //     }
-  //   } catch (error) {
-  //     setAuthError("Failed to sign in with Google. Please try again.");
-  //   }
-  // };
+      if (result?.error) {
+        setAuthError("Failed to sign in with Google. Please try again.");
+      } else {
+        // User is successfully signed in; handle accordingly
+        router.push("/");
+      }
+    } catch (error) {
+      setAuthError("Failed to sign in with Google. Please try again.");
+    }
+  };
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, email, phone, password } = data;
@@ -170,7 +170,7 @@ const Auth: React.FC = () => {
           </Button>
         </form>
         <Button
-          onClick={() => signIn("google")}
+          onClick={handleGoogleSignIn}
           className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
           disabled={loading} // Disable Google sign-in button while loading
         >
