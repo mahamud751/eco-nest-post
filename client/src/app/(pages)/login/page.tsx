@@ -1,4 +1,5 @@
-"use client";
+"use client"; // Indicate this is a client component
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,6 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useAuth } from "@/services/hooks/auth";
+import { signIn } from "next-auth/react";
 
 interface FormInputs {
   name?: string;
@@ -41,6 +43,22 @@ const Auth: React.FC = () => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signIn("google", { redirect: false });
+  
+      if (result?.error) {
+        setAuthError("Failed to sign in with Google. Please try again.");
+      } else {
+        // User is successfully signed in; handle accordingly
+        router.push("/");
+      }
+    } catch (error) {
+      setAuthError("Failed to sign in with Google. Please try again.");
+    }
+  };
+  
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, email, phone, password } = data;
@@ -140,6 +158,12 @@ const Auth: React.FC = () => {
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
         </form>
+        <Button
+          onClick={handleGoogleSignIn}
+          className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
+        >
+          Sign In with Google
+        </Button>
         <div className="text-center mt-4">
           <p className="text-sm">
             {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
