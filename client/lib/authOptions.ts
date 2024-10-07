@@ -22,13 +22,13 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async signIn({ profile }) {
-            if (profile) {
-                console.log("Profile:", profile);
+        async signIn({ user }) {
+            if (user) {
+                console.log("Profile:", user);
                 try {
                     await axios.post("https://api.korbojoy.shop/v1/users/register", {
-                        name: profile.name || "",
-                        email: profile.email || "",
+                        name: user.name || "",
+                        email: user.email || "",
                         phone: "",
                         password: "",
                         refferCode: "",
