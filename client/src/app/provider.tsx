@@ -13,6 +13,7 @@ import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import store from "./redux/store";
 import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 import theme from "@/services/theme/theme";
+import SessionWraper from "@/components/SessionWrapper";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -45,7 +46,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <SessionWraper>  <ThemeProvider theme={theme}>
       <CssBaseline />
       <Provider store={store}>
         <UserProvider>
@@ -69,6 +70,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           </SnackbarProvider>
         </UserProvider>
       </Provider>
-    </ThemeProvider>
+    </ThemeProvider></SessionWraper>
+
   );
 }
