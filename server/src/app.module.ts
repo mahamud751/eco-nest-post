@@ -17,6 +17,7 @@ import { VendorModule } from './vendor/vendor.module';
 import { FaqModule } from './faq/faq.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { OrderModule } from './order/order.module';
+import { DynamicModule } from './dynamic/dynamic.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { OrderModule } from './order/order.module';
     FaqModule,
     WishlistModule,
     OrderModule,
+    DynamicModule,
   ],
 })
 export class AppModule {}
