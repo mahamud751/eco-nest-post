@@ -44,15 +44,14 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session?.user) {
                 // If you need to enrich the session object, do so here
-                //@ts-expect-error
-
-
+                //@ts-expect-error Token has no type definition in session.user
                 session.user.id = token.sub;
                 return session; // Return the updated session object
             }
             return session; // Default session object
         },
     },
+
 
 }
 
