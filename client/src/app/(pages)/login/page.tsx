@@ -27,18 +27,18 @@ const Auth: React.FC = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<FormInputs>();
+  
   const router = useRouter();
   const [authError, setAuthError] = useState("");
   const { loginUser, registerUser } = useAuth();
 
   if (!loginUser || !registerUser) {
-    throw new Error(
-      "AuthContext is undefined. Please ensure you are using UserProvider."
-    );
+    throw new Error("AuthContext is undefined. Please ensure you are using UserProvider.");
   }
 
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -47,7 +47,7 @@ const Auth: React.FC = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signIn("google", { redirect: false });
-  
+
       if (result?.error) {
         setAuthError("Failed to sign in with Google. Please try again.");
       } else {
@@ -58,10 +58,11 @@ const Auth: React.FC = () => {
       setAuthError("Failed to sign in with Google. Please try again.");
     }
   };
-  
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, email, phone, password } = data;
+    setLoading(true); // Set loading state to true
+    setAuthError(""); // Clear any previous error
     try {
       if (isSignup) {
         await registerUser(name!, email, phone!, password, "", "");
@@ -71,7 +72,10 @@ const Auth: React.FC = () => {
         router.push("/");
       }
     } catch (error) {
+      console.error(error); // Log the error for debugging
       setAuthError("Failed to authenticate. Please check your credentials.");
+    } finally {
+      setLoading(false); // Set loading state back to false
     }
   };
 
@@ -111,7 +115,13 @@ const Auth: React.FC = () => {
             label="Email"
             variant="outlined"
             fullWidth
-            {...register("email", { required: "Email is required" })}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
+              },
+            })}
             error={!!errors.email}
             helperText={errors.email ? errors.email.message : ""}
           />
@@ -152,15 +162,17 @@ const Auth: React.FC = () => {
           />
           {authError && <p className="text-red-500">{authError}</p>}
           <Button
-            className="bg-purple-800 text-white p-4 w-full mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out"
+            className={`bg-purple-800 text-white p-4 w-full mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
             type="submit"
+            disabled={loading} // Disable button while loading
           >
-            {isSignup ? "Sign Up" : "Sign In"}
+            {loading ? "Loading..." : isSignup ? "Sign Up" : "Sign In"}
           </Button>
         </form>
         <Button
           onClick={handleGoogleSignIn}
           className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
+          disabled={loading} // Disable Google sign-in button while loading
         >
           Sign In with Google
         </Button>
