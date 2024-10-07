@@ -16,6 +16,15 @@ export interface Banner {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Dynamic {
+  id: string;
+  name: string;
+  desc: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 export interface Faq {
   id: string;
   title: string;

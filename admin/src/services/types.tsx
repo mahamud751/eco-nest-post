@@ -25,6 +25,15 @@ export interface Faq {
   updatedAt: Date;
 }
 
+export interface Dynamic {
+  id: string;
+  name: string;
+  desc: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Subcategory {
   id: string;
   name: string;

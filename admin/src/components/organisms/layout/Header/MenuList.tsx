@@ -21,6 +21,8 @@ import {
   ManageAccounts,
   AddBusiness,
   School,
+  LiveHelp,
+  Pages,
 } from "@mui/icons-material";
 
 import styles from "../../../../css/Header.module.css";
@@ -212,7 +214,7 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Faq",
-      icon: <School className="text-orange-600" />,
+      icon: <LiveHelp className="text-red-400 " />,
       path: "/faq",
       submenus: [
         {
@@ -222,6 +224,21 @@ export default function MenuList({ open }: MenuListProps) {
         {
           text: "Faq List",
           path: "/faq-list",
+        },
+      ],
+    },
+    {
+      text: "Dynamic",
+      icon: <Pages className="text-sky-800 " />,
+      path: "/dynamic",
+      submenus: [
+        {
+          text: "Add Dynamic",
+          path: "/add-dynamic",
+        },
+        {
+          text: "Dynamic List",
+          path: "/dynamic-list",
         },
       ],
     },
