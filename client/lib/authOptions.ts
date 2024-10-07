@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
                         name: user.name || "",
                         email: user.email || "",
                         phone: "",
-                        password: "",
+                        password: "123456Pt!1",
                         refferCode: "",
                         photos: "",
                     });
