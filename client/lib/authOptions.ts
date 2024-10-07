@@ -44,7 +44,9 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session?.user) {
                 // If you need to enrich the session object, do so here
-                //@ts-ignore
+                //@ts-expect-error
+
+
                 session.user.id = token.sub;
                 return session; // Return the updated session object
             }
