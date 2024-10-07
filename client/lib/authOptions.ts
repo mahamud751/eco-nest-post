@@ -21,34 +21,33 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+
     callbacks: {
         async signIn({ user }) {
-            if (user) {
-                console.log("Profile:", user);
-                try {
-                    await axios.post("https://api.korbojoy.shop/v1/users/register", {
-                        name: user.name || "",
-                        email: user.email || "",
-                        phone: "",
-                        password: "123456Pt!1",
-                        refferCode: "",
-                        photos: "",
-                    });
-                } catch (error) {
-                    console.error("Error registering user:", error);
-                    return '/auth/error?error=RegistrationFailed'; // Abort and redirect if an error occurs
-                }
+            // Handle sending data to your backend API for first-time Google logins
+
+            // Example using fetch (replace with your preferred HTTP client)
+            const response = await fetch('https://api.korbojoy.shop/v1/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: user.email,
+                    name: user.name || null,
+                    password: '123456Pt!1'
+                })
+            });
+
+            // Check API response for success and handle errors appropriately
+            if (!response.ok) {
+                console.error('Error registering user:', await response.text());
+                // Consider throwing an error or displaying an error message to the user
+            } else {
+                console.log('Successfully registered user:', await response.json());
             }
-            return true; // Continue with sign-in
-        },
-        async session({ session, token }) {
-            if (session?.user) {
-                // If you need to enrich the session object, do so here
-                //@ts-expect-error Token has no type definition in session.user
-                session.user.id = token.sub;
-                return session; // Return the updated session object
-            }
-            return session; // Default session object
+
+            return true; // Allow sign in to proceed
         },
     },
 
