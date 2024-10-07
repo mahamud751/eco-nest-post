@@ -46,7 +46,7 @@ const Auth: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signIn("google", { redirect: false });
+      const result = await signIn("google");
 
       if (result?.error) {
         setAuthError("Failed to sign in with Google. Please try again.");
