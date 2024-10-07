@@ -1,5 +1,5 @@
 
-import axios from 'axios';
+// import axios from 'axios';
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
@@ -16,28 +16,28 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
-    callbacks: {
-        async signIn({ profile }) {
-            if (profile) {
-                try {
-                    await axios.post("https://api.korbojoy.shop/v1/users/register", {
-                        name: profile.name || "",
-                        email: profile.email || "",
-                        phone: "",
-                        password: "",
-                        refferCode: "",
-                        photos: "",
-                    });
-                } catch (error) {
-                    console.error("Error registering user:", error);
+    // callbacks: {
+    //     async signIn({ profile }) {
+    //         if (profile) {
+    //             try {
+    //                 await axios.post("https://api.korbojoy.shop/v1/users/register", {
+    //                     name: profile.name || "",
+    //                     email: profile.email || "",
+    //                     phone: "",
+    //                     password: "",
+    //                     refferCode: "",
+    //                     photos: "",
+    //                 });
+    //             } catch (error) {
+    //                 console.error("Error registering user:", error);
 
-                    return '/auth/error?error=RegistrationFailed';
-                }
-            }
-            return true;
-        },
+    //                 return '/auth/error?error=RegistrationFailed';
+    //             }
+    //         }
+    //         return true;
+    //     },
 
-    },
+    // },
 }
 
 
