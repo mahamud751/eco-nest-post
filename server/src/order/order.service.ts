@@ -90,7 +90,6 @@ export class OrderService {
       take: perPageNumber,
       where,
       orderBy: { createdAt: 'desc' },
-      include: { getState: true },
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
