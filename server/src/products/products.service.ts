@@ -56,13 +56,13 @@ export class ProductService {
           ? { connect: { id: subcategoryId } }
           : undefined,
         branch: branchId ? { connect: { id: branchId } } : undefined,
-        review: reviewId ? { connect: { id: reviewId } } : undefined,
+        reviews: reviewId ? { connect: { id: reviewId } } : undefined,
       },
       include: {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -109,7 +109,7 @@ export class ProductService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -145,7 +145,7 @@ export class ProductService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -172,7 +172,7 @@ export class ProductService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -208,7 +208,7 @@ export class ProductService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -224,7 +224,7 @@ export class ProductService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
@@ -283,7 +283,7 @@ export class ProductService {
           ? { connect: { id: subcategoryId } }
           : undefined,
         branch: branchId ? { connect: { id: branchId } } : undefined,
-        review: reviewId ? { connect: { id: reviewId } } : undefined,
+        reviews: reviewId ? { connect: { id: reviewId } } : undefined,
       },
     });
     await this.auditLogService.log(

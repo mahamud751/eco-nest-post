@@ -267,7 +267,7 @@ export class UsersService {
         category: true,
         subcategory: true,
         branch: true,
-        review: true,
+        reviews: true,
       },
     });
 
