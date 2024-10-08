@@ -85,9 +85,6 @@ export class OrderService {
         mode: 'insensitive',
       };
     }
-    if (includeGetState) {
-      where.includeGetState = 'yes';
-    }
 
     // Fetch orders for the current page
     const ordersPromise = this.prisma.order.findMany({
