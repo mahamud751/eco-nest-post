@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useState } from "react";
 import { Card, CardContent, IconButton, Typography } from "@mui/material";
-import { AddShoppingCart, Favorite, Info } from "@mui/icons-material";
+import { Favorite, Info } from "@mui/icons-material";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import Link from "next/link";
@@ -113,8 +113,8 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             <div className="relative group">
               <IconButton
                 className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${userWishList
-                  ? "group-hover:bg-[#e8f6ea]"
-                  : "group-hover:bg-[#088178]"
+                    ? "group-hover:bg-[#e8f6ea]"
+                    : "group-hover:bg-[#088178]"
                   }`}
                 onClick={
                   userWishList ? handleRemoveFromWishlist : handleAddToWishlist
@@ -154,34 +154,29 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           borderBottomRightRadius: "25px",
         }}
       >
-        <div className="flex items-center justify-around">
-          <div>
-            <Typography
-              variant="h6"
-              component="div"
-              className="font-semibold mb-2"
-            >
-              {product.name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" className="mb-2">
-              {product.fulldesc}
-            </Typography>
+        <Link href={`/productDetails/${product.id}`}>
+          <div className="flex items-center justify-around">
+            <div>
+              <Typography
+                variant="h6"
+                component="div"
+                className="font-semibold mb-2"
+              >
+                {product.name}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className="mb-2"
+              >
+                {product.fulldesc}
+              </Typography>
+            </div>
             <Typography variant="h6" component="div" className="font-bold">
               ৳{product.price}
             </Typography>
           </div>
-          <Link href={`productDetails/${product.id}`}>
-            <div className="relative group">
-              <IconButton className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110">
-                <AddShoppingCart className="text-[#088178] group-hover:text-white" />
-              </IconButton>
-              <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
-                Add to Cart
-                <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
-              </span>
-            </div>
-          </Link>
-        </div>
+        </Link>
       </CardContent>
     </Card>
   );
