@@ -30,10 +30,9 @@ import { Feedbacks, Photo } from "@/services/types";
 import { useAuth } from "@/services/hooks/auth";
 interface AddFormProps {
   photosData: Photo[];
-  setPhotosData?: React.Dispatch<React.SetStateAction<Photo[]>>;
 }
 
-const Feedback: React.FC<AddFormProps> = ({ photosData, setPhotosData }) => {
+const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
   const { user } = useAuth();
   const [data, setData] = useState<{
     data: Feedbacks[];
@@ -174,12 +173,13 @@ const Feedback: React.FC<AddFormProps> = ({ photosData, setPhotosData }) => {
 
       Swal.fire("Good job!", "Successfully added", "success");
       handleClose();
-    } catch (err) {
-      console.error(err);
-      const error = err as any;
+    } catch (error) {
+      const errorResponse = error as {
+        response: { data: { message: string } };
+      };
       Swal.fire(
         "Error",
-        error?.response?.data?.message || "Failed to submit review",
+        errorResponse?.response?.data?.message || "Failed to submit review",
         "error"
       );
     }
