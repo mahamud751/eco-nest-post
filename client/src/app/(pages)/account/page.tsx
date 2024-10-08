@@ -52,6 +52,7 @@ const StyledIcon = styled("span")(({ theme, color }) => ({
 const VerticalTabsWithIcons: React.FC = () => {
   const { logoutUser } = useAuth();
   const [selectedTab, setSelectedTab] = useState(0);
+  const photosData: { title: string; src: string }[] = [];
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
@@ -132,7 +133,7 @@ const VerticalTabsWithIcons: React.FC = () => {
         )}
         {selectedTab === 3 && (
           <div>
-            <Feedback />
+            <Feedback photosData={photosData} />
           </div>
         )}
       </Paper>
