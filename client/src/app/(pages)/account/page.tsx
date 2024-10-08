@@ -6,14 +6,15 @@ import {
   Settings,
   Info,
   ShoppingCart,
-  ExitToApp,
+  PowerSettingsNew,
 } from "@mui/icons-material";
+
 import { styled } from "@mui/material/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
 
-const StyledTab = styled(Tab)(({}) => ({
+const StyledTab = styled(Tab)(({ }) => ({
   minWidth: 150,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -27,7 +28,7 @@ const StyledTab = styled(Tab)(({}) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({}) => ({
+const StyledIconButton = styled(IconButton)(({ }) => ({
   color: "#F44336",
   marginLeft: 8,
 }));
@@ -108,7 +109,7 @@ const VerticalTabsWithIcons: React.FC = () => {
           />
         </Tabs>
         <StyledIconButton aria-label="Logout" onClick={handleLogOut}>
-          <ExitToApp />
+          <PowerSettingsNew />
           <span className="ms-2 text-[14px] text-gray-500">Log Out</span>
         </StyledIconButton>
       </Paper>
