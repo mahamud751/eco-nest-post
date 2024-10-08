@@ -70,18 +70,22 @@ export class OrderService {
     email: string,
     page: number = 1,
     perPage: number = 10,
-    includeGetState?: string, // New parameter
+    includeGetState?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const where: any = {
-      email: {
+    const where: any = {};
+    if (email) {
+      where.email = {
         contains: email,
         mode: 'insensitive',
-      },
-    };
+      };
+    }
+    if (includeGetState) {
+      where.includeGetState = 'yes';
+    }
 
     const ordersPromise = this.prisma.order.findMany({
       skip,
