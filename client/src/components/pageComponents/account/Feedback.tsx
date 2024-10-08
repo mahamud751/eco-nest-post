@@ -315,12 +315,14 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
         <p className="text-center text-gray-500">No orders found.</p>
       )}
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Submit Review</DialogTitle>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle className="text-lg font-semibold text-center bg-[#FF9800] text-white py-4">
+          Submit Review
+        </DialogTitle>
         <DialogContent>
-          <p>
+          <p className="text-gray-700 mb-4">
             Please provide a detailed review for the product with the given ID:{" "}
-            {selectedProductId}
+            <span className="font-bold">{selectedProductId}</span>
           </p>
 
           <form id="review-form" onSubmit={handleReviewSubmit}>
@@ -333,39 +335,46 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               required
+              variant="outlined"
+              className="mb-4"
             />
-            <StarRatings
-              rating={rating}
-              starRatedColor="orange"
-              changeRating={handleRatingChange}
-              numberOfStars={5}
-              name="rating"
-              starDimension="30px"
-              starSpacing="5px"
-            />
+            <div className="flex items-center mb-4">
+              <StarRatings
+                rating={rating}
+                starRatedColor="orange"
+                changeRating={handleRatingChange}
+                numberOfStars={5}
+                name="rating"
+                starDimension="30px"
+                starSpacing="5px"
+              />
+              <span className="ml-2 text-gray-600">
+                Rate the product: {rating} stars
+              </span>
+            </div>
             <input
               type="file"
               multiple
               onChange={handleFileChange}
               accept="image/*"
               ref={fileInputRef}
-              className="mt-4"
+              className="mt-4 border border-gray-300 rounded p-2"
             />
             {previews.length > 0 && (
-              <div className="mt-4 flex">
+              <div className="mt-4 flex flex-wrap">
                 {previews.map((preview, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative mr-2 mb-2">
                     <img
                       src={preview}
                       alt="Preview"
                       width={50}
                       height={50}
-                      className="mr-2"
+                      className="rounded shadow-md"
                     />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded"
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-sm hover:bg-red-600 transition"
                     >
                       &times;
                     </button>
@@ -375,11 +384,17 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
             )}
           </form>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className="justify-center">
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button type="submit" form="review-form" color="primary">
+          <Button
+            type="submit"
+            form="review-form"
+            color="primary"
+            variant="contained"
+            className="bg-[#FF9800] hover:bg-[#e68a00]"
+          >
             Submit
           </Button>
         </DialogActions>
