@@ -56,6 +56,17 @@ export class OrderController {
     return this.orderService.findOrdersByEmail(page, perPage, email);
   }
 
+  @Get('/myBooking/all')
+  @ApiOperation({ summary: 'Get all orders' })
+  @ApiResponse({ status: 200, description: 'List of all orders' })
+  async findOrdersByEmailAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+    @Query('email') email?: string,
+  ) {
+    return this.orderService.findOrdersByEmailAll(page, perPage, email);
+  }
+
   @Get('/totalGrandPrice')
   @ApiOperation({ summary: 'Get total grand price of all orders' })
   @ApiResponse({ status: 200, description: 'Total grand price' })
