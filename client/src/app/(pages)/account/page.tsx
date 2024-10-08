@@ -13,8 +13,9 @@ import { styled } from "@mui/material/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
+import Feedback from "@/components/pageComponents/account/Feedback";
 
-const StyledTab = styled(Tab)(({ }) => ({
+const StyledTab = styled(Tab)(({}) => ({
   minWidth: 150,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -28,7 +29,7 @@ const StyledTab = styled(Tab)(({ }) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({ }) => ({
+const StyledIconButton = styled(IconButton)(({}) => ({
   color: "#F44336",
   marginLeft: 8,
 }));
@@ -129,7 +130,11 @@ const VerticalTabsWithIcons: React.FC = () => {
             <Wishlist />
           </div>
         )}
-        {selectedTab === 3 && <div>Info Content</div>}
+        {selectedTab === 3 && (
+          <div>
+            <Feedback />
+          </div>
+        )}
       </Paper>
     </Box>
   );

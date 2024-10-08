@@ -66,6 +66,7 @@ export interface Product {
   discountType: string;
   discountPrice: number;
   userInfo?: { [key: string]: unknown };
+  views: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -232,6 +233,13 @@ export interface Order {
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Feedbacks {
+  product: Product;
+  color: string;
+  quantity: number;
+  size: string;
 }
 
 export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";

@@ -45,7 +45,10 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         productId: product.id,
         email: user.email,
       };
-      await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`, wishlistItem);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`,
+        wishlistItem
+      );
       openSnackbar(
         `${product.name} Item successfully add to wishlist!`,
         "success",
@@ -106,26 +109,30 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         />
 
         <div
-          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-in-out ${hover ? "opacity-100" : "opacity-0"
-            }`}
+          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
+            hover ? "opacity-100" : "opacity-0"
+          }`}
         >
           <div className="relative flex space-x-4">
             <div className="relative group">
               <IconButton
-                className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${userWishList
-                  ? "group-hover:bg-[#e8f6ea]"
-                  : "group-hover:bg-[#088178]"
-                  }`}
+                className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${
+                  userWishList
+                    ? "group-hover:bg-[#e8f6ea]"
+                    : "group-hover:bg-[#088178]"
+                }`}
                 onClick={
                   userWishList ? handleRemoveFromWishlist : handleAddToWishlist
                 }
               >
                 <Favorite
-                  className={`${userWishList ? "text-red-500" : "text-[#088178]"
-                    } ${userWishList
+                  className={`${
+                    userWishList ? "text-red-500" : "text-[#088178]"
+                  } ${
+                    userWishList
                       ? "group-hover:text-red-500"
                       : "group-hover:text-white"
-                    } `}
+                  } `}
                 />
               </IconButton>
               <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
@@ -158,7 +165,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           <div className="flex items-center justify-around">
             <div>
               <Typography
-                variant="h6"
+                variant="body1"
                 component="div"
                 className="font-semibold mb-2"
               >

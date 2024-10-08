@@ -18,6 +18,7 @@ import { FaqModule } from './faq/faq.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { OrderModule } from './order/order.module';
 import { DynamicModule } from './dynamic/dynamic.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { DynamicModule } from './dynamic/dynamic.module';
     WishlistModule,
     OrderModule,
     DynamicModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}

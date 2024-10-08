@@ -11,9 +11,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Pagination,
   CircularProgress,
   Button,
+  TablePagination,
 } from "@mui/material";
 import dayjs from "dayjs";
 
@@ -26,9 +26,8 @@ const OrderDetails = () => {
   } | null>(null);
 
   const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const perPage = 10;
 
   const fetchOrders = async () => {
     if (!user || !user.email) {
@@ -43,7 +42,7 @@ const OrderDetails = () => {
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${perPage}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
       );
       setData(response.data);
     } catch (error) {
@@ -56,16 +55,21 @@ const OrderDetails = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [page]);
+  }, [page, rowsPerPage]);
 
   const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    value: number
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
   ) => {
-    setPage(value);
+    setPage(newPage + 1);
   };
 
-  const totalPages = data ? Math.ceil(data.total / perPage) : 1;
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
 
   if (loading) {
     return (
@@ -138,11 +142,15 @@ const OrderDetails = () => {
           </Table>
 
           <div className="flex justify-center mt-6 mb-5">
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handleChangePage}
-              color="primary"
+            <TablePagination
+              component="div"
+              count={data?.total || 0}
+              page={page - 1}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10, 25]}
+              labelRowsPerPage="Rows per page:"
               showFirstButton
               showLastButton
             />

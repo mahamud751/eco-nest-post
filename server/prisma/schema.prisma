@@ -65,7 +65,7 @@ model Product {
   photos        Json[]
   branch        Branch?      @relation(fields: [branchId], references: [id])
   category      Category     @relation("CategoryProducts", fields: [categoryId], references: [id])
-  review        Review?      @relation(fields: [reviewId], references: [id])
+  reviews       Review[]
   subcategory   SubCategory? @relation("SubCategoryProducts", fields: [subcategoryId], references: [id])
 
   Wishlist Wishlist[] @relation("WishlistProducts")
@@ -129,9 +129,18 @@ model Banner {
 }
 
 model Review {
-  id       String    @id @default(uuid())
-  content  String
-  products Product[]
+  id        String   @id @default(uuid())
+  userName  String
+  comment   String
+  rating    Int      @default(0)
+  category  String?
+  photos    Json[]
+  replies   Json?
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Blog {
