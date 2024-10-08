@@ -5,7 +5,7 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const order = await this.prisma.order.create({
@@ -67,13 +67,13 @@ export class OrderService {
   }
 
   async findOrdersByEmail(
+    email: string,
     page: number = 1,
     perPage: number = 10,
-    email: string,
+    includeGetState?: string, // New parameter
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
-
     const skip = (pageNumber - 1) * perPageNumber;
 
     const where: any = {
@@ -83,18 +83,26 @@ export class OrderService {
       },
     };
 
-    const totalCountPromise = this.prisma.order.count({ where });
-
-    const dataPromise = this.prisma.order.findMany({
+    const ordersPromise = this.prisma.order.findMany({
       skip,
       take: perPageNumber,
       where,
       orderBy: { createdAt: 'desc' },
     });
 
-    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+    const totalCountPromise = this.prisma.order.count({ where });
 
-    return { data, total };
+    const [total, orders] = await Promise.all([
+      totalCountPromise,
+      ordersPromise,
+    ]);
+
+    if (includeGetState === 'yes') {
+      const getStateItems = orders.flatMap((order) => order.getState);
+      return { data: getStateItems, total };
+    }
+
+    return { data: orders, total };
   }
 
   async getOrderById(id: string) {
