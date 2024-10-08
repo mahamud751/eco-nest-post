@@ -26,6 +26,7 @@ import {
   TextField,
 } from "@mui/material";
 import Swal from "sweetalert2";
+import StarRatings from "react-star-ratings";
 import { Feedbacks, Photo } from "@/services/types";
 import { useAuth } from "@/services/hooks/auth";
 interface AddFormProps {
@@ -184,6 +185,9 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
       );
     }
   };
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating);
+  };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
     handleImagesChange(selectedFiles);
@@ -330,15 +334,14 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
               onChange={(e) => setComment(e.target.value)}
               required
             />
-            <TextField
-              margin="dense"
-              label="Rating"
-              type="number"
-              fullWidth
-              value={rating}
-              onChange={(e) => setRating(Number(e.target.value))}
-              required
-              inputProps={{ min: 0, max: 5 }}
+            <StarRatings
+              rating={rating}
+              starRatedColor="orange"
+              changeRating={handleRatingChange}
+              numberOfStars={5}
+              name="rating"
+              starDimension="30px"
+              starSpacing="5px"
             />
             <input
               type="file"
