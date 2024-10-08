@@ -67,34 +67,52 @@ export class OrderService {
   }
 
   async findOrdersByEmail(
+    email: string,
     page: number = 1,
     perPage: number = 10,
-    email: string,
+    includeGetState?: string, // New parameter
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
-
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const where: any = {
-      email: {
+    // Base 'where' clause for orders matching the email
+
+    const where: any = {};
+    if (email) {
+      where.email = {
         contains: email,
         mode: 'insensitive',
-      },
-    };
+      };
+    }
+    if (includeGetState) {
+      where.includeGetState = 'yes';
+    }
 
-    const totalCountPromise = this.prisma.order.count({ where });
-
-    const dataPromise = this.prisma.order.findMany({
+    // Fetch orders for the current page
+    const ordersPromise = this.prisma.order.findMany({
       skip,
       take: perPageNumber,
       where,
       orderBy: { createdAt: 'desc' },
     });
 
-    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+    // Base total count for orders matching the email
+    const totalCountPromise = this.prisma.order.count({ where });
 
-    return { data, total };
+    const [total, orders] = await Promise.all([
+      totalCountPromise,
+      ordersPromise,
+    ]);
+
+    // If `includeGetState` is 'yes', flatten the getState items
+    if (includeGetState === 'yes') {
+      const getStateItems = orders.flatMap((order) => order.getState);
+      return { data: getStateItems, total }; // Return total based on orders
+    }
+
+    // Return the original orders without filtering by `getState`
+    return { data: orders, total };
   }
 
   async findOrdersByEmailAll(
