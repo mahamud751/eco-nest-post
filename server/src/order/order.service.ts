@@ -70,13 +70,11 @@ export class OrderService {
     email: string,
     page: number = 1,
     perPage: number = 10,
-    includeGetState?: string, // New parameter
+    includeGetState?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
-
-    // Base 'where' clause for orders matching the email
 
     const where: any = {};
     if (email) {
@@ -86,7 +84,6 @@ export class OrderService {
       };
     }
 
-    // Fetch orders for the current page
     const ordersPromise = this.prisma.order.findMany({
       skip,
       take: perPageNumber,
@@ -94,7 +91,6 @@ export class OrderService {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Base total count for orders matching the email
     const totalCountPromise = this.prisma.order.count({ where });
 
     const [total, orders] = await Promise.all([
@@ -102,52 +98,13 @@ export class OrderService {
       ordersPromise,
     ]);
 
-    // If `includeGetState` is 'yes', flatten the getState items
     if (includeGetState === 'yes') {
       const getStateItems = orders.flatMap((order) => order.getState);
-      return { data: getStateItems, total }; // Return total based on orders
+      const totalGetStateCount = getStateItems.length;
+      return { data: getStateItems, total: totalGetStateCount };
     }
 
-    // Return the original orders without filtering by `getState`
     return { data: orders, total };
-  }
-
-  async findOrdersByEmailAll(
-    page: number = 1,
-    perPage: number = 10,
-    email: string,
-  ): Promise<{ data: any[]; total: number }> {
-    const pageNumber = Number(page) || 1;
-    const perPageNumber = Number(perPage) || 10;
-
-    const skip = (pageNumber - 1) * perPageNumber;
-
-    const where: any = {
-      email: {
-        contains: email,
-        mode: 'insensitive',
-      },
-    };
-
-    const ordersPromise = this.prisma.order.findMany({
-      skip,
-      take: perPageNumber,
-      where,
-      orderBy: { createdAt: 'desc' },
-    });
-
-    // Fetch the total number of orders matching the email criteria
-    const totalCountPromise = this.prisma.order.count({ where });
-
-    const [orders] = await Promise.all([ordersPromise, totalCountPromise]);
-
-    // Map the last data to getState
-    const getStateItems = orders.flatMap((order) => order.getState);
-
-    // Set total to the number of getState items
-    const totalGetStateCount = getStateItems.length;
-
-    return { data: getStateItems, total: totalGetStateCount };
   }
 
   async getOrderById(id: string) {
