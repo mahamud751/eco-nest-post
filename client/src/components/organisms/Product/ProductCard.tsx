@@ -45,7 +45,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         productId: product.id,
         email: user.email,
       };
-      await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);
+      await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`, wishlistItem);
       openSnackbar(
         `${product.name} Item successfully add to wishlist!`,
         "success",
@@ -69,7 +69,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
     event.preventDefault();
     try {
       await axios.delete(
-        `https://api.korbojoy.shop/v1/wishlist/${userWishList?.id}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${userWishList?.id}`
       );
       openSnackbar(
         `${product.name} Item removed from wishlist!`,
@@ -113,8 +113,8 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             <div className="relative group">
               <IconButton
                 className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${userWishList
-                    ? "group-hover:bg-[#e8f6ea]"
-                    : "group-hover:bg-[#088178]"
+                  ? "group-hover:bg-[#e8f6ea]"
+                  : "group-hover:bg-[#088178]"
                   }`}
                 onClick={
                   userWishList ? handleRemoveFromWishlist : handleAddToWishlist

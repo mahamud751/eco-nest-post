@@ -267,7 +267,7 @@ const CustomizedStepper: React.FC = () => {
     };
 
     try {
-      const response = await fetch("https://api.korbojoy.shop/v1/orders", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

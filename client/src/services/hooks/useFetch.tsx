@@ -10,7 +10,7 @@ const UseFetch = <T,>(path: string) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`https://api.korbojoy.shop/v1/${path}`);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`);
         setData(res.data.data); // Assuming your response structure has "data" as a key
       } catch (err) {
         setError((err as Error).message);
@@ -23,7 +23,7 @@ const UseFetch = <T,>(path: string) => {
   const reFetch = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.korbojoy.shop/v1/${path}`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`);
       setData(res.data.data); // Ensure we're setting the correct part of the response
     } catch (err) {
       setError((err as Error).message);

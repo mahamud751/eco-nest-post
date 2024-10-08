@@ -62,7 +62,7 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
         perPage: number;
         totalPages: number;
       }>(
-        `https://api.korbojoy.shop/v1/categories/${id}/products?page=${page}&perPage=${sort}&${queryParams.toString()}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/categories/${id}/products?page=${page}&perPage=${sort}&${queryParams.toString()}`
       );
       setCategoryData(response.data);
     } catch (error) {

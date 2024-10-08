@@ -75,7 +75,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const loginUser = async (email: string, password: string) => {
     try {
       const response = await axios.post(
-        "https://api.korbojoy.shop/v1/users/login",
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/login`,
         { email, password }
       );
 
@@ -107,7 +107,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   ) => {
     try {
       const response = await axios.post(
-        "https://api.korbojoy.shop/v1/users/register",
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/register`,
         {
           name,
           email,

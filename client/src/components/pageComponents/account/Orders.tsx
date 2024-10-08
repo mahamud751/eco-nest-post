@@ -43,7 +43,7 @@ const OrderDetails = () => {
         total: number;
         perPage: number;
       }>(
-        `https://api.korbojoy.shop/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${perPage}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${perPage}`
       );
       setData(response.data);
     } catch (error) {
