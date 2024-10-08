@@ -57,14 +57,9 @@ export class OrderController {
     @Query('email') email: string,
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
-    @Query('includeGetState') includeGetState?: string,
+    @Query('allOrder') allOrder?: string,
   ) {
-    return this.orderService.findOrdersByEmail(
-      email,
-      page,
-      perPage,
-      includeGetState,
-    );
+    return this.orderService.findOrdersByEmail(email, page, perPage, allOrder);
   }
 
   @Get('/totalGrandPrice')

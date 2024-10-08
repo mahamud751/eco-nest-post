@@ -70,7 +70,7 @@ export class OrderService {
     email: string,
     page: number = 1,
     perPage: number = 10,
-    includeGetState?: string,
+    allOrder?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -98,7 +98,7 @@ export class OrderService {
       ordersPromise,
     ]);
 
-    if (includeGetState === 'yes') {
+    if (allOrder === 'yes') {
       const getStateItems = orders.flatMap((order) => order.getState);
       const totalGetStateCount = getStateItems.length;
       return { data: getStateItems, total: totalGetStateCount };
