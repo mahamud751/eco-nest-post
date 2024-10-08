@@ -67,25 +67,52 @@ export class OrderService {
   }
 
   async findOrdersByEmail(
-    email: string,
     page: number = 1,
     perPage: number = 10,
-    includeGetState?: string,
+    email: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
+
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const where: any = {};
-    if (email) {
-      where.email = {
+    const where: any = {
+      email: {
         contains: email,
         mode: 'insensitive',
-      };
-    }
-    if (includeGetState) {
-      where.includeGetState = 'yes';
-    }
+      },
+    };
+
+    const totalCountPromise = this.prisma.order.count({ where });
+
+    const dataPromise = this.prisma.order.findMany({
+      skip,
+      take: perPageNumber,
+      where,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
+  }
+
+  async findOrdersByEmailAll(
+    page: number = 1,
+    perPage: number = 10,
+    email: string,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const where: any = {
+      email: {
+        contains: email,
+        mode: 'insensitive',
+      },
+    };
 
     const ordersPromise = this.prisma.order.findMany({
       skip,
@@ -94,19 +121,18 @@ export class OrderService {
       orderBy: { createdAt: 'desc' },
     });
 
+    // Fetch the total number of orders matching the email criteria
     const totalCountPromise = this.prisma.order.count({ where });
 
-    const [total, orders] = await Promise.all([
-      totalCountPromise,
-      ordersPromise,
-    ]);
+    const [orders] = await Promise.all([ordersPromise, totalCountPromise]);
 
-    if (includeGetState === 'yes') {
-      const getStateItems = orders.flatMap((order) => order.getState);
-      return { data: getStateItems, total };
-    }
+    // Map the last data to getState
+    const getStateItems = orders.flatMap((order) => order.getState);
 
-    return { data: orders, total };
+    // Set total to the number of getState items
+    const totalGetStateCount = getStateItems.length;
+
+    return { data: getStateItems, total: totalGetStateCount };
   }
 
   async getOrderById(id: string) {

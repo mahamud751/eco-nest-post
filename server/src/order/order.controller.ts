@@ -46,25 +46,14 @@ export class OrderController {
   }
 
   @Get('/myBooking')
-  @ApiOperation({
-    summary: 'Get orders and optionally getState for a specific email',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'List of orders or getState items for the provided email',
-  })
+  @ApiOperation({ summary: 'Get all orders' })
+  @ApiResponse({ status: 200, description: 'List of all orders' })
   async findOrdersByEmail(
-    @Query('email') email: string,
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
-    @Query('includeGetState') includeGetState?: string,
+    @Query('email') email?: string,
   ) {
-    return this.orderService.findOrdersByEmail(
-      email,
-      page,
-      perPage,
-      includeGetState,
-    );
+    return this.orderService.findOrdersByEmail(page, perPage, email);
   }
 
   @Get('/totalGrandPrice')
