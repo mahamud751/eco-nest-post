@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "@/services/hooks/auth";
 import UseFetch from "@/services/hooks/useFetch";
 import { WishlistItem } from "@/services/types";
+import { useSnackbar } from "@/services/contexts/useSnackbar";
 
 interface Product {
   id: string;
@@ -28,7 +29,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const [hover, setHover] = useState(false);
   const { user } = useAuth();
   const MySwal = withReactContent(Swal);
-
+  const { openSnackbar } = useSnackbar();
   const { data: wishlist, reFetch: wishlistRefetch } =
     UseFetch<WishlistItem[]>(`wishlist`);
 
@@ -45,6 +46,11 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         email: user.email,
       };
       await axios.post("https://api.korbojoy.shop/v1/wishlist", wishlistItem);
+      openSnackbar(
+        `${product.name} Item successfully add to wishlist!`,
+        "success",
+        "#4caf50"
+      );
       wishlistRefetch();
     } catch (error) {
       MySwal.fire("Error", "Something went wrong!", "error");
@@ -65,14 +71,16 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       await axios.delete(
         `https://api.korbojoy.shop/v1/wishlist/${userWishList?.id}`
       );
-      toast.success("Product removed from wishlist!");
+      openSnackbar(
+        `${product.name} Item removed from wishlist!`,
+        "error",
+        "#4caf50"
+      );
       wishlistRefetch();
     } catch (err) {
       toast.error("Error removing product from wishlist");
     }
   };
-
-
 
   return (
     <Card
@@ -85,12 +93,10 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         New
       </span>
 
-
       <div
         className="relative h-64 overflow-hidden m-4"
         style={{ borderTopLeftRadius: "25px", borderTopRightRadius: "25px" }}
       >
-
         <Image
           src={hover ? product.photos[1]?.src : product.photos[0]?.src}
           alt={product.name}
@@ -104,27 +110,26 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             }`}
         >
           <div className="relative flex space-x-4">
-
             <div className="relative group">
               <IconButton
-                className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${userWishList ? 'group-hover:bg-[#e8f6ea]' : "group-hover:bg-[#088178]"
+                className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${userWishList
+                  ? "group-hover:bg-[#e8f6ea]"
+                  : "group-hover:bg-[#088178]"
                   }`}
                 onClick={
-                  userWishList
-                    ? handleRemoveFromWishlist
-                    : handleAddToWishlist
+                  userWishList ? handleRemoveFromWishlist : handleAddToWishlist
                 }
               >
                 <Favorite
                   className={`${userWishList ? "text-red-500" : "text-[#088178]"
-                    } ${userWishList ? "group-hover:text-red-500" : "group-hover:text-white"
+                    } ${userWishList
+                      ? "group-hover:text-red-500"
+                      : "group-hover:text-white"
                     } `}
                 />
               </IconButton>
               <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
-                {userWishList
-                  ? "Remove from Wishlist"
-                  : "Add to Wishlist"}
+                {userWishList ? "Remove from Wishlist" : "Add to Wishlist"}
                 <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
               </span>
             </div>
