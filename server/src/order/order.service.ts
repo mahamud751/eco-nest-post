@@ -5,7 +5,7 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const order = await this.prisma.order.create({
@@ -90,6 +90,7 @@ export class OrderService {
       take: perPageNumber,
       where,
       orderBy: { createdAt: 'desc' },
+      include: { getState: true },
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
