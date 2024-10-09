@@ -3,6 +3,7 @@ import React from "react";
 import { Container, Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import Faq from "@/components/pageComponents/about/Faq";
+import LottieAnimation from "@/components/dynamics/animations/LottieAnimation";
 
 const About: React.FC = () => {
   return (
@@ -37,7 +38,10 @@ const About: React.FC = () => {
           </motion.div>
         </Box>
 
-        <Box className="why-choose mt-20">
+        <Box className="why-choose mt-20 flex justify-between">
+          <Box className="my-20 flex justify-center items-center">
+            <LottieAnimation />
+          </Box>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

@@ -31,7 +31,7 @@ const Faq: React.FC = () => {
   }, [faq]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-20 px-4 sm:px-6 lg:px-16 bg-[#1f2937] rounded-lg p-16">
+    <div className="w-full max-w-4xl mx-auto mt-20 px-4 sm:px-6 lg:px-16 bg-[#1f2937] rounded-lg p-16 mb-20">
       <Typography className="text-center text-3xl font-bold text-[#00d1b2] mb-8">
         Frequently Asked Questions
       </Typography>
