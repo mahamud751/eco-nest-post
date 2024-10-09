@@ -217,14 +217,22 @@ export class ProductService {
     return { data, total };
   }
 
-  async findOne(id: string, userId?: string): Promise<Product> {
+  async findOne(
+    id: string,
+    userId?: string,
+    status?: string,
+  ): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id },
       include: {
         category: true,
         subcategory: true,
         branch: true,
-        reviews: true,
+        reviews: {
+          where: {
+            status: status || undefined,
+          },
+        },
       },
     });
 

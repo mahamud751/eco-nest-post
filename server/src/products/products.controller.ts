@@ -112,8 +112,12 @@ export class ProductController {
   @ApiOperation({ summary: 'Get a product by ID' })
   @ApiResponse({ status: 200, description: 'Return the product by ID.' })
   @ApiResponse({ status: 404, description: 'Product not found.' })
-  async findOne(@Param('id') id: string, @Query('userId') userId?: string) {
-    const product = await this.productService.findOne(id, userId);
+  async findOne(
+    @Param('id') id: string,
+    @Query('userId') userId?: string,
+    @Query('status') status?: string,
+  ) {
+    const product = await this.productService.findOne(id, userId, status);
 
     return product;
   }
