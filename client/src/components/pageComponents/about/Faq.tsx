@@ -26,27 +26,38 @@ const Faq: React.FC = () => {
 
   useEffect(() => {
     if (faq && faq.length > 0) {
-      setExpanded(0); // Set the first accordion to be open initially
+      setExpanded(0);
     }
   }, [faq]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-10">
+    <div className="w-full max-w-4xl mx-auto mt-20 px-4 sm:px-6 lg:px-16 bg-[#1f2937] rounded-lg p-16">
+      <Typography className="text-center text-3xl font-bold text-[#00d1b2] mb-8">
+        Frequently Asked Questions
+      </Typography>
       {faq?.map((data: FaqItem, i: number) => (
         <Accordion
           key={data.id}
           expanded={expanded === i}
           onChange={() => handleToggle(i)}
-          className="border border-gray-300 rounded-lg mb-4"
+          className={`border border-gray-700 rounded-lg mb-6 transition-all duration-300 ${
+            expanded === i
+              ? "bg-gradient-to-r from-teal-500 to-purple-500"
+              : "bg-[#374151]"
+          }`}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className="bg-gray-100 px-4 py-2"
+            expandIcon={<ExpandMoreIcon className="text-[#00d1b2]" />}
+            className="px-4 py-2 text-white"
           >
-            <Typography className="font-semibold">{data.title}</Typography>
+            <Typography className="font-semibold text-lg sm:text-xl">
+              {data.title}
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails className="px-4 py-2 bg-white">
-            <Typography className="text-gray-700">{data.desc}</Typography>
+          <AccordionDetails className="px-4 py-2 bg-[#111827] text-gray-300 rounded-b-lg">
+            <Typography className="text-base sm:text-lg leading-relaxed">
+              {data.desc}
+            </Typography>
           </AccordionDetails>
         </Accordion>
       ))}
