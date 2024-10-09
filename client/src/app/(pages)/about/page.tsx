@@ -18,7 +18,7 @@ const About: React.FC = () => {
             with a solution for one of the biggest problems in the education
             sector (especially primary, secondary, and post-secondary
             education), which is the dropout of students due to lack of
-            educational equipment. ...
+            educational equipment ...
           </Typography>
         </Box>
 
