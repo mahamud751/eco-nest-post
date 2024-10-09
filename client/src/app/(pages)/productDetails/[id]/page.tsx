@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Button,
   Box,
@@ -8,21 +9,21 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+import axios from "axios";
+import toast from "react-hot-toast";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Image from "next/image";
 import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
-import axios from "axios";
+
 import { Category, Product, WishlistItem } from "@/services/types";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { add_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import toast from "react-hot-toast";
 import { CartItem } from "@/app/redux/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useAuth } from "@/services/hooks/auth";
-import Link from "next/link";
 
 interface ProductDetailsProps {
   params: {
@@ -59,7 +60,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get<Product>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/products/${id}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/products/${id}?status=active`
       );
       setProduct(response.data);
     } catch (error) {
@@ -83,7 +84,10 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
         productId: productId,
         email,
       };
-      await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`, wishlistItem);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`,
+        wishlistItem
+      );
       toast.success("Product added to wishlist!");
       wishlistRefetch();
     } catch (err) {
@@ -167,10 +171,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                     alt={img.title}
                     width={100}
                     height={100}
-                    className={`border-2 ${selectedImage === img.src
-                      ? "border-blue-500"
-                      : "border-gray-300"
-                      } rounded-lg`}
+                    className={`border-2 ${
+                      selectedImage === img.src
+                        ? "border-blue-500"
+                        : "border-gray-300"
+                    } rounded-lg`}
                     onClick={() => handleImageSelect(img.src)}
                   />
                 </div>
@@ -190,8 +195,9 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                   {colors.map((clr) => (
                     <button
                       key={clr}
-                      className={`w-8 h-8 rounded-full border-2 ${color === clr ? "border-blue-500" : "border-gray-300"
-                        }`}
+                      className={`w-8 h-8 rounded-full border-2 ${
+                        color === clr ? "border-blue-500" : "border-gray-300"
+                      }`}
                       style={{ backgroundColor: clr }}
                       onClick={() => setColor(clr)}
                     ></button>
@@ -207,10 +213,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                   {sizes.map((sz) => (
                     <button
                       key={sz}
-                      className={`w-10 h-10 text-sm font-bold border-2 ${size === sz
-                        ? "border-blue-500 bg-blue-100"
-                        : "border-gray-300"
-                        } rounded-lg`}
+                      className={`w-10 h-10 text-sm font-bold border-2 ${
+                        size === sz
+                          ? "border-blue-500 bg-blue-100"
+                          : "border-gray-300"
+                      } rounded-lg`}
                       onClick={() => setSize(sz)}
                     >
                       {sz}
@@ -252,7 +259,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                   })
                 }
                 className="bg-[#088178] px-5 ms-3 shadow-md transition-transform duration-300 ease-in-out group-hover:scale-110 h-10"
-                disabled={!product} // Disable button if product is null
+                disabled={!product}
               >
                 Add to Cart
               </Button>
@@ -270,8 +277,9 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                   className="focus:outline-none"
                 >
                   <FavoriteIcon
-                    className={`transition-all duration-300 ${userWishList ? "text-red-500" : "text-gray-300"
-                      }`}
+                    className={`transition-all duration-300 ${
+                      userWishList ? "text-red-500" : "text-gray-300"
+                    }`}
                   />
                 </IconButton>
               </Button>

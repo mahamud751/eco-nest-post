@@ -69,8 +69,18 @@ export interface Product {
   views: number;
   createdAt: Date;
   updatedAt: Date;
+  reviews: Review[];
 }
 
+export interface Review {
+  id: string;
+  productId: string;
+  userName: string;
+  comment: string;
+  rating: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 export interface WishlistItem {
   id: string;
   productId: string;
