@@ -13,11 +13,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Image from "next/image";
-import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
+import StarRatings from "react-star-ratings";
 
-import { Category, Product, WishlistItem } from "@/services/types";
+import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
+import { Category, Product, Review, WishlistItem } from "@/services/types";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { add_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
@@ -47,6 +49,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const [color, setColor] = useState<string>("");
   const [size, setSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
+  const [averageRating, setAverageRating] = useState<number>(0);
   const productId = product?.id;
   const userName = user?.name;
   const email = user?.email;
@@ -63,17 +66,26 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/products/${id}?status=active`
       );
       setProduct(response.data);
+      calculateAverageRating(response.data.reviews);
     } catch (error) {
       console.error("Error fetching product:", error);
       setProduct(null);
     }
   };
-
+  const calculateAverageRating = (reviews: Review[]) => {
+    if (reviews.length > 0) {
+      const totalRating = reviews.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      );
+      const avgRating = totalRating / reviews.length;
+      setAverageRating(avgRating);
+    }
+  };
   useEffect(() => {
     fetchProducts();
   }, [id]);
 
-  // Add product to wishlist
   const handleAddToWishlist = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -95,7 +107,6 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
     }
   };
 
-  // Remove product from wishlist
   const handleRemoveFromWishlist = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -105,7 +116,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${userWishList?.id}`
       );
       toast.success("Product removed from wishlist!");
-      wishlistRefetch(); // Refresh the wishlist data
+      wishlistRefetch();
     } catch (err) {
       toast.error("Error removing product from wishlist");
     }
@@ -184,9 +195,29 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
           </div>
 
           <div>
-            <h1 className="text-3xl font-bold mb-4">{product?.name}</h1>
-            <p className="font-bold mb-4"> Category: {categoryName}</p>
+            <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
+            <div className="flex">
+              <StarRatings
+                rating={averageRating}
+                starRatedColor="gold"
+                numberOfStars={5}
+                starDimension="20px"
+                starSpacing="2px"
+                name="averageRating"
+              />
+              <p className="ms-3 mt-[2px]">({averageRating.toFixed(1)} / 5)</p>
+            </div>
+            <p className="font-bold my-4"> Category: {categoryName}</p>
             <p className="text-gray-600 mb-6">{product?.desc}</p>
+            <Box className="flex items-center space-x-2 mb-6">
+              <VisibilityIcon className="text-[#286156]" />
+              <Typography
+                variant="body1"
+                className="text-[#4a69b8] font-semibold"
+              >
+                {product?.views} Users Recently Viewed This Product
+              </Typography>
+            </Box>
 
             {colors.length > 0 && (
               <div className="mb-4">
