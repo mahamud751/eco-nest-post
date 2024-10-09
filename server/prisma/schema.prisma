@@ -138,7 +138,7 @@ model Review {
   replies   Json?
   product   Product  @relation(fields: [productId], references: [id])
   productId String
-  status    String   @default("active")
+  status    String   @default("inActive")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
