@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import { Blog } from "@/services/types";
+import Link from "next/link";
 
 const Blogs = () => {
   const { data: blogs, loading, error } = UseFetch<Blog[]>("blogs");
@@ -55,14 +56,14 @@ const Blogs = () => {
             </div>
             {blogs.map((item) => (
               <SwiperSlide key={item.id}>
-                <div className="mt-16">
+                <Link href={`blogDetails/${item.id}`} className="mt-16">
                   <div
                     key={item.id}
                     className="flex flex-col overflow-hidden rounded-lg shadow-lg"
                   >
                     <div className="flex-shrink-0">
                       <Image
-                        src={item.photos[0].src}
+                        src={item?.photos[0].src}
                         alt={item.name}
                         width={400}
                         height={400}
@@ -108,7 +109,7 @@ const Blogs = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

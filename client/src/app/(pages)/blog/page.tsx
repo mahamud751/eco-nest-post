@@ -3,6 +3,7 @@ import React from "react";
 import UseFetch from "@/services/hooks/useFetch";
 import { Blog } from "@/services/types";
 import Image from "next/image";
+import Link from "next/link";
 
 const CategorySection = () => {
   const { data: blogs, loading, error } = UseFetch<Blog[]>("blogs");
@@ -27,7 +28,8 @@ const CategorySection = () => {
         </div>
         <div className="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
           {blogs.map((article) => (
-            <div
+            <Link
+              href={`/blogDetails/${article.id}`}
               key={article.id}
               className="flex flex-col overflow-hidden rounded-lg shadow-lg"
             >
@@ -78,7 +80,7 @@ const CategorySection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
