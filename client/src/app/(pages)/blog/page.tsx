@@ -23,7 +23,7 @@ const CategorySection = () => {
             Column me neatly.
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">
-            This is your life and it's ending one minute @ a time...
+            This is your life and it is ending one minute @ a time...
           </p>
         </div>
         <div className="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
