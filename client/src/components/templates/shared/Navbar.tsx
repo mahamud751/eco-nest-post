@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import Image from "next/image";
@@ -13,36 +15,63 @@ import {
   Button,
   Box,
   Typography,
+  BottomNavigation,
+  BottomNavigationAction,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import DensityMediumIcon from "@mui/icons-material/DensityMedium";
-import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CloseIcon from "@mui/icons-material/Close";
+import {
+  ShoppingCart as CartIcon,
+  Article as BlogIcon,
+  ContactMail as ContactIcon,
+  AccountCircle as AccountIcon,
+  Facebook,
+  Delete,
+  Close,
+  Home,
+  Info,
+  Category as CategoryIcon,
+  AccountCircle,
+  Search,
+  DensityMedium,
+} from "@mui/icons-material";
+
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 import { CategoryMenu } from "@/components/templates/shared/CategoryMenu";
 import { useAuth } from "@/services/hooks/auth";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
-
 import { RootState } from "@/app/redux/reducers";
 import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import { Category } from "@/services/types";
+import UseFetch from "@/services/hooks/useFetch";
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
   const [cartOpen, setCartOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [, setSearchResults] = useState([]);
+  const [value, setValue] = useState(0);
+  const {
+    data: categories,
+    loading,
+    error,
+  } = UseFetch<Category[]>("categories");
+
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
 
   const toggleCart = () => setCartOpen(!cartOpen);
   const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
+  const toggleCategoryModal = () => setCategoryModalOpen(!categoryModalOpen);
+  const toggleAccountModal = () => setAccountModalOpen(!accountModalOpen);
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
@@ -67,8 +96,8 @@ export default function Navbar() {
   const handleClickOutside = (event: MouseEvent) => {
     const target = event.target as HTMLElement | null;
 
-    if (target && !target.closest(".category-dropdown")) {
-      setCategoriesOpen(false);
+    if (target && !target.closest(".MuiDrawer-root")) {
+      setCartOpen(false);
     }
   };
 
@@ -95,249 +124,490 @@ export default function Navbar() {
     }
   };
 
+  const handleCategorySelect = (categoryId: string) => {
+    router.push(`/category/${categoryId}`);
+    setCategoryModalOpen(false);
+    setCategoriesOpen(false);
+  };
   return (
-    <AppBar
-      position="static"
-      className="bg-white text-black shadow-md text-[14px]"
-    >
-      <Toolbar
-        className="flex justify-between"
-        style={{ background: "linear-gradient(to right, #020304, #071e37)" }}
+    <>
+      <AppBar
+        position="static"
+        className={`bg-white text-black shadow-md text-[14px]`}
       >
-        <Box className="container mx-auto text-white">
-          <div className="flex justify-between ">
-            <div className="flex">
-              <p className="font-bold ]">SHOP EVENTS & SAVE UP TO 65% OFF!</p>
-              <p className="font-bold ms-24 me-5">Call Us: +8801789999751</p>
-              <FacebookIcon />
-            </div>
+        <Toolbar className="hidden sm:flex justify-between bg-gradient-to-r from-[#020304] to-[#071e37]">
+          <Box className="container mx-auto text-white">
+            <div className="flex justify-between ">
+              <div className="flex">
+                <p className="font-bold">SHOP EVENTS & SAVE UP TO 65% OFF!</p>
+                <p className="font-bold ms-24 me-5">Call Us: +8801789999751</p>
+                <Facebook />
+              </div>
 
-            <div>
-              <Link href="/" className="font-bold">
-                Order Request
-              </Link>
-              <Link href="/" className="font-bold ms-10">
-                Vendor Request
-              </Link>
-            </div>
-          </div>
-        </Box>
-      </Toolbar>
-      <Toolbar className="flex justify-between">
-        <Box className="container mx-auto">
-          <div className="flex justify-between">
-            <Link href="/" className="flex mt-5">
               <div>
-                <Image
-                  src={"https://i.ibb.co/CMkLbff/Icon.png"}
-                  width={30}
-                  height={20}
-                  alt="icon"
-                  className="ml-2"
-                />
-              </div>
-              <Typography
-                variant="h6"
-                component="div"
-                className="font-semibold mb-2 mt-1 ms-1 text-2xl"
-              >
-                KorboJoy
-              </Typography>
-            </Link>
-
-            <div className="hidden sm:flex w-[75%] px-12 items-center rounded">
-              <div className="flex justify-end items-center w-full p-2 mt-2">
-                <div className="relative w-full flex items-center">
-                  <InputBase
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search your favorite products"
-                    className="px-3 py-2 w-full rounded-l-md border border-gray-300 focus:outline-none"
-                    sx={{
-                      paddingRight: "50px",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleSearch}
-                    className="absolute right-0 bg-red-500 hover:bg-red-600 text-white px-3 py-[13px]"
-                  >
-                    <SearchIcon />
-                  </button>
-                </div>
+                <Link href="/" className="font-bold">
+                  Order Request
+                </Link>
+                <Link href="/" className="font-bold ms-10">
+                  Vendor Request
+                </Link>
               </div>
             </div>
+          </Box>
+        </Toolbar>
 
-            <IconButton color="inherit" onClick={toggleCart}>
-              <Badge badgeContent={cartItemsFromRedux?.length} color="error">
-                <HiOutlineShoppingBag />
-              </Badge>
-            </IconButton>
+        <Toolbar className="flex justify-between">
+          <Box className="container mx-auto">
+            <div className="flex justify-between">
+              <Link href="/" className="flex mt-5">
+                <div>
+                  <Image
+                    src={"https://i.ibb.co/CMkLbff/Icon.png"}
+                    width={30}
+                    height={20}
+                    alt="icon"
+                    className="ml-2"
+                  />
+                </div>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  className="font-semibold mb-2 mt-1 ms-1 text-2xl"
+                >
+                  KorboJoy
+                </Typography>
+              </Link>
 
-            <Drawer anchor="right" open={cartOpen} onClose={toggleCart}>
-              <div className="w-80 p-6">
-                <div className="flex justify-between">
-                  <h2 className="text-2xl font-semibold text-gray-800">
-                    Your Cart
-                  </h2>
-                  <div className="bg-red-500 p-1">
-                    <CloseIcon
-                      className="cursor-pointer text-white"
-                      onClick={toggleCart}
+              <div className="hidden sm:flex w-[75%] px-12 items-center rounded">
+                <div className="flex justify-end items-center w-full p-2 mt-2">
+                  <div className="relative w-full flex items-center">
+                    <InputBase
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search your favorite products"
+                      className="px-3 py-2 w-full rounded-l-md border border-gray-300 focus:outline-none"
+                      sx={{
+                        paddingRight: "50px",
+                      }}
                     />
+                    <button
+                      type="button"
+                      onClick={handleSearch}
+                      className="absolute right-0 bg-red-500 hover:bg-red-600 text-white px-3 py-[13px]"
+                    >
+                      <Search />
+                    </button>
                   </div>
                 </div>
-                <hr className="mt-5" />
+              </div>
 
-                <div className="mt-6 space-y-4">
-                  {cartItemsFromRedux.length > 0 ? (
-                    cartItemsFromRedux.map((item, index) => (
-                      <Link
-                        href={`/productDetails/${item?.product?.id}`}
-                        key={index}
-                      >
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-3"
-                        >
-                          {item?.product?.photos?.length > 0 ? (
-                            <Image
-                              width={50}
-                              height={50}
-                              src={item?.product?.photos[0]?.src}
-                              alt={item?.product?.name}
-                              className="rounded-md object-cover"
-                            />
-                          ) : (
-                            <span className="text-gray-500 italic">
-                              No Image
-                            </span>
-                          )}
+              <IconButton color="inherit" onClick={toggleCart}>
+                <Badge badgeContent={cartItemsFromRedux?.length} color="error">
+                  <HiOutlineShoppingBag />
+                </Badge>
+              </IconButton>
+            </div>
+          </Box>
+        </Toolbar>
 
-                          <div className="flex-1 mx-3">
-                            <p className="font-medium text-gray-800">
-                              {item?.product?.name}
-                            </p>
-                            <div className="text-sm text-gray-600">
-                              <span>{item?.quantity}</span> x{" "}
-                              <span>৳{item?.product?.price}</span>
-                            </div>
-                          </div>
+        <Toolbar className="bg-gray-100 mt-5 hidden sm:flex justify-between">
+          <Box className="container mx-auto">
+            <div className="flex justify-between">
+              <div className="flex">
+                <div className="relative category-dropdown">
+                  <Button
+                    onClick={toggleCategories}
+                    className="bg-black text-white px-5 py-2 flex justify-between items-center"
+                    style={{ minWidth: "300px", width: "300px", height: 70 }}
+                  >
+                    <span className="flex-1 text-left ms-4">Categories</span>
+                    <DensityMedium style={{ fontSize: 16 }} />
+                  </Button>
 
-                          <IconButton
-                            onClick={() => removeItem(index)}
-                            aria-label="delete"
-                            color="error"
-                            className="hover:bg-red-100"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <p className="text-center text-gray-500">
-                      Your cart is empty.
-                    </p>
+                  {categoriesOpen && (
+                    <CategoryMenu setCategoriesOpen={setCategoriesOpen} />
                   )}
                 </div>
-              </div>
-              <hr />
-              <div className="flex justify-between my-5 px-8">
-                <p>SubTotal:</p>
-                <p className="text-red-500 font-bold">
-                  ৳
-                  {cartItemsFromRedux
-                    .reduce(
-                      (acc, item) => acc + item.product?.price * item?.quantity,
-                      0
-                    )
-                    .toFixed(2)}
-                </p>
-              </div>
-              <hr />
-              <div className="uppercase p-3">
-                <div className="mt-6">
-                  <Link href={"/cart"}>
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      className="py-3 rounded-lg bg-[#088178]"
-                    >
-                      View Cart
-                    </Button>
-                  </Link>
-                </div>
-                <div className="mt-6">
-                  <Link href={"/cart"}>
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      className="py-3 rounded-lg bg-[#088178]"
-                    >
-                      Checkout
-                    </Button>
-                  </Link>
+                <div className="hidden sm:flex space-x-4 mt-6 uppercase ms-24">
+                  <Link href="/">Home</Link>
+                  <Link href="/about">About</Link>
+                  <Link href="/cart">Cart</Link>
+                  <Link href="/blog">Blog</Link>
+                  <Link href="/contact">Contact</Link>
+                  {user && <Link href="/account">Account</Link>}
                 </div>
               </div>
-            </Drawer>
-          </div>
-        </Box>
-      </Toolbar>
+              <div className="mt-6">
+                {user ? (
+                  <div className="flex items-center space-x-4">
+                    <span>
+                      <Link
+                        href={"/account"}
+                        className="text-red-500 uppercase"
+                      >
+                        {user.name}
+                      </Link>
+                    </span>
+                    <span
+                      onClick={handleLogOut}
+                      className="cursor-pointer text-gray-700 hover:text-blue-500"
+                    >
+                      Log Out
+                    </span>
+                  </div>
+                ) : (
+                  <Link href="/login">
+                    <span className="cursor-pointer text-gray-700 hover:text-blue-500">
+                      Sign Up / Log In
+                    </span>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Box
+        sx={{
+          display: { xs: "block", sm: "none" },
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.2)",
+          background: "#fff",
+          zIndex: 1000,
+        }}
+      >
+        <BottomNavigation
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            switch (newValue) {
+              case 0:
+                toggleCategoryModal();
+                break;
+              case 1:
+                toggleCart();
+                break;
+              case 2:
+                router.push("/");
+                break;
+              case 3:
+                router.push("/account");
+                break;
+              case 4:
+                toggleAccountModal();
+                break;
+              default:
+                break;
+            }
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: 0,
+          }}
+        >
+          <BottomNavigationAction
+            icon={<CategoryIcon sx={{ color: "#4CAF50" }} />}
+            sx={{ flex: 1, display: "flex", justifyContent: "center" }}
+          />
+          <BottomNavigationAction
+            icon={<HiOutlineShoppingBag style={{ color: "#FF9800" }} />}
+            sx={{ flex: 1, display: "flex", justifyContent: "center" }}
+          />
 
-      <Toolbar className="bg-gray-100 mt-5">
-        <Box className="container mx-auto">
-          <div className="flex justify-between">
-            {" "}
-            <div className="flex">
-              <div className="relative category-dropdown">
-                <Button
-                  onClick={toggleCategories}
-                  className="bg-black text-white px-5 py-2 flex justify-between items-center"
-                  style={{ minWidth: "300px", width: "300px", height: 70 }}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "30px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              backgroundColor: "red",
+              borderRadius: "50%",
+              width: "50px",
+              height: "50px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              zIndex: 1,
+            }}
+          >
+            <IconButton
+              onClick={() => router.push("/")}
+              sx={{
+                color: "white",
+                padding: 0,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <Home sx={{ fontSize: "30px" }} />{" "}
+            </IconButton>
+          </Box>
+
+          <BottomNavigationAction
+            icon={<AccountCircle sx={{ color: "#2196F3" }} />}
+            sx={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              marginLeft: 10,
+            }}
+          />
+          <BottomNavigationAction
+            icon={<Info sx={{ color: "#9C27B0" }} />}
+            sx={{ flex: 1, display: "flex", justifyContent: "center" }}
+          />
+        </BottomNavigation>
+      </Box>
+      <Drawer
+        anchor="left"
+        open={categoryModalOpen}
+        onClose={toggleCategoryModal}
+      >
+        <div className="p-4 w-64">
+          <Typography variant="h6" className="mb-2">
+            Categories
+          </Typography>
+
+          {loading && <div>Loading...</div>}
+          {error && <div>Error loading categories</div>}
+          {categories &&
+            categories.map((category) => (
+              <div key={category.id} className="flex items-center mb-2">
+                <Image
+                  src={category.photos[0]?.src || "/default-image.jpg"}
+                  alt={category.name}
+                  width={40}
+                  height={40}
+                  className="rounded-full mr-2"
+                />
+                <Link
+                  href={`/category/${category.id}`}
+                  onClick={() => handleCategorySelect(category.id)}
                 >
-                  <span className="flex-1 text-left ms-4">Categories</span>
-                  <DensityMediumIcon style={{ fontSize: 16 }} />
-                </Button>
-
-                {categoriesOpen && <CategoryMenu />}
-              </div>
-              <div className="flex space-x-4 mt-6 uppercase ms-24">
-                <Link href="/">Home</Link>
-                <Link href="/about">About</Link>
-                <Link href="/cart">Cart</Link>
-                <Link href="/blog">Blog</Link>
-                <Link href="/contact">Contact</Link>
-                {user && <Link href="/account">Account</Link>}
-              </div>
-            </div>
-            <div className="mt-6">
-              {user ? (
-                <div className="flex items-center space-x-4">
-                  <span>
-                    <Link href={"/account"} className="text-red-500 uppercase">
-                      {user.name}
-                    </Link>
-                  </span>
-                  <span
-                    onClick={handleLogOut}
-                    className="cursor-pointer text-gray-700 hover:text-blue-500"
-                  >
-                    Log Out
-                  </span>
-                </div>
-              ) : (
-                <Link href="/login">
-                  <span className="cursor-pointer text-gray-700 hover:text-blue-500">
-                    Sign Up / Log In
-                  </span>
+                  <Typography variant="body2">{category.name}</Typography>
                 </Link>
-              )}
+              </div>
+            ))}
+        </div>
+      </Drawer>
+      <Drawer
+        anchor="left"
+        open={accountModalOpen}
+        onClose={toggleAccountModal}
+      >
+        <div className="p-4 w-64 bg-gray-50">
+          <List>
+            <Link href="/" passHref>
+              <ListItem
+                component="a"
+                onClick={toggleAccountModal}
+                className="hover:bg-[#EEF5FF]"
+              >
+                <ListItemIcon>
+                  <Home sx={{ color: "#088178" }} />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" className="text-[#088178]">
+                    Home
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            </Link>
+
+            <Link href="/about" passHref>
+              <ListItem
+                component="a"
+                onClick={toggleAccountModal}
+                className="hover:bg-[#EEF5FF]"
+              >
+                <ListItemIcon>
+                  <Info sx={{ color: "#FF6F61" }} />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" className="text-[#FF6F61]">
+                    About
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            </Link>
+
+            <Link href="/cart" passHref>
+              <ListItem
+                component="a"
+                onClick={toggleAccountModal}
+                className="hover:bg-[#EEF5FF]"
+              >
+                <ListItemIcon>
+                  <CartIcon sx={{ color: "#FFD700" }} />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" className="text-[#FFD700]">
+                    Cart
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            </Link>
+
+            <Link href="/blog" passHref>
+              <ListItem
+                component="a"
+                onClick={toggleAccountModal}
+                className="hover:bg-[#EEF5FF]"
+              >
+                <ListItemIcon>
+                  <BlogIcon sx={{ color: "#FF8C00" }} />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" className="text-[#FF8C00]">
+                    Blog
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            </Link>
+
+            <Link href="/contact" passHref>
+              <ListItem
+                component="a"
+                onClick={toggleAccountModal}
+                className="hover:bg-[#EEF5FF]"
+              >
+                <ListItemIcon>
+                  <ContactIcon sx={{ color: "#6A5ACD" }} />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography variant="body2" className="text-[#6A5ACD]">
+                    Contact
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            </Link>
+
+            {user && (
+              <Link href="/account" passHref>
+                <ListItem
+                  component="a"
+                  onClick={toggleAccountModal}
+                  className="hover:bg-[#EEF5FF]"
+                >
+                  <ListItemIcon>
+                    <AccountIcon sx={{ color: "#32CD32" }} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography variant="body2" className="text-[#32CD32]">
+                      Account
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              </Link>
+            )}
+          </List>
+        </div>
+      </Drawer>
+      <Drawer anchor="right" open={cartOpen} onClose={toggleCart}>
+        <div className="w-80 p-6">
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-semibold text-gray-800">Your Cart</h2>
+            <div className="bg-red-500 p-1">
+              <Close
+                className="cursor-pointer text-white"
+                onClick={toggleCart}
+              />
             </div>
           </div>
-        </Box>
-      </Toolbar>
-    </AppBar>
+          <hr className="mt-5" />
+
+          <div className="mt-6 space-y-4">
+            {cartItemsFromRedux.length > 0 ? (
+              cartItemsFromRedux.map((item, index) => (
+                <Link href={`/productDetails/${item?.product?.id}`} key={index}>
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3"
+                  >
+                    {item?.product?.photos?.length > 0 ? (
+                      <Image
+                        width={50}
+                        height={50}
+                        src={item?.product?.photos[0]?.src}
+                        alt={item?.product?.name}
+                        className="rounded-md object-cover"
+                      />
+                    ) : (
+                      <span className="text-gray-500 italic">No Image</span>
+                    )}
+
+                    <div className="flex-1 mx-3">
+                      <p className="font-medium text-gray-800">
+                        {item?.product?.name}
+                      </p>
+                      <div className="text-sm text-gray-600">
+                        <span>{item?.quantity}</span> x{" "}
+                        <span>৳{item?.product?.price}</span>
+                      </div>
+                    </div>
+
+                    <IconButton
+                      onClick={() => removeItem(index)}
+                      aria-label="delete"
+                      color="error"
+                      className="hover:bg-red-100"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">Your cart is empty.</p>
+            )}
+          </div>
+        </div>
+        <hr />
+        <div className="flex justify-between my-5 px-8">
+          <p>SubTotal:</p>
+          <p className="text-red-500 font-bold">
+            ৳
+            {cartItemsFromRedux
+              .reduce(
+                (acc, item) => acc + item.product?.price * item?.quantity,
+                0
+              )
+              .toFixed(2)}
+          </p>
+        </div>
+        <hr />
+        <div className="uppercase p-3">
+          <div className="mt-6">
+            <Link href={"/cart"}>
+              <Button
+                variant="contained"
+                fullWidth
+                className="py-3 rounded-lg bg-[#088178]"
+              >
+                View Cart
+              </Button>
+            </Link>
+          </div>
+          <div className="mt-6">
+            <Link href={"/cart"}>
+              <Button
+                variant="contained"
+                fullWidth
+                className="py-3 rounded-lg bg-[#088178]"
+              >
+                Checkout
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </Drawer>
+    </>
   );
 }

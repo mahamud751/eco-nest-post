@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, useMediaQuery } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -23,6 +23,8 @@ const CategoryProduct = () => {
   } = UseFetch<Category[]>("categories");
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
 
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
   const handleTabChange = (event: React.SyntheticEvent, newIndex: number) => {
     setSelectedCategoryIndex(newIndex);
   };
@@ -43,19 +45,22 @@ const CategoryProduct = () => {
           indicatorColor="primary"
           textColor="primary"
           sx={{
-            borderRight: 1,
-            borderColor: "divider",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
+            flexDirection: isSmallScreen ? "row" : "column",
+            overflowX: isSmallScreen ? "auto" : "unset",
+            borderRight: !isSmallScreen ? 1 : "none",
+            borderColor: "divider",
           }}
+          variant={isSmallScreen ? "scrollable" : "standard"}
+          scrollButtons={isSmallScreen ? "auto" : false}
+          allowScrollButtonsMobile={true}
         >
           {categories.map((category, index) => (
             <Tab key={index} label={category.name} />
           ))}
         </Tabs>
 
-        <Box sx={{ marginLeft: 3, marginTop: 5 }}>
+        <Box sx={{ marginLeft: isSmallScreen ? 0 : 3, marginTop: 5 }}>
           {selectedCategory.products.length > 0 ? (
             <Swiper
               modules={[Autoplay, Navigation, Pagination]}
@@ -67,10 +72,11 @@ const CategoryProduct = () => {
               }}
               pagination={{ clickable: true }}
               breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-                1280: { slidesPerView: 5 },
+                320: { slidesPerView: 1, spaceBetween: 10 },
+                640: { slidesPerView: 1, spaceBetween: 10 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 30 },
+                1280: { slidesPerView: 5, spaceBetween: 30 },
               }}
             >
               <div

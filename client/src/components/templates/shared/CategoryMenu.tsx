@@ -2,6 +2,7 @@ import { MenuItem, Paper, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import UseFetch from "@/services/hooks/useFetch";
 
@@ -18,14 +19,20 @@ interface SubCategory {
   photos: { src: string; title: string }[];
 }
 
-export const CategoryMenu = () => {
+interface CategoryMenuProps {
+  setCategoriesOpen: (open: boolean) => void;
+}
+
+export const CategoryMenu = ({ setCategoriesOpen }: CategoryMenuProps) => {
   const {
     data: categories,
     loading,
     error,
   } = UseFetch<Category[]>("categories");
+
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
   const [hoverCategory, setHoverCategory] = useState<number | null>(null);
+  const router = useRouter();
 
   const handleCategoryClick = (index: number) => {
     setOpenSubMenu(openSubMenu === index ? null : index);
@@ -37,6 +44,11 @@ export const CategoryMenu = () => {
 
   const handleMouseLeave = () => {
     setHoverCategory(null);
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    router.push(`/category/${categoryId}`);
+    setCategoriesOpen(false);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -57,14 +69,17 @@ export const CategoryMenu = () => {
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={handleMouseLeave}
         >
-          <Link href={`/category/${category.id}`}>
+          <Link
+            href={`/category/${category.id}`}
+            onClick={() => handleCategorySelect(category.id)}
+          >
             <MenuItem
               onClick={() => handleCategoryClick(index)}
               className="flex justify-between items-center px-4 py-2 hover:bg-[#EEF5FF] hover:text-[#088178]"
             >
               <span className="flex items-center space-x-2">
                 <Image
-                  src={category.photos[0]?.src || "/default-image.jpg"} // Default image if no photo
+                  src={category.photos[0]?.src || "/default-image.jpg"}
                   alt={category.photos[0]?.title || category.name}
                   width={20}
                   height={20}
