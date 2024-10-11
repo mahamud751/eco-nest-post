@@ -32,6 +32,7 @@ import {
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 
 import { useSnackbar } from "@/services/contexts/useSnackbar";
+import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 
 const steps = ["Shopping Cart", "Checkout", "Order Complete"];
 
@@ -148,7 +149,7 @@ const ShoppingCartStep: React.FC<{
 );
 
 const CheckoutStep: React.FC<{
-  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>; // Updated to match the type
+  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }> = ({ handleFormSubmit }) => (
   <form onSubmit={handleFormSubmit}>
     <div className="flex justify-between">
@@ -191,6 +192,7 @@ const CheckoutStep: React.FC<{
           margin="normal"
         />
       </div>
+      <PaymentCheckout />
     </div>
 
     <Button type="submit" variant="contained" color="primary">
@@ -262,18 +264,24 @@ const CustomizedStepper: React.FC = () => {
       city: formData.get("city"),
       country: formData.get("country"),
       postCode: formData.get("postCode"),
+      transactionId: formData.get("transactionId"),
+      bkashNumber: formData.get("bkashNumber"),
+      rocketNumber: formData.get("rocketNumber"),
       grandPrice: grandTotal,
       getState: cartItemsFromRedux,
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

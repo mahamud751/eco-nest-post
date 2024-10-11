@@ -275,6 +275,7 @@ model Order {
   transactionId String?
   bkashNumber   String?
   bkashTrx      String?
+  nagadNumber   String?
   rocketNumber  String?
   rocketTrx     String?
   dutchNumber   String?

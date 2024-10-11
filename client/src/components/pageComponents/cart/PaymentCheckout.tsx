@@ -9,12 +9,9 @@ import {
   Card,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Image from "next/image";
 
-interface PaymentOptionProps {
-  handleOnBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-}
-
-const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
+const PaymentCheckout = () => {
   const [bkashChecked, setBkashChecked] = useState(false);
   const [rocketChecked, setRocketChecked] = useState(false);
 
@@ -30,11 +27,9 @@ const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
             <Checkbox />
             <Typography>Cash on delivery</Typography>
           </div>
-          {/* <img src="assets/images/dollar.png" alt="cash" className="ml-auto" /> */}
         </AccordionSummary>
       </Accordion>
 
-      {/* Bkash Payment */}
       <Accordion
         expanded={bkashChecked}
         onChange={() => setBkashChecked(!bkashChecked)}
@@ -52,10 +47,13 @@ const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
             />
             <Typography>Bkash</Typography>
           </div>
-          <img
-            src="https://dsmartuniforms.com/wp-content/plugins/bangladeshi-payment-gateways//assets/images/bKash.png"
+
+          <Image
+            src="https://i.ibb.co.com/2kDyHRB/1656227518bkash-logo-png.png"
             alt="Bkash"
             className="ml-auto"
+            height={80}
+            width={120}
           />
         </AccordionSummary>
         <AccordionDetails className="bg-white">
@@ -84,25 +82,21 @@ const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
             variant="outlined"
             fullWidth
             placeholder="01XXXXXXXXXX"
-            required
-            onBlur={handleOnBlur}
             type="number"
             className="my-2"
+            name="bkashNumber"
           />
           <TextField
             label="Bkash Transaction ID"
-            variant="outlined"
             fullWidth
             placeholder="23562"
-            required
-            onBlur={handleOnBlur}
             type="text"
             className="my-2"
+            name="transactionId"
           />
         </AccordionDetails>
       </Accordion>
 
-      {/* Rocket Payment */}
       <Accordion
         expanded={rocketChecked}
         onChange={() => setRocketChecked(!rocketChecked)}
@@ -120,10 +114,12 @@ const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
             />
             <Typography>Rocket</Typography>
           </div>
-          <img
-            src="https://dsmartuniforms.com/wp-content/plugins/bangladeshi-payment-gateways//assets/images/Rocket.png"
+          <Image
+            src="https://i.ibb.co.com/vcQpgh3/mlogo.png"
             alt="Rocket"
             className="ml-auto"
+            height={80}
+            width={120}
           />
         </AccordionSummary>
         <AccordionDetails className="bg-white">
@@ -152,20 +148,18 @@ const PaymentCheckout: React.FC<PaymentOptionProps> = ({ handleOnBlur }) => {
             variant="outlined"
             fullWidth
             placeholder="01XXXXXXXXXX"
-            required
-            onBlur={handleOnBlur}
             type="number"
             className="my-2"
+            name="rocketNumber"
           />
           <TextField
             label="Rocket Transaction ID"
             variant="outlined"
             fullWidth
             placeholder="23562"
-            required
-            onBlur={handleOnBlur}
             type="text"
             className="my-2"
+            name="transactionId"
           />
         </AccordionDetails>
       </Accordion>

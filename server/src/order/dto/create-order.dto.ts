@@ -174,6 +174,15 @@ export class CreateOrderDto {
   transactionId?: string;
 
   @ApiProperty({
+    description: 'Nagad number used for payment',
+    example: '+8801XXXXXXXXX',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  nagadNumber?: string;
+
+  @ApiProperty({
     description: 'Bkash number used for payment',
     example: '+8801XXXXXXXXX',
     required: false,
