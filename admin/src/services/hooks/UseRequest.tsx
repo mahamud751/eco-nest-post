@@ -8,7 +8,7 @@ interface UseFetchState<T> {
   error: AxiosError | null;
 }
 
-const useFetch = <T,>(path: string) => {
+const UseFetch = <T,>(path: string) => {
   const [state, setState] = useState<UseFetchState<T>>({
     data: null,
     total: null,
@@ -73,4 +73,4 @@ const useFetch = <T,>(path: string) => {
   };
 };
 
-export default useFetch;
+export default UseFetch;
