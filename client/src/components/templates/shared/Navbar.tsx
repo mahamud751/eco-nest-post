@@ -52,7 +52,7 @@ import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   console.log("session", session);
 
   const [cartOpen, setCartOpen] = useState(false);
