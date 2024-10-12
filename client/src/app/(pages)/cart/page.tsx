@@ -1,6 +1,8 @@
 "use client";
 import React, { FormEvent, useState } from "react";
+import { styled } from "@mui/material/styles";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   Stepper,
   Step,
@@ -15,11 +17,17 @@ import {
   TableRow,
   TextField,
   Box,
+  Grid,
+  Typography,
 } from "@mui/material";
+import {
+  Delete,
+  ShoppingCart,
+  Payment,
+  CheckCircle,
+  KeyboardArrowDown,
+} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/reducers";
@@ -33,124 +41,149 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
+import { PriceTotal } from "@/components/pageComponents/cart/PriceTotal";
+import SuccessAnimation from "@/components/dynamics/animations/SuccessAnimation";
 
-const steps = ["Shopping Cart", "Checkout", "Order Complete"];
+const steps = [
+  {
+    label: "Shopping Cart",
+    icon: <ShoppingCart style={{ color: "red" }} />,
+  },
+  {
+    label: "Checkout",
+    icon: <Payment style={{ color: "green" }} />,
+  },
+  {
+    label: "Order Complete",
+    icon: <CheckCircle style={{ color: "blue" }} />,
+  },
+];
 
 const ShoppingCartStep: React.FC<{
   cartItems: CartItem[];
   onUpdate: (index: number, change: number) => void;
   onRemove: (index: number) => void;
-}> = ({ cartItems, onUpdate, onRemove }) => (
-  <Card className="p-4 mt-10">
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Image</TableCell>
-            <TableCell>Product Name</TableCell>
-            <TableCell>Color</TableCell>
-            <TableCell>Size</TableCell>
-            <TableCell>Quantity</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {cartItems.map((item, index) => (
-            <TableRow key={item.product.id}>
-              <TableCell>
-                {item.product.photos.length > 0 ? (
-                  <Image
-                    width={400}
-                    height={400}
-                    src={item.product.photos[0].src}
-                    alt={item.product.name}
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <span>No Image</span>
-                )}
-              </TableCell>
-              <TableCell>{item.product.name}</TableCell>
-              <TableCell>
-                {item.color ? (
-                  <span
-                    style={{
-                      backgroundColor: item.color,
-                      color: "#fff",
-                      padding: "2px 8px",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    {item.color}
-                  </span>
-                ) : (
-                  <span style={{ color: "red" }}>N/A</span>
-                )}
-              </TableCell>
-              <TableCell>{item.size || "N/A"}</TableCell>
-              <TableCell>
-                <div className="flex items-center">
-                  <Button
-                    variant="outlined"
-                    className="flex items-center justify-between w-20 border-gray-400 text-black p-1"
-                  >
-                    <span className="flex-grow text-center text-black">
-                      {item.quantity}
-                    </span>
-
-                    <div className="flex flex-col ml-1">
-                      <KeyboardArrowUpIcon
-                        onClick={() => onUpdate(index, 1)}
-                        className="text-black"
-                      />
-                      <KeyboardArrowDownIcon
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onUpdate(index, -1);
-                        }}
-                        className="text-black mt-[-4px]"
-                      />
-                    </div>
-                  </Button>
-                </div>
-              </TableCell>
-
-              <TableCell>
-                {(item.product.price * item.quantity).toFixed(2)}
-              </TableCell>
-              <TableCell>
-                <IconButton
-                  onClick={() => {
-                    onRemove(index);
-                  }}
-                  aria-label="delete"
-                  color="error"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+  onProceedToCheckout: () => void;
+}> = ({ cartItems, onUpdate, onRemove, onProceedToCheckout }) => (
+  <>
+    <Card className="p-4 mt-10">
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Image</TableCell>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Color</TableCell>
+              <TableCell>Size</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <div>
-      Total:{" "}
-      {cartItems
-        .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-        .toFixed(2)}
+          </TableHead>
+          <TableBody>
+            {cartItems.map((item, index) => (
+              <TableRow key={item.product.id}>
+                <TableCell>
+                  {item.product.photos.length > 0 ? (
+                    <Image
+                      width={400}
+                      height={400}
+                      src={item.product.photos[0].src}
+                      alt={item.product.name}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <span>No Image</span>
+                  )}
+                </TableCell>
+                <TableCell>{item.product.name}</TableCell>
+                <TableCell>
+                  {item.color ? (
+                    <span
+                      style={{
+                        backgroundColor: item.color,
+                        color: "#fff",
+                        padding: "2px 8px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      {item.color}
+                    </span>
+                  ) : (
+                    <span style={{ color: "red" }}>N/A</span>
+                  )}
+                </TableCell>
+                <TableCell>{item.size || "N/A"}</TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Button
+                      variant="outlined"
+                      className="flex items-center justify-between w-20 border-gray-400 text-black p-1"
+                    >
+                      <span className="flex-grow text-center text-black">
+                        {item.quantity}
+                      </span>
+
+                      <div className="flex flex-col ml-1">
+                        <KeyboardArrowDown
+                          onClick={() => onUpdate(index, 1)}
+                          className="text-black"
+                        />
+                        <KeyboardArrowDown
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onUpdate(index, -1);
+                          }}
+                          className="text-black mt-[-4px]"
+                        />
+                      </div>
+                    </Button>
+                  </div>
+                </TableCell>
+
+                <TableCell>
+                  {(item.product.price * item.quantity).toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => {
+                      onRemove(index);
+                    }}
+                    aria-label="delete"
+                    color="error"
+                  >
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Card>
+
+    <PriceTotal cartItems={cartItems} />
+    <div className="flex justify-end mt-6">
+      <Button
+        variant="contained"
+        color="primary"
+        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+        onClick={onProceedToCheckout}
+      >
+        Proceed to Checkout
+      </Button>
     </div>
-  </Card>
+  </>
 );
 
 const CheckoutStep: React.FC<{
+  cartItems: CartItem[];
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-}> = ({ handleFormSubmit }) => (
+}> = ({ cartItems, handleFormSubmit }) => (
   <form onSubmit={handleFormSubmit}>
     <div className="flex justify-between">
       <div className="w-1/2 p-4">
@@ -160,6 +193,7 @@ const CheckoutStep: React.FC<{
           name="firstName"
           fullWidth
           margin="normal"
+          required
         />
         <TextField
           label="Enter your last name"
@@ -172,6 +206,7 @@ const CheckoutStep: React.FC<{
           name="email"
           fullWidth
           margin="normal"
+          required
         />
         <TextField label="Phone" name="phone" fullWidth margin="normal" />
       </div>
@@ -182,9 +217,22 @@ const CheckoutStep: React.FC<{
           name="streetAddress"
           fullWidth
           margin="normal"
+          required
         />
-        <TextField label="Town / City" name="city" fullWidth margin="normal" />
-        <TextField label="Country" name="country" fullWidth margin="normal" />
+        <TextField
+          label="Town / City"
+          name="city"
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Country"
+          name="country"
+          fullWidth
+          margin="normal"
+          required
+        />
         <TextField
           label="Postal Code"
           name="postCode"
@@ -192,19 +240,56 @@ const CheckoutStep: React.FC<{
           margin="normal"
         />
       </div>
-      <PaymentCheckout />
+      <div>
+        <PriceTotal cartItems={cartItems} />
+        <PaymentCheckout />
+      </div>
     </div>
-
-    <Button type="submit" variant="contained" color="primary">
-      Submit Order
-    </Button>
+    <div className="flex justify-end mt-12">
+      <Button
+        variant="contained"
+        color="primary"
+        type="submit"
+        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+      >
+        Place Order
+      </Button>
+    </div>
   </form>
 );
 
 const OrderCompleteStep: React.FC = () => (
-  <div>
-    <h2 className="text-xl font-bold">Thank you for your order!</h2>
-    <p>Your order has been placed successfully.</p>
+  <div className="text-center">
+    <Grid item xs={12} md={6} className="flex justify-center">
+      <SuccessAnimation />
+    </Grid>
+    <Box className="main-txt text-center">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+      >
+        <Typography
+          variant="h2"
+          className="text-[#0F4C75] font-bold leading-tight"
+        >
+          Thank you for your order!
+        </Typography>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1, ease: "easeInOut" }}
+      >
+        <Typography
+          variant="h5"
+          className="text-gray-700 font-bold leading-tight"
+        >
+          Your order has been placed successfully.
+        </Typography>
+      </motion.div>
+    </Box>
   </div>
 );
 
@@ -217,7 +302,12 @@ const CustomizedStepper: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
-  const handleBack = () => setActiveStep((prev) => prev - 1);
+  const handleProceedToCheckout = () => handleNext();
+  const handleStepClick = (step: number) => {
+    if (step < activeStep) {
+      setActiveStep(step);
+    }
+  };
 
   const removeItem = (index: number) => {
     if (index < 0 || index >= cartItemsFromRedux.length) return;
@@ -248,9 +338,13 @@ const CustomizedStepper: React.FC = () => {
       }
     }
   };
-  const grandTotal = cartItemsFromRedux
-    .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-    .toFixed(2);
+  const vat = 40;
+  const grandTotal = (
+    cartItemsFromRedux.reduce(
+      (acc, item) => acc + item.product.price * item.quantity,
+      0
+    ) + vat
+  ).toFixed(2);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -296,38 +390,71 @@ const CustomizedStepper: React.FC = () => {
 
   return (
     <Box className="container mx-auto py-10">
-      <Stepper activeStep={activeStep}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
+      <CustomStepper activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <CustomStep key={index} onClick={() => handleStepClick(index)}>
+            <CustomStepButton>
+              {step.icon}
+              <StepLabel className="ms-5">{step.label}</StepLabel>
+            </CustomStepButton>
+          </CustomStep>
         ))}
-      </Stepper>
+      </CustomStepper>
       <div>
         {activeStep === 0 && (
           <ShoppingCartStep
             cartItems={cartItemsFromRedux}
             onUpdate={updateQuantity}
             onRemove={removeItem}
+            onProceedToCheckout={handleProceedToCheckout}
           />
         )}
-        {activeStep === 1 && <CheckoutStep handleFormSubmit={handleSubmit} />}
+        {activeStep === 1 && (
+          <CheckoutStep
+            cartItems={cartItemsFromRedux}
+            handleFormSubmit={handleSubmit}
+          />
+        )}
         {activeStep === 2 && <OrderCompleteStep />}
-      </div>
-      <div>
-        <Button disabled={activeStep === 0} onClick={handleBack}>
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={activeStep === steps.length - 1 ? undefined : handleNext}
-        >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
       </div>
     </Box>
   );
 };
 
 export default CustomizedStepper;
+
+const CustomStepper = styled(Stepper)(({ theme }) => ({
+  backgroundColor: "transparent",
+  padding: "20px",
+  position: "relative",
+  "& .MuiStepConnector-root": {
+    display: "none",
+  },
+}));
+
+const CustomStep = styled(Step)(({ theme }) => ({
+  cursor: "pointer",
+  position: "relative",
+  padding: "0 20px",
+  "&:hover .MuiStepLabel-root": {
+    color: theme.palette.primary.main,
+  },
+}));
+
+const CustomStepButton = styled("div")(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  borderRadius: "20px",
+  padding: "10px 20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  transition: "background-color 0.3s ease",
+  margin: "0 10px",
+  width: "100%",
+
+  "& .MuiStepLabel-root": {
+    color: "white",
+    textAlign: "center",
+  },
+}));
