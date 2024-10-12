@@ -122,10 +122,15 @@ export class OrderService {
 
   async calculateTotalGrandPrice() {
     const orders = await this.prisma.order.findMany();
-    return orders.reduce(
+    const totalGrandPrice = orders.reduce(
       (total, order) => total + parseFloat(order.grandPrice),
       0,
     );
+    return {
+      data: {
+        totalGrandPrice,
+      },
+    };
   }
 
   async sendOrderEmail(email: string) {

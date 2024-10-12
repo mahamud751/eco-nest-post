@@ -141,6 +141,50 @@ export interface User {
   advances?: Advance[];
 }
 
+export interface Order {
+  id: string;
+  getState: unknown[];
+  grandPrice?: string;
+  selectedSize?: string;
+  selectedColor?: string;
+  firstName?: string;
+  lastName?: string;
+  userId?: string;
+  email?: string;
+  phone?: string;
+  city?: string;
+  streetAddress?: string;
+  country?: string;
+  district?: string;
+  apartment?: string;
+  postCode?: string;
+  address?: string;
+  gender?: Gender;
+  paymentType?: string;
+  paymentNumber?: string;
+  transactionId?: string;
+  bkashNumber?: string;
+  bkashTrx?: string;
+  rocketNumber?: string;
+  rocketTrx?: string;
+  dutchNumber?: string;
+  dutchTrx?: string;
+
+  status: OrderStatus;
+  totalAmount?: number;
+  receivedTk?: number;
+  dueAmount?: number;
+  totalReceiveTk?: number;
+  unReceivedTk?: number;
+  paymentStatus?: string;
+  bookingExtend?: boolean;
+  isCancel: CancelStatus;
+  userCancel?: unknown;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface School {
   id: string;
   name: string;
@@ -178,6 +222,10 @@ export interface Student {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";
+
+export type CancelStatus = "YES" | "NO";
 
 export type SchoolStatus = "pending" | "processing" | "delivery" | "canceled";
 
