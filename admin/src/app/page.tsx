@@ -3,15 +3,15 @@ import { Grid } from "@mui/material";
 import React from "react";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
-import useFetch from "@/services/hooks/UseRequest";
+import UseFetch from "@/services/hooks/UseRequest";
 import { Advance, GrandPrice, Order } from "@/services/types";
 import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
 const page = () => {
-  const { total: orderTotal } = useFetch<Order>(`orders`);
-  const { data: totalGrandPrice } = useFetch<GrandPrice>(
+  const { total: orderTotal } = UseFetch<Order>(`orders`);
+  const { data: totalGrandPrice } = UseFetch<GrandPrice>(
     `orders/totalGrandPrice`
   );
-  const { total: customOrder } = useFetch<Advance>(`advance`);
+  const { total: customOrder } = UseFetch<Advance>(`advance`);
   return (
     <>
       <Grid container spacing={2}>
