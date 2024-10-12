@@ -3,7 +3,7 @@ import Blogs from "@/components/pageComponents/home/Blogs";
 import CategoryPage from "@/components/pageComponents/home/Category";
 import CategoryProduct from "@/components/pageComponents/home/CategoryProduct";
 import HomeFavouriteTab from "@/components/pageComponents/home/HomeFavouriteTab";
-import TopSell from "@/components/pageComponents/home/TopSell";
+import Top from "@/components/pageComponents/home/Top";
 
 import React from "react";
 
@@ -15,7 +15,7 @@ const page = () => {
 
       <HomeFavouriteTab />
       <CategoryProduct />
-      <TopSell />
+      <Top />
       <Blogs />
     </div>
   );

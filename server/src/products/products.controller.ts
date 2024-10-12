@@ -43,10 +43,10 @@ export class ProductController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
-    @Request() req, // Ensure it's before optional parameters
+    @Request() req,
     @Query('limit') limit?: number,
     @Query('flashsale') flashsale?: string,
-    @Query('email') email?: string, // Email query parameter for filtering
+    @Query('email') email?: string,
     @Query('name') name?: string,
   ): Promise<PaginatedResult<Product>> {
     return this.productService.findAll(
