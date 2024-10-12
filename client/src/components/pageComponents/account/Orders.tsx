@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/services/hooks/auth";
-import { Order } from "@/services/types";
+import { Order } from "@/services/types/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {

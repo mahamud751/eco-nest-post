@@ -53,18 +53,7 @@ const Auth: React.FC = () => {
       if (result?.error) {
         setAuthError("Failed to sign in with Google. Please try again.");
       } else {
-        const session = await fetch("/api/auth/session").then((res) =>
-          res.json()
-        );
-
-        if (session) {
-          const { user, token } = session;
-
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", token);
-
-          router.push("/");
-        }
+        router.push("/");
       }
     } catch (error) {
       setAuthError("Failed to sign in with Google. Please try again.");
@@ -177,7 +166,7 @@ const Auth: React.FC = () => {
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             type="submit"
-            disabled={loading} // Disable button while loading
+            disabled={loading}
           >
             {loading ? "Loading..." : isSignup ? "Sign Up" : "Sign In"}
           </Button>
@@ -185,7 +174,7 @@ const Auth: React.FC = () => {
         <Button
           onClick={handleGoogleSignIn}
           className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
-          disabled={loading} // Disable Google sign-in button while loading
+          disabled={loading}
         >
           Sign In with Google
         </Button>

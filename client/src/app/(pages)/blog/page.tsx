@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import UseFetch from "@/services/hooks/useFetch";
-import { Blog } from "@/services/types";
+import { Blog } from "@/services/types/types";
 import Image from "next/image";
 import Link from "next/link";
 

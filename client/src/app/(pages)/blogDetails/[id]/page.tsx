@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { Blog } from "@/services/types";
+import { Blog } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
 import Link from "next/link";
 

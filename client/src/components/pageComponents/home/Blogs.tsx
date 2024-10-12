@@ -6,7 +6,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
-import { Blog } from "@/services/types";
+import { Blog } from "@/services/types/types";
 import Link from "next/link";
 
 const Blogs = () => {

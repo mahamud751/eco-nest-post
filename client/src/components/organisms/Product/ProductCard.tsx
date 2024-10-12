@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 import { useAuth } from "@/services/hooks/auth";
 import UseFetch from "@/services/hooks/useFetch";
-import { WishlistItem } from "@/services/types";
+import { WishlistItem } from "@/services/types/types";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 
 interface Product {

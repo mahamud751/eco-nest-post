@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import UseFetch from "@/services/hooks/useFetch";
 import ProductCard from "@/components/organisms/Product/ProductCard";
-import { Product } from "@/services/types";
+import { Product } from "@/services/types/types";
 
 interface Category {
   id: string;

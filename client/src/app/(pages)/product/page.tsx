@@ -19,7 +19,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import ProductCard from "@/components/organisms/Product/ProductCard";
-import { Category, Product } from "@/services/types";
+import { Category, Product } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useSearchParams } from "next/navigation";
 
@@ -64,7 +64,9 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
         perPage: number;
         totalPages: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/products?page=${page}&perPage=${sort}&name=${params.get(
+        `${
+          process.env.NEXT_PUBLIC_BASEURL
+        }/v1/products?page=${page}&perPage=${sort}&name=${params.get(
           "search"
         )}&${queryParams.toString()}`
       );

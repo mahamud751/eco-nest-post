@@ -1,6 +1,6 @@
 "use client";
 import UseFetch from "@/services/hooks/useFetch";
-import { Dynamic } from "@/services/types";
+import { Dynamic } from "@/services/types/types";
 import { Box } from "@mui/material";
 
 const Terms = () => {

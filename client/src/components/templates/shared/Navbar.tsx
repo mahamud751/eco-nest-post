@@ -46,7 +46,7 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { RootState } from "@/app/redux/reducers";
 import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import { Category } from "@/services/types";
+import { Category } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useSession } from "next-auth/react";
 

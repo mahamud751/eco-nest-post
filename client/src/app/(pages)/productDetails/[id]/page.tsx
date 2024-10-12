@@ -19,7 +19,12 @@ import Image from "next/image";
 import StarRatings from "react-star-ratings";
 
 import AdditionalTab from "@/components/pageComponents/productDetails/AdditionalTab";
-import { Category, Product, Review, WishlistItem } from "@/services/types";
+import {
+  Category,
+  Product,
+  Review,
+  WishlistItem,
+} from "@/services/types/types";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { add_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";

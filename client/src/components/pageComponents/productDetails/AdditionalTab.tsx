@@ -11,7 +11,7 @@ import {
   Avatar,
   SvgIcon,
 } from "@mui/material";
-import { Product } from "@/services/types";
+import { Product } from "@/services/types/types";
 import StarRatings from "react-star-ratings";
 import {
   Person as PersonIcon,

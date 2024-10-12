@@ -14,7 +14,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { WishlistItem } from "@/services/types";
+import { WishlistItem } from "@/services/types/types";
 
 const Wishlist = () => {
   const { user } = useAuth();

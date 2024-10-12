@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import StarRatings from "react-star-ratings";
-import { Feedbacks, Photo } from "@/services/types";
+import { Feedbacks, Photo } from "@/services/types/types";
 import { useAuth } from "@/services/hooks/auth";
 interface AddFormProps {
   photosData: Photo[];
