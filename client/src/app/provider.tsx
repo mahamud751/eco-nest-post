@@ -46,31 +46,33 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SessionWraper>  <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Provider store={store}>
-        <UserProvider>
-          <SnackbarProvider>
-            <ScrollToTop
-              // @ts-expect-error - Custom properties for ScrollToTop not typed in library
-              height={27}
-              smooth
-              // @ts-expect-error - Custom properties for ScrollToTop not typed in library
-              width={40}
-              color="#ffffff"
-              style={{
-                background: "#000000",
-                height: "44px",
-                boxShadow: "none",
-              }}
-            />
-            {showHeader}
-            {children}
-            {showHeader && <Footer />}
-          </SnackbarProvider>
-        </UserProvider>
-      </Provider>
-    </ThemeProvider></SessionWraper>
-
+    <SessionWraper>
+      {" "}
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Provider store={store}>
+          <UserProvider>
+            <SnackbarProvider>
+              <ScrollToTop
+                // @ts-expect-error - Custom properties for ScrollToTop not typed in library
+                height={27}
+                smooth
+                // @ts-expect-error - Custom properties for ScrollToTop not typed in library
+                width={40}
+                color="#ffffff"
+                style={{
+                  background: "#000000",
+                  height: "44px",
+                  boxShadow: "none",
+                }}
+              />
+              {showHeader}
+              {children}
+              {showHeader && <Footer />}
+            </SnackbarProvider>
+          </UserProvider>
+        </Provider>
+      </ThemeProvider>
+    </SessionWraper>
   );
 }

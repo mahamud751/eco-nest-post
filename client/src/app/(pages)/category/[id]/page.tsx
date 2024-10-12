@@ -8,7 +8,7 @@ import {
   CardContent,
   Radio,
   FormControlLabel,
-  Grid,
+  Grid2 as Grid,
   Pagination,
   Select,
   MenuItem,
@@ -231,7 +231,7 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
             {/* Product Grid */}
             <Grid container spacing={3}>
               {filteredProducts.map((product) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
                   <ProductCard product={product} />
                 </Grid>
               ))}

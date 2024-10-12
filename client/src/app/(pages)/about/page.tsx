@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Container, Typography, Box, Grid } from "@mui/material";
+import { Container, Typography, Box, Grid2 as Grid } from "@mui/material";
 import { motion } from "framer-motion";
 import Faq from "@/components/pageComponents/about/Faq";
 import LottieAnimation from "@/components/dynamics/animations/LottieAnimation";
@@ -38,11 +38,11 @@ const About: React.FC = () => {
           </motion.div>
         </Box>
 
-        <Grid container spacing={4} className="why-choose mt-20">
-          <Grid item xs={12} md={6} className="flex justify-center">
+        <Grid spacing={4} className="why-choose mt-20">
+          <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
             <LottieAnimation />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
