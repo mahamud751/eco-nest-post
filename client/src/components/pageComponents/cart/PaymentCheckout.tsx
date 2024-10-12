@@ -42,10 +42,9 @@ const PaymentCheckout = () => {
               sx={{
                 "&.Mui-checked": {
                   color: "white",
-                  backgroundColor: "red",
                 },
                 "&.Mui-checked .MuiSvgIcon-root": {
-                  color: "white",
+                  color: "red",
                 },
                 borderRadius: "50%",
               }}
@@ -76,14 +75,11 @@ const PaymentCheckout = () => {
               sx={{
                 "&.Mui-checked": {
                   color: "white",
-                  backgroundColor: "red",
                 },
                 "&.Mui-checked .MuiSvgIcon-root": {
-                  color: "white",
+                  color: "red",
                 },
                 borderRadius: "50%",
-                color: "red",
-                backgroundColor: "red",
               }}
             />
             <Typography>Bkash</Typography>
@@ -160,14 +156,11 @@ const PaymentCheckout = () => {
               sx={{
                 "&.Mui-checked": {
                   color: "white",
-                  backgroundColor: "red",
                 },
                 "&.Mui-checked .MuiSvgIcon-root": {
-                  color: "white",
+                  color: "red",
                 },
                 borderRadius: "50%",
-                color: "red",
-                backgroundColor: "red",
               }}
             />
             <Typography>Nagad</Typography>
@@ -244,14 +237,11 @@ const PaymentCheckout = () => {
               sx={{
                 "&.Mui-checked": {
                   color: "white",
-                  backgroundColor: "red",
                 },
                 "&.Mui-checked .MuiSvgIcon-root": {
-                  color: "white",
+                  color: "red",
+                  borderRadius: "50%",
                 },
-                borderRadius: "50%",
-                color: "red",
-                backgroundColor: "red",
               }}
             />
             <Typography>Rocket</Typography>

@@ -48,9 +48,13 @@ import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import { Category } from "@/services/types";
 import UseFetch from "@/services/hooks/useFetch";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
+  const { data: session, status } = useSession();
+  console.log("session", session);
+
   const [cartOpen, setCartOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -239,6 +243,7 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="mt-6">
+                {session && session.user?.email}
                 {user ? (
                   <div className="flex items-center space-x-4">
                     <span>

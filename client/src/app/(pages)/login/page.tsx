@@ -33,7 +33,9 @@ const Auth: React.FC = () => {
   const { loginUser, registerUser } = useAuth();
 
   if (!loginUser || !registerUser) {
-    throw new Error("AuthContext is undefined. Please ensure you are using UserProvider.");
+    throw new Error(
+      "AuthContext is undefined. Please ensure you are using UserProvider."
+    );
   }
 
   const [showPassword, setShowPassword] = useState(false);
@@ -51,8 +53,18 @@ const Auth: React.FC = () => {
       if (result?.error) {
         setAuthError("Failed to sign in with Google. Please try again.");
       } else {
-        // User is successfully signed in; handle accordingly
-        router.push("/");
+        const session = await fetch("/api/auth/session").then((res) =>
+          res.json()
+        );
+
+        if (session) {
+          const { user, token } = session;
+
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", token);
+
+          router.push("/");
+        }
       }
     } catch (error) {
       setAuthError("Failed to sign in with Google. Please try again.");
@@ -61,8 +73,8 @@ const Auth: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, email, phone, password } = data;
-    setLoading(true); // Set loading state to true
-    setAuthError(""); // Clear any previous error
+    setLoading(true);
+    setAuthError("");
     try {
       if (isSignup) {
         await registerUser(name!, email, phone!, password, "", "");
@@ -72,10 +84,10 @@ const Auth: React.FC = () => {
         router.push("/");
       }
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
       setAuthError("Failed to authenticate. Please check your credentials.");
     } finally {
-      setLoading(false); // Set loading state back to false
+      setLoading(false);
     }
   };
 
@@ -113,7 +125,6 @@ const Auth: React.FC = () => {
           )}
           <TextField
             label="Email"
-            variant="outlined"
             fullWidth
             {...register("email", {
               required: "Email is required",
@@ -162,7 +173,9 @@ const Auth: React.FC = () => {
           />
           {authError && <p className="text-red-500">{authError}</p>}
           <Button
-            className={`bg-purple-800 text-white p-4 w-full mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`bg-purple-800 text-white p-4 w-full mt-12 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition-all duration-300 ease-in-out ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
             disabled={loading} // Disable button while loading
           >

@@ -33,6 +33,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/reducers";
 import { CartItem } from "@/app/redux/types";
 import {
+  clear_cart,
   delete_item,
   remove_item,
   update_quantity,
@@ -382,6 +383,7 @@ const CustomizedStepper: React.FC = () => {
       }
       openSnackbar("Order placed successfully!", "success", "#4caf50");
       setActiveStep(2);
+      dispatch(clear_cart());
     } catch (error) {
       console.error("Error placing order:", error);
       openSnackbar("Failed to place order!", "error", "#f44336");
