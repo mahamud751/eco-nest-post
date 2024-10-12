@@ -261,7 +261,7 @@ const CheckoutStep: React.FC<{
 
 const OrderCompleteStep: React.FC = () => (
   <div className="text-center">
-    <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
+    <Grid container size={{ xs: 12, md: 6 }} className="flex justify-center">
       <SuccessAnimation />
     </Grid>
     <Box className="main-txt text-center">

@@ -38,11 +38,14 @@ const About: React.FC = () => {
           </motion.div>
         </Box>
 
-        <Grid spacing={4} className="why-choose mt-20">
-          <Grid size={{ xs: 12, md: 6 }} className="flex justify-center">
+        <Grid container spacing={4} className="why-choose mt-20">
+          <Grid
+            size={{ xs: 12, md: 6, lg: 6 }}
+            className="flex justify-center items-center"
+          >
             <LottieAnimation />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 6 }}>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

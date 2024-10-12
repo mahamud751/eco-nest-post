@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Card, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
-import { Autoplay, Navigation, Pagination } from "swiper/modules"; // Already imported Autoplay module
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import UseFetch from "@/services/hooks/useFetch";
