@@ -187,80 +187,85 @@ const ShoppingCartStep: React.FC<{
 const CheckoutStep: React.FC<{
   cartItems: CartItem[];
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-}> = ({ cartItems, handleFormSubmit }) => (
-  <form onSubmit={handleFormSubmit}>
-    <div className="flex justify-between">
-      <div className="w-1/2 p-4">
-        <h2 className="font-bold mb-2">User Details</h2>
-        <TextField
-          label="Enter your first name"
-          name="firstName"
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Enter your last name"
-          name="lastName"
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Enter your email"
-          name="email"
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField label="Phone" name="phone" fullWidth margin="normal" />
+}> = ({ cartItems, handleFormSubmit }) => {
+  const { user } = useAuth();
+  return (
+    <form onSubmit={handleFormSubmit}>
+      <div className="flex justify-between">
+        <div className="w-1/2 p-4">
+          <h2 className="font-bold mb-2">User Details</h2>
+          <TextField
+            label="Enter your first name"
+            name="firstName"
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Enter your last name"
+            name="lastName"
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Enter your email"
+            name="email"
+            fullWidth
+            margin="normal"
+            required
+            defaultValue={user?.email || ""}
+            disabled
+          />
+          <TextField label="Phone" name="phone" fullWidth margin="normal" />
+        </div>
+        <div className="w-1/2 p-4">
+          <h2 className="font-bold mb-2">Billing Information</h2>
+          <TextField
+            label="House number and street address"
+            name="streetAddress"
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Town / City"
+            name="city"
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Country"
+            name="country"
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Postal Code"
+            name="postCode"
+            fullWidth
+            margin="normal"
+          />
+        </div>
+        <div>
+          <PriceTotal cartItems={cartItems} />
+          <PaymentCheckout />
+        </div>
       </div>
-      <div className="w-1/2 p-4">
-        <h2 className="font-bold mb-2">Billing Information</h2>
-        <TextField
-          label="House number and street address"
-          name="streetAddress"
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Town / City"
-          name="city"
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Country"
-          name="country"
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Postal Code"
-          name="postCode"
-          fullWidth
-          margin="normal"
-        />
+      <div className="flex justify-end mt-12">
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+        >
+          Place Order
+        </Button>
       </div>
-      <div>
-        <PriceTotal cartItems={cartItems} />
-        <PaymentCheckout />
-      </div>
-    </div>
-    <div className="flex justify-end mt-12">
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
-      >
-        Place Order
-      </Button>
-    </div>
-  </form>
-);
+    </form>
+  );
+};
 
 const OrderCompleteStep: React.FC = () => (
   <div className="text-center">
@@ -367,7 +372,7 @@ const CustomizedStepper: React.FC = () => {
     const orderData = {
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
-      email: formData.get("email"),
+      email: user?.email,
       phone: formData.get("phone"),
       streetAddress: formData.get("streetAddress"),
       city: formData.get("city"),
@@ -375,6 +380,7 @@ const CustomizedStepper: React.FC = () => {
       postCode: formData.get("postCode"),
       transactionId: formData.get("transactionId"),
       bkashNumber: formData.get("bkashNumber"),
+      nagadNumber: formData.get("nagadNumber"),
       rocketNumber: formData.get("rocketNumber"),
       grandPrice: grandTotal,
       getState: cartItemsFromRedux,
