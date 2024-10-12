@@ -48,9 +48,7 @@ const page = () => {
             </div>
           </div>
         </Grid>
-        <Grid item xs={4}>
-          s
-        </Grid>
+        <Grid item xs={4}></Grid>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={9}>
