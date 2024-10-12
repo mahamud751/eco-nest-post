@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "@mui/material";
+import { Card } from "@mui/material";
 import { CartItem } from "@/app/redux/types";
 
 export const PriceTotal: React.FC<{
