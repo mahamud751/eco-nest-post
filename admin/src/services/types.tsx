@@ -142,6 +142,7 @@ export interface User {
 }
 
 export interface Order {
+  totalGrandPrice: Order | null;
   id: string;
   getState: unknown[];
   grandPrice?: string;
@@ -221,6 +222,10 @@ export interface Student {
   school: School;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface GrandPrice {
+  totalGrandPrice: number;
 }
 
 export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";
