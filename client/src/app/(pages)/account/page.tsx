@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, Tab, Box, Paper, IconButton } from "@mui/material";
 import {
   Home,
@@ -8,6 +8,7 @@ import {
   ShoppingCart,
   PowerSettingsNew,
 } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 import { styled } from "@mui/material/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
@@ -49,8 +50,9 @@ const StyledIcon = styled("span")(({ theme, color }) => ({
   color: color || theme.palette.text.primary,
 }));
 
-const VerticalTabsWithIcons: React.FC = () => {
-  const { logoutUser } = useAuth();
+const Account: React.FC = () => {
+  const { user, logoutUser, token } = useAuth();
+  const router = useRouter();
   const [selectedTab, setSelectedTab] = useState(0);
   const photosData: { title: string; src: string }[] = [];
 
@@ -61,7 +63,11 @@ const VerticalTabsWithIcons: React.FC = () => {
   const handleLogOut = () => {
     logoutUser();
   };
-
+  useEffect(() => {
+    if (!token || !user) {
+      router.push("/login");
+    }
+  }, [token, user, router]);
   return (
     <Box className="container mx-auto py-10 flex gap-8">
       <Paper
@@ -141,4 +147,4 @@ const VerticalTabsWithIcons: React.FC = () => {
   );
 };
 
-export default VerticalTabsWithIcons;
+export default Account;

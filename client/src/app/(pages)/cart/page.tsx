@@ -3,6 +3,8 @@ import React, { FormEvent, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import {
   Stepper,
   Step,
@@ -28,8 +30,9 @@ import {
   KeyboardArrowDown,
 } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+
 import { RootState } from "@/app/redux/reducers";
 import { CartItem } from "@/app/redux/types";
 import {
@@ -39,11 +42,11 @@ import {
   update_quantity,
 } from "@/app/redux/actions/cartAction";
 import { useAppDispatch } from "@/services/hooks/useAppDispatch";
-
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 import { PriceTotal } from "@/components/pageComponents/cart/PriceTotal";
 import SuccessAnimation from "@/components/dynamics/animations/SuccessAnimation";
+import { useAuth } from "@/services/hooks/auth";
 
 const steps = [
   {
@@ -295,6 +298,9 @@ const OrderCompleteStep: React.FC = () => (
 );
 
 const CustomizedStepper: React.FC = () => {
+  const { user, token } = useAuth();
+  const router = useRouter();
+  const MySwal = withReactContent(Swal);
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
   const cartItemsFromRedux = useSelector(
@@ -303,7 +309,15 @@ const CustomizedStepper: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
-  const handleProceedToCheckout = () => handleNext();
+  const handleProceedToCheckout = () => {
+    if (!user || !token) {
+      MySwal.fire("Please login first", "", "error");
+      router.push("/login");
+      return;
+    }
+    handleNext();
+  };
+
   const handleStepClick = (step: number) => {
     if (step < activeStep) {
       setActiveStep(step);

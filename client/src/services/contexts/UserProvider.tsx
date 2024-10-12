@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, {
   createContext,
   useState,
@@ -83,6 +83,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
+        document.cookie = `authToken=${data.token}; path=/; max-age=3600`;
         setLoading(false);
       } else {
         throw new Error("Invalid email or password");
@@ -120,6 +121,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
+        document.cookie = `authToken=${data.token}; path=/; max-age=3600`;
         setLoading(false);
       } else {
         throw new Error("Registration failed");
