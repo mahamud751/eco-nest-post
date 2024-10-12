@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
         const token = data.token;
         const registeredUser = data.user;
 
+        // Store user and token in localStorage
         if (typeof window !== "undefined") {
           localStorage.setItem("user", JSON.stringify(registeredUser));
           localStorage.setItem("token", token);
@@ -54,13 +55,6 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
       }
       return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-      }
-      return session;
     },
   },
 };
