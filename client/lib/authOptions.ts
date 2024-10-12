@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             email: user.email,
             name: user.name || null,
-            password: "123456Pt!1",
+            password: "123456Pt!1", // Use a better approach for the password in real scenarios
           }),
         }
       );
@@ -50,11 +50,18 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user }) {
+      // If user is defined (on first login), add custom fields to token
       if (user) {
         token.id = user.id;
         token.email = user.email;
       }
       return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token) {
+        session.user.email = token.email;
+      }
+      return session;
     },
   },
 };
