@@ -14,8 +14,13 @@ import {
   CircularProgress,
   Button,
   TablePagination,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import dayjs from "dayjs";
+
+import Invoice from "./Invoice";
 
 const OrderDetails = () => {
   const { user } = useAuth();
@@ -28,6 +33,8 @@ const OrderDetails = () => {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const fetchOrders = async () => {
     if (!user || !user.email) {
@@ -71,6 +78,16 @@ const OrderDetails = () => {
     setPage(1);
   };
 
+  const handleInvoiceClick = (order: Order) => {
+    setSelectedOrder(order);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedOrder(null);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -84,7 +101,6 @@ const OrderDetails = () => {
       <h1 className="text-3xl font-semibold text-center mb-6 text-green-600">
         My Orders
       </h1>
-
       <div className="text-right mb-4">
         <p className="text-gray-600">Total Orders: {data?.total}</p>
       </div>
@@ -102,6 +118,9 @@ const OrderDetails = () => {
                   Email
                 </TableCell>
                 <TableCell className="p-4 text-white font-bold">Date</TableCell>
+                <TableCell className="p-4 text-white font-bold">
+                  Invoice
+                </TableCell>
                 <TableCell className="p-4 text-white font-bold">
                   Status
                 </TableCell>
@@ -124,13 +143,22 @@ const OrderDetails = () => {
                   <TableCell className="p-4">
                     <Button
                       variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleInvoiceClick(item)}
+                    >
+                      View Invoice
+                    </Button>
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <Button
+                      variant="contained"
                       color={item.status === "APPROVED" ? "success" : "error"}
                       size="small"
                       style={{
                         borderRadius: "5px",
                         padding: "2px 12px",
                         textTransform: "none",
-                        border: "none",
                       }}
                     >
                       {item.status === "APPROVED" ? "Completed" : "Pending"}
@@ -159,6 +187,13 @@ const OrderDetails = () => {
       ) : (
         <p className="text-center text-gray-500">No orders found.</p>
       )}
+
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
+        <DialogTitle>Invoice Details</DialogTitle>
+        <DialogContent>
+          <Invoice selectedOrder={selectedOrder} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -203,7 +203,7 @@ export interface Student {
 
 export interface Order {
   id: string;
-  getState: unknown[];
+  getState: OrderItem[];
   grandPrice?: string;
   selectedSize?: string;
   selectedColor?: string;
@@ -229,7 +229,6 @@ export interface Order {
   rocketTrx?: string;
   dutchNumber?: string;
   dutchTrx?: string;
-
   status: OrderStatus;
   totalAmount?: number;
   receivedTk?: number;
@@ -240,9 +239,16 @@ export interface Order {
   bookingExtend?: boolean;
   isCancel: CancelStatus;
   userCancel?: unknown;
-
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface OrderItem {
+  product: Product;
+  quantity: number;
+  price: number;
+  size: string;
+  color: string;
 }
 
 export interface Feedbacks {

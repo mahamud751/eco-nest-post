@@ -15,6 +15,7 @@ import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
 import Feedback from "@/components/pageComponents/account/Feedback";
+import Dashboard from "@/components/pageComponents/account/Dashboard";
 
 const StyledTab = styled(Tab)(({}) => ({
   minWidth: 150,
@@ -126,7 +127,11 @@ const Account: React.FC = () => {
         elevation={3}
         className="w-3/4 p-6 rounded-xl shadow-md border border-gray-200"
       >
-        {selectedTab === 0 && <div>Home Content</div>}
+        {selectedTab === 0 && (
+          <div>
+            <Dashboard />
+          </div>
+        )}
         {selectedTab === 1 && (
           <div>
             <OrderDetails />

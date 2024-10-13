@@ -1,40 +1,74 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import axios, { AxiosError } from "axios";
+
+interface UseFetchState<T> {
+  data: T | null;
+  total: number | null;
+  loading: boolean;
+  error: AxiosError | null;
+}
 
 const UseFetch = <T,>(path: string) => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [state, setState] = useState<UseFetchState<T>>({
+    data: null,
+    total: null,
+    loading: false,
+    error: null,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setState({ data: null, total: null, loading: true, error: null });
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`);
-        setData(res.data.data); // Assuming your response structure has "data" as a key
+        const res = await axios.get<{ data: T; total: number }>(
+          `https://api.korbojoy.shop/v1/${path}`
+        );
+        setState({
+          data: res.data.data,
+          total: res.data.total,
+          loading: false,
+          error: null,
+        });
       } catch (err) {
-        setError((err as Error).message);
+        setState({
+          data: null,
+          total: null,
+          loading: false,
+          error: err as AxiosError,
+        });
       }
-      setLoading(false);
     };
+
     fetchData();
   }, [path]);
 
   const reFetch = async () => {
-    setLoading(true);
+    setState({ data: null, total: null, loading: true, error: null });
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`);
-      setData(res.data.data); // Ensure we're setting the correct part of the response
+      const res = await axios.get<{ data: T; total: number }>(
+        `https://api.korbojoy.shop/v1/${path}`
+      );
+      setState({
+        data: res.data.data,
+        total: res.data.total,
+        loading: false,
+        error: null,
+      });
     } catch (err) {
-      setError((err as Error).message);
+      setState({
+        data: null,
+        total: null,
+        loading: false,
+        error: err as AxiosError,
+      });
     }
-    setLoading(false);
   };
 
   return {
-    data,
-    loading,
-    error,
+    data: state.data,
+    total: state.total,
+    loading: state.loading,
+    error: state.error,
     reFetch,
   };
 };
