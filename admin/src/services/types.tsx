@@ -239,10 +239,10 @@ export interface Student {
 export interface GrandPrice {
   data: {
     totalGrandPrice: number;
-  }
+  };
 }
 
-export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";
+export type OrderStatus = "pending" | "processing" | "delivery" | "canceled";
 
 export type CancelStatus = "YES" | "NO";
 
