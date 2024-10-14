@@ -258,7 +258,12 @@ export interface Feedbacks {
   size: string;
 }
 
-export type OrderStatus = "pending" | "processing" | "delivery" | "canceled";
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "approved"
+  | "delivered"
+  | "canceled";
 
 export type CancelStatus = "YES" | "NO";
 

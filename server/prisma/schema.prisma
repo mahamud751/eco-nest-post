@@ -358,6 +358,7 @@ enum OrderStatus {
   pending
   processing
   approved
+  delivered
   canceled
 }
 
