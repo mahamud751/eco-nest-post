@@ -2,7 +2,6 @@
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
-import Link from "next/link";
 import { Photo } from "@/services/types";
 import Image from "next/image";
 import StatusButton from "@/components/atoms/StatusButton";

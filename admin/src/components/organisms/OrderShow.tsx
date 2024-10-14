@@ -1,15 +1,15 @@
 import * as React from "react";
-import { Paper } from "@mui/material";
 import Image from "next/image";
-import { Review } from "@/services/types";
+import { Paper } from "@mui/material";
+import { Order } from "@/services/types";
 import StatusButton from "../atoms/StatusButton";
 import UseFormattedDate from "@/services/hooks/UseFormattedDate";
 
-interface ReviewShowProps {
-  data: Review;
+interface OrderShowProps {
+  data: Order;
 }
 
-const ReviewShow: React.FC<ReviewShowProps> = ({ data }) => {
+const OrderShow: React.FC<OrderShowProps> = ({ data }) => {
   return (
     <Paper elevation={3} className="p-6 rounded-lg shadow-md">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -19,15 +19,19 @@ const ReviewShow: React.FC<ReviewShowProps> = ({ data }) => {
         </div>
         <div>
           <strong className="font-bold block mb-2 text-gray-700">
-            User Name:
+            UserName
           </strong>
-          <span className="font-normal text-gray-600">{data.userName}</span>
+          <span className="font-normal text-gray-600">
+            {data.firstName} {data.lastName}
+          </span>
         </div>
         <div>
-          <strong className="font-bold block mb-2 text-gray-700">
-            Comment:
-          </strong>
-          <span className="font-normal text-gray-600">{data.comment}</span>
+          <strong className="font-bold block mb-2 text-gray-700">Email</strong>
+          <span className="font-normal text-gray-600">{data.email}</span>
+        </div>
+        <div>
+          <strong className="font-bold block mb-2 text-gray-700">Phone </strong>
+          <span className="font-normal text-gray-600">{data.phone}</span>
         </div>
 
         <div>
@@ -53,26 +57,8 @@ const ReviewShow: React.FC<ReviewShowProps> = ({ data }) => {
           </span>
         </div>
       </div>
-
-      <>
-        <h3 className="text-lg font-bold mt-2">Photo:</h3>
-        <div className="flex">
-          {data?.photos?.map((photo, index) => (
-            <div key={index} className="mt-4 flex">
-              {" "}
-              <Image
-                src={photo.src}
-                alt={"review"}
-                className="rounded me-4"
-                width={80}
-                height={80}
-              />
-            </div>
-          ))}
-        </div>
-      </>
     </Paper>
   );
 };
 
-export default ReviewShow;
+export default OrderShow;

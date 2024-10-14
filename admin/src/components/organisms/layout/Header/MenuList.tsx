@@ -23,6 +23,8 @@ import {
   School,
   LiveHelp,
   Pages,
+  ReviewsOutlined,
+  ShoppingBasketOutlined,
 } from "@mui/icons-material";
 
 import styles from "../../../../css/Header.module.css";
@@ -229,18 +231,15 @@ export default function MenuList({ open }: MenuListProps) {
     },
     {
       text: "Review",
-      icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
-      path: "/reviews",
-      submenus: [
-        {
-          text: "Add Review",
-          path: "/add-review",
-        },
-        {
-          text: "Review List",
-          path: "/review-list",
-        },
-      ],
+      icon: <ReviewsOutlined className="text-blue-500" />,
+      path: "/review-list",
+      submenus: [],
+    },
+    {
+      text: "Order",
+      icon: <ShoppingBasketOutlined className="text-purple-500" />,
+      path: "/order-list",
+      submenus: [],
     },
     {
       text: "Dynamic",
@@ -261,9 +260,9 @@ export default function MenuList({ open }: MenuListProps) {
 
   const menuItems = isClient
     ? [
-      ...commonMenuItems,
-      ...(user?.role === "superAdmin" ? adminMenuItems : []),
-    ]
+        ...commonMenuItems,
+        ...(user?.role === "superAdmin" ? adminMenuItems : []),
+      ]
     : commonMenuItems;
 
   return (

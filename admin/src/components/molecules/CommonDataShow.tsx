@@ -71,7 +71,6 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
             {data?.photos?.map((photo, index) => (
               <div key={index} className="mt-4 flex">
                 {" "}
-                {/* key added here */}
                 <Image
                   src={photo.src}
                   alt={data.name}

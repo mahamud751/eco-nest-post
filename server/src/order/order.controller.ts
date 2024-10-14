@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Query, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Put,
+  Patch,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
@@ -61,7 +70,7 @@ export class OrderController {
     return this.orderService.getOrderById(id);
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   @ApiOperation({ summary: 'Update an order' })
   @ApiParam({ name: 'id', description: 'Order ID' })
   @ApiResponse({ status: 200, description: 'The updated order details' })
