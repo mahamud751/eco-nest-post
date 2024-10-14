@@ -42,10 +42,10 @@ const EditOrder: React.FC<BaseEditProps> = ({ params }) => {
             value={status}
             onChange={handleStatusChange}
           >
-            <MenuItem value="PENDING">Pending</MenuItem>
-            <MenuItem value="PROCESSING">Processing</MenuItem>
-            <MenuItem value="APPROVED">Approved</MenuItem>
-            <MenuItem value="CANCELED">Canceled</MenuItem>
+            <MenuItem value="pending">Pending</MenuItem>
+            <MenuItem value="processing">Processing</MenuItem>
+            <MenuItem value="approved">Approved</MenuItem>
+            <MenuItem value="canceled">Canceled</MenuItem>
           </Select>
         </FormControl>
       </Grid>

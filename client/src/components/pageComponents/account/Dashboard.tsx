@@ -13,7 +13,7 @@ const Dashboard = () => {
     : { data: [], total: 0 };
 
   const pendingOrdersCount = Array.isArray(orders)
-    ? orders.filter((order) => order.status === "PENDING").length
+    ? orders.filter((order) => order.status === "pending").length
     : 0;
   return (
     <>

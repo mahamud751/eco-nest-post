@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Query,
-  Put,
   Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
