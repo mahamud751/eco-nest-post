@@ -11,6 +11,7 @@ const page = () => {
   const { data: totalGrandPrice } = UseFetch<GrandPrice>(
     `orders/totalGrandPrice`
   );
+
   const { total: customOrder } = UseFetch<Advance>(`advance`);
   return (
     <>
@@ -39,7 +40,7 @@ const page = () => {
               <div className="ms-3 text-white">
                 <p className="fs-5 text-[20px]">Ecommerce Order Amount</p>
                 <p className="fw-bold text-[14px]">
-                  ৳ {totalGrandPrice?.totalGrandPrice}
+                  ৳ {totalGrandPrice?.data?.totalGrandPrice}
                 </p>
               </div>
             </div>

@@ -225,7 +225,9 @@ export interface Student {
 }
 
 export interface GrandPrice {
-  totalGrandPrice: number;
+  data: {
+    totalGrandPrice: number;
+  }
 }
 
 export type OrderStatus = "PENDING" | "PROCESSING" | "APPROVED" | "CANCELED";
