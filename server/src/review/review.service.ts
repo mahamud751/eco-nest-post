@@ -73,7 +73,6 @@ export class ReviewService {
     const review = await this.prisma.review.findUnique({
       where: { id },
     });
-
     if (!review) {
       throw new NotFoundException('Review not found');
     }
