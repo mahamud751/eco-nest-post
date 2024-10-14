@@ -13,7 +13,6 @@ import { BaseEditProps, Order } from "@/services/types";
 
 import AddForm from "@/components/templates/AddForm";
 import useFetch from "@/services/hooks/UseRequest";
-import StatusSelect from "@/components/molecules/StatusSelect";
 import LoadingError from "@/components/atoms/LoadingError";
 
 const EditOrder: React.FC<BaseEditProps> = ({ params }) => {

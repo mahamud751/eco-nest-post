@@ -281,7 +281,7 @@ model Order {
   dutchNumber   String?
   dutchTrx      String?
 
-  status         OrderStatus  @default(PENDING)
+  status         OrderStatus  @default(pending)
   totalAmount    Float?
   receivedTk     Float?
   dueAmount      Float?
@@ -355,10 +355,10 @@ enum VendorStatus {
 }
 
 enum OrderStatus {
-  PENDING
-  PROCESSING
-  APPROVED
-  CANCELED
+  pending
+  processing
+  approved
+  canceled
 }
 
 enum CancelStatus {

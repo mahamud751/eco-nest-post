@@ -31,6 +31,7 @@ const StyledButton = styled(Button)<{ status: string }>(({ theme, status }) => {
     case "inactive":
     case "reject":
     case "deactive":
+    case "canceled":
     case "blocked":
       backgroundColor = isDarkMode ? "#f44336" : "rgba(251, 233, 231, 0.8)";
       color = isDarkMode ? "#ffffff" : "rgb(216, 67, 21)";
