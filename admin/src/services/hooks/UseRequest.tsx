@@ -24,7 +24,7 @@ const UseFetch = <T,>(path: string) => {
           `https://api.korbojoy.shop/v1/${path}`
         );
         setState({
-          data: res.data.data,
+          data: res.data as T,
           total: res.data.total,
           loading: false,
           error: null,
@@ -49,7 +49,7 @@ const UseFetch = <T,>(path: string) => {
         `https://api.korbojoy.shop/v1/${path}`
       );
       setState({
-        data: res.data.data,
+        data: res.data as T,
         total: res.data.total,
         loading: false,
         error: null,
