@@ -153,7 +153,7 @@ const OrderDetails = () => {
                   <TableCell className="p-4">
                     <Button
                       variant="contained"
-                      color={item?.status === "delivery" ? "success" : "error"}
+                      color={item?.status === "delivered" ? "success" : "error"}
                       size="small"
                       style={{
                         borderRadius: "5px",
@@ -161,7 +161,7 @@ const OrderDetails = () => {
                         textTransform: "none",
                       }}
                     >
-                      {item?.status === "delivery" ? "Completed" : "Pending"}
+                      {item?.status === "delivered" ? "Completed" : "Pending"}
                     </Button>
                   </TableCell>
                 </TableRow>
