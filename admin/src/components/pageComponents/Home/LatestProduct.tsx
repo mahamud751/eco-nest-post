@@ -46,7 +46,7 @@ const LatestProduct = () => {
       searchField="name"
       defaultHiddenColumns={[""]}
       link="product-list"
-      isJustData={false}
+      isJustCreateData={false}
     />
   );
 };

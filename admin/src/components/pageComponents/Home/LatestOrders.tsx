@@ -39,7 +39,7 @@ const LatestOrders = () => {
       searchField="name"
       defaultHiddenColumns={["photos"]}
       link="product-list"
-      isJustData={false}
+      isJustCreateData={false}
     />
   );
 };
