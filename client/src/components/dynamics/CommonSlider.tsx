@@ -29,7 +29,9 @@ const CommonSlider = <T extends { id: string }>({
   const { data: items, loading, error } = UseFetch<T[]>(endpoint);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error || !items || items.length === 0) {
+    return <div>Failed to load items or no items available</div>;
+  }
 
   return (
     <div>
