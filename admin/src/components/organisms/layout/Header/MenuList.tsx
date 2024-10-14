@@ -228,6 +228,21 @@ export default function MenuList({ open }: MenuListProps) {
       ],
     },
     {
+      text: "Review",
+      icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
+      path: "/reviews",
+      submenus: [
+        {
+          text: "Add Review",
+          path: "/add-review",
+        },
+        {
+          text: "Review List",
+          path: "/review-list",
+        },
+      ],
+    },
+    {
       text: "Dynamic",
       icon: <Pages className="text-sky-800 " />,
       path: "/dynamic",
@@ -246,9 +261,9 @@ export default function MenuList({ open }: MenuListProps) {
 
   const menuItems = isClient
     ? [
-        ...commonMenuItems,
-        ...(user?.role === "superAdmin" ? adminMenuItems : []),
-      ]
+      ...commonMenuItems,
+      ...(user?.role === "superAdmin" ? adminMenuItems : []),
+    ]
     : commonMenuItems;
 
   return (

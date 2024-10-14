@@ -5,7 +5,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 
 @Injectable()
 export class ReviewService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createReview(data: CreateReviewDto) {
     const product = await this.prisma.product.findUnique({
@@ -67,6 +67,17 @@ export class ReviewService {
     }
 
     return reviews;
+  }
+
+  async findOne(id: string) {
+    const review = await this.prisma.review.findUnique({
+      where: { id },
+    });
+
+    if (!review) {
+      throw new NotFoundException('Review not found');
+    }
+    return review;
   }
 
   async replyToReview(reviewId: string, body: string, userName: string) {

@@ -54,7 +54,8 @@ interface DataTableProps {
   defaultHiddenColumns?: string[];
   searchField?: string;
   enableExport?: boolean;
-  isJustData?: boolean;
+  isJustCreateData?: boolean;
+  isJustEditData?: boolean;
 }
 function Pagination({
   page,
@@ -74,12 +75,12 @@ function Pagination({
       onChange={(event, newPage) => {
         onPageChange(event as any, newPage - 1);
       }}
-      // renderItem={(item) => (
-      //   <PaginationItem
-      //     slots={{ previous: ArrowBack, next: ArrowForward }}
-      //     {...item}
-      //   />
-      // )}
+    // renderItem={(item) => (
+    //   <PaginationItem
+    //     slots={{ previous: ArrowBack, next: ArrowForward }}
+    //     {...item}
+    //   />
+    // )}
     />
   );
 }
@@ -96,7 +97,8 @@ const DataTable: React.FC<DataTableProps> = ({
   defaultHiddenColumns = [],
   searchField = "name",
   enableExport = true,
-  isJustData = true,
+  isJustCreateData = true,
+  isJustEditData = true,
 }) => {
   const theme = useTheme();
   console.log(link);
@@ -314,35 +316,35 @@ const DataTable: React.FC<DataTableProps> = ({
   };
   const modifiedColumns = [
     ...columns.filter((col) => columnVisibility[col.field]),
-    ...(isJustData
+    ...(isJustEditData
       ? [
-          {
-            field: "action",
-            headerName: "Action",
-            flex: 1,
-            renderCell: (params: { id: { toString: () => string } }) => (
-              <div>
-                <Link href={`${firstPart}-show/${params.id}`}>
-                  <RemoveRedEyeIcon color="success" />
-                </Link>
-                <Link href={`${link}/${params.id}`}>
-                  <Edit color="action" className="mx-2" />
-                </Link>
-                <Delete
-                  color="error"
-                  onClick={() => handleDelete(params.id.toString())}
-                  className="cursor-pointer"
-                />
-              </div>
-            ),
-          },
-        ]
+        {
+          field: "action",
+          headerName: "Action",
+          flex: 1,
+          renderCell: (params: { id: { toString: () => string } }) => (
+            <div>
+              <Link href={`${firstPart}-show/${params.id}`}>
+                <RemoveRedEyeIcon color="success" />
+              </Link>
+              <Link href={`${link}/${params.id}`}>
+                <Edit color="action" className="mx-2" />
+              </Link>
+              <Delete
+                color="error"
+                onClick={() => handleDelete(params.id.toString())}
+                className="cursor-pointer"
+              />
+            </div>
+          ),
+        },
+      ]
       : []),
   ];
 
   return (
     <>
-      {isJustData && (
+      {isJustCreateData && (
         <div className="flex justify-end items-center mb-4">
           {" "}
           <Link href={`/add-${firstPart}`}>
@@ -369,7 +371,7 @@ const DataTable: React.FC<DataTableProps> = ({
             }}
             className="mr-4"
           />
-          {isJustData && (
+          {isJustEditData && (
             <div>
               <Button
                 variant="contained"
@@ -429,9 +431,8 @@ const DataTable: React.FC<DataTableProps> = ({
               ...transitionStyles,
               "& .MuiDataGrid-columnHeaders": customStyles.header,
               "& .MuiDataGrid-cell": {
-                borderBottom: `1px solid ${
-                  theme.palette.mode === "dark" ? "#444" : "#E0E0E0"
-                }`,
+                borderBottom: `1px solid ${theme.palette.mode === "dark" ? "#444" : "#E0E0E0"
+                  }`,
               },
               "& .MuiDataGrid-row:hover": {
                 backgroundColor:

@@ -83,14 +83,14 @@ const CustomVendorOrder: React.FC = () => {
         columns={columns}
         searchField="name"
         link="order-list"
-        isJustData={false}
+        isJustCreateData={false}
       />
       {selectedOrderId && (
         <DemoSubmitModal
           open={open}
           handleClose={handleClose}
           orderId={selectedOrderId}
-          refetch={() => {}}
+          refetch={() => { }}
         />
       )}
     </>

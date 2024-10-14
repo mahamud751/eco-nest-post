@@ -22,7 +22,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 @ApiTags('Reviews')
 @Controller('reviews')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) {}
+  constructor(private readonly reviewService: ReviewService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new review' })
@@ -73,6 +73,15 @@ export class ReviewController {
   })
   async getReviewsByUser(@Query('email') email: string) {
     return this.reviewService.getReviewsByUser(email);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a review by id' })
+  @ApiParam({ name: 'id', description: 'ID of the review to retrieve' })
+  @ApiResponse({ status: 200, description: 'Return the review.' })
+  @ApiResponse({ status: 404, description: 'review not found.' })
+  findOne(@Param('id') id: string) {
+    return this.reviewService.findOne(id);
   }
 
   @Patch(':id/reply')

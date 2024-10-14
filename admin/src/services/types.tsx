@@ -69,6 +69,18 @@ export interface Product {
   updatedAt: Date;
 }
 
+export interface Review {
+  id: string;
+  productId: string;
+  photos: Photo[];
+  userName: string;
+  comment: string;
+  rating: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface BlogComment {
   id: string;
   userName: string;
