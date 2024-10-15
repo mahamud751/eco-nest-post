@@ -32,6 +32,7 @@ import { useSnackbar } from "@/services/contexts/useSnackbar";
 import { CartItem } from "@/app/redux/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useAuth } from "@/services/hooks/auth";
+import LatestProduct from "@/components/pageComponents/home/LatestProduct";
 
 interface ProductDetailsProps {
   params: {
@@ -230,7 +231,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                       Category: {categoryName}
                     </Typography>
                     <Typography variant="body1" className="text-gray-600 mb-4">
-                      {product?.desc}
+                      {product?.desc.slice(0, 400)}...
                     </Typography>
                     <Box className="flex items-center space-x-2 mb-6">
                       <VisibilityIcon className="text-[#286156]" />
@@ -380,14 +381,9 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
             </CardContent>
           </Card>
 
-          <Card className="border">
+          <Card className="border mt-3">
             <CardContent>
-              <Image
-                src="/image3.jpg"
-                alt="Sample Image"
-                width={300}
-                height={300}
-              />
+              <LatestProduct />
             </CardContent>
           </Card>
         </Grid>
