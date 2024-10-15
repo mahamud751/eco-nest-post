@@ -2,10 +2,10 @@ export interface Category {
   id: string;
   name: string;
   photos: Photo[];
-
   status: string;
   createdAt: Date;
   updatedAt: Date;
+  products: Product[];
 }
 
 export interface Banner {
