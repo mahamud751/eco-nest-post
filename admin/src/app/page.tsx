@@ -1,14 +1,16 @@
 "use client";
 import { Grid } from "@mui/material";
 import React from "react";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
+import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import InsightsOutlinedIcon from "@mui/icons-material/InsightsOutlined";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
 import UseFetch from "@/services/hooks/UseRequest";
 import { Advance, GrandPrice, Order } from "@/services/types";
 import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
 import { useTheme } from "@mui/material/styles";
 
-const page = () => {
+const Page = () => {
   const { total: orderTotal } = UseFetch<Order>(`orders`);
   const { data: totalGrandPrice } = UseFetch<GrandPrice>(
     `orders/totalGrandPrice`
@@ -22,13 +24,18 @@ const page = () => {
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <div
-            className={`rounded-[15px] p-5 ${
-              theme.palette.mode === "dark" ? "bg-[#2d7f7a]" : "bg-[#35b0a7]"
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#2d7f7a] to-[#35b0a7]"
+                : "from-[#35b0a7] to-[#2d7f7a]"
             }`}
           >
             <div className="flex p-3">
               <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
-                <TrendingUpIcon className="text-white" fontSize="large" />
+                <SignalCellularAltOutlinedIcon
+                  className="text-white"
+                  fontSize="large"
+                />
               </div>
               <div className="ms-3 text-white">
                 <p className="fs-5 text-[20px]">Total Ecommerce Orders</p>
@@ -39,13 +46,15 @@ const page = () => {
         </Grid>
         <Grid item xs={4}>
           <div
-            className={`rounded-[15px] p-5 ${
-              theme.palette.mode === "dark" ? "bg-[#6b2c7e]" : "bg-[#8e44ad]"
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#6b2c7e] to-[#8e44ad]"
+                : "from-[#8e44ad] to-[#6b2c7e]"
             }`}
           >
             <div className="flex p-3">
               <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
-                <TrendingUpIcon className="text-white" fontSize="large" />
+                <TimelineOutlinedIcon className="text-white" fontSize="large" />
               </div>
               <div className="ms-3 text-white">
                 <p className="fs-5 text-[20px]">Ecommerce Order Amount</p>
@@ -56,15 +65,18 @@ const page = () => {
             </div>
           </div>
         </Grid>
+
         <Grid item xs={4}>
           <div
-            className={`rounded-[15px] p-5 ${
-              theme.palette.mode === "dark" ? "bg-[#b94768]" : "bg-[#E55A7E]"
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#b94768] to-[#E55A7E]"
+                : "from-[#E55A7E] to-[#b94768]"
             }`}
           >
             <div className="flex p-3">
               <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
-                <TrendingUpIcon className="text-white" fontSize="large" />
+                <InsightsOutlinedIcon className="text-white" fontSize="large" />
               </div>
               <div className="ms-3 text-white">
                 <p className="fs-5 text-[20px]">Total Custom Orders</p>
@@ -87,4 +99,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

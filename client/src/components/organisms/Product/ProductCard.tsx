@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useState } from "react";
 import { Card, CardContent, IconButton, Typography } from "@mui/material";
-import { Favorite, Info } from "@mui/icons-material";
+import { AddShoppingCart, Favorite, Info } from "@mui/icons-material";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import Link from "next/link";
@@ -162,26 +162,35 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         }}
       >
         <Link href={`/productDetails/${product.id}`}>
+          <Typography
+            variant="body1"
+            component="div"
+            className="font-semibold mb-2"
+          >
+            {product.name.slice(0, 40)}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" className="mb-2">
+            {product.fulldesc.slice(0, 60)}
+          </Typography>
           <div className="flex items-center justify-around">
             <div>
               <Typography
-                variant="body1"
-                component="div"
-                className="font-semibold mb-2"
-              >
-                {product.name}
-              </Typography>
-              <Typography
-                variant="body2"
+                variant="h6"
                 color="textSecondary"
-                className="mb-2"
+                className="mb-2 text-[#088178] font-extrabold"
               >
-                {product.fulldesc}
+                ৳ {product.price}
               </Typography>
             </div>
-            <Typography variant="h6" component="div" className="font-bold">
-              ৳{product.price}
-            </Typography>
+            <div className="relative group">
+              <IconButton className="bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out group-hover:bg-[#088178] group-hover:scale-110">
+                <AddShoppingCart className="text-[#088178] group-hover:text-white" />
+              </IconButton>
+              <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
+                Add to Cart
+                <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
+              </span>
+            </div>
           </div>
         </Link>
       </CardContent>

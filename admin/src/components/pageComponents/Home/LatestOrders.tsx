@@ -2,7 +2,6 @@
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
 import { getCommonColumns } from "@/components/templates/CommonColums";
-import UseFormattedDate from "@/services/hooks/UseFormattedDate";
 
 const LatestOrders = () => {
   const columns = getCommonColumns([
@@ -19,16 +18,6 @@ const LatestOrders = () => {
     },
 
     { field: "email", headerName: "Email", flex: 1 },
-    {
-      field: "createdAt",
-      headerName: "Created At",
-      flex: 1,
-      renderCell: (params) => (
-        <div>
-          <p>{UseFormattedDate(params.row?.createdAt) || "N/A"}</p>
-        </div>
-      ),
-    },
   ]);
 
   return (

@@ -33,7 +33,7 @@ const AdditionalTab = ({ product }: AdditionalTabProps) => {
     switch (value) {
       case 0:
         return (
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center w-full">
             <Image
               src={product?.photos[0]?.src || ""}
               alt="Selected Image"

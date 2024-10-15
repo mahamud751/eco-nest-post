@@ -72,13 +72,13 @@ const Blogs = () => {
                     </div>
                     <div className="flex flex-1 flex-col justify-between bg-white p-6">
                       <div className="flex-1">
-                        <a href="#" className="mt-2 block">
+                        <a href="#" className="mt-1 block">
                           <p className="text-xl font-semibold text-gray-900">
-                            {item.name}
+                            {item.name.slice(0, 30)}
                           </p>
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: item?.desc.slice(0, 150),
+                              __html: item?.desc.slice(0, 90),
                             }}
                             className="mt-3 text-base text-gray-500"
                           />
