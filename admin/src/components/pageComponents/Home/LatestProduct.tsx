@@ -9,15 +9,9 @@ const LatestProduct = () => {
       field: "categoryName",
       headerName: "Category Name",
       flex: 1,
-      renderCell: (params) => (
-        <div className="my-2">
-          <p>{params.row.category?.name}</p>
-        </div>
-      ),
+      renderCell: (params) => <p>{params.row.category?.name}</p>,
     },
     { field: "price", headerName: "Price", flex: 1 },
-    { field: "discountPrice", headerName: "Discount Price", flex: 1 },
-    { field: "flashsale", headerName: "Flashsale", flex: 1 },
     {
       field: "sizes",
       headerName: "Sizes",

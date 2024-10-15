@@ -1,6 +1,5 @@
 import { createTheme } from "@mui/material/styles";
 
-// Common component overrides
 const componentOverrides = {
   MuiTextField: {
     styleOverrides: {
@@ -60,7 +59,6 @@ const componentOverrides = {
   },
 };
 
-// Light theme
 export const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -76,13 +74,12 @@ export const lightTheme = createTheme({
   components: componentOverrides,
 });
 
-// Dark theme
 export const darkTheme = createTheme({
   palette: {
     mode: "dark",
     background: {
       default: "#121212",
-      paper: "#1e1e1e",
+      paper: "#1C262E",
     },
     text: {
       primary: "#ffffff",

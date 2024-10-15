@@ -21,6 +21,7 @@ import Image from "next/image";
 
 import ProfileMenu from "./ProfileMenu";
 import MenuList from "./MenuList";
+import { useTheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
@@ -116,6 +117,7 @@ export default function AppMenu({
   darkMode,
   toggleDarkMode,
 }: AppMenuProps) {
+  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -147,7 +149,6 @@ export default function AppMenu({
           </IconButton>
 
           <div className="flex justify-end w-full">
-            {/* Add Dark Mode Toggle Button */}
             <IconButton
               onClick={toggleDarkMode}
               style={{ marginLeft: 8, color: "black" }}
@@ -171,13 +172,18 @@ export default function AppMenu({
             <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
               {open ? (
                 <MenuIcon
-                  className="relative flex items-center justify-center flex-shrink-0 font-sans 
-              bg-purple-50 cursor-pointer rounded-md w-[24px] h-[34px] 
-              text-[1.2rem] overflow-hidden transition-transform 
-              duration-200 ease-in-out text-purple-700 "
+                  className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
+          text-[1.2rem] overflow-hidden transition-transform duration-200 ease-in-out
+          ${
+            theme.palette.mode === "dark"
+              ? "bg-transparent text-white" // Dark theme styles
+              : "bg-purple-50 text-purple-700" // Light theme styles
+          }`}
                 />
               ) : (
-                <ChevronRightIcon />
+                <ChevronRightIcon
+                  className={theme.palette.mode === "dark" ? "text-white" : ""}
+                />
               )}
             </IconButton>
           </div>

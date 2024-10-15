@@ -75,12 +75,12 @@ function Pagination({
       onChange={(event, newPage) => {
         onPageChange(event as any, newPage - 1);
       }}
-    // renderItem={(item) => (
-    //   <PaginationItem
-    //     slots={{ previous: ArrowBack, next: ArrowForward }}
-    //     {...item}
-    //   />
-    // )}
+      // renderItem={(item) => (
+      //   <PaginationItem
+      //     slots={{ previous: ArrowBack, next: ArrowForward }}
+      //     {...item}
+      //   />
+      // )}
     />
   );
 }
@@ -101,7 +101,6 @@ const DataTable: React.FC<DataTableProps> = ({
   isJustEditData = true,
 }) => {
   const theme = useTheme();
-  console.log(link);
 
   const customStyles = {
     header: {
@@ -242,7 +241,6 @@ const DataTable: React.FC<DataTableProps> = ({
       return stringValue;
     };
 
-    // Ensure that the 'categoryName' field is included in the columns and headers
     const headers = columns
       .filter((col) => col.field !== "action" && columnVisibility[col.field])
       .map((col) => escapeCsvValue(col.headerName))
@@ -318,27 +316,27 @@ const DataTable: React.FC<DataTableProps> = ({
     ...columns.filter((col) => columnVisibility[col.field]),
     ...(isJustEditData
       ? [
-        {
-          field: "action",
-          headerName: "Action",
-          flex: 1,
-          renderCell: (params: { id: { toString: () => string } }) => (
-            <div>
-              <Link href={`${firstPart}-show/${params.id}`}>
-                <RemoveRedEyeIcon color="success" />
-              </Link>
-              <Link href={`${link}/${params.id}`}>
-                <Edit color="action" className="mx-2" />
-              </Link>
-              <Delete
-                color="error"
-                onClick={() => handleDelete(params.id.toString())}
-                className="cursor-pointer"
-              />
-            </div>
-          ),
-        },
-      ]
+          {
+            field: "action",
+            headerName: "Action",
+            flex: 1,
+            renderCell: (params: { id: { toString: () => string } }) => (
+              <div>
+                <Link href={`${firstPart}-show/${params.id}`}>
+                  <RemoveRedEyeIcon color="success" />
+                </Link>
+                <Link href={`${link}/${params.id}`}>
+                  <Edit color="action" className="mx-2" />
+                </Link>
+                <Delete
+                  color="error"
+                  onClick={() => handleDelete(params.id.toString())}
+                  className="cursor-pointer"
+                />
+              </div>
+            ),
+          },
+        ]
       : []),
   ];
 
@@ -379,23 +377,37 @@ const DataTable: React.FC<DataTableProps> = ({
                 startIcon={<Delete />}
                 onClick={handleBulkDelete}
                 disabled={selectedIds.length === 0}
-                className="bg-red-600 hover:bg-red-800 text-white"
+                className={`${
+                  theme.palette.mode === "dark"
+                    ? "bg-red-800 hover:bg-red-900 text-white"
+                    : "bg-red-600 hover:bg-red-800 text-white"
+                }`}
               >
                 Delete
               </Button>
+
               {enableExport && (
                 <Button
                   startIcon={<FileDownload />}
                   onClick={handleExport}
-                  className="mr-2 text-emerald-950"
+                  className={`mr-2 ${
+                    theme.palette.mode === "dark"
+                      ? "text-emerald-500"
+                      : "text-emerald-950"
+                  }`}
                 >
                   Export
                 </Button>
               )}
+
               <Button
                 startIcon={<Print />}
                 onClick={handlePrint}
-                className="mr-2 text-emerald-950"
+                className={`mr-2 ${
+                  theme.palette.mode === "dark"
+                    ? "text-emerald-500"
+                    : "text-emerald-950"
+                }`}
               >
                 Print
               </Button>
@@ -431,8 +443,9 @@ const DataTable: React.FC<DataTableProps> = ({
               ...transitionStyles,
               "& .MuiDataGrid-columnHeaders": customStyles.header,
               "& .MuiDataGrid-cell": {
-                borderBottom: `1px solid ${theme.palette.mode === "dark" ? "#444" : "#E0E0E0"
-                  }`,
+                borderBottom: `1px solid ${
+                  theme.palette.mode === "dark" ? "#444" : "#E0E0E0"
+                }`,
               },
               "& .MuiDataGrid-row:hover": {
                 backgroundColor:

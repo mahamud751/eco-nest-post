@@ -11,7 +11,7 @@ const LatestOrders = () => {
       headerName: "Name",
       flex: 1,
       renderCell: (params) => (
-        <div className="my-2">
+        <div>
           <p>{params.row.firstName}</p>
           <p>{params.row.lastName}</p>
         </div>
@@ -24,7 +24,7 @@ const LatestOrders = () => {
       headerName: "Created At",
       flex: 1,
       renderCell: (params) => (
-        <div className="my-2">
+        <div>
           <p>{UseFormattedDate(params.row?.createdAt) || "N/A"}</p>
         </div>
       ),

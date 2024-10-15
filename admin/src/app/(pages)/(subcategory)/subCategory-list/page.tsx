@@ -10,7 +10,7 @@ const SubCategoryList = () => {
       headerName: "Category Name",
       flex: 1,
       renderCell: (params) => (
-        <div className="my-2">
+        <div>
           <p>{params.row.category?.name}</p>
         </div>
       ),

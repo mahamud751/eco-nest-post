@@ -8,7 +8,13 @@ export const getCommonColumns = (
   additionalColumns: GridColDef[]
 ): GridColDef[] => {
   const commonColumns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
+    {
+      field: "id",
+      headerName: "No",
+      filterable: false,
+      renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    },
+
     { field: "name", headerName: "Name", flex: 1 },
   ];
   const photoColumn: GridColDef = {

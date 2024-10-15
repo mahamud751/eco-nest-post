@@ -6,11 +6,9 @@ import DataTable from "@/components/templates/DataTable";
 import InvoiceModal from "./InvoiceModal";
 import { Order } from "@/services/types";
 
-
 const OrderList = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   const handleOpenModal = (order: Order) => {
     setSelectedOrder(order);
@@ -29,11 +27,9 @@ const OrderList = () => {
       headerName: "User Name",
       flex: 1,
       renderCell: (params) => (
-        <div className="my-2">
-          <p>
-            {params.row?.firstName} {params.row?.lastName}
-          </p>
-        </div>
+        <p>
+          {params.row?.firstName} {params.row?.lastName}
+        </p>
       ),
     },
     { field: "email", headerName: "Email", flex: 1 },
@@ -51,8 +47,9 @@ const OrderList = () => {
       flex: 1,
       renderCell: (params) => (
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="mt-3 flex justify-center items-center bg-red-500 text-white px-4 rounded"
           onClick={() => handleOpenModal(params.row)}
+          style={{ height: 27 }}
         >
           View Invoice
         </button>
