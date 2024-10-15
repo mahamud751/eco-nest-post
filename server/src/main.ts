@@ -7,12 +7,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import * as express from 'express';
+import { AllExceptionsFilter } from './filter-all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
-
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json({ limit: '50mb' }));
