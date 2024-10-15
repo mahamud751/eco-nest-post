@@ -167,7 +167,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             component="div"
             className="font-semibold mb-2"
           >
-            {product.name.slice(0, 40)}
+            {product.name.slice(0, 20)}
           </Typography>
           <Typography variant="body2" color="textSecondary" className="mb-2">
             {product.fulldesc.slice(0, 60)}

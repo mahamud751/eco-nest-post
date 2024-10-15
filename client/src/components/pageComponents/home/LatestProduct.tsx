@@ -114,9 +114,9 @@ const LatestProduct: FC = () => {
             {products?.map((product) => (
               <SwiperSlide key={product.id} style={{ height: 90 }}>
                 <ProductCard
-                  photo={product.photos[0]?.src || ""}
-                  productName={product.name}
-                  price={product.price}
+                  photo={product?.photos[0]?.src || ""}
+                  productName={product?.name.slice(0, 20)}
+                  price={product?.price}
                 />
               </SwiperSlide>
             ))}
