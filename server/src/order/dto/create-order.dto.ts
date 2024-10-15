@@ -239,7 +239,7 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'Status of the order',
     enum: OrderStatus,
-    default: OrderStatus.PENDING,
+    default: OrderStatus.pending,
   })
   @IsOptional()
   @IsEnum(OrderStatus)
