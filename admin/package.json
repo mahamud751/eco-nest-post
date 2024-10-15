@@ -17,6 +17,7 @@
     "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
+    "dayjs": "^1.11.13",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",

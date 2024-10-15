@@ -156,7 +156,7 @@ export interface User {
 export interface Order {
   totalGrandPrice: Order | null;
   id: string;
-  getState: unknown[];
+  getState: OrderItem[];
   grandPrice?: string;
   selectedSize?: string;
   selectedColor?: string;
@@ -198,6 +198,13 @@ export interface Order {
   updatedAt: Date;
 }
 
+export interface OrderItem {
+  product: Product;
+  quantity: number;
+  price: number;
+  size: string;
+  color: string;
+}
 export interface School {
   id: string;
   name: string;

@@ -16,8 +16,8 @@ const ProductsPage = () => {
         <Image
           width={2000}
           height={640}
-          src={product.photos[0].src}
-          alt={product.name || "Product Image"}
+          src={product?.photos[0]?.src}
+          alt={product?.name || "Product Image"}
           style={{
             height: 600,
           }}
