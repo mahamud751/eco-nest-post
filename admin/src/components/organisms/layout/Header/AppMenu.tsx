@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import {
   Box,
@@ -17,11 +17,17 @@ import {
   ChevronRight as ChevronRightIcon,
   DarkMode,
   LightMode,
+  Language,
+  ShoppingCart,
+  Notifications,
 } from "@mui/icons-material";
 import { useTheme, styled, Theme, CSSObject } from "@mui/material/styles";
 
 import UnifiedMenu from "./MainMenu";
 import ProfileMenu from "./ProfileMenu";
+import LanguageModal from "../AllHeaderModal/Language";
+import CartModal from "../AllHeaderModal/CartModal";
+import NotificationModal from "../AllHeaderModal/Notification";
 
 const drawerWidth = 240;
 
@@ -121,12 +127,61 @@ export default function AppMenu({
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(!isSmallScreen);
+  const [openLanguageModal, setOpenLanguageModal] = useState(false);
+  const [openCartModal, setOpenCartModal] = useState(false);
+  const [openNotificationModal, setOpenNotificationModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorElLanguage, setAnchorElLanguage] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElNotification, setAnchorElNotification] =
+    useState<null | HTMLElement>(null);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const notifications = [
+    { message: "New message received", read: false },
+    { message: "Order shipped", read: true },
+  ];
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 1,
+      image:
+        "https://i.ibb.co.com/Sx1t5ZZ/2024-Luxury-Clothing-Men-s-Genuine-Linen-Shirt-Man-Shirts-High-Quality-Fashion-Blouses-Social-T-jpg.jpg",
+      name: "Item 1",
+      price: 10,
+      quantity: 1,
+    },
+    {
+      id: 2,
+      image: "https://i.ibb.co.com/d6rGWKR/product-3-1.jpg",
+      name: "Item 2",
+      price: 20,
+      quantity: 2,
+    },
+  ]);
+  const handleToggleCartModal = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setOpenCartModal((prev) => !prev);
+  };
+  const handleLanguageModalOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElLanguage(event.currentTarget);
+    setOpenLanguageModal((prev) => !prev);
+  };
+  const handleNotificationModalOpen = (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    setAnchorElNotification(event.currentTarget);
+    setOpenNotificationModal((prev) => !prev);
+  };
+
+  const handleRemoveItem = (id: number) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   return (
@@ -159,17 +214,77 @@ export default function AppMenu({
 
           <div className="flex justify-end w-full">
             <IconButton
+              onClick={handleLanguageModalOpen}
+              sx={{
+                "&:hover": {
+                  background: "transparent",
+                },
+                marginLeft: 2,
+                color: theme.palette.mode === "dark" ? "white" : "black",
+              }}
+            >
+              <Language />
+            </IconButton>
+            <IconButton
+              onClick={handleToggleCartModal}
+              sx={{
+                "&:hover": {
+                  background: "transparent",
+                },
+                marginLeft: 2,
+                color: theme.palette.mode === "dark" ? "white" : "black",
+              }}
+            >
+              <ShoppingCart />
+            </IconButton>
+            <IconButton
+              onClick={handleNotificationModalOpen}
+              sx={{
+                "&:hover": {
+                  background: "transparent",
+                },
+                marginLeft: 2,
+                color: theme.palette.mode === "dark" ? "white" : "black",
+              }}
+            >
+              <Notifications />
+            </IconButton>
+            <IconButton
               onClick={toggleDarkMode}
               sx={{
                 "&:hover": {
                   background: "transparent",
                 },
+                marginRight: 8,
+                color: theme.palette.mode === "dark" ? "white" : "black",
               }}
-              style={{ marginLeft: 8, color: "black" }}
             >
               {darkMode ? <LightMode /> : <DarkMode />}
             </IconButton>
+
             <ProfileMenu />
+
+            <LanguageModal
+              open={openLanguageModal}
+              onClose={() => {
+                setOpenLanguageModal(false);
+                setAnchorElLanguage(null);
+              }}
+              anchorEl={anchorElLanguage}
+            />
+            <CartModal
+              open={openCartModal}
+              anchorEl={anchorEl}
+              onClose={() => setOpenCartModal(false)}
+              cartItems={cartItems}
+              onRemoveItem={handleRemoveItem}
+            />
+            <NotificationModal
+              open={openNotificationModal}
+              onClose={() => setOpenNotificationModal(false)}
+              notifications={notifications}
+              anchorEl={anchorElNotification}
+            />
           </div>
         </Toolbar>
       </AppBar>

@@ -64,8 +64,8 @@ export default function SwipeableTemporaryDrawer() {
               <ListItemIcon>
                 <Image
                   src={"https://i.ibb.co/t2JQT5q/girl.png"}
-                  width={40}
-                  height={40}
+                  width={20}
+                  height={20}
                   alt="profile image"
                   className="rounded-full"
                 />
@@ -106,12 +106,12 @@ export default function SwipeableTemporaryDrawer() {
     <div>
       <IconButton
         onClick={toggleDrawer(true)}
-        className="bg-purple-50 rounded-full"
+        className="bg-purple-50 rounded-full mt-1"
       >
         <Image
           src={"https://i.ibb.co/t2JQT5q/girl.png"}
-          width={40}
-          height={40}
+          width={15}
+          height={15}
           alt="profile image"
           className="rounded-full"
         />

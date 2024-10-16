@@ -21,6 +21,7 @@ import {
   Category as CategoryIcon,
   DryCleaning as DryCleaningIcon,
   PhotoLibraryOutlined as PhotoLibraryOutlinedIcon,
+  Menu as MenuIcon,
   ManageAccounts,
   AddBusiness,
   School,
@@ -30,6 +31,7 @@ import {
   ShoppingBasketOutlined,
 } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
 
 import { useAuth } from "@/services/hooks/auth";
 import styles from "../../../../css/Header.module.css";
@@ -51,7 +53,7 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const theme = useTheme();
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -357,14 +359,22 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
 
   return isDrawer ? (
     <>
-      <IconButton onClick={toggleDrawer(true)}>
-        <Image
-          src={"https://i.ibb.co/t2JQT5q/girl.png"}
-          width={40}
-          height={40}
-          alt="profile"
-          className="rounded-full"
-        />
+      <IconButton
+        color="inherit"
+        onClick={toggleDrawer(true)}
+        className={`relative flex items-center justify-center flex-shrink-0 font-sans 
+              cursor-pointer rounded-md w-[34px] h-[34px] 
+              text-[1.2rem] overflow-hidden transition-transform 
+              duration-200 ease-in-out 
+            `}
+        sx={{
+          color: theme.palette.mode === "dark" ? "white" : "purple",
+          "&:hover": {
+            background: "transparent",
+          },
+        }}
+      >
+        <MenuIcon />
       </IconButton>
       <SwipeableDrawer
         anchor="left"
