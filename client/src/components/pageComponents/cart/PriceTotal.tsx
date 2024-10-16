@@ -14,7 +14,7 @@ export const PriceTotal: React.FC<{
 
   return (
     <Card
-      className="p-4 mt-12 shadow-lg"
+      className="p-2 mt-12 shadow-lg"
       sx={{
         border: "1px dotted #ccc",
         borderRadius: "12px",
@@ -23,9 +23,8 @@ export const PriceTotal: React.FC<{
       }}
     >
       <div
-        className="flex flex-col items-end text-lg font-bold mb-4"
+        className="flex flex-col items-end text-lg font-bold mb-4 w-full sm:w-350px md:w-400px"
         style={{
-          width: "400px",
           marginLeft: "auto",
         }}
       >
