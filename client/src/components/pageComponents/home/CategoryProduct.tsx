@@ -56,7 +56,7 @@ const CategoryProduct = () => {
   return (
     <Box className="container mx-auto py-10">
       <div
-        className="p-12 shadow-lg rounded-lg mb-10"
+        className="p-6 md:p-12 shadow-lg rounded-lg mb-10"
         style={{ background: categoryBackgroundColors[selectedCategoryIndex] }}
       >
         <Tabs

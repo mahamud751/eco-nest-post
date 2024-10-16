@@ -21,7 +21,7 @@ const Blogs = () => {
 
   return (
     <Box className="container mx-auto py-10">
-      <div className="mb-10">
+      <div className="p-4 md:p-0 mb-10">
         <Box sx={{ marginLeft: isSmallScreen ? 0 : 3, marginTop: 5 }}>
           <Swiper
             modules={[Autoplay, Navigation, Pagination]}

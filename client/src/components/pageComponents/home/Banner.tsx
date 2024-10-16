@@ -12,7 +12,7 @@ interface Product {
 const ProductsPage = () => {
   const renderSlide = (product: Product) => {
     return (
-      <div className="mt-5">
+      <div className="mt-5 p-1 md:p-0">
         <Image
           width={2000}
           height={640}

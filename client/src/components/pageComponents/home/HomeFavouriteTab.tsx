@@ -17,7 +17,7 @@ const HomeFavouriteTab = () => {
 
   return (
     <Box className="container mx-auto py-10">
-      <div className="bg-[#f3f4f6] p-12 shadow-lg rounded-lg mb-10">
+      <div className="bg-[#f3f4f6] p-1 md:p-12 shadow-lg rounded-lg mb-10">
         <Tabs
           value={tabValue}
           onChange={handleChange}
