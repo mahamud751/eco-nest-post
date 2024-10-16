@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
+import Image from "next/image";
 import {
   Box,
   Drawer as MuiDrawer,
@@ -10,6 +10,7 @@ import {
   IconButton,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -17,11 +18,10 @@ import {
   DarkMode,
   LightMode,
 } from "@mui/icons-material";
-import Image from "next/image";
+import { useTheme, styled, Theme, CSSObject } from "@mui/material/styles";
 
+import UnifiedMenu from "./MainMenu";
 import ProfileMenu from "./ProfileMenu";
-import MenuList from "./MenuList";
-import { useTheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
@@ -118,8 +118,8 @@ export default function AppMenu({
   toggleDarkMode,
 }: AppMenuProps) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const [open, setOpen] = React.useState(!isSmallScreen);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -133,20 +133,23 @@ export default function AppMenu({
       <CssBaseline />
       <AppBar position="fixed" open={open} className="bg-white shadow-none">
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={`relative flex items-center justify-center flex-shrink-0 font-sans 
+          {isSmallScreen && <UnifiedMenu isDrawer />}
+          {!isSmallScreen && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={`relative flex items-center justify-center flex-shrink-0 font-sans 
               bg-purple-50 cursor-pointer rounded-md w-[34px] h-[34px] 
               text-[1.2rem] overflow-hidden transition-transform 
               duration-200 ease-in-out text-purple-700 
               ${open ? "hidden" : "block"}`}
-            style={{ marginLeft: 40 }}
-          >
-            <MenuIcon />
-          </IconButton>
+              style={{ marginLeft: 40 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
           <div className="flex justify-end w-full">
             <IconButton
@@ -159,38 +162,42 @@ export default function AppMenu({
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader className="flex justify-between p-4">
-          <Image
-            src={"https://i.ibb.co/CMkLbff/Icon.png"}
-            width={30}
-            height={20}
-            alt="icon"
-            className="ml-2"
-          />
-          <div className="flex items-center">
-            <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
-              {open ? (
-                <MenuIcon
-                  className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
-          text-[1.2rem] overflow-hidden transition-transform duration-200 ease-in-out
-          ${
-            theme.palette.mode === "dark"
-              ? "bg-transparent text-white" // Dark theme styles
-              : "bg-purple-50 text-purple-700" // Light theme styles
-          }`}
-                />
-              ) : (
-                <ChevronRightIcon
-                  className={theme.palette.mode === "dark" ? "text-white" : ""}
-                />
-              )}
-            </IconButton>
-          </div>
-        </DrawerHeader>
-        <Divider />
-        <MenuList open={open} />
-      </Drawer>
+      {!isSmallScreen && (
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader className="flex justify-between p-4">
+            <Image
+              src={"https://i.ibb.co/CMkLbff/Icon.png"}
+              width={20}
+              height={20}
+              alt="icon"
+              className="ml-2"
+            />
+            <div className="flex items-center">
+              <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
+                {open ? (
+                  <MenuIcon
+                    className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
+                    text-[1.2rem] overflow-hidden transition-transform duration-200 ease-in-out
+                    ${
+                      theme.palette.mode === "dark"
+                        ? "bg-transparent text-white"
+                        : "bg-purple-50 text-purple-700"
+                    }`}
+                  />
+                ) : (
+                  <ChevronRightIcon
+                    className={
+                      theme.palette.mode === "dark" ? "text-white" : ""
+                    }
+                  />
+                )}
+              </IconButton>
+            </div>
+          </DrawerHeader>
+          <Divider />
+          {!isSmallScreen && <UnifiedMenu isDrawer={false} />}
+        </Drawer>
+      )}
       <MainContent open={open}>
         <DrawerHeader />
         {children}
