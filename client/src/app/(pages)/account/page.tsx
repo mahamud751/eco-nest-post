@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Box, Paper, IconButton } from "@mui/material";
+import { Tabs, Tab, Box, Paper, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import {
   Home,
   Settings,
@@ -9,7 +9,6 @@ import {
   PowerSettingsNew,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-
 import { styled } from "@mui/material/styles";
 import OrderDetails from "@/components/pageComponents/account/Orders";
 import Wishlist from "@/components/pageComponents/account/Wishlist";
@@ -17,7 +16,7 @@ import { useAuth } from "@/services/hooks/auth";
 import Feedback from "@/components/pageComponents/account/Feedback";
 import Dashboard from "@/components/pageComponents/account/Dashboard";
 
-const StyledTab = styled(Tab)(({}) => ({
+const StyledTab = styled(Tab)(({ }) => ({
   minWidth: 150,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -31,7 +30,7 @@ const StyledTab = styled(Tab)(({}) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({}) => ({
+const StyledIconButton = styled(IconButton)(({ }) => ({
   color: "#F44336",
   marginLeft: 8,
 }));
@@ -57,6 +56,10 @@ const Account: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const photosData: { title: string; src: string }[] = [];
 
+  const theme = useTheme();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
@@ -64,19 +67,21 @@ const Account: React.FC = () => {
   const handleLogOut = () => {
     logoutUser();
   };
+
   useEffect(() => {
     if (!token || !user) {
       router.push("/login");
     }
   }, [token, user, router]);
+
   return (
-    <Box className="container mx-auto py-10 flex gap-8">
+    <Box className="container mx-auto py-10 flex flex-col md:flex-row gap-8">
       <Paper
         elevation={3}
-        className="w-1/4 p-4 rounded-xl shadow-md border border-gray-200"
+        className="w-full md:w-1/4 p-4 rounded-xl shadow-md border border-gray-200"
       >
         <Tabs
-          orientation="vertical"
+          orientation={isSmallScreen ? "horizontal" : "vertical"}
           value={selectedTab}
           onChange={handleTabChange}
           aria-label="Vertical tabs"
@@ -125,28 +130,30 @@ const Account: React.FC = () => {
 
       <Paper
         elevation={3}
-        className="w-3/4 p-6 rounded-xl shadow-md border border-gray-200"
+        className="w-full md:w-3/4 p-6 rounded-xl shadow-md border border-gray-200 flex flex-col" // Adjusted for responsive layout
       >
-        {selectedTab === 0 && (
-          <div>
-            <Dashboard />
-          </div>
-        )}
-        {selectedTab === 1 && (
-          <div>
-            <OrderDetails />
-          </div>
-        )}
-        {selectedTab === 2 && (
-          <div>
-            <Wishlist />
-          </div>
-        )}
-        {selectedTab === 3 && (
-          <div>
-            <Feedback photosData={photosData} />
-          </div>
-        )}
+        <div className="flex-grow">
+          {selectedTab === 0 && (
+            <div>
+              <Dashboard />
+            </div>
+          )}
+          {selectedTab === 1 && (
+            <div>
+              <OrderDetails />
+            </div>
+          )}
+          {selectedTab === 2 && (
+            <div>
+              <Wishlist />
+            </div>
+          )}
+          {selectedTab === 3 && (
+            <div>
+              <Feedback photosData={photosData} />
+            </div>
+          )}
+        </div>
       </Paper>
     </Box>
   );
