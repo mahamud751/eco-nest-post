@@ -146,6 +146,11 @@ export default function AppMenu({
               text-[1.2rem] overflow-hidden transition-transform 
               duration-200 ease-in-out text-purple-700 
               ${open ? "hidden" : "block"}`}
+              sx={{
+                "&:hover": {
+                  background: "transparent",
+                },
+              }}
               style={{ marginLeft: 40 }}
             >
               <MenuIcon />
@@ -155,6 +160,11 @@ export default function AppMenu({
           <div className="flex justify-end w-full">
             <IconButton
               onClick={toggleDarkMode}
+              sx={{
+                "&:hover": {
+                  background: "transparent",
+                },
+              }}
               style={{ marginLeft: 8, color: "black" }}
             >
               {darkMode ? <LightMode /> : <DarkMode />}
@@ -174,7 +184,14 @@ export default function AppMenu({
               className="ml-2"
             />
             <div className="flex items-center">
-              <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
+              <IconButton
+                onClick={open ? handleDrawerClose : handleDrawerOpen}
+                sx={{
+                  "&:hover": {
+                    background: "transparent",
+                  },
+                }}
+              >
                 {open ? (
                   <MenuIcon
                     className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
