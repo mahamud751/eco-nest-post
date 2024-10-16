@@ -4,11 +4,11 @@ import React from "react";
 import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import InsightsOutlinedIcon from "@mui/icons-material/InsightsOutlined";
+import { useTheme } from "@mui/material/styles";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
 import UseFetch from "@/services/hooks/UseRequest";
 import { Advance, GrandPrice, Order } from "@/services/types";
 import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
-import { useTheme } from "@mui/material/styles";
 
 const Page = () => {
   const { total: orderTotal } = UseFetch<Order>(`orders`);
@@ -22,7 +22,7 @@ const Page = () => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
@@ -44,7 +44,7 @@ const Page = () => {
             </div>
           </div>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
@@ -66,7 +66,7 @@ const Page = () => {
           </div>
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
@@ -88,10 +88,10 @@ const Page = () => {
       </Grid>
 
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <LatestProduct />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <LatestOrders />
         </Grid>
       </Grid>
