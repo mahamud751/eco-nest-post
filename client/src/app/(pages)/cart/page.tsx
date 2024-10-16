@@ -191,8 +191,8 @@ const CheckoutStep: React.FC<{
   const { user } = useAuth();
   return (
     <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col sm:flex-row gap-4"> {/* Wrapper for columns on larger devices */}
-        <div className="flex-1 p-2"> {/* User Details section */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1 p-2">
           <h2 className="font-bold mb-2">User Details</h2>
           <TextField
             label="Enter your first name"
@@ -267,12 +267,6 @@ const CheckoutStep: React.FC<{
         </Button>
       </div>
     </form>
-
-
-
-
-
-
   );
 };
 
@@ -422,7 +416,7 @@ const CustomizedStepper: React.FC = () => {
   return (
     <Box className="container mx-auto py-10">
       <CustomStepper activeStep={activeStep} alternativeLabel>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {steps.map((step, index) => (
             <CustomStep key={index} onClick={() => handleStepClick(index)}>
               <CustomStepButton>
@@ -451,13 +445,12 @@ const CustomizedStepper: React.FC = () => {
         {activeStep === 2 && <OrderCompleteStep />}
       </div>
     </Box>
-
   );
 };
 
 export default CustomizedStepper;
 
-const CustomStepper = styled(Stepper)(({ }) => ({
+const CustomStepper = styled(Stepper)(({}) => ({
   backgroundColor: "transparent",
   padding: "20px",
   position: "relative",

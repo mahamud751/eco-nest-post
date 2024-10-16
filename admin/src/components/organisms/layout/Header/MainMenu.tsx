@@ -288,16 +288,16 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
         listStyle: "none",
         "&::-webkit-scrollbar": {
           width: "8px",
-          background: theme.palette.mode === "dark" ? "#1f1f1f" : "#f0f0f0", // Background of scrollbar
+          background: theme.palette.mode === "dark" ? "#1f1f1f" : "#f0f0f0",
         },
         "&::-webkit-scrollbar-thumb": {
           backgroundColor:
-            theme.palette.mode === "dark" ? "#ffffff" : "#000000", // Thumb color
+            theme.palette.mode === "dark" ? "#ffffff" : "#000000",
           borderRadius: "4px",
         },
         "&::-webkit-scrollbar-thumb:hover": {
           backgroundColor:
-            theme.palette.mode === "dark" ? "#e0e0e0" : "#4a4a4a", // Thumb color on hover
+            theme.palette.mode === "dark" ? "#e0e0e0" : "#4a4a4a",
         },
       }}
     >

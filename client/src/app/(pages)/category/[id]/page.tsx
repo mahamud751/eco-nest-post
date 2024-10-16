@@ -17,6 +17,11 @@ import {
   Typography,
   Box,
   SelectChangeEvent,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import ProductCard from "@/components/organisms/Product/ProductCard";
 import { Category, Product } from "@/services/types/types";
@@ -43,6 +48,7 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
     color: "",
     size: "",
   });
+  const [openFilters, setOpenFilters] = useState(false);
 
   const fetchCategory = async () => {
     try {
@@ -117,11 +123,27 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
       return matchesColor && matchesSize;
     }) || [];
 
+  const handleOpenFilters = () => {
+    setOpenFilters(true);
+  };
+
+  const handleCloseFilters = () => {
+    setOpenFilters(false);
+  };
+
   return (
-    <Box className="container mx-auto py-10">
+    <Box className="container mx-auto py-10 p-2 md:p-0">
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-12 md:col-span-3 grid grid-cols-1 md:grid-cols-1 gap-8">
-          <div className="max-h-[80vh] overflow-y-auto scrollbar-custom">
+        <div className="col-span-12 md:col-span-3">
+          <Button
+            variant="outlined"
+            onClick={handleOpenFilters}
+            className="md:hidden mb-4"
+          >
+            Open Filters
+          </Button>
+
+          <div className="max-h-[80vh] overflow-y-auto scrollbar-custom hidden md:block">
             <Card className="border">
               <CardContent>
                 {categories?.map((category) => (
@@ -175,7 +197,6 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
               </CardContent>
             </Card>
 
-            {/* Size Filter */}
             <Card className="mt-5 border">
               <CardContent>
                 <h2 className="text-lg font-bold mt-4">Size</h2>
@@ -210,11 +231,10 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
           </div>
         </div>
 
-        {/* Right Side Product List */}
         <div className="col-span-12 md:col-span-9 grid grid-cols-1 gap-6">
           <div>
-            <div className="flex justify-between mb-4">
-              <FormControl variant="outlined" className="w-1/3">
+            <div className="flex justify-between mb-4 mt-5">
+              <FormControl variant="outlined" className="w-1/3 hidden md:block">
                 <InputLabel>Sort By</InputLabel>
                 <Select
                   value={sort}
@@ -228,16 +248,17 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
               </FormControl>
             </div>
 
-            {/* Product Grid */}
-            <Grid container spacing={3}>
-              {filteredProducts.map((product) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
-            </Grid>
+            <div>
+              <Grid container spacing={3}>
+                {filteredProducts.map((product) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
+                    <ProductCard product={product} />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-10 md:block mb-12">
               <Pagination
                 count={categoryData?.totalPages || 0}
                 page={page}
@@ -268,6 +289,85 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={openFilters}
+        onClose={handleCloseFilters}
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "#f9f9f9",
+            borderRadius: "12px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+          },
+        }}
+      >
+        <DialogTitle sx={{ backgroundColor: "#4CAF50", color: "white" }}>
+          <Typography
+            variant="h6"
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <span style={{ marginRight: "8px" }}></span>
+            Filters
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="h6">Color</Typography>
+          <FormControlLabel
+            control={
+              <Radio
+                value="All"
+                checked={filters.color === ""}
+                onChange={handleColorChange}
+              />
+            }
+            label="All"
+          />
+          {["Red", "Blue", "Black", "White"].map((color) => (
+            <FormControlLabel
+              control={
+                <Radio
+                  value={color}
+                  checked={filters.color === color}
+                  onChange={handleColorChange}
+                />
+              }
+              label={color}
+              key={color}
+            />
+          ))}
+          <Typography variant="h6" className="mt-4">
+            Size
+          </Typography>
+          <FormControlLabel
+            control={
+              <Radio
+                value="All"
+                checked={filters.size === ""}
+                onChange={handleSizeChange}
+              />
+            }
+            label="All"
+          />
+          {["Small", "Medium", "Large", "XL"].map((size) => (
+            <FormControlLabel
+              control={
+                <Radio
+                  value={size}
+                  checked={filters.size === size}
+                  onChange={handleSizeChange}
+                />
+              }
+              label={size}
+              key={size}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseFilters} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
