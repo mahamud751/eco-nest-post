@@ -277,7 +277,30 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
     : commonMenuItems;
 
   const renderMenuItems = () => (
-    <List className={styles.sidebar}>
+    <List
+      className={styles.sidebar}
+      sx={{
+        overflowY: "auto",
+        maxHeight: "90vh",
+        width: 240,
+        padding: 0,
+        margin: 0,
+        listStyle: "none",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+          background: theme.palette.mode === "dark" ? "#1f1f1f" : "#f0f0f0", // Background of scrollbar
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor:
+            theme.palette.mode === "dark" ? "#ffffff" : "#000000", // Thumb color
+          borderRadius: "4px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          backgroundColor:
+            theme.palette.mode === "dark" ? "#e0e0e0" : "#4a4a4a", // Thumb color on hover
+        },
+      }}
+    >
       {isDrawer && (
         <Box
           sx={{
