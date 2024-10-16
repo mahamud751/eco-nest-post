@@ -313,6 +313,7 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
                   handleSubmenuClick(item.text);
                 } else {
                   router.push(item.path);
+                  setDrawerOpen(false);
                 }
               }}
               sx={{ minHeight: 48, justifyContent: "center", px: 2.5 }}
@@ -341,7 +342,10 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
                 {item.submenus.map((subItem) => (
                   <ListItem key={subItem.text}>
                     <ListItemButton
-                      onClick={() => router.push(subItem.path)}
+                      onClick={() => {
+                        router.push(subItem.path);
+                        setDrawerOpen(false);
+                      }}
                       sx={{ pl: 8 }}
                     >
                       <CircleIcon className="text-[6px] mx-2" />
