@@ -146,6 +146,11 @@ const OrderDetails = () => {
                       color="primary"
                       size="small"
                       onClick={() => handleInvoiceClick(item)}
+                      style={{
+                        borderRadius: "5px",
+                        width: 100,
+                        textTransform: "none",
+                      }}
                     >
                       View Invoice
                     </Button>
