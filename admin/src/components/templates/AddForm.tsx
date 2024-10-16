@@ -263,7 +263,14 @@ const AddForm: React.FC<AddFormProps> = ({
       )}
       <Paper elevation={2} className="shadow-lg">
         <form ref={formRef} onSubmit={handleSubmit}>
-          <Box sx={{ padding: 2 }}>
+          <Box
+            sx={{
+              padding: {
+                xs: 1,
+                sm: 8,
+              },
+            }}
+          >
             <Grid container spacing={2}>
               {additionalFields}
               {!isNoPhotoFile ? (

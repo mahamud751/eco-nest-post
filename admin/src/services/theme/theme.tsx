@@ -79,12 +79,38 @@ export const darkTheme = createTheme({
     mode: "dark",
     background: {
       default: "#121212",
-      paper: "#1C262E",
+      paper: "linear-gradient(to right, #141a21, #232526)",
     },
     text: {
       primary: "#ffffff",
       secondary: "#a1a1a1",
     },
   },
-  components: componentOverrides,
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: "linear-gradient(to right, #141a21, #232526)",
+          color: "#ffffff",
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#141a21",
+          color: "#ffffff",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#141a21",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#ffffff",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#141a21",
+          },
+        },
+      },
+    },
+  },
 });

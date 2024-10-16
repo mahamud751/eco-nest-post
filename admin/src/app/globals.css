@@ -38,7 +38,7 @@ body.dark .css-1ue1bo9-MuiDataGrid-root {
 }
 
 .label-upload:focus-within {
-  border-color: #3b82f6;
+  border-color: #000000;
 }
 
 @keyframes bounce {
