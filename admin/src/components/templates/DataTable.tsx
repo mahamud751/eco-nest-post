@@ -357,7 +357,7 @@ const DataTable: React.FC<DataTableProps> = ({
         </div>
       )}
 
-      <Paper className="p-6 m-6 shadow-xl rounded-lg">
+      <Paper className="p-6 m-2 md:m-6 shadow-xl rounded-lg">
         <div className="flex justify-between items-center mb-6">
           <TextField
             variant="outlined"

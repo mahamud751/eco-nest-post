@@ -96,7 +96,7 @@ const MainContent = styled(Box, {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  margin: "10px 10px",
   transition: theme.transitions.create(["margin-left", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -104,6 +104,7 @@ const MainContent = styled(Box, {
   width: `calc(100% - ${
     open ? drawerWidth : `calc(${theme.spacing(7)} + 1px)`
   })`,
+  height: "100vh",
 }));
 
 interface AppMenuProps {
@@ -118,7 +119,7 @@ export default function AppMenu({
   toggleDarkMode,
 }: AppMenuProps) {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(!isSmallScreen);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,7 +130,7 @@ export default function AppMenu({
   };
 
   return (
-    <Box className="flex">
+    <Box className="flex" sx={{ height: "100vh", margin: 0 }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="bg-white shadow-none">
         <Toolbar>
