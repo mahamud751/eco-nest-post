@@ -33,7 +33,7 @@ const AdditionalTab = ({ product }: AdditionalTabProps) => {
     switch (value) {
       case 0:
         return (
-          <div className="flex justify-between items-center w-full">
+          <div className="md:flex justify-between items-center w-full">
             <Image
               src={product?.photos[0]?.src || ""}
               alt="Selected Image"
@@ -41,7 +41,7 @@ const AdditionalTab = ({ product }: AdditionalTabProps) => {
               height={500}
               className="object-cover"
             />
-            <div className="ms-12">
+            <div className="p-2 md:p-0 md:ms-12">
               <Typography variant="body1">{product?.fulldesc}</Typography>
             </div>
           </div>
