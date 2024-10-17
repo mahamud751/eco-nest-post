@@ -148,9 +148,9 @@ export default function Navbar() {
               </div>
 
               <div>
-                <Link href="/" className="font-bold">
+                {/* <Link href="/" className="font-bold">
                   Order Request
-                </Link>
+                </Link> */}
                 <Link href="/vendor" className="font-bold ms-10">
                   Vendor Request
                 </Link>
