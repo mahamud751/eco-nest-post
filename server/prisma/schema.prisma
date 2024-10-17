@@ -296,6 +296,19 @@ model Order {
   updatedAt DateTime @updatedAt
 }
 
+model Notification {
+  id          String   @id @default(uuid()) 
+  userEmail   String 
+  orderId     String   
+  message     String   
+  status      String   @default("unread")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  order       Order    @relation(fields: [orderId], references: [id])  // Relation to Order
+}
+
+
 model Dynamic {
   id        String   @id @default(uuid())
   name      String
