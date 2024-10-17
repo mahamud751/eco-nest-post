@@ -4,12 +4,25 @@ import { Paper } from "@mui/material";
 import { Order } from "@/services/types";
 import StatusButton from "../atoms/StatusButton";
 import UseFormattedDate from "@/services/hooks/UseFormattedDate";
+import InvoiceModal from "@/app/(pages)/(order)/order-list/InvoiceModal";
 
 interface OrderShowProps {
   data: Order;
 }
 
 const OrderShow: React.FC<OrderShowProps> = ({ data }) => {
+  const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleOpenModal = (order: Order) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedOrder(null);
+  };
   return (
     <Paper elevation={3} className="p-6 rounded-lg shadow-md">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -42,6 +55,18 @@ const OrderShow: React.FC<OrderShowProps> = ({ data }) => {
         </div>
         <div>
           <strong className="font-bold block mb-2 text-gray-700">
+            Invoices:
+          </strong>
+          <button
+            className="mt-3 flex justify-center items-center bg-red-500 text-white px-4 rounded"
+            onClick={() => handleOpenModal(data)}
+            style={{ height: 27 }}
+          >
+            View Invoice
+          </button>
+        </div>
+        <div>
+          <strong className="font-bold block mb-2 text-gray-700">
             Created At:
           </strong>
           <span className="font-normal text-gray-600">
@@ -56,6 +81,13 @@ const OrderShow: React.FC<OrderShowProps> = ({ data }) => {
             {UseFormattedDate(data.updatedAt)}
           </span>
         </div>
+        {selectedOrder && (
+          <InvoiceModal
+            open={isModalOpen}
+            onClose={handleCloseModal}
+            selectedOrder={selectedOrder}
+          />
+        )}
       </div>
     </Paper>
   );

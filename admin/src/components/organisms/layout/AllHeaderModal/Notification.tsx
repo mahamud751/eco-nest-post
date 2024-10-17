@@ -14,7 +14,7 @@ import { useTheme } from "@mui/material/styles";
 
 import { useAuth } from "@/services/hooks/auth";
 import { Notification } from "@/services/types";
-
+import Link from "next/link";
 
 interface NotificationPopperProps {
   open: boolean;
@@ -38,6 +38,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const fetchOrders = async () => {
     if (!user || !user.email) {
@@ -54,7 +55,16 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
       }>(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
       );
-      setData(response.data);
+
+      if (response.data.data.length < rowsPerPage) {
+        setHasMore(false);
+      }
+
+      setData((prevData) => ({
+        data: [...(prevData?.data || []), ...response.data.data],
+        total: response.data.total,
+        perPage: response.data.perPage,
+      }));
     } catch (error) {
       console.error("Error fetching orders:", error);
       setData(null);
@@ -65,31 +75,25 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
 
   useEffect(() => {
     fetchOrders();
-  }, [page, rowsPerPage]);
+  }, [page]);
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage + 1);
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+
+    if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !loading) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1);
-  };
+  const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
       <div className="flex items-center justify-center h-screen">
         <CircularProgress />
       </div>
     );
   }
-
-  const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
   return (
     <Popper
@@ -117,11 +121,11 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
               boxShadow: 3,
               borderRadius: 3,
               color: theme.palette.mode === "dark" ? "white" : "black",
-
               overflow: "auto",
               maxHeight: 400,
               width: 300,
             }}
+            onScroll={handleScroll}
           >
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Notifications
@@ -160,9 +164,19 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
                           {notification.message}
                         </Typography>
                         <Typography
+                          variant="body1"
+                          sx={{
+                            color: "black",
+                          }}
+                        >
+                          Order Id : <Link href={`/order-show/${notification.orderId}`}>{notification.orderId}</Link>
+                        </Typography>
+                        <Typography
                           variant="caption"
                           color={
-                            notification?.status === 'unread' ? "textSecondary" : "primary"
+                            notification?.status === "unread"
+                              ? "textSecondary"
+                              : "primary"
                           }
                           sx={{ color: "black" }}
                         >
@@ -172,6 +186,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
                     </Grid>
                   </Grid>
                 ))}
+                {loading && <CircularProgress />}
               </Grid>
             )}
             <Button

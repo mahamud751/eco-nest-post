@@ -260,6 +260,7 @@ export interface Feedbacks {
 
 export interface Notification {
   id: string;
+  orderId: string
   message: string;
   userEmail?: string;
   createdAt: Date;
