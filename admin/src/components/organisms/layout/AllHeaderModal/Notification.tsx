@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Popper,
   Paper,
@@ -7,28 +8,86 @@ import {
   Button,
   Fade,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-interface Notification {
-  message: string;
-  read: boolean;
-}
+import { useAuth } from "@/services/hooks/auth";
+import { Notification } from "@/services/types";
+
 
 interface NotificationPopperProps {
   open: boolean;
   anchorEl: HTMLElement | null;
   onClose: () => void;
-  notifications: Notification[];
 }
 
 const NotificationPopper: React.FC<NotificationPopperProps> = ({
   open,
   anchorEl,
   onClose,
-  notifications,
 }) => {
   const theme = useTheme();
+  const { user } = useAuth();
+  const [data, setData] = useState<{
+    data: Notification[];
+    total: number;
+    perPage: number;
+  } | null>(null);
+
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchOrders = async () => {
+    if (!user || !user.email) {
+      console.error("User is not logged in");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.get<{
+        data: Notification[];
+        total: number;
+        perPage: number;
+      }>(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
+      );
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [page, rowsPerPage]);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage + 1);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
@@ -67,7 +126,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Notifications
             </Typography>
-            {notifications.length === 0 ? (
+            {data?.data.length === 0 ? (
               <Typography
                 variant="body2"
                 align="center"
@@ -79,12 +138,12 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
               </Typography>
             ) : (
               <Grid container spacing={2}>
-                {notifications.map((notification, index) => (
+                {data?.data.map((notification, index) => (
                   <Grid item xs={12} key={index} container alignItems="center">
                     <Grid item xs>
                       <Box
                         sx={{
-                          backgroundColor: notification.read
+                          backgroundColor: notification.status
                             ? "#f0f0f0"
                             : "#d1f5d3",
                           borderRadius: "8px",
@@ -103,11 +162,11 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
                         <Typography
                           variant="caption"
                           color={
-                            notification.read ? "textSecondary" : "primary"
+                            notification?.status === 'unread' ? "textSecondary" : "primary"
                           }
                           sx={{ color: "black" }}
                         >
-                          {notification.read ? "Read" : "Unread"}
+                          {notification.status ? "Read" : "Unread"}
                         </Typography>
                       </Box>
                     </Grid>

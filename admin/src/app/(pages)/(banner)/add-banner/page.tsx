@@ -8,7 +8,7 @@ const AddBanner: React.FC = () => {
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/banners"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/banners`}
       additionalFields={additionalFields}
       buttonText="Add Banner"
       id=""

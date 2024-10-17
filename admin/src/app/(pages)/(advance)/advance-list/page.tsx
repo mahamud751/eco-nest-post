@@ -33,7 +33,7 @@ const AdvanceList = () => {
           (detail: { src: any; id: React.Key | null | undefined }) => (
             <div key={detail.id}>
               <Link
-                href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
+                href={`${process.env.NEXT_PUBLIC_BASEURL}/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800"
@@ -76,8 +76,8 @@ const AdvanceList = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <DataTable
-        fetchUrl="https://api.korbojoy.shop/v1/advance"
-        deleteUrl="https://api.korbojoy.shop/v1/advance"
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance`}
         columns={columns}
         searchField="name"
         link="advance-list"

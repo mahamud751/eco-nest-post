@@ -243,6 +243,14 @@ export interface Student {
   updatedAt: Date;
 }
 
+export interface Notification {
+  id: string;
+  message: string;
+  userEmail?: string;
+  createdAt: Date;
+  status: string;
+}
+
 export interface GrandPrice {
   data: {
     totalGrandPrice: number;

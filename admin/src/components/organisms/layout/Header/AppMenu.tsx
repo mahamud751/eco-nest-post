@@ -107,9 +107,8 @@ const MainContent = styled(Box, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  width: `calc(100% - ${
-    open ? drawerWidth : `calc(${theme.spacing(7)} + 1px)`
-  })`,
+  width: `calc(100% - ${open ? drawerWidth : `calc(${theme.spacing(7)} + 1px)`
+    })`,
   height: "100vh",
 }));
 
@@ -144,10 +143,6 @@ export default function AppMenu({
     setOpen(false);
   };
 
-  const notifications = [
-    { message: "New message received", read: false },
-    { message: "Order shipped", read: true },
-  ];
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -282,7 +277,6 @@ export default function AppMenu({
             <NotificationModal
               open={openNotificationModal}
               onClose={() => setOpenNotificationModal(false)}
-              notifications={notifications}
               anchorEl={anchorElNotification}
             />
           </div>
@@ -311,11 +305,10 @@ export default function AppMenu({
                   <MenuIcon
                     className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
                     text-[1.2rem] overflow-hidden transition-transform duration-200 ease-in-out
-                    ${
-                      theme.palette.mode === "dark"
+                    ${theme.palette.mode === "dark"
                         ? "bg-transparent text-white"
                         : "bg-purple-50 text-purple-700"
-                    }`}
+                      }`}
                   />
                 ) : (
                   <ChevronRightIcon

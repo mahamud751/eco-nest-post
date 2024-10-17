@@ -36,7 +36,7 @@ const CustomVendorOrder: React.FC = () => {
           (detail: { src: string; id: string | null | undefined }) => (
             <div key={detail.id}>
               <Link
-                href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
+                href={`${process.env.NEXT_PUBLIC_BASEURL}/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800"
@@ -78,8 +78,8 @@ const CustomVendorOrder: React.FC = () => {
   return (
     <>
       <DataTable
-        fetchUrl={`https://api.korbojoy.shop/v1/advance/${user?.id}/myAdvance`}
-        deleteUrl="https://api.korbojoy.shop/v1/advance"
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance/${user?.id}/myAdvance`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance`}
         columns={columns}
         searchField="name"
         link="order-list"

@@ -55,7 +55,7 @@ const CommonDataShow: React.FC<CommonDataShowProps> = ({ data, isFile }) => {
             {data?.files?.map((detail: { src: string }, index: number) => (
               <Link
                 key={index}
-                href={`https://api.korbojoy.shop/public/uploads/${detail.src}`}
+                href={`${process.env.NEXT_PUBLIC_BASEURL}/public/uploads/${detail.src}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

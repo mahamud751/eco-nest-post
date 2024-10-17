@@ -34,8 +34,8 @@ const LatestProduct = () => {
 
   return (
     <DataTable
-      fetchUrl={`https://api.korbojoy.shop/v1/products/latest`}
-      deleteUrl="https://api.korbojoy.shop/v1/products"
+      fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products/latest`}
+      deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products`}
       columns={columns}
       searchField="name"
       defaultHiddenColumns={[""]}

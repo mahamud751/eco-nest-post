@@ -21,7 +21,7 @@ const UseFetch = <T,>(path: string) => {
       setState({ data: null, total: null, loading: true, error: null });
       try {
         const res = await axios.get<{ data: T; total: number }>(
-          `https://api.korbojoy.shop/v1/${path}`
+          `${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`
         );
         setState({
           data: res.data as T,
@@ -46,7 +46,7 @@ const UseFetch = <T,>(path: string) => {
     setState({ data: null, total: null, loading: true, error: null });
     try {
       const res = await axios.get<{ data: T; total: number }>(
-        `https://api.korbojoy.shop/v1/${path}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/${path}`
       );
       setState({
         data: res.data as T,

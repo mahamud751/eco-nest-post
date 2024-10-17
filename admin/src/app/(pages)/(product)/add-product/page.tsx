@@ -55,7 +55,7 @@ const AddProduct: React.FC = () => {
   return (
     <div>
       <AddForm
-        endpoint="https://api.korbojoy.shop/v1/products"
+        endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products`}
         additionalFields={additionalFields}
         additionalData={{
           sizes: sizes,

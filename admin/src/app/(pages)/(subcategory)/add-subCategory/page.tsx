@@ -17,7 +17,7 @@ const AddSubCategory: React.FC = () => {
   return (
     <div>
       <AddForm
-        endpoint="https://api.korbojoy.shop/v1/subCategories"
+        endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/subCategories`}
         additionalFields={additionalFields}
         buttonText="Add Sub Category"
         id=""

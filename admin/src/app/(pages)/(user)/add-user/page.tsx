@@ -13,7 +13,7 @@ const AddUser: React.FC = () => {
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/users/register"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/users/register`}
       additionalFields={additionalFields}
       buttonText="Add User"
       id=""

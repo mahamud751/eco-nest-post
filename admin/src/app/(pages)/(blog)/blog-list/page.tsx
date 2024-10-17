@@ -8,8 +8,8 @@ const BlogList = () => {
 
   return (
     <DataTable
-      fetchUrl="https://api.korbojoy.shop/v1/blogs"
-      deleteUrl="https://api.korbojoy.shop/v1/blogs"
+      fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/blogs`}
+      deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/blogs`}
       columns={columns}
       searchField="name"
       link="blog-list"

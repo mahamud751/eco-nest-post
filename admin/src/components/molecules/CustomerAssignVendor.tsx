@@ -41,7 +41,7 @@ const CustomerAssignVendor: React.FC<CustomerAssignVendorProps> = ({
       };
 
       await axios.patch(
-        `https://api.korbojoy.shop/v1/advance/${id}/assign`,
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/advance/${id}/assign`,
         updatedVendors
       );
 

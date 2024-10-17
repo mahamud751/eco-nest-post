@@ -20,8 +20,8 @@ const FaqList = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <DataTable
-        fetchUrl="https://api.korbojoy.shop/v1/faq"
-        deleteUrl="https://api.korbojoy.shop/v1/faq"
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/faq`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/faq`}
         columns={columns}
         searchField="name"
         link="faq-list"

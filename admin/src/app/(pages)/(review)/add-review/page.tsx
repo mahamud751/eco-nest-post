@@ -9,7 +9,7 @@ const AddReview: React.FC = () => {
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/reviews"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/reviews`}
       additionalFields={additionalFields}
       buttonText="Add Review"
       id=""

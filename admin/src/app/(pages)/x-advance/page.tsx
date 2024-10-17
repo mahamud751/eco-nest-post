@@ -111,7 +111,7 @@ const Custom: React.FC = () => {
       };
 
       // Send data to the server
-      await axios.post("https://api.korbojoy.shop/v1/advance", data);
+      await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance`, data);
 
       MySwal.fire("Good job!", "Successfully added", "success");
       formRef.current?.reset();

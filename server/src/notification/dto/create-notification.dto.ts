@@ -1,9 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
   IsOptional,
   IsEmail,
+  IsEnum,
 } from 'class-validator';
 
 export class CreateNotificationDto {
@@ -22,6 +23,13 @@ export class CreateNotificationDto {
   @IsOptional()
   message?: string;
 
+  @ApiPropertyOptional({
+    description: 'Status of the demo',
+    enum: ['read', 'unread'],
+  })
+  @IsEnum(['read', 'unread'])
+  @IsOptional()
+  status?: string;
 
 }
 

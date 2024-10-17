@@ -7,7 +7,7 @@ const AddSchool: React.FC = () => {
   const photosData: { title: string; src: string }[] = [];
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/schools"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/schools`}
       additionalFields={additionalFields}
       buttonText="Add School"
       id=""

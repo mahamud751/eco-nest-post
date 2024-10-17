@@ -258,6 +258,14 @@ export interface Feedbacks {
   size: string;
 }
 
+export interface Notification {
+  id: string;
+  message: string;
+  userEmail?: string;
+  createdAt: Date;
+  status: string;
+}
+
 export type OrderStatus =
   | "pending"
   | "processing"

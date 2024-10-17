@@ -55,10 +55,10 @@ const columns: GridColDef[] = [
       <div className="my-2">
         {params.row.oldValue?.files && params.row.oldValue.files.length > 0
           ? params.row.oldValue.files.map(
-              (file: { id: React.Key | null | undefined; title: any }) => (
-                <p key={file.id}>{file.title || "No Title"}</p>
-              )
+            (file: { id: React.Key | null | undefined; title: any }) => (
+              <p key={file.id}>{file.title || "No Title"}</p>
             )
+          )
           : "No Files"}
       </div>
     ),
@@ -71,10 +71,10 @@ const columns: GridColDef[] = [
       <div className="my-2">
         {params.row.newValue?.files && params.row.newValue.files.length > 0
           ? params.row.newValue.files.map(
-              (file: { id: React.Key | null | undefined; title: any }) => (
-                <p key={file.id}>{file.title || "No Title"}</p>
-              )
+            (file: { id: React.Key | null | undefined; title: any }) => (
+              <p key={file.id}>{file.title || "No Title"}</p>
             )
+          )
           : "No Files"}
       </div>
     ),
@@ -136,7 +136,7 @@ const ShowAvance: React.FC<BaseEditProps> = ({ params }) => {
         </>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
-            fetchUrl={`https://api.korbojoy.shop/v1/audit-logs?entityId=${params.id}`}
+            fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/audit-logs?entityId=${params.id}`}
             columns={columns}
           />
         </div>

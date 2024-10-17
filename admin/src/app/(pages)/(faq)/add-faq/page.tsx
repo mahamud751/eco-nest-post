@@ -7,7 +7,7 @@ const AddFaq: React.FC = () => {
 
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/faq"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/faq`}
       additionalFields={additionalFields}
       buttonText="Add faq"
       photosData={[]}

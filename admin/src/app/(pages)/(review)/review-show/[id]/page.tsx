@@ -144,7 +144,7 @@ const ShowReview: React.FC<BaseEditProps> = ({ params }) => {
         <>{data ? <ReviewShow data={data} /> : <p>No data available.</p>}</>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
-            fetchUrl={`https://api.korbojoy.shop/v1/audit-logs?entityId=${params.id}`}
+            fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/audit-logs?entityId=${params.id}`}
             columns={columns}
           />
         </div>

@@ -60,8 +60,8 @@ const OrderList = () => {
   return (
     <>
       <DataTable
-        fetchUrl="https://api.korbojoy.shop/v1/orders"
-        deleteUrl="https://api.korbojoy.shop/v1/orders"
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`}
         columns={columns}
         searchField="name"
         link="order-list"

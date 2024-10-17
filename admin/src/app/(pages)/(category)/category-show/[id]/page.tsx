@@ -55,17 +55,17 @@ const columns: GridColDef[] = [
       <div className="my-2 flex">
         {params.row.oldValue?.photos && params.row.oldValue.photos.length > 0
           ? params.row.oldValue.photos.map(
-              (photo: Photo, index: React.Key | null | undefined) => (
-                <div key={index} className="flex mr-2">
-                  <Image
-                    src={photo.src}
-                    alt={photo.title}
-                    width={36}
-                    height={36}
-                  />
-                </div>
-              )
+            (photo: Photo, index: React.Key | null | undefined) => (
+              <div key={index} className="flex mr-2">
+                <Image
+                  src={photo.src}
+                  alt={photo.title}
+                  width={36}
+                  height={36}
+                />
+              </div>
             )
+          )
           : "No Image"}
       </div>
     ),
@@ -78,17 +78,17 @@ const columns: GridColDef[] = [
       <div className="my-2 flex">
         {params.row.newValue?.photos && params.row.newValue.photos.length > 0
           ? params.row.newValue.photos.map(
-              (photo: Photo, index: React.Key | null | undefined) => (
-                <div key={index} className="flex mr-2">
-                  <Image
-                    src={photo.src}
-                    alt={photo.title}
-                    width={36}
-                    height={36}
-                  />
-                </div>
-              )
+            (photo: Photo, index: React.Key | null | undefined) => (
+              <div key={index} className="flex mr-2">
+                <Image
+                  src={photo.src}
+                  alt={photo.title}
+                  width={36}
+                  height={36}
+                />
+              </div>
             )
+          )
           : "No Image"}
       </div>
     ),
@@ -147,7 +147,7 @@ const ShowCategory: React.FC<BaseEditProps> = ({ params }) => {
         <>{data ? <CategoryShow data={data} /> : <p>No data available.</p>}</>
         <div style={{ height: 400, width: "100%" }}>
           <HistotyDataTable
-            fetchUrl={`https://api.korbojoy.shop/v1/audit-logs?entityId=${params.id}`}
+            fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/audit-logs?entityId=${params.id}`}
             columns={columns}
           />
         </div>

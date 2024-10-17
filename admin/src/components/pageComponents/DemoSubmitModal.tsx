@@ -38,7 +38,7 @@ const DemoSubmitModal: React.FC<DemoSubmitModalProps> = ({
         aria-describedby="demo-submit-modal-description"
       >
         <AddForm
-          endpoint="https://api.korbojoy.shop/v1/demo"
+          endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/demo`}
           additionalFields={additionalFields}
           buttonText="Demo Submit"
           photosData={photosData}

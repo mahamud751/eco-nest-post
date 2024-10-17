@@ -43,8 +43,8 @@ const ReviewList = () => {
 
   return (
     <DataTable
-      fetchUrl="https://api.korbojoy.shop/v1/reviews"
-      deleteUrl="https://api.korbojoy.shop/v1/reviews"
+      fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/reviews`}
+      deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/reviews`}
       columns={columns}
       searchField="name"
       link="review-list"

@@ -40,7 +40,7 @@ const EditCategory: React.FC<BaseEditProps> = ({ params }) => {
   return (
     <LoadingError loading={loading} error={error}>
       <AddForm
-        endpoint={`https://api.korbojoy.shop/v1/categories/${params.id}`}
+        endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/categories/${params.id}`}
         id={params.id}
         additionalFields={additionalFields}
         buttonText="Edit Category"

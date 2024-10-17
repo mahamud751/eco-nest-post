@@ -15,7 +15,7 @@ const AddDynamic: React.FC = () => {
 
   return (
     <AddForm
-      endpoint="https://api.korbojoy.shop/v1/dynamics"
+      endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/dynamics`}
       additionalFields={additionalFields}
       buttonText="Add Dynamic"
       photosData={[]}

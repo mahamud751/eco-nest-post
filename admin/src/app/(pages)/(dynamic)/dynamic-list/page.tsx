@@ -19,8 +19,8 @@ const DynamicList = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <DataTable
-        fetchUrl="https://api.korbojoy.shop/v1/dynamics"
-        deleteUrl="https://api.korbojoy.shop/v1/dynamics"
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/dynamics`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/dynamics`}
         columns={columns}
         searchField="name"
         link="dynamic-list"
