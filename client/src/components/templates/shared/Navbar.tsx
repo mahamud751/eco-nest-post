@@ -120,9 +120,8 @@ export default function Navbar() {
 
       setSearchResults(response.data);
 
-      // Use router.push to redirect without page reload
       const searchUrl = `/product?search=${encodeURIComponent(searchQuery)}`;
-      router.push(searchUrl); // Redirects without reloading
+      router.push(searchUrl);
     } catch (error) {
       console.error(error);
     }
@@ -152,7 +151,7 @@ export default function Navbar() {
                 <Link href="/" className="font-bold">
                   Order Request
                 </Link>
-                <Link href="/" className="font-bold ms-10">
+                <Link href="/vendor" className="font-bold ms-10">
                   Vendor Request
                 </Link>
               </div>

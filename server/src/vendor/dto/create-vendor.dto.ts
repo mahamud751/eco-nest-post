@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEnum } from 'class-validator';
+import { IsString, IsEnum, IsOptional } from 'class-validator';
 import { VendorStatus } from '@prisma/client'; // Import the enum from Prisma
 
 export class CreateVendorDto {
@@ -17,12 +17,14 @@ export class CreateVendorDto {
 
   @ApiProperty({ description: 'Vendor address' })
   @IsString()
-  address: string;
+  address: string;;
 
   @ApiProperty({
     description: 'Status of the vendor',
-    enum: VendorStatus, // Use the enum from Prisma
+    enum: VendorStatus,
+    default: VendorStatus.pending,
   })
+  @IsOptional()
   @IsEnum(VendorStatus)
-  status: VendorStatus; // Change type to VendorStatus
+  status?: VendorStatus;
 }
