@@ -111,6 +111,14 @@ const Login: React.FC = () => {
           >
             Sign In
           </Button>
+          <div>
+            <p className="font-bold text-gray-800 ms-2 mt-2">
+              Email: mama@gmail.com
+            </p>
+            <p className="font-bold text-gray-800 ms-2 mt-2">
+              Password: 123456Pt!1
+            </p>
+          </div>
         </form>
       </div>
     </div>
