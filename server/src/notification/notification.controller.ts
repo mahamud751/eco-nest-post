@@ -8,12 +8,7 @@ import { CreateNotificationDto, UpdateNotificationStatusDto } from './dto/create
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) { }
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new notification' })
-  @ApiResponse({ status: 201, description: 'Notification successfully created.' })
-  async create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationService.createNotification(createNotificationDto);
-  }
+
 
   @Get('user/:email')
   @ApiOperation({ summary: 'Get all notifications for a specific user by email' })

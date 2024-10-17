@@ -22,6 +22,7 @@ export class CreateNotificationDto {
   @IsOptional()
   message?: string;
 
+
 }
 
 export class UpdateNotificationStatusDto {
