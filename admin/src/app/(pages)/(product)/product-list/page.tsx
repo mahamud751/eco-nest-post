@@ -2,8 +2,16 @@
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
 import { getCommonColumns } from "@/components/templates/CommonColums";
+import { useAuth } from "@/services/hooks/auth";
 
 const ProductList = () => {
+  const { user } = useAuth();
+
+  const fetchUrl =
+    user?.role === "vendor"
+      ? `${process.env.NEXT_PUBLIC_BASEURL}/v1/products?email=${user.email}`
+      : `${process.env.NEXT_PUBLIC_BASEURL}/v1/products`;
+
   const columns = getCommonColumns([
     {
       field: "categoryName",
@@ -42,7 +50,7 @@ const ProductList = () => {
 
   return (
     <DataTable
-      fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products`}
+      fetchUrl={fetchUrl}
       deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products`}
       columns={columns}
       searchField="name"

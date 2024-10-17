@@ -89,6 +89,21 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       ],
     },
     {
+      text: "Product",
+      icon: <DryCleaningIcon className="text-red-500" />,
+      path: "/products",
+      submenus: [
+        {
+          text: "Add Product",
+          path: "/add-product",
+        },
+        {
+          text: "Product List",
+          path: "/product-list",
+        },
+      ],
+    },
+    {
       text: "Custom Order",
       icon: <InboxIcon className="text-purple-500" />,
       path: "/customOrder-list",
@@ -117,21 +132,6 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
         {
           text: "Subcategory List",
           path: "/subCategory-list",
-        },
-      ],
-    },
-    {
-      text: "Product",
-      icon: <DryCleaningIcon className="text-red-500" />,
-      path: "/products",
-      submenus: [
-        {
-          text: "Add Product",
-          path: "/add-product",
-        },
-        {
-          text: "Product List",
-          path: "/product-list",
         },
       ],
     },
