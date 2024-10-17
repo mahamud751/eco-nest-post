@@ -30,7 +30,7 @@ export class NotificationService {
     const skip = (pageNumber - 1) * perPageNumber;
 
     const where: any = {
-      email: {
+      userEmail: {
         contains: email,
         mode: 'insensitive',
       },
