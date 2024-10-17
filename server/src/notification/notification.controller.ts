@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateNotificationDto, UpdateNotificationStatusDto } from './dto/create-notification.dto';
@@ -14,6 +14,26 @@ export class NotificationController {
   @ApiResponse({ status: 201, description: 'Notification successfully created.' })
   async create(@Body() createNotificationDto: CreateNotificationDto) {
     return this.notificationService.createNotification(createNotificationDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all subcategories' })
+  @ApiResponse({ status: 200, description: 'Return all subcategories.' })
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+    @Query('email') email?: string,
+  ) {
+    return this.notificationService.findAll(page, perPage, email);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a wishlist by id' })
+  @ApiParam({ name: 'id', description: 'ID of the wishlist to retrieve' })
+  @ApiResponse({ status: 200, description: 'Return the wishlist.' })
+  @ApiResponse({ status: 404, description: 'Wishlist not found.' })
+  findOne(@Param('id') id: string) {
+    return this.wishlistService.findOne(id);
   }
 
   @Get('user/:email')
