@@ -19,6 +19,7 @@ import { WishlistModule } from './wishlist/wishlist.module';
 import { OrderModule } from './order/order.module';
 import { DynamicModule } from './dynamic/dynamic.module';
 import { ReviewModule } from './review/review.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ReviewModule } from './review/review.module';
     OrderModule,
     DynamicModule,
     ReviewModule,
+    NotificationModule
   ],
 })
-export class AppModule {}
+export class AppModule { }

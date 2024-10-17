@@ -292,22 +292,22 @@ model Order {
   isCancel       CancelStatus @default(NO)
   userCancel     Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Notification Notification[]
 }
 
 model Notification {
-  id          String   @id @default(uuid()) 
-  userEmail   String 
-  orderId     String   
-  message     String   
-  status      String   @default("unread")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  userEmail String
+  orderId   String
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  order       Order    @relation(fields: [orderId], references: [id])  // Relation to Order
+  order Order @relation(fields: [orderId], references: [id]) // Relation to Order
 }
-
 
 model Dynamic {
   id        String   @id @default(uuid())
