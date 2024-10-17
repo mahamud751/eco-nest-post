@@ -16,7 +16,7 @@ const Vendor: React.FC = () => {
             name: formData.get("name"),
             email: formData.get("email"),
             number: formData.get("number"),
-            adress: formData.get("address"),
+            address: formData.get("address"),
         };
 
         try {

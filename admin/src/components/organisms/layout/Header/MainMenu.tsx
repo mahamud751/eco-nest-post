@@ -193,6 +193,10 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
           text: "Vendor List",
           path: "/vendor-list",
         },
+        {
+          text: "Vendor Request List",
+          path: "/vendor-list/request-list",
+        },
       ],
     },
     {
@@ -271,9 +275,9 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
 
   const menuItems = isClient
     ? [
-        ...commonMenuItems,
-        ...(user?.role === "superAdmin" ? adminMenuItems : []),
-      ]
+      ...commonMenuItems,
+      ...(user?.role === "superAdmin" ? adminMenuItems : []),
+    ]
     : commonMenuItems;
 
   const renderMenuItems = () => (
