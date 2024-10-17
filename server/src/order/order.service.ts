@@ -6,7 +6,10 @@ import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService, private readonly notificationService: NotificationService,) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) { }
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const order = await this.prisma.order.create({
@@ -119,10 +122,20 @@ export class OrderService {
   }
 
   async updateOrder(id: string, updateData: any) {
-    return await this.prisma.order.update({
+    const updatedOrder = await this.prisma.order.update({
       where: { id: id },
       data: updateData,
     });
+
+    if (updateData.status) {
+      await this.notificationService.createNotification({
+        userEmail: updatedOrder.email,
+        orderId: updatedOrder.id,
+        message: `Your order status has been updated to ${updateData.status}.`,
+      });
+    }
+
+    return updatedOrder;
   }
 
   async calculateTotalGrandPrice() {
