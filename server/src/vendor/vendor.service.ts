@@ -5,7 +5,7 @@ import { UpdateVendorDto } from './dto/update-vendor.dto';
 
 @Injectable()
 export class VendorService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(createVendorDto: CreateVendorDto) {
     return this.prisma.vendor.create({
@@ -13,10 +13,26 @@ export class VendorService {
     });
   }
 
-  async findAll() {
-    return this.prisma.vendor.findMany({
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.vendor.count();
+
+    const dataPromise = this.prisma.vendor.findMany({
+      skip,
+      take: perPageNumber,
       orderBy: { createdAt: 'desc' },
     });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string) {

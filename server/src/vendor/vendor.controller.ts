@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { VendorService } from './vendor.service';
@@ -15,7 +16,7 @@ import { UpdateVendorDto } from './dto/update-vendor.dto';
 @ApiTags('Vendors')
 @Controller('vendors')
 export class VendorController {
-  constructor(private readonly vendorService: VendorService) {}
+  constructor(private readonly vendorService: VendorService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new vendor' })
@@ -29,10 +30,13 @@ export class VendorController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all vendors' })
-  @ApiResponse({ status: 200, description: 'List of vendors' })
-  findAll() {
-    return this.vendorService.findAll();
+  @ApiOperation({ summary: 'Get all vendor' })
+  @ApiResponse({ status: 200, description: 'Return all vendor.' })
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.vendorService.findAll(page, perPage);
   }
 
   @Get(':id')
