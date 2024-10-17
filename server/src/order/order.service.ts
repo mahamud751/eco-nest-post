@@ -2,16 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import * as nodemailer from 'nodemailer';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly notificationService: NotificationService,) { }
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const order = await this.prisma.order.create({
       data: { ...createOrderDto },
     });
-
+    await this.notificationService.createNotification({
+      userEmail: order.email,
+      orderId: order.id,
+      message: `Your order has been placed successfully.`,
+    });
     await this.sendOrderEmail(createOrderDto.email);
 
     return order;

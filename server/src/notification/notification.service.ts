@@ -6,6 +6,19 @@ import { CreateNotificationDto, UpdateNotificationStatusDto } from './dto/create
 export class NotificationService {
   constructor(private readonly prisma: PrismaService) { }
 
+
+  async createNotification(createNotificationDto: CreateNotificationDto) {
+    const { userEmail, message, ...rest } = createNotificationDto;
+    const notification = await this.prisma.notification.create({
+      data: {
+        userEmail,
+        message,
+        ...rest
+      },
+    });
+
+    return notification;
+  }
   async getNotificationsForUserByEmail(email: string) {
     return this.prisma.notification.findMany({
       where: { userEmail: email },
