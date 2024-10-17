@@ -8,9 +8,14 @@ export class VendorService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(createVendorDto: CreateVendorDto) {
-    return this.prisma.vendor.create({
-      data: createVendorDto,
+    const { ...rest } = createVendorDto;
+
+    const vendor = await this.prisma.vendor.create({
+      data: {
+        ...rest,
+      },
     });
+    return { message: 'vendor created successfully', vendor };
   }
 
   async findAll(
