@@ -18,9 +18,7 @@ const ProductsPage = () => {
           height={640}
           src={product?.photos[0]?.src}
           alt={product?.name || "Product Image"}
-          style={{
-            height: 600,
-          }}
+          className="w-full h-[220px] md:h-[600px]"
         />
       </div>
     );
