@@ -93,7 +93,7 @@ const Custom: React.FC = () => {
         });
       }
 
-      // Construct the data object
+
       const data = {
         name,
         number,
