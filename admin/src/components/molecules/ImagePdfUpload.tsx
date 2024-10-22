@@ -27,8 +27,6 @@ const ImagePdfUpload: React.FC<ImagePdfUploadProps> = ({
     };
   }, [files]);
 
-  console.log(filePreviews);
-
   const handlePdfChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onFilesChangePdf) {
       const fileList = e.target.files;

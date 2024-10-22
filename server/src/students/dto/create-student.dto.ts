@@ -74,9 +74,9 @@ export class CreateStudentDto {
   waist: number;
 
   @ApiProperty({ description: 'The waist size (numeric) of the student' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  waistSize: number;
+  waistSize?: number;
 
   @ApiProperty({ description: 'The half body measurement of the student' })
   @IsOptional()
