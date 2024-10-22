@@ -94,9 +94,7 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
   return (
     <Box className="container my-12 mx-auto px-2 md:px-4" sx={{ flexGrow: 1 }}>
       <div className="text-center">
-        <h2 className="mb-12 px-6 text-3xl font-bold">
-          School Name{data?.name}
-        </h2>
+        <h2 className="mb-5 px-6 text-3xl font-bold">{data?.name}</h2>
         <div className="flex justify-center">
           {data &&
             data.photos.map((school, index) => (
