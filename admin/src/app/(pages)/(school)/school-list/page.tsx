@@ -2,11 +2,28 @@
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
 import { getCommonColumns } from "@/components/templates/CommonColums";
+import Link from "next/link";
 
 const SchoolList = () => {
   const columns = getCommonColumns([
     { field: "email", headerName: "Email", flex: 1 },
     { field: "location", headerName: "Location", flex: 1 },
+    {
+      field: "link",
+      headerName: "Measurement",
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <Link
+            href={`/school-measurement-list/${params.row.id}`}
+            className="mt-3 flex justify-center items-center bg-red-500 text-white rounded"
+            style={{ height: 30 }}
+          >
+            Measurements
+          </Link>
+        </div>
+      ),
+    },
   ]);
   return (
     <DataTable
