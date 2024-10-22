@@ -18,6 +18,7 @@ const SchoolList = () => {
             href={`https://www.korbojoy.shop/measurement/${params.row.id}`}
             className="mt-3 flex justify-center items-center bg-green-500 text-white rounded"
             style={{ height: 30 }}
+            target="_blank"
           >
             Add Measurement Link
           </Link>
@@ -34,7 +35,6 @@ const SchoolList = () => {
             href={`/school-measurement-list/${params.row.id}`}
             className="mt-3 flex justify-center items-center bg-red-500 text-white rounded"
             style={{ height: 30 }}
-            target="_blank"
           >
             Measurements
           </Link>
