@@ -64,7 +64,7 @@ export class SchoolService {
 
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const totalCountPromise = this.prisma.advance.count();
+    const totalCountPromise = this.prisma.school.count();
 
     const dataPromise = await this.prisma.school.findMany({
       skip,
