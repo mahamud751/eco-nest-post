@@ -15,7 +15,7 @@ const SchoolList = () => {
       renderCell: (params) => (
         <div>
           <Link
-            href={`https://www.korbojoy.shop/measurement/${params.row.id}`}
+            href={`https://www.korbojoy.shop/measurements/${params.row.id}`}
             className="mt-3 flex justify-center items-center bg-green-500 text-white rounded"
             style={{ height: 30 }}
             target="_blank"
