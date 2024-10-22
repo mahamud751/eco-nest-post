@@ -37,16 +37,20 @@ export class StudentService {
   async findAll(
     page: number = 1,
     perPage: number = 10,
+    schoolId?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
-    const totalCountPromise = this.prisma.subCategory.count();
+    const totalCountPromise = this.prisma.student.count({
+      where: schoolId ? { schoolId } : {},
+    });
 
     const dataPromise = this.prisma.student.findMany({
       skip,
       take: perPageNumber,
       orderBy: { createdAt: 'desc' },
+      where: schoolId ? { schoolId } : {},
       include: {
         school: true,
       },

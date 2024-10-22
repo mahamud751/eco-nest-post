@@ -52,18 +52,19 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
       name: formData.get("name"),
       class: formData.get("class"),
       mobile: formData.get("mobile"),
-      total: formData.get("total"),
+      total: parseFloat(formData.get("total") as string),
       category: formData.get("category"),
-      height: formData.get("height"),
-      shoulder: formData.get("shoulder"),
-      sleeveLength: formData.get("sleeveLength"),
-      collar: formData.get("collar"),
-      length: formData.get("length"),
-      armhole: formData.get("armhole"),
-      sleeveOpening: formData.get("sleeveOpening"),
-      halfBody: formData.get("halfBody"),
-      bottomHem: formData.get("bottomHem"),
-      hips: formData.get("hips"),
+      height: parseFloat(formData.get("height") as string),
+      shoulder: parseFloat(formData.get("shoulder") as string),
+      sleeveLength: parseFloat(formData.get("sleeveLength") as string),
+      collar: parseFloat(formData.get("collar") as string),
+      length: parseFloat(formData.get("length") as string),
+      armhole: parseFloat(formData.get("armhole") as string),
+      sleeveOpening: parseFloat(formData.get("sleeveOpening") as string),
+      halfBody: parseFloat(formData.get("halfBody") as string),
+      bottomHem: parseFloat(formData.get("bottomHem") as string),
+      hips: parseFloat(formData.get("hips") as string),
+      waist: parseFloat(formData.get("waist") as string),
     };
 
     try {
@@ -85,9 +86,8 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      openSnackbar("Vendor Addes successfully!", "success", "#4caf50");
+      openSnackbar("Measurement Addes successfully!", "success", "#4caf50");
     } catch (error) {
-      console.error("Error placing order:", error);
       openSnackbar("Failed to place order!", "error", "#f44336");
     }
   };
@@ -121,10 +121,9 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 আপনার নাম? Student Name
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "name",
                 }}
                 name="name"
               />
@@ -136,10 +135,9 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 আপনি কোন শ্রেণির শিক্ষার্থী? Class Name
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "class",
                 }}
                 name="class"
               />
@@ -151,10 +149,9 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 আপনার অভিভাবক বা আপনার মোবাইল নাম্বার এইখানে দিন।
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "mobile",
                 }}
                 name="mobile"
               />
@@ -166,13 +163,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 আপনার কত সেট ইউনিফর্ম লাগবে?
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "total",
+                  type: "number",
                 }}
                 name="total"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -204,13 +200,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Height
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "height",
+                  type: "number",
                 }}
                 name="height"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -220,10 +215,10 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 ফিটিং এ একুরেট যা আসে সেটাই এইখানে দিবেন। Chest/ Width
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "chest",
+                  type: "number",
                 }}
                 name="chest"
               />
@@ -235,13 +230,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Length
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "length",
+                  type: "number",
                 }}
                 name="length"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -251,13 +245,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Shoulder
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "shoulder",
+                  type: "number",
                 }}
                 name="shoulder"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -267,13 +260,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Sleeve Length
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "sleeveLength",
+                  type: "number",
                 }}
                 name="sleeveLength"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -283,13 +275,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Collar
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "collar",
+                  type: "number",
                 }}
                 name="collar"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -299,13 +290,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Arm Hole
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "armhole",
+                  type: "number",
                 }}
                 name="armhole"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -315,13 +305,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Sleeve Open
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "sleeveOpening",
+                  type: "number",
                 }}
                 name="sleeveOpening"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -331,13 +320,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 আপনার কোমরের মা্প কত ইঞ্চি? Waist
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "waist",
+                  type: "number",
                 }}
                 name="waist"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -347,13 +335,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Hips
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "hips",
+                  type: "number",
                 }}
                 name="hips"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -363,13 +350,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Bottom Hem
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "bottomHem",
+                  type: "number",
                 }}
                 name="bottomHem"
-                type="number"
               />
             </FormControl>
           </Grid>
@@ -379,13 +365,12 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
                 Half Body
               </FormHelperText>
               <OutlinedInput
-                id="outlined-adornment-weight"
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
-                  "aria-label": "weight",
+                  "aria-label": "halfBody",
+                  type: "number",
                 }}
                 name="halfBody"
-                type="number"
               />
             </FormControl>
           </Grid>
