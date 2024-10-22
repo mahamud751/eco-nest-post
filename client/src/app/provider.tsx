@@ -14,7 +14,9 @@ import store from "./redux/store";
 import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 import theme from "@/services/theme/theme";
 import SessionWraper from "@/components/SessionWrapper";
-import CartSummary from "@/components/templates/shared/CartSummary";
+import dynamic from "next/dynamic";
+const CartSummary = dynamic(() => import('@/components/templates/shared/CartSummary'), { ssr: false });
+
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -68,19 +70,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 }}
               />
               {showHeader}
-              <Box padding={2}>{children}</Box>
+              {children}
               {showHeader && <Footer />}
-              <Box
-                position="fixed"
-                top="50%"
-                right={20}
-                zIndex={1000}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <CartSummary />
-              </Box>
+
+              <CartSummary />
+
             </SnackbarProvider>
           </UserProvider>
         </Provider>
