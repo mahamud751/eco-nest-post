@@ -14,6 +14,7 @@ import store from "./redux/store";
 import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 import theme from "@/services/theme/theme";
 import SessionWraper from "@/components/SessionWrapper";
+import CartSummary from "@/components/templates/shared/CartSummary";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <Navbar />
     </Suspense>
   );
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -47,7 +49,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionWraper>
-      {" "}
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
@@ -67,8 +68,19 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 }}
               />
               {showHeader}
-              {children}
+              <Box padding={2}>{children}</Box>
               {showHeader && <Footer />}
+              <Box
+                position="fixed"
+                top="50%"
+                right={20}
+                zIndex={1000}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <CartSummary />
+              </Box>
             </SnackbarProvider>
           </UserProvider>
         </Provider>

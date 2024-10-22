@@ -450,7 +450,7 @@ const CustomizedStepper: React.FC = () => {
 
 export default CustomizedStepper;
 
-const CustomStepper = styled(Stepper)(({}) => ({
+const CustomStepper = styled(Stepper)(({ }) => ({
   backgroundColor: "transparent",
   padding: "20px",
   position: "relative",
