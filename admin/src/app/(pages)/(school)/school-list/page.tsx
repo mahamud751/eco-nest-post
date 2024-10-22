@@ -10,7 +10,23 @@ const SchoolList = () => {
     { field: "location", headerName: "Location", flex: 1 },
     {
       field: "link",
-      headerName: "Measurement",
+      headerName: "Link",
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <Link
+            href={`https://www.korbojoy.shop/measurement/${params.row.id}`}
+            className="mt-3 flex justify-center items-center bg-green-500 text-white rounded"
+            style={{ height: 30 }}
+          >
+            Add Measurement Link
+          </Link>
+        </div>
+      ),
+    },
+    {
+      field: "measurement",
+      headerName: "All Measurement",
       flex: 1,
       renderCell: (params) => (
         <div>
