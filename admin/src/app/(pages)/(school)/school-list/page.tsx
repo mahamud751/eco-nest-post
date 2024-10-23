@@ -48,7 +48,6 @@ const SchoolList = () => {
       deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/schools`}
       columns={columns}
       searchField="name"
-      // defaultHiddenColumns={["id"]}
       link="school-list"
     />
   );

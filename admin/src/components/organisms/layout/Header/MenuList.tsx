@@ -140,16 +140,16 @@ export default function MenuList({ open }: MenuListProps) {
       ],
     },
     {
-      text: "Advance Order",
+      text: "Sample Order",
       icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
       path: "/advance",
       submenus: [
         {
-          text: "Add Advance",
+          text: "Add Sample",
           path: "/add-advance",
         },
         {
-          text: "Advance List",
+          text: "Sample List",
           path: "/advance-list",
         },
       ],
