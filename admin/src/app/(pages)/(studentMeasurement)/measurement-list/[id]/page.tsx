@@ -1,82 +1,62 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import { Advance, BaseEditProps } from "@/services/types";
+import { BaseEditProps, Student } from "@/services/types";
 import AddForm from "@/components/templates/AddForm";
 import useFetch from "@/services/hooks/UseRequest";
 import LoadingError from "@/components/atoms/LoadingError";
-import AdvanceForm from "@/components/pageComponents/AdvanceForm";
+import MeasurementForm from "@/components/pageComponents/MeasurementForm";
 
-const EditAdvance: React.FC<BaseEditProps> = ({ params }) => {
-  const { data, loading, error } = useFetch<Advance>(`advance/${params.id}`);
-  const [files, setFiles] = useState<File[]>([]);
-  const [status, setStatus] = useState<string>("");
-
+const EditMeasurement: React.FC<BaseEditProps> = ({ params }) => {
+  const { data, loading, error } = useFetch<Student>(`students/${params.id}`);
+  const [category, setCategory] = useState<string>("");
+  const [selectedSchool, setSelectedSchool] = useState<string>("");
   useEffect(() => {
     if (data) {
-      if (data.files) {
-        // Ensure files are properly parsed and set
-        setFiles(
-          data.files.map((file: any) => new File([file.src], file.title))
-        );
-      } else {
-        setFiles([]);
-      }
-
-      setStatus(data.status);
+      setCategory(data.category);
+      setSelectedSchool(data.schoolId);
     }
   }, [data]);
 
-  const handleStatusChange = (event: SelectChangeEvent<string>) => {
-    setStatus(event.target.value as string);
-  };
-
   const additionalFields = (
     <>
-      <AdvanceForm advance={data} />
-      <Grid item xs={4}>
-        <FormControl fullWidth>
-          <InputLabel id="status-select-label">Status</InputLabel>
-          <Select
-            labelId="status-select-label"
-            id="status-select"
-            label="Select Status"
-            name="status"
-            value={status}
-            onChange={handleStatusChange}
-          >
-            <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="processing">Processing</MenuItem>
-            <MenuItem value="approve">Approve</MenuItem>
-            <MenuItem value="reject">Reject</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
+      <MeasurementForm
+        student={data}
+        category={category}
+        setCategory={setCategory}
+        selectedSchool={selectedSchool}
+        setSelectedSchool={setSelectedSchool}
+      />
     </>
   );
-
+  const numberFields = [
+    "height",
+    "length",
+    "shoulder",
+    "sleeveLength",
+    "collar",
+    "armhole",
+    "sleeveOpening",
+    "waist",
+    "waistSize",
+    "hips",
+    "bottomHem",
+    "halfBody",
+    "total",
+  ];
   return (
     <LoadingError loading={loading} error={error}>
       <AddForm
-        endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/advance/${params.id}`}
+        endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/students/${params.id}`}
         id={params.id}
         additionalFields={additionalFields}
         photosData={[]}
-        files={files}
-        setFiles={setFiles}
-        buttonText="Edit Advance"
-        isFile={true}
-        link="/advance-list"
+        isNoPhotoFile={true}
+        numberFields={numberFields}
+        buttonText="Edit Measurement"
+        link="/measurement-list"
       />
     </LoadingError>
   );
 };
 
-export default EditAdvance;
+export default EditMeasurement;
