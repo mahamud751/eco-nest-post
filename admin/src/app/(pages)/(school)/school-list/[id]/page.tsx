@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Grid, SelectChangeEvent } from "@mui/material";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 
 import { BaseEditProps, Photo, School, User } from "@/services/types";
 import AddForm from "@/components/templates/AddForm";
@@ -30,7 +37,22 @@ const EditSchool: React.FC<BaseEditProps> = ({ params }) => {
     <>
       <SchoolForm school={data} />
       <Grid item xs={4}>
-        <StatusSelect status={status} handleStatusChange={handleStatusChange} />
+        <FormControl fullWidth>
+          <InputLabel id="status-select-label">Status</InputLabel>
+          <Select
+            labelId="status-select-label"
+            id="status-select"
+            label="Select Status"
+            name="status"
+            value={status}
+            onChange={handleStatusChange}
+          >
+            <MenuItem value="active">Active</MenuItem>
+            <MenuItem value="pending">Pending</MenuItem>
+            <MenuItem value="processing">Processing</MenuItem>
+            <MenuItem value="delivered">Delivered</MenuItem>
+          </Select>
+        </FormControl>
       </Grid>
     </>
   );

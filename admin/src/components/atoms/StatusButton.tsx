@@ -14,6 +14,7 @@ const StyledButton = styled(Button)<{ status: string }>(({ theme, status }) => {
 
   switch (status) {
     case "active":
+    case "delivered":
     case "approve":
       backgroundColor = isDarkMode
         ? "rgb(20,170,156)"

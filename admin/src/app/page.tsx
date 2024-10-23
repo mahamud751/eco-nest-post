@@ -18,9 +18,11 @@ const Page = () => {
   const { total: customOrder } = UseFetch<Advance>(`advance`);
   const { data, total: totalSchool } = UseFetch<School>(`schools`);
   const { total: totalStudents } = UseFetch<Student>(`students`);
-  // const deliveryTotal =
-  //   data && data?.data.filter((item) => item.status === "delivery");
-  // console.log(deliveryTotal);
+  const delivery =
+    data &&
+    data.data.filter(
+      (school: { status: string }) => school.status === "delivered"
+    );
 
   const theme = useTheme();
 
@@ -96,8 +98,8 @@ const Page = () => {
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
-                ? "from-[#2d7f7a] to-[#35b0a7]"
-                : "from-[#35b0a7] to-[#2d7f7a]"
+                ? "from-[#2d477f] to-[#5035b0]"
+                : "from-[#3537b0] to-[#2d537f]"
             }`}
           >
             <div className="flex p-3">
@@ -118,8 +120,8 @@ const Page = () => {
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
-                ? "from-[#6b2c7e] to-[#8e44ad]"
-                : "from-[#8e44ad] to-[#6b2c7e]"
+                ? "from-[#ce5e4f] to-[#b06a6a]"
+                : "from-[#ce5b5b] to-[#c37a75]"
             }`}
           >
             <div className="flex p-3">
@@ -138,17 +140,17 @@ const Page = () => {
           <div
             className={`rounded-[15px] p-5 bg-gradient-to-r ${
               theme.palette.mode === "dark"
-                ? "from-[#b94768] to-[#E55A7E]"
-                : "from-[#E55A7E] to-[#b94768]"
+                ? "from-[#171717] to-[#302e2e]"
+                : "from-[#040404] to-[#4f4e4e]"
             }`}
           >
             <div className="flex p-3">
-              <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
+              <div className="flex justify-center items-center bg-[rgba(239,232,232,0.2)] rounded-full p-5 w-20">
                 <InsightsOutlinedIcon className="text-white" fontSize="large" />
               </div>
               <div className="ms-3 text-white">
-                <p className="fs-5 text-[20px]">Total Delivery Order</p>
-                <p className="fw-bold text-[14px]">{customOrder}</p>
+                <p className="fs-5 text-[20px]">Total Delivery Measurements</p>
+                <p className="fw-bold text-[14px]">{delivery?.length}</p>
               </div>
             </div>
           </div>

@@ -260,7 +260,7 @@ export interface Feedbacks {
 
 export interface Notification {
   id: string;
-  orderId: string
+  orderId: string;
   message: string;
   userEmail?: string;
   createdAt: Date;
@@ -276,7 +276,7 @@ export type OrderStatus =
 
 export type CancelStatus = "YES" | "NO";
 
-export type SchoolStatus = "pending" | "processing" | "delivery" | "canceled";
+export type SchoolStatus = "active" | "pending" | "processing" | "delivery";
 
 export type Gender = "Male" | "Female" | "Other";
 
