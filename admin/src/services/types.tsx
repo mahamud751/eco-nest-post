@@ -206,6 +206,7 @@ export interface OrderItem {
   color: string;
 }
 export interface School {
+  data: any;
   id: string;
   name: string;
   photos: Photo[];
@@ -241,6 +242,7 @@ export interface Student {
   school: School;
   createdAt: Date;
   updatedAt: Date;
+  students: Student[];
 }
 
 export interface Notification {
