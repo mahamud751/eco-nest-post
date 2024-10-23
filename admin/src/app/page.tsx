@@ -7,7 +7,7 @@ import InsightsOutlinedIcon from "@mui/icons-material/InsightsOutlined";
 import { useTheme } from "@mui/material/styles";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
 import UseFetch from "@/services/hooks/UseRequest";
-import { Advance, GrandPrice, Order } from "@/services/types";
+import { Advance, GrandPrice, Order, School, Student } from "@/services/types";
 import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
 
 const Page = () => {
@@ -16,6 +16,11 @@ const Page = () => {
     `orders/totalGrandPrice`
   );
   const { total: customOrder } = UseFetch<Advance>(`advance`);
+  const { data, total: totalSchool } = UseFetch<School>(`schools`);
+  const { total: totalStudents } = UseFetch<Student>(`students`);
+  // const deliveryTotal =
+  //   data && data?.data.filter((item) => item.status === "delivery");
+  // console.log(deliveryTotal);
 
   const theme = useTheme();
 
@@ -80,7 +85,70 @@ const Page = () => {
               </div>
               <div className="ms-3 text-white">
                 <p className="fs-5 text-[20px]">Total Custom Orders</p>
-                <p className="fw-bold text-[14px]">৳ {customOrder}</p>
+                <p className="fw-bold text-[14px]">{customOrder}</p>
+              </div>
+            </div>
+          </div>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} sx={{ mt: 5 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <div
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#2d7f7a] to-[#35b0a7]"
+                : "from-[#35b0a7] to-[#2d7f7a]"
+            }`}
+          >
+            <div className="flex p-3">
+              <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
+                <SignalCellularAltOutlinedIcon
+                  className="text-white"
+                  fontSize="large"
+                />
+              </div>
+              <div className="ms-3 text-white">
+                <p className="fs-5 text-[20px]">Total Schools</p>
+                <p className="fw-bold text-[14px]">{totalSchool}</p>
+              </div>
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <div
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#6b2c7e] to-[#8e44ad]"
+                : "from-[#8e44ad] to-[#6b2c7e]"
+            }`}
+          >
+            <div className="flex p-3">
+              <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
+                <TimelineOutlinedIcon className="text-white" fontSize="large" />
+              </div>
+              <div className="ms-3 text-white">
+                <p className="fs-5 text-[20px]">Total Measurements</p>
+                <p className="fw-bold text-[14px]">{totalStudents}</p>
+              </div>
+            </div>
+          </div>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <div
+            className={`rounded-[15px] p-5 bg-gradient-to-r ${
+              theme.palette.mode === "dark"
+                ? "from-[#b94768] to-[#E55A7E]"
+                : "from-[#E55A7E] to-[#b94768]"
+            }`}
+          >
+            <div className="flex p-3">
+              <div className="flex justify-center items-center bg-[rgba(0,0,0,0.2)] rounded-full p-5 w-20">
+                <InsightsOutlinedIcon className="text-white" fontSize="large" />
+              </div>
+              <div className="ms-3 text-white">
+                <p className="fs-5 text-[20px]">Total Delivery Order</p>
+                <p className="fw-bold text-[14px]">{customOrder}</p>
               </div>
             </div>
           </div>

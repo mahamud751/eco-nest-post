@@ -55,7 +55,10 @@ interface DataTableProps {
   searchField?: string;
   enableExport?: boolean;
   isJustCreateData?: boolean;
+  isJustActionData?: boolean;
   isJustEditData?: boolean;
+  isJustShowData?: boolean;
+  isJustDeleteData?: boolean;
 }
 function Pagination({
   page,
@@ -98,7 +101,10 @@ const DataTable: React.FC<DataTableProps> = ({
   searchField = "name",
   enableExport = true,
   isJustCreateData = true,
+  isJustActionData = true,
   isJustEditData = true,
+  isJustShowData = true,
+  isJustDeleteData = true,
 }) => {
   const theme = useTheme();
 
@@ -314,7 +320,7 @@ const DataTable: React.FC<DataTableProps> = ({
   };
   const modifiedColumns = [
     ...columns.filter((col) => columnVisibility[col.field]),
-    ...(isJustEditData
+    ...(isJustActionData
       ? [
           {
             field: "action",
@@ -322,17 +328,23 @@ const DataTable: React.FC<DataTableProps> = ({
             flex: 1,
             renderCell: (params: { id: { toString: () => string } }) => (
               <div>
-                <Link href={`${firstPart}-show/${params.id}`}>
-                  <RemoveRedEyeIcon color="success" />
-                </Link>
-                <Link href={`${link}/${params.id}`}>
-                  <Edit color="action" className="mx-2" />
-                </Link>
-                <Delete
-                  color="error"
-                  onClick={() => handleDelete(params.id.toString())}
-                  className="cursor-pointer"
-                />
+                {isJustEditData && (
+                  <Link href={`${firstPart}-show/${params.id}`}>
+                    <RemoveRedEyeIcon color="success" />
+                  </Link>
+                )}
+                {isJustShowData && (
+                  <Link href={`${link}/${params.id}`}>
+                    <Edit color="action" className="mx-2" />
+                  </Link>
+                )}
+                {isJustDeleteData && (
+                  <Delete
+                    color="error"
+                    onClick={() => handleDelete(params.id.toString())}
+                    className="cursor-pointer"
+                  />
+                )}
               </div>
             ),
           },

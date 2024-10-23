@@ -57,9 +57,9 @@ export class CreateSchoolDto {
 
   @ApiPropertyOptional({
     description: 'The status of the School',
-    enum: ['active', 'inActive'],
+    enum: ['pending', 'processing', 'delivered', 'active'],
   })
-  @IsEnum(['active', 'inActive'])
+  @IsEnum(['pending', 'processing', 'delivered', 'active'])
   @IsOptional()
   status?: string;
 }
