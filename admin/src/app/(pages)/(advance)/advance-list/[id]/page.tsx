@@ -22,14 +22,12 @@ const EditAdvance: React.FC<BaseEditProps> = ({ params }) => {
   useEffect(() => {
     if (data) {
       if (data.files) {
-        // Ensure files are properly parsed and set
         setFiles(
           data.files.map((file: any) => new File([file.src], file.title))
         );
       } else {
         setFiles([]);
       }
-
       setStatus(data.status);
     }
   }, [data]);

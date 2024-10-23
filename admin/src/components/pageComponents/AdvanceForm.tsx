@@ -15,12 +15,18 @@ interface AdvanceFormProps {
 }
 
 const AdvanceForm: React.FC<AdvanceFormProps> = ({ advance }) => {
-  const [students, setStudents] = useState<string | undefined>(undefined);
-  const [ratio, setRatio] = useState<string | undefined>(undefined);
-  const [topPart, setTopPart] = useState<string | undefined>(undefined);
-  const [topFab, setTopFab] = useState<string | undefined>(undefined);
-  const [bottomPart, setBottomPart] = useState<string | undefined>(undefined);
-  const [bottomFab, setBottomFab] = useState<string | undefined>(undefined);
+  const [students, setStudents] = useState<string | undefined>(
+    advance?.students
+  );
+  const [ratio, setRatio] = useState<string | undefined>(advance?.ratio);
+  const [topPart, setTopPart] = useState<string | undefined>(advance?.topPart);
+  const [topFab, setTopFab] = useState<string | undefined>(advance?.topFab);
+  const [bottomPart, setBottomPart] = useState<string | undefined>(
+    advance?.bottomPart
+  );
+  const [bottomFab, setBottomFab] = useState<string | undefined>(
+    advance?.bottomFab
+  );
 
   const handleStudentsChange = (event: SelectChangeEvent<string>) => {
     setStudents(event.target.value);
