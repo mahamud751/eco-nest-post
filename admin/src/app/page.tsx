@@ -20,7 +20,7 @@ const Page = () => {
   const { total: totalStudents } = UseFetch<Student>(`students`);
   const delivery =
     data &&
-    data.data.filter(
+    data?.data?.filter(
       (school: { status: string }) => school.status === "delivered"
     );
 
