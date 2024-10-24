@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { AuditLogService } from '../audit/audit.service';
+import { UserInfoDto } from 'src/products/dto/user-info.dts';
 
 @Injectable()
 export class StudentService {
@@ -38,6 +39,7 @@ export class StudentService {
     page: number = 1,
     perPage: number = 10,
     schoolId?: string,
+    email?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -57,8 +59,16 @@ export class StudentService {
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+    const filteredData = email
+      ? data.filter((product) => {
+          const userInfo = product.school as UserInfoDto;
+          return userInfo?.email ? userInfo.email.includes(email) : false;
+        })
+      : data;
 
-    return { data, total };
+    const filteredTotal = email ? filteredData.length : total;
+
+    return { data: filteredData, total: filteredTotal };
   }
 
   async findOne(id: string) {

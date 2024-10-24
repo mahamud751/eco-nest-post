@@ -36,8 +36,9 @@ export class StudentController {
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('schoolId') schoolId?: string,
+    @Query('email') email?: string,
   ) {
-    return this.studentService.findAll(page, perPage, schoolId);
+    return this.studentService.findAll(page, perPage, email, schoolId);
   }
 
   @Get(':id')
