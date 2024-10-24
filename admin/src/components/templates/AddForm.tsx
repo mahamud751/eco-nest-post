@@ -140,7 +140,6 @@ const AddForm: React.FC<AddFormProps> = ({
       }
     });
 
-    // Serialize userInfo into JSON string
     if (
       additionalData?.userInfo &&
       typeof additionalData.userInfo === "object"

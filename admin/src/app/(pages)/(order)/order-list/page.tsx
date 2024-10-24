@@ -97,7 +97,6 @@ const OrderList = () => {
         link="order-list"
         isJustCreateData={false}
       />
-      {/* Invoice modal component */}
       {selectedOrder && (
         <InvoiceModal
           open={isModalOpenInvoice}

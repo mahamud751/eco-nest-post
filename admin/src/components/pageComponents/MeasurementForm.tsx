@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { School, StudentFormProps } from "@/services/types";
 import useFetch from "@/services/hooks/UseRequest";
+import { useAuth } from "@/services/hooks/auth";
 
 const MeasurementForm: React.FC<StudentFormProps> = ({
   student,
@@ -16,32 +17,60 @@ const MeasurementForm: React.FC<StudentFormProps> = ({
   selectedSchool,
   setSelectedSchool,
 }) => {
+  const { user } = useAuth();
+
   const { data: responseData } = useFetch<{ data: School[] }>("schools");
+  const selectedSchoolAlready = responseData?.data?.find(
+    (school) => school.email === user?.email
+  );
+  console.log(selectedSchoolAlready);
+
   const schools = responseData?.data || [];
   return (
     <>
-      <Grid item xs={12} md={4}>
-        <FormControl fullWidth>
-          <InputLabel id="school-label">Schools</InputLabel>
-          <Select
-            labelId="school-label"
-            id="school-select"
-            label="Select School"
-            name="schoolId"
-            value={selectedSchool}
-            onChange={(e) => setSelectedSchool(e.target.value)}
-            disabled={selectedSchool != ""}
-          >
-            {schools.map((data) => {
-              return (
-                <MenuItem key={data.id} value={data.id}>
-                  {data.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Grid>
+      {user?.role === "schoolManager" ? (
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel id="school-label">Schools</InputLabel>
+            <Select
+              labelId="school-label"
+              id="school-select"
+              label="Select School"
+              name="schoolId"
+              value={selectedSchool}
+              onChange={(e) => setSelectedSchool(e.target.value)}
+            >
+              <MenuItem value={selectedSchoolAlready?.id}>
+                {selectedSchoolAlready?.name}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      ) : (
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel id="school-label">Schools</InputLabel>
+            <Select
+              labelId="school-label"
+              id="school-select"
+              label="Select School"
+              name="schoolId"
+              value={selectedSchool}
+              onChange={(e) => setSelectedSchool(e.target.value)}
+              disabled={!!student?.id}
+            >
+              {schools.map((data) => {
+                return (
+                  <MenuItem key={data.id} value={data.id}>
+                    {data.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+      )}
+
       <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"

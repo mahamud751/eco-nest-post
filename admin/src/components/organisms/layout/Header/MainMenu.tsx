@@ -289,13 +289,29 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
     },
   ];
 
-  // Rider Menu Items
   const riderMenuItems: MenuItem[] = [
     {
       text: "Order",
       icon: <ShoppingBasketOutlined className="text-purple-500" />,
       path: "/order-list",
       submenus: [],
+    },
+  ];
+  const schoolMenuItems: MenuItem[] = [
+    {
+      text: "Measurements",
+      icon: <School className="text-pink-600" />,
+      path: "/measurements",
+      submenus: [
+        {
+          text: "Add Measurement",
+          path: "/add-measurement",
+        },
+        {
+          text: "Measurement List",
+          path: "/measurement-list",
+        },
+      ],
     },
   ];
 
@@ -308,6 +324,8 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
           ? vendorMenuItems
           : user?.role === "rider"
           ? riderMenuItems
+          : user?.role === "schoolManager"
+          ? schoolMenuItems
           : []),
       ]
     : commonMenuItems;
