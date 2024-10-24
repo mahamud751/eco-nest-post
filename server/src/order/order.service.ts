@@ -124,7 +124,7 @@ export class OrderService {
     });
   }
 
-  async updateOrder(id: string, updateData: any) {
+  async updateOrder(id: string, updateData: UpdateOrderDto) {
     const oldOrder = await this.prisma.order.findUnique({
       where: { id },
     });
