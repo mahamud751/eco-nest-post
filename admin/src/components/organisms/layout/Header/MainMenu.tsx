@@ -181,17 +181,21 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       ],
     },
     {
-      text: "Vendors",
+      text: "Vendors & Riders",
       icon: <AddBusiness className="text-indigo-600" />,
       path: "/vendors",
       submenus: [
         {
-          text: "Add Vendor",
+          text: "Add Vendor & Riders",
           path: "/add-user",
         },
         {
           text: "Vendor List",
           path: "/vendor-list",
+        },
+        {
+          text: "Riders List",
+          path: "/rider-list",
         },
         {
           text: "Vendor Request List",
@@ -275,9 +279,9 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
 
   const menuItems = isClient
     ? [
-      ...commonMenuItems,
-      ...(user?.role === "superAdmin" ? adminMenuItems : []),
-    ]
+        ...commonMenuItems,
+        ...(user?.role === "superAdmin" ? adminMenuItems : []),
+      ]
     : commonMenuItems;
 
   const renderMenuItems = () => (

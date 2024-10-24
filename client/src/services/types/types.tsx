@@ -260,7 +260,7 @@ export interface Feedbacks {
 
 export interface Notification {
   id: string;
-  orderId: string
+  orderId: string;
   message: string;
   userEmail?: string;
   createdAt: Date;
@@ -286,7 +286,8 @@ export type UserRole =
   | "user"
   | "manager"
   | "vendor"
-  | "schoolManager";
+  | "schoolManager"
+  | "rider";
 
 export type UserStatus = "active" | "deactive" | "blocked";
 

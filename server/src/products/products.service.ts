@@ -325,7 +325,5 @@ export class ProductService {
       where: { status: 'InActive' },
       data: { status: 'inactive' },
     });
-
-    console.log('Statuses updated successfully');
   }
 }

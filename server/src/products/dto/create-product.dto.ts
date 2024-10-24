@@ -144,7 +144,7 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({
     description: 'User information related to the product',
-    type: UserInfoDto, // Use UserInfoDto here
+    type: UserInfoDto,
   })
   @IsObject()
   @IsOptional()
