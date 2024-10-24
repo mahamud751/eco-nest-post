@@ -26,6 +26,7 @@ model User {
   lastVisited String[]   @default([])
   branch      Branch?    @relation(fields: [branchId], references: [id])
   advances    Advance[]  @relation("VendorAdvances")
+  orders      Order[]    @relation("RiderOrders")
 }
 
 model Vendor {
@@ -292,6 +293,8 @@ model Order {
   getState       Json[]
   nagadNumber    String?
   Notification   Notification[]
+  riderIds       String[]
+  rider          User[]         @relation("RiderOrders")
 }
 
 model Notification {
