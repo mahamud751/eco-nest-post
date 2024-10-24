@@ -11,15 +11,21 @@ export class PermissionService {
     private readonly auditLogService: AuditLogService,
   ) {}
 
-  async create(CreatePermissionDto: CreatePermissionDto) {
-    const { ...rest } = CreatePermissionDto;
-
+  async create(createPermissionDto: CreatePermissionDto) {
+    const { users, ...rest } = createPermissionDto;
     const permission = await this.prisma.permission.create({
       data: {
         ...rest,
+        users: {
+          connect: users?.map((userId) => ({ id: userId })),
+        },
+      },
+      include: {
+        users: true,
       },
     });
-    return { message: 'permission created successfully', permission };
+
+    return { message: 'Permission created successfully', permission };
   }
 
   async findAll(

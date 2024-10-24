@@ -260,7 +260,6 @@ export class UsersService {
 
     const productIds = user.lastVisited;
 
-    // Fetch the products based on the IDs in lastVisited
     const products = await this.prisma.product.findMany({
       where: { id: { in: productIds } },
       include: {

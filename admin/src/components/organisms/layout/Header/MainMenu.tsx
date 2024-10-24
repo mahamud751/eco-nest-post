@@ -234,6 +234,21 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       ],
     },
     {
+      text: "Permissions",
+      icon: <School className="text-pink-600" />,
+      path: "/permissions",
+      submenus: [
+        {
+          text: "Add Permissions",
+          path: "/add-permission",
+        },
+        {
+          text: "Permissions List",
+          path: "/permission-list",
+        },
+      ],
+    },
+    {
       text: "Faq",
       icon: <LiveHelp className="text-red-400 " />,
       path: "/faq",

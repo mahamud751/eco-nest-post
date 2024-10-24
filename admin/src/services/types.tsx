@@ -218,6 +218,12 @@ export interface School {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface Permission {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface Student {
   id: string;
