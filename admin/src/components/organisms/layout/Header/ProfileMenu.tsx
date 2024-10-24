@@ -64,8 +64,8 @@ export default function SwipeableTemporaryDrawer() {
               <ListItemIcon>
                 <Image
                   src={"https://i.ibb.co/t2JQT5q/girl.png"}
-                  width={20}
-                  height={20}
+                  width={50}
+                  height={50}
                   alt="profile image"
                   className="rounded-full"
                 />
