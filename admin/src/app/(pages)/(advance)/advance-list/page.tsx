@@ -64,7 +64,7 @@ const AdvanceList = () => {
       flex: 1,
       renderCell: (params) => (
         <button
-          className="bg-blue-500 text-white px-3 py-1 rounded"
+          className="mt-4 flex justify-center items-center bg-red-500 text-white rounded w-[80px] h-[25px]"
           onClick={() => handleAssignClick(params.row)}
         >
           Assign

@@ -30,6 +30,7 @@ const MeasurementForm: React.FC<StudentFormProps> = ({
             name="schoolId"
             value={selectedSchool}
             onChange={(e) => setSelectedSchool(e.target.value)}
+            disabled={selectedSchool != ""}
           >
             {schools.map((data) => {
               return (

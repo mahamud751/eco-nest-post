@@ -151,16 +151,16 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       ],
     },
     {
-      text: "Advance Order",
+      text: "Sample Order",
       icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
       path: "/advance",
       submenus: [
         {
-          text: "Add Advance",
+          text: "Add Sample",
           path: "/add-advance",
         },
         {
-          text: "Advance List",
+          text: "Sample List",
           path: "/advance-list",
         },
       ],

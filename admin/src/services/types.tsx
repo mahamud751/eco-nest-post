@@ -206,6 +206,7 @@ export interface OrderItem {
   color: string;
 }
 export interface School {
+  data: any;
   id: string;
   name: string;
   photos: Photo[];
@@ -241,6 +242,7 @@ export interface Student {
   school: School;
   createdAt: Date;
   updatedAt: Date;
+  students: Student[];
 }
 
 export interface Notification {
@@ -267,7 +269,7 @@ export type OrderStatus =
 
 export type CancelStatus = "YES" | "NO";
 
-export type SchoolStatus = "pending" | "processing" | "delivery" | "canceled";
+export type SchoolStatus = "active" | "pending" | "processing" | "delivery";
 
 export type Gender = "Male" | "Female" | "Other";
 

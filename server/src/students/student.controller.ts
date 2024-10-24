@@ -35,8 +35,9 @@ export class StudentController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
+    @Query('schoolId') schoolId?: string,
   ) {
-    return this.studentService.findAll(page, perPage);
+    return this.studentService.findAll(page, perPage, schoolId);
   }
 
   @Get(':id')

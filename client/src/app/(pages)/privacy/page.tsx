@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 
 const Terms = () => {
   const { data } = UseFetch<Dynamic[]>("dynamics");
-  const terms = data?.find((item) => item.name === "Privacy");
+  const terms = data?.find((item) => item.name === "privacy");
 
   return (
     <Box className="container mx-auto py-10 flex gap-8">
