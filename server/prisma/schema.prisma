@@ -251,7 +251,7 @@ model Student {
 }
 
 model Order {
-  id             String       @id @default(uuid())
+  id             String         @id @default(uuid())
   grandPrice     String?
   selectedSize   String?
   selectedColor  String?
@@ -277,7 +277,7 @@ model Order {
   rocketTrx      String?
   dutchNumber    String?
   dutchTrx       String?
-  status         OrderStatus  @default(pending)
+  status         OrderStatus    @default(pending)
   totalAmount    Float?
   receivedTk     Float?
   dueAmount      Float?
@@ -285,24 +285,23 @@ model Order {
   unReceivedTk   Float?
   paymentStatus  String?
   bookingExtend  Boolean?
-  isCancel       CancelStatus @default(NO)
+  isCancel       CancelStatus   @default(NO)
   userCancel     Json?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   getState       Json[]
   nagadNumber    String?
-
-  Notification Notification[]
+  Notification   Notification[]
 }
 
 model Notification {
   id        String   @id @default(uuid())
   userEmail String
-  orderId   String
   message   String
   status    String   @default("unread")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orderId   String
   order     Order    @relation(fields: [orderId], references: [id])
 }
 
@@ -349,7 +348,6 @@ enum UserRole {
   manager
   vendor
   schoolManager
-  rider
 }
 
 enum UserStatus {
