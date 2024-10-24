@@ -175,7 +175,7 @@ const OrderDetails = () => {
                   <TableCell className="p-4">
                     <Button
                       variant="contained"
-                      color="primary"
+                      color="warning"
                       size="small"
                       onClick={() => handleHistoryClick(item)}
                       style={{
