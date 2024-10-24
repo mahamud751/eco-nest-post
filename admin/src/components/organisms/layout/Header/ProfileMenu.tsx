@@ -77,18 +77,6 @@ export default function SwipeableTemporaryDrawer() {
       <h2 className="text-center text-xl">{user?.name}</h2>
       <p className="text-center mb-5 text-purple-600">{user?.email}</p>
       <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
 
       <Divider />
       <div className="flex justify-center">
