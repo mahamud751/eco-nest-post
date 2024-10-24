@@ -39,15 +39,18 @@ export class StudentService {
     page: number = 1,
     perPage: number = 10,
     schoolId?: string,
-    email?: string,
+    email?: string, // Added email parameter
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
+
+    // Count total number of students
     const totalCountPromise = this.prisma.student.count({
       where: schoolId ? { schoolId } : {},
     });
 
+    // Fetch the paginated student data
     const dataPromise = this.prisma.student.findMany({
       skip,
       take: perPageNumber,
@@ -59,13 +62,16 @@ export class StudentService {
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    // Apply email filtering if email is provided
     const filteredData = email
-      ? data.filter((product) => {
-          const userInfo = product.school as UserInfoDto;
+      ? data.filter((student) => {
+          const userInfo = student.school as UserInfoDto; // Adjust if the structure differs
           return userInfo?.email ? userInfo.email.includes(email) : false;
         })
       : data;
 
+    // Recalculate total if email filter is applied
     const filteredTotal = email ? filteredData.length : total;
 
     return { data: filteredData, total: filteredTotal };
