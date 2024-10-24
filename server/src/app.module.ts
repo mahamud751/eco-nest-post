@@ -20,6 +20,7 @@ import { OrderModule } from './order/order.module';
 import { DynamicModule } from './dynamic/dynamic.module';
 import { ReviewModule } from './review/review.module';
 import { NotificationModule } from './notification/notification.module';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { NotificationModule } from './notification/notification.module';
     OrderModule,
     DynamicModule,
     ReviewModule,
-    NotificationModule
+    NotificationModule,
+    PermissionModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

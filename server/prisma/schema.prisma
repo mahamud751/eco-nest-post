@@ -8,25 +8,26 @@ datasource db {
 }
 
 model User {
-  id          String     @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
-  email       String     @unique
+  email       String       @unique
   phone       String?
   userId      String?
   refferCode  String?
-  gender      Gender     @default(Other)
+  gender      Gender       @default(Other)
   password    String
   address     String?
-  role        UserRole   @default(user)
+  role        UserRole     @default(user)
   branchId    String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   photos      Json[]
-  status      UserStatus @default(active)
-  lastVisited String[]   @default([])
-  branch      Branch?    @relation(fields: [branchId], references: [id])
-  advances    Advance[]  @relation("VendorAdvances")
-  orders      Order[]    @relation("RiderOrders")
+  status      UserStatus   @default(active)
+  lastVisited String[]     @default([])
+  branch      Branch?      @relation(fields: [branchId], references: [id])
+  advances    Advance[]    @relation("VendorAdvances")
+  orders      Order[]      @relation("RiderOrders")
+  permissions Permission[] @relation("UserPermissions")
 }
 
 model Vendor {
@@ -295,6 +296,14 @@ model Order {
   Notification   Notification[]
   riderIds       String[]
   rider          User[]         @relation("RiderOrders")
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]   @relation("UserPermissions")
 }
 
 model Notification {
