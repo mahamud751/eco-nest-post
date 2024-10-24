@@ -348,8 +348,6 @@ enum UserRole {
   manager
   vendor
   schoolManager
-  rider
-  delivery
 }
 
 enum UserStatus {
