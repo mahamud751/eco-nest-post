@@ -73,6 +73,9 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       path: "/",
       submenus: [],
     },
+  ];
+
+  const adminMenuItems: MenuItem[] = [
     {
       text: "Banner",
       icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
@@ -109,9 +112,6 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       path: "/customOrder-list",
       submenus: [],
     },
-  ];
-
-  const adminMenuItems: MenuItem[] = [
     {
       text: "Category",
       icon: <CategoryIcon className="text-yellow-500" />,
@@ -277,10 +277,38 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
     },
   ];
 
+  const vendorMenuItems: MenuItem[] = [
+    {
+      text: "Product",
+      icon: <DryCleaningIcon className="text-red-500" />,
+      path: "/products",
+      submenus: [
+        { text: "Add Product", path: "/add-product" },
+        { text: "Product List", path: "/product-list" },
+      ],
+    },
+  ];
+
+  // Rider Menu Items
+  const riderMenuItems: MenuItem[] = [
+    {
+      text: "Order",
+      icon: <ShoppingBasketOutlined className="text-purple-500" />,
+      path: "/order-list",
+      submenus: [],
+    },
+  ];
+
   const menuItems = isClient
     ? [
         ...commonMenuItems,
-        ...(user?.role === "superAdmin" ? adminMenuItems : []),
+        ...(user?.role === "superAdmin"
+          ? adminMenuItems
+          : user?.role === "vendor"
+          ? vendorMenuItems
+          : user?.role === "rider"
+          ? riderMenuItems
+          : []),
       ]
     : commonMenuItems;
 

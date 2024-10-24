@@ -193,7 +193,7 @@ export interface Order {
   bookingExtend?: boolean;
   isCancel: CancelStatus;
   userCancel?: unknown;
-
+  riders: User[];
   createdAt: Date;
   updatedAt: Date;
 }

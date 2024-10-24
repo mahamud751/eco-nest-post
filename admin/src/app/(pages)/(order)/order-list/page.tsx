@@ -5,18 +5,28 @@ import StatusButton from "@/components/atoms/StatusButton";
 import DataTable from "@/components/templates/DataTable";
 import InvoiceModal from "./InvoiceModal";
 import { Order } from "@/services/types";
+import CustomerAssignRider from "@/components/molecules/CustomerAssignRider";
+import { useAuth } from "@/services/hooks/auth";
 
 const OrderList = () => {
+  const { user } = useAuth();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRiderOrder, setSelectedRiderOrder] = useState<Order | null>(
+    null
+  );
+  const [isModalOpenInvoice, setIsModalOpenInvoice] = useState(false);
+
+  const handleAssignClick = (row: Order) => {
+    setSelectedRiderOrder(row);
+  };
 
   const handleOpenModal = (order: Order) => {
     setSelectedOrder(order);
-    setIsModalOpen(true);
+    setIsModalOpenInvoice(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpenInvoice(false);
     setSelectedOrder(null);
   };
 
@@ -56,6 +66,21 @@ const OrderList = () => {
       ),
     },
   ];
+  if (user?.role !== "rider") {
+    columns.push({
+      field: "assignRider",
+      headerName: "Assign Rider",
+      flex: 1,
+      renderCell: (params) => (
+        <button
+          className="mt-3 flex justify-center items-center bg-gray-700 text-white rounded w-[80px] h-[28px]"
+          onClick={() => handleAssignClick(params.row)}
+        >
+          Assign
+        </button>
+      ),
+    });
+  }
 
   return (
     <>
@@ -70,9 +95,15 @@ const OrderList = () => {
       {/* Invoice modal component */}
       {selectedOrder && (
         <InvoiceModal
-          open={isModalOpen}
+          open={isModalOpenInvoice}
           onClose={handleCloseModal}
           selectedOrder={selectedOrder}
+        />
+      )}
+      {selectedRiderOrder && (
+        <CustomerAssignRider
+          data={selectedRiderOrder}
+          onClose={() => setSelectedRiderOrder(null)}
         />
       )}
     </>

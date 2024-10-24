@@ -45,6 +45,7 @@ import Link from "next/link";
 import MuiPagination from "@mui/material/Pagination";
 
 import useExtractLinkPart from "@/services/hooks/useExtractLinkPart";
+import { useAuth } from "@/services/hooks/auth";
 
 interface DataTableProps {
   fetchUrl: string;
@@ -107,7 +108,7 @@ const DataTable: React.FC<DataTableProps> = ({
   isJustDeleteData = true,
 }) => {
   const theme = useTheme();
-
+  const { user } = useAuth();
   const customStyles = {
     header: {
       backgroundColor: theme.palette.mode === "dark" ? "#333" : "#F4F6F8",
@@ -338,7 +339,7 @@ const DataTable: React.FC<DataTableProps> = ({
                     <Edit color="action" className="mx-2" />
                   </Link>
                 )}
-                {isJustDeleteData && (
+                {isJustDeleteData && user?.role !== "rider" && (
                   <Delete
                     color="error"
                     onClick={() => handleDelete(params.id.toString())}

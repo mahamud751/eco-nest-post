@@ -55,6 +55,24 @@ export class OrderController {
     return this.orderService.findOrdersByEmail(email, page, perPage, allOrder);
   }
 
+  @Get(':id/riderOrder')
+  @ApiOperation({
+    summary: 'Get order products assigned to a specific (user)',
+  })
+  @ApiParam({ name: 'id', description: 'ID of the order (user)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return order products assigned to the order',
+  })
+  @ApiResponse({ status: 404, description: 'rider or products not found' })
+  async getRiderOrder(
+    @Param('id') id: string,
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 25,
+  ) {
+    return this.orderService.getRiderOrder(id, page, perPage);
+  }
+
   @Get('/totalGrandPrice')
   @ApiOperation({ summary: 'Get total grand price of all orders' })
   @ApiResponse({ status: 200, description: 'Total grand price' })

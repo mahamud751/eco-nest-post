@@ -139,6 +139,40 @@ export class OrderService {
     return updatedOrder;
   }
 
+  async getRiderOrder(
+    userId: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.order.count({
+      where: {
+        riderIds: {
+          has: userId,
+        },
+      },
+    });
+
+    const dataPromise = this.prisma.order.findMany({
+      where: {
+        riderIds: {
+          has: userId,
+        },
+      },
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
+  }
+
   async assignRiderToOrder(id: string, updateOrderDto: UpdateOrderDto) {
     const order = await this.prisma.order.findUnique({
       where: { id },
