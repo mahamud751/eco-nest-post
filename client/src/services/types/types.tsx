@@ -241,6 +241,7 @@ export interface Order {
   userCancel?: unknown;
   createdAt: Date;
   updatedAt: Date;
+  riders: User[];
 }
 
 export interface OrderItem {

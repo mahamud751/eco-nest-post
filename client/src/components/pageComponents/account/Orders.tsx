@@ -21,6 +21,7 @@ import {
 import dayjs from "dayjs";
 
 import Invoice from "./Invoice";
+import History from "./History";
 
 const OrderDetails = () => {
   const { user } = useAuth();
@@ -34,7 +35,11 @@ const OrderDetails = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const [openHistory, setOpenHistory] = useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrdeHistory, setSelectedOrderHistory] = useState<Order | null>(
+    null
+  );
 
   const fetchOrders = async () => {
     if (!user || !user.email) {
@@ -83,9 +88,18 @@ const OrderDetails = () => {
     setOpen(true);
   };
 
+  const handleHistoryClick = (order: Order) => {
+    setSelectedOrderHistory(order);
+    setOpenHistory(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
     setSelectedOrder(null);
+  };
+  const handleClose2 = () => {
+    setOpenHistory(false);
+    setSelectedOrderHistory(null);
   };
 
   if (loading) {
@@ -122,6 +136,9 @@ const OrderDetails = () => {
                   Invoice
                 </TableCell>
                 <TableCell className="p-4 text-white font-bold">
+                  Order History
+                </TableCell>
+                <TableCell className="p-4 text-white font-bold">
                   Status
                 </TableCell>
               </TableRow>
@@ -153,6 +170,21 @@ const OrderDetails = () => {
                       }}
                     >
                       View Invoice
+                    </Button>
+                  </TableCell>
+                  <TableCell className="p-4">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleHistoryClick(item)}
+                      style={{
+                        borderRadius: "5px",
+                        width: 100,
+                        textTransform: "none",
+                      }}
+                    >
+                      View History
                     </Button>
                   </TableCell>
                   <TableCell className="p-4">
@@ -197,6 +229,11 @@ const OrderDetails = () => {
         <DialogTitle>Invoice Details</DialogTitle>
         <DialogContent>
           <Invoice selectedOrder={selectedOrder} />
+        </DialogContent>
+      </Dialog>
+      <Dialog open={openHistory} onClose={handleClose2} maxWidth="lg" fullWidth>
+        <DialogContent>
+          <History selectedOrder={selectedOrdeHistory} />
         </DialogContent>
       </Dialog>
     </div>
