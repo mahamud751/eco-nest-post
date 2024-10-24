@@ -324,4 +324,12 @@ export class CreateOrderDto {
   })
   @IsOptional()
   userCancel?: any;
+
+  @ApiPropertyOptional({
+    description: 'List of rider IDs associated with the order',
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  riderIds?: string[];
 }

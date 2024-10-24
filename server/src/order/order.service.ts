@@ -1,15 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import * as nodemailer from 'nodemailer';
 import { NotificationService } from 'src/notification/notification.service';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationService: NotificationService,
-  ) { }
+  ) {}
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const order = await this.prisma.order.create({
@@ -136,6 +137,27 @@ export class OrderService {
     }
 
     return updatedOrder;
+  }
+
+  async assignRiderToOrder(id: string, updateOrderDto: UpdateOrderDto) {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: { rider: true },
+    });
+    if (!order) {
+      throw new NotFoundException('Order product not found');
+    }
+    if (updateOrderDto.riderIds) {
+      await this.prisma.order.update({
+        where: { id },
+        data: {
+          riderIds: {
+            set: updateOrderDto.riderIds,
+          },
+        },
+      });
+    }
+    return { message: 'Order rider assignment updated successfully' };
   }
 
   async calculateTotalGrandPrice() {

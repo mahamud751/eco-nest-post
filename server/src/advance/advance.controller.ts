@@ -51,7 +51,7 @@ export class AdvanceController {
         {
           title: file.originalname,
           src: `/uploads/${file.filename}`,
-          srcHash: '', // This will be set in the service
+          srcHash: '',
           id: undefined,
         },
       ];
@@ -190,19 +190,17 @@ export class AdvanceController {
     @Body() updateAdvanceDto: UpdateAdvanceDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // Handle Multer file upload
     if (file) {
       updateAdvanceDto.files = [
         {
           title: file.originalname,
           src: `/uploads/${file.filename}`,
-          srcHash: '', // This will be set in the service
+          srcHash: '',
           id: undefined,
         },
       ];
     }
 
-    // Handle Base64 file uploads if provided
     if (updateAdvanceDto.files) {
       for (const fileDetail of updateAdvanceDto.files) {
         if (fileDetail.src.startsWith('data:')) {
@@ -218,7 +216,7 @@ export class AdvanceController {
           const filePath = join('public', 'uploads', filename);
 
           await writeFile(filePath, buffer);
-          fileDetail.src = `/${filename}`; // Update the path to reflect the public URL
+          fileDetail.src = `/${filename}`;
         }
       }
     }

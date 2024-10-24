@@ -10,6 +10,7 @@ import {
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -75,5 +76,17 @@ export class OrderController {
   @ApiResponse({ status: 200, description: 'The updated order details' })
   updateOrder(@Param('id') id: string, @Body() updateData: any) {
     return this.orderService.updateOrder(id, updateData);
+  }
+
+  @Patch(':id/assign')
+  @ApiOperation({ summary: 'Assign riders to an order by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the order to update' })
+  @ApiResponse({ status: 200, description: 'The updated order' })
+  @ApiResponse({ status: 404, description: 'order not found' })
+  async assignRiderToOrder(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return this.orderService.assignRiderToOrder(id, updateOrderDto);
   }
 }
