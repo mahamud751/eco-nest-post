@@ -4,12 +4,14 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import * as nodemailer from 'nodemailer';
 import { NotificationService } from 'src/notification/notification.service';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { AuditLogService } from 'src/audit/audit.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly auditLogService: AuditLogService,
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto) {
@@ -123,6 +125,13 @@ export class OrderService {
   }
 
   async updateOrder(id: string, updateData: any) {
+    const oldOrder = await this.prisma.order.findUnique({
+      where: { id },
+    });
+
+    if (!oldOrder) {
+      throw new NotFoundException('Order not found');
+    }
     const updatedOrder = await this.prisma.order.update({
       where: { id: id },
       data: updateData,
@@ -136,7 +145,15 @@ export class OrderService {
       });
     }
 
-    return updatedOrder;
+    await this.auditLogService.log(
+      id,
+      'Order',
+      'UPDATE',
+      oldOrder,
+      updatedOrder,
+    );
+
+    return { message: 'Order updated successfully', updatedOrder };
   }
 
   async getRiderOrder(

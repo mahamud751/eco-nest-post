@@ -10,7 +10,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [
     PrismaModule,
     MulterModule.register({
-      dest: '/public/uploads', // specify the destination folder for uploads
+      dest: '/public/uploads',
     }),
   ],
   controllers: [AdvanceController],

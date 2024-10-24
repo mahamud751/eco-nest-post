@@ -1,7 +1,6 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -32,10 +31,9 @@ export class AdvanceService {
       bottomFab,
       address,
       quantity,
-      files, // Extract files here
+      files,
     } = createAdvanceDto;
 
-    // Validate files if necessary
     if (files) {
       files.forEach((file) => {
         if (!file.title || !file.src) {
@@ -65,7 +63,7 @@ export class AdvanceService {
                 srcHash: crypto
                   .createHash('md5')
                   .update(file.src)
-                  .digest('hex'), // Hashing the src
+                  .digest('hex'),
               })),
             }
           : undefined,
@@ -256,7 +254,6 @@ export class AdvanceService {
       throw new NotFoundException('Advance product not found');
     }
 
-    // Remove associated files before deleting the advance
     await this.prisma.file.deleteMany({
       where: { advanceId: id },
     });
@@ -279,19 +276,15 @@ export class AdvanceService {
     }
 
     const { files, ...updateData } = updateAdvanceDto;
-
-    // Determine which files should be removed
     const filesToRemove = advance.files.filter(
       (file) => !files?.some((f) => f.id === file.id),
     );
 
-    // Handle file upserts
     const fileUpserts = (files || []).map((file) => {
       const srcHash = file.src
         ? crypto.createHash('md5').update(file.src).digest('hex')
         : undefined;
 
-      // Check if the srcHash already exists for another file
       const existingFile = advance.files.find(
         (f) => f.srcHash === srcHash && f.id !== file.id,
       );
@@ -299,7 +292,7 @@ export class AdvanceService {
       if (existingFile) {
         return {
           where: {
-            id: existingFile.id, // Update existing file
+            id: existingFile.id,
           },
           update: {
             title: file.title,
@@ -314,11 +307,10 @@ export class AdvanceService {
         };
       }
 
-      // If no existing file with the same srcHash, create new
       return {
         where: {
-          id: file.id || undefined, // Use id if available
-          srcHash: srcHash || undefined, // Use srcHash if available
+          id: file.id || undefined,
+          srcHash: srcHash || undefined,
         },
         update: {
           title: file.title,
@@ -333,7 +325,6 @@ export class AdvanceService {
       };
     });
 
-    // Perform the update
     const updatedAdvance = await this.prisma.advance.update({
       where: { id },
       data: {
