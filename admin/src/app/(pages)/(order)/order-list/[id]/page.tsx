@@ -45,7 +45,7 @@ const EditOrder: React.FC<BaseEditProps> = ({ params }) => {
             <MenuItem value="pending">Pending</MenuItem>
             <MenuItem value="processing">Processing</MenuItem>
             <MenuItem value="approved">Approved</MenuItem>
-            <MenuItem value="delivered">Approved</MenuItem>
+            <MenuItem value="delivered">Delivered</MenuItem>
             <MenuItem value="canceled">Canceled</MenuItem>
           </Select>
         </FormControl>

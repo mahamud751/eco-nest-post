@@ -30,6 +30,11 @@ const OrderList = () => {
     setSelectedOrder(null);
   };
 
+  const fetchUrl =
+    user?.role === "rider"
+      ? `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/${user?.id}/riderOrder`
+      : `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`;
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 1 },
     {
@@ -52,8 +57,8 @@ const OrderList = () => {
       renderCell: (params) => <StatusButton status={params.value} />,
     },
     {
-      field: "actions",
-      headerName: "Actions",
+      field: "invoice",
+      headerName: "Invoice",
       flex: 1,
       renderCell: (params) => (
         <button
@@ -85,7 +90,7 @@ const OrderList = () => {
   return (
     <>
       <DataTable
-        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`}
+        fetchUrl={fetchUrl}
         deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`}
         columns={columns}
         searchField="name"
