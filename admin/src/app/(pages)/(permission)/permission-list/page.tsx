@@ -27,12 +27,9 @@ const PermissionList: React.FC = () => {
   const users = userData?.data || [];
   const permissions = permissionData?.data || [];
 
-  // Effect to set initial permissions for the selected user
   useEffect(() => {
     if (selectedUser) {
       setSelectedPermissions(selectedUser.permissions?.map((p) => p.id) || []);
-    } else {
-      setSelectedPermissions([]);
     }
   }, [selectedUser]);
 
@@ -43,9 +40,9 @@ const PermissionList: React.FC = () => {
   const handlePermissionChange = (permissionId: string) => {
     setSelectedPermissions((prev) => {
       if (prev.includes(permissionId)) {
-        return prev.filter((id) => id !== permissionId); // Unselect permission
+        return prev.filter((id) => id !== permissionId);
       }
-      return [...prev, permissionId]; // Select permission
+      return [...prev, permissionId];
     });
   };
 
@@ -74,11 +71,6 @@ const PermissionList: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to update permissions");
       }
-
-      // Optionally, refetch user data here to get the latest permissions
-      // If the response contains updated user data, update the state accordingly
-      const updatedUser = await response.json();
-      setSelectedPermissions(updatedUser.permissions.map((p: any) => p.id));
 
       Swal.fire({
         title: "Success",
