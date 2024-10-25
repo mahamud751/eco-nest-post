@@ -267,34 +267,28 @@ export class UsersService {
   ) {
     const updatePromises = payloads.map(async ({ id, permissions }) => {
       try {
-        console.log(`Updating permissions for user: ${id}`);
-
+        // Find existing permissions for the user
         const existingUser = await this.prisma.user.findUnique({
           where: { id },
           include: { permissions: true },
         });
 
-        if (!existingUser) {
-          throw new NotFoundException(`User ${id} not found`);
-        }
+        if (!existingUser) throw new NotFoundException(`User ${id} not found`);
 
-        // Combine current permissions with new permissions
+        // Merge new permissions with existing ones
         const combinedPermissions = new Set([
           ...existingUser.permissions.map((p) => p.id),
           ...permissions,
         ]);
 
-        // Log the final permissions to be set
-        const permissionSet = Array.from(combinedPermissions).map((permId) => ({
-          id: permId,
-        }));
-        console.log(`Setting permissions for user ${id}:`, permissionSet);
-
+        // Update each user individually
         return this.prisma.user.update({
           where: { id },
           data: {
             permissions: {
-              set: permissionSet,
+              set: Array.from(combinedPermissions).map((permissionId) => ({
+                id: permissionId,
+              })),
             },
           },
         });
@@ -305,7 +299,6 @@ export class UsersService {
     });
 
     await Promise.all(updatePromises);
-
     return { message: 'Permissions updated successfully for all users' };
   }
 
