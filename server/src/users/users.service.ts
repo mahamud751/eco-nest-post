@@ -215,14 +215,21 @@ export class UsersService {
   }
 
   async getUser(id: string): Promise<any> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { permissions: true },
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
   }
+
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const oldUser = await this.prisma.user.findUnique({ where: { id } });
+    const oldUser = await this.prisma.user.findUnique({
+      where: { id },
+      include: { permissions: true },
+    });
 
     if (!oldUser) {
       throw new NotFoundException('User not found');
@@ -235,9 +242,10 @@ export class UsersService {
         title: photo.title,
         src: photo.src,
       })) || [];
+
     const permissionsData = permissions
       ? {
-          connect: permissions.map((permissionId) => ({ id: permissionId })),
+          set: permissions.map((permissionId) => ({ id: permissionId })),
         }
       : undefined;
 
