@@ -131,9 +131,16 @@ const PermissionList: React.FC = () => {
                       />
                     )}
                     renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip label={option.name} {...getTagProps({ index })} />
-                      ))
+                      value.map((option, index) => {
+                        const { key, ...tagProps } = getTagProps({ index });
+                        return (
+                          <Chip
+                            key={option.id}
+                            label={option.name}
+                            {...tagProps}
+                          />
+                        );
+                      })
                     }
                   />
                 </Grid>
