@@ -60,7 +60,7 @@ const PermissionList: React.FC = () => {
     // Prepare payloads based on selection
     const payloads = usersToUpdate.map((user) => ({
       id: user.id,
-      email: user.email,
+      //   email: user.email,
       permissions: selectedPermissions,
     }));
 
@@ -75,6 +75,7 @@ const PermissionList: React.FC = () => {
             body: JSON.stringify(payloads),
           }
         );
+        //9c577c53-d019-4a56-ae55-27c407f83e00
       } else {
         // Individual update for single user
         await Promise.all(
