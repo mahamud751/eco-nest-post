@@ -264,6 +264,9 @@ export class UsersService {
   }
 
   async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
+    console.log('Received ids:', ids);
+    console.log('Received updateUserDto:', updateUserDto);
+
     const updatePromises = ids.map(async (id) => {
       try {
         const oldUser = await this.prisma.user.findUnique({
