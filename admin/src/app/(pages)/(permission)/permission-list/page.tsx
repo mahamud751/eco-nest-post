@@ -54,7 +54,6 @@ const PermissionList: React.FC = () => {
       await Promise.all(
         users.map(async (user) => {
           const payload = {
-            userId: user.id,
             permissions: selectedPermissions[user.id] || [],
           };
 

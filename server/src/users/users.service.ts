@@ -221,25 +221,32 @@ export class UsersService {
     }
     return user;
   }
-
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const oldUser = await this.prisma.user.findUnique({ where: { id } });
 
     if (!oldUser) {
       throw new NotFoundException('User not found');
     }
-    const { photos, ...rest } = updateUserDto;
+
+    const { photos, permissions, ...rest } = updateUserDto;
 
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
         src: photo.src,
       })) || [];
+    const permissionsData = permissions
+      ? {
+          connect: permissions.map((permissionId) => ({ id: permissionId })),
+        }
+      : undefined;
+
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
         ...rest,
         photos: photoObjects.length > 0 ? photoObjects : undefined,
+        permissions: permissionsData,
       },
     });
 

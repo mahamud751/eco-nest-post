@@ -68,5 +68,5 @@ export class UpdateUserDto {
   @IsArray()
   @IsOptional()
   @IsString({ each: true })
-  permission?: string[];
+  permissions?: string[];
 }
