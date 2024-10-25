@@ -267,7 +267,7 @@ export class UsersService {
   ) {
     const updatePromises = payloads.map(async ({ id, permissions }) => {
       try {
-        // Find existing permissions for the user
+        // Fetch existing permissions for the user
         const existingUser = await this.prisma.user.findUnique({
           where: { id },
           include: { permissions: true },
@@ -275,18 +275,29 @@ export class UsersService {
 
         if (!existingUser) throw new NotFoundException(`User ${id} not found`);
 
-        // Merge new permissions with existing ones
-        const combinedPermissions = new Set([
-          ...existingUser.permissions.map((p) => p.id),
-          ...permissions,
-        ]);
+        // Separate permissions to add and remove
+        const existingPermissions = new Set(
+          existingUser.permissions.map((p) => p.id),
+        );
+        const newPermissions = new Set(permissions);
 
-        // Update each user individually
+        // Determine which permissions to connect and disconnect
+        const permissionsToConnect = Array.from(newPermissions).filter(
+          (permission) => !existingPermissions.has(permission),
+        );
+        const permissionsToDisconnect = Array.from(existingPermissions).filter(
+          (permission) => !newPermissions.has(permission),
+        );
+
+        // Update user with connect and disconnect for permissions
         return this.prisma.user.update({
           where: { id },
           data: {
             permissions: {
-              set: Array.from(combinedPermissions).map((permissionId) => ({
+              connect: permissionsToConnect.map((permissionId) => ({
+                id: permissionId,
+              })),
+              disconnect: permissionsToDisconnect.map((permissionId) => ({
                 id: permissionId,
               })),
             },
