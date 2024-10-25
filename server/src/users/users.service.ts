@@ -265,37 +265,48 @@ export class UsersService {
 
   async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
     const updatePromises = ids.map(async (id) => {
-      const oldUser = await this.prisma.user.findUnique({
-        where: { id },
-        include: { permissions: true },
-      });
+      try {
+        const oldUser = await this.prisma.user.findUnique({
+          where: { id },
+          include: { permissions: true },
+        });
 
-      if (!oldUser) throw new NotFoundException(`User ${id} not found`);
+        if (!oldUser) {
+          throw new NotFoundException(`User ${id} not found`);
+        }
 
-      const { photos, permissions, ...rest } = updateUserDto;
+        const { photos, permissions, ...rest } = updateUserDto;
+        const photoObjects =
+          photos?.map((photo) => ({
+            title: photo.title,
+            src: photo.src,
+          })) || [];
 
-      const photoObjects =
-        photos?.map((photo) => ({
-          title: photo.title,
-          src: photo.src,
-        })) || [];
+        const permissionsData = permissions
+          ? { set: permissions.map((permissionId) => ({ id: permissionId })) }
+          : undefined;
 
-      const permissionsData = permissions
-        ? { set: permissions.map((permissionId) => ({ id: permissionId })) }
-        : undefined;
+        const userUpdate = await this.prisma.user.update({
+          where: { id },
+          data: {
+            ...rest,
+            photos: photoObjects.length > 0 ? photoObjects : undefined,
+            permissions: permissionsData,
+          },
+        });
 
-      const userUpdate = await this.prisma.user.update({
-        where: { id },
-        data: {
-          ...rest,
-          photos: photoObjects.length > 0 ? photoObjects : undefined,
-          permissions: permissionsData,
-        },
-      });
-
-      // Logging each user's update
-      await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
-      return { message: `User ${id} updated successfully`, userUpdate };
+        await this.auditLogService.log(
+          id,
+          'User',
+          'UPDATE',
+          oldUser,
+          userUpdate,
+        );
+        return { message: `User ${id} updated successfully`, userUpdate };
+      } catch (error) {
+        console.error(`Error updating user ${id}:`, error);
+        throw new InternalServerErrorException(`Failed to update user ${id}`);
+      }
     });
 
     try {
