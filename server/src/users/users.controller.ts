@@ -130,7 +130,7 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Patch('batch-update')
+  @Patch('batch-updatess')
   @ApiOperation({ summary: 'Batch update multiple users' })
   async batchUpdateUsers(
     @Body() body: { ids: string[]; updateUserDto: UpdateUserDto },
