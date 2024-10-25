@@ -14,6 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import { User } from "@/services/types";
+import Swal from "sweetalert2";
 
 const AddPermission: React.FC = () => {
   const { data: responseData } = UseFetch<{ data: User[] }>("users");
@@ -50,11 +51,24 @@ const AddPermission: React.FC = () => {
         throw new Error("Network response was not ok");
       }
 
-      console.log("Permission added successfully!");
+      Swal.fire({
+        title: "Success",
+        text: "Permission added successfully!",
+        icon: "success",
+        confirmButtonText: "Okay",
+      });
+
       setPermissionName("");
       setSelectedUsers([]);
     } catch (error) {
       console.error("Error adding permission:", error);
+
+      Swal.fire({
+        title: "Error",
+        text: "Failed to add permission. Please try again.",
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
     }
   };
 
@@ -69,7 +83,6 @@ const AddPermission: React.FC = () => {
             },
           }}
         >
-          {" "}
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
