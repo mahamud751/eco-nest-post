@@ -151,6 +151,7 @@ export interface User {
   updatedAt: Date;
   photos: Photo[];
   advances?: Advance[];
+  permissions?: string[];
 }
 
 export interface Order {

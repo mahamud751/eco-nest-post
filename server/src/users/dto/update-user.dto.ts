@@ -1,3 +1,4 @@
+import { Permission } from './../../../../admin/src/services/types';
 import {
   IsOptional,
   IsString,
@@ -60,4 +61,12 @@ export class UpdateUserDto {
   @Type(() => PhotoDto)
   @IsOptional()
   photos?: PhotoDto[];
+
+  @ApiPropertyOptional({
+    description: 'Array of user IDs associated with the permission',
+    type: [String],
+  })
+  @IsArray()
+  @IsOptional()
+  Permission?: string[];
 }
