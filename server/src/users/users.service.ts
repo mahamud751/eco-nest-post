@@ -243,22 +243,18 @@ export class UsersService {
         src: photo.src,
       })) || [];
 
-    // Merge current permissions with new permissions
-    const currentPermissionIds = new Set(oldUser.permissions.map((p) => p.id));
-    permissions?.forEach((permissionId) =>
-      currentPermissionIds.add(permissionId),
-    );
-
-    const mergedPermissions = Array.from(currentPermissionIds).map((id) => ({
-      id,
-    }));
+    const permissionsData = permissions
+      ? {
+          set: permissions.map((permissionId) => ({ id: permissionId })),
+        }
+      : undefined;
 
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
         ...rest,
         photos: photoObjects.length > 0 ? photoObjects : undefined,
-        permissions: { set: mergedPermissions },
+        permissions: permissionsData,
       },
     });
 
