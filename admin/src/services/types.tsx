@@ -151,7 +151,7 @@ export interface User {
   updatedAt: Date;
   photos: Photo[];
   advances?: Advance[];
-  permissions?: string[];
+  permissions?: Permission[];
 }
 
 export interface Order {
@@ -197,6 +197,7 @@ export interface Order {
   riders: User[];
   createdAt: Date;
   updatedAt: Date;
+  permissions: Permission[];
 }
 
 export interface OrderItem {

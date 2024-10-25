@@ -3,13 +3,15 @@ import React, { useState, useEffect } from "react";
 import UseFetch from "@/services/hooks/UseRequest";
 import {
   Grid,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
+  Autocomplete,
+  TextField,
   Button,
-  Typography,
+  Chip,
+  Paper,
+  Box,
 } from "@mui/material";
 import { User, Permission } from "@/services/types";
+import Swal from "sweetalert2";
 
 const PermissionList: React.FC = () => {
   const { data: userData } = UseFetch<{ data: User[] }>("users");
@@ -17,102 +19,141 @@ const PermissionList: React.FC = () => {
     "permissions"
   );
 
-  const [selectedPermissions, setSelectedPermissions] = useState<{
-    [key: string]: string[];
-  }>({});
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
   const users = userData?.data || [];
   const permissions = permissionData?.data || [];
 
   useEffect(() => {
-    const initialPermissions: { [key: string]: string[] } = {};
-    users.forEach((user) => {
-      // If user.permissions is an array of strings, no need to map over an object with 'id'
-      initialPermissions[user.id] = user.permissions || [];
-    });
-    setSelectedPermissions(initialPermissions);
-  }, [users]);
+    if (selectedUser) {
+      setSelectedPermissions(selectedUser.permissions?.map((p) => p.id) || []);
+    }
+  }, [selectedUser]);
 
-  const handlePermissionChange = (userId: string, permissionId: string) => {
-    setSelectedPermissions((prev) => {
-      const userPermissions = prev[userId] || [];
-      if (userPermissions.includes(permissionId)) {
-        return {
-          ...prev,
-          [userId]: userPermissions.filter((id) => id !== permissionId),
-        };
-      } else {
-        return { ...prev, [userId]: [...userPermissions, permissionId] };
-      }
-    });
+  const handleUserChange = (user: User | null) => {
+    setSelectedUser(user);
+  };
+
+  const handlePermissionChange = (permissionIds: string[]) => {
+    setSelectedPermissions(permissionIds);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!selectedUser) return;
+
+    const payload = {
+      email: selectedUser.email,
+      permissions: selectedPermissions,
+    };
+
     try {
-      await Promise.all(
-        users.map(async (user) => {
-          const payload = {
-            permissions: selectedPermissions[user.id] || [],
-          };
-
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${user.id}`,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error("Failed to update permissions");
-          }
-        })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${selectedUser.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
       );
 
-      console.log("Permissions updated successfully!");
+      if (!response.ok) {
+        throw new Error("Failed to update permissions");
+      }
+
+      Swal.fire({
+        title: "Success",
+        text: "Permissions updated successfully!",
+        icon: "success",
+        confirmButtonText: "Okay",
+      });
     } catch (error) {
       console.error("Error updating permissions:", error);
+
+      Swal.fire({
+        title: "Error",
+        text: "Failed to update permissions. Please try again.",
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        {users.map((user) => (
-          <Grid item xs={12} key={user.id}>
-            <Typography variant="h6">{user.name}</Typography>
-            <FormGroup>
-              {permissions.map((permission) => (
-                <FormControlLabel
-                  key={permission.id}
-                  control={
-                    <Checkbox
-                      checked={
-                        selectedPermissions[user.id]?.includes(permission.id) ||
-                        false
-                      }
-                      onChange={() =>
-                        handlePermissionChange(user.id, permission.id)
-                      }
+    <div className="md:mx-24 md:p-12">
+      <Paper elevation={2} className="shadow-lg">
+        <Box
+          sx={{
+            padding: {
+              xs: 1,
+              sm: 8,
+            },
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Autocomplete
+                  options={users}
+                  getOptionLabel={(option) => option.name}
+                  onChange={(event, newValue) => handleUserChange(newValue)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select User"
+                      variant="outlined"
                     />
-                  }
-                  label={permission.name}
+                  )}
                 />
-              ))}
-            </FormGroup>
-          </Grid>
-        ))}
-      </Grid>
+              </Grid>
 
-      <Button type="submit" variant="contained" color="primary">
-        Update Permissions
-      </Button>
-    </form>
+              {selectedUser && (
+                <Grid item xs={12}>
+                  <Autocomplete
+                    multiple
+                    options={permissions}
+                    getOptionLabel={(option) => option.name}
+                    value={permissions.filter((permission) =>
+                      selectedPermissions.includes(permission.id)
+                    )}
+                    onChange={(event, newValue) => {
+                      handlePermissionChange(newValue.map((p) => p.id));
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Permissions"
+                        variant="outlined"
+                      />
+                    )}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip label={option.name} {...getTagProps({ index })} />
+                      ))
+                    }
+                  />
+                </Grid>
+              )}
+            </Grid>
+
+            <Button
+              type="submit"
+              className="mt-12 text-white bg-neutral-950 px-6 py-3 hover:bg-neutral-700"
+              sx={{
+                background: "#1C252E",
+                "&:hover": { backgroundColor: "#1C252E" },
+              }}
+            >
+              Assign Permissions
+            </Button>
+          </form>
+        </Box>
+      </Paper>
+    </div>
   );
 };
 
