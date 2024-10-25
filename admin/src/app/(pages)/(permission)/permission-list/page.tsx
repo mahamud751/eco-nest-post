@@ -60,6 +60,7 @@ const PermissionList: React.FC = () => {
     // Prepare payloads based on selection
     const payloads = usersToUpdate.map((user) => ({
       id: user.id,
+      email: user.email,
       permissions: selectedPermissions,
     }));
 

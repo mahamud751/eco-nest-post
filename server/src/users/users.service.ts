@@ -266,26 +266,31 @@ export class UsersService {
     payloads: { id: string; permissions: string[] }[],
   ) {
     const updatePromises = payloads.map(async ({ id, permissions }) => {
-      const existingUser = await this.prisma.user.findUnique({
-        where: { id },
-        include: { permissions: true },
-      });
+      try {
+        const existingUser = await this.prisma.user.findUnique({
+          where: { id },
+          include: { permissions: true },
+        });
 
-      if (!existingUser) throw new NotFoundException(`User ${id} not found`);
+        if (!existingUser) throw new NotFoundException(`User ${id} not found`);
 
-      const combinedPermissions = new Set([
-        ...existingUser.permissions.map((p) => p.id),
-        ...permissions,
-      ]);
+        const combinedPermissions = new Set([
+          ...existingUser.permissions.map((p) => p.id),
+          ...permissions,
+        ]);
 
-      return this.prisma.user.update({
-        where: { id },
-        data: {
-          permissions: {
-            set: Array.from(combinedPermissions).map((id) => ({ id })),
+        return this.prisma.user.update({
+          where: { id },
+          data: {
+            permissions: {
+              set: Array.from(combinedPermissions).map((id) => ({ id })),
+            },
           },
-        },
-      });
+        });
+      } catch (error) {
+        console.error(`Error updating user ${id}:`, error);
+        throw error;
+      }
     });
 
     await Promise.all(updatePromises);
