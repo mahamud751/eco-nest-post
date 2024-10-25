@@ -131,11 +131,12 @@ export class UsersController {
   }
 
   @Patch('batch-update')
-  @ApiOperation({ summary: 'Batch update user permissions' })
+  @ApiOperation({ summary: 'Batch update multiple users' })
   async batchUpdateUsers(
-    @Body() payload: { id: string; permissions: string[] }[],
+    @Body() body: { ids: string[]; updateUserDto: UpdateUserDto },
   ) {
-    return this.usersService.batchUpdateUsersPermissions(payload);
+    const { ids, updateUserDto } = body;
+    return this.usersService.batchUpdateUsers(ids, updateUserDto);
   }
 
   @Get(':userId/last-visit')
