@@ -310,7 +310,7 @@ export class UsersService {
     });
 
     try {
-      const results = await Promise.all(updatePromises);
+      const results = await Promise.allSettled(updatePromises);
       return { message: 'All users updated successfully', results };
     } catch (error) {
       console.error('Error updating multiple users:', error);
