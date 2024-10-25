@@ -268,21 +268,23 @@ export class UsersService {
   ) {
     const updatePromises = payloads.map(async ({ id, permissions }) => {
       try {
-        // Fetch existing permissions for the user
+        // Fetch the current permissions for the user
         const existingUser = await this.prisma.user.findUnique({
           where: { id },
           include: { permissions: true },
         });
 
-        if (!existingUser) throw new NotFoundException(`User ${id} not found`);
+        if (!existingUser) {
+          throw new NotFoundException(`User ${id} not found`);
+        }
 
-        // Separate permissions to add and remove
+        // Prepare sets of current and new permissions for easy comparison
         const existingPermissions = new Set(
           existingUser.permissions.map((p) => p.id),
         );
         const newPermissions = new Set(permissions);
 
-        // Determine which permissions to connect and disconnect
+        // Determine permissions to add and remove
         const permissionsToConnect = Array.from(newPermissions).filter(
           (permission) => !existingPermissions.has(permission),
         );
@@ -290,12 +292,12 @@ export class UsersService {
           (permission) => !newPermissions.has(permission),
         );
 
-        // Log the IDs being connected and disconnected
-        console.log(`User ID: ${id}`);
+        // Log permissions being updated for traceability
+        console.log(`Updating User ID: ${id}`);
         console.log(`Connecting Permissions: ${permissionsToConnect}`);
         console.log(`Disconnecting Permissions: ${permissionsToDisconnect}`);
 
-        // Update user with connect and disconnect for permissions
+        // Update the user's permissions using `connect` and `disconnect`
         return this.prisma.user.update({
           where: { id },
           data: {
@@ -310,23 +312,26 @@ export class UsersService {
           },
         });
       } catch (error) {
-        // Log the error details for debugging
-        console.error(`Error updating permissions for user ${id}:`, error);
-        throw error; // Propagate the error to the caller
+        // Log detailed error information
+        console.error(
+          `Error updating permissions for user ${id}:`,
+          error.message,
+          error.stack,
+        );
+        throw error; // Re-throw error for handling in `Promise.all` context
       }
     });
 
     try {
+      // Execute all update promises concurrently
       await Promise.all(updatePromises);
+      return { message: 'Permissions updated successfully for all users' };
     } catch (error) {
-      // Handle and log any errors from the Promise.all execution
-      console.error('Error in batch update:', error);
+      console.error('Batch update failed:', error);
       throw new InternalServerErrorException(
         'Failed to update user permissions',
       );
     }
-
-    return { message: 'Permissions updated successfully for all users' };
   }
 
   async getLastVisitedProducts(userId: string): Promise<Product[]> {
