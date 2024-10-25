@@ -180,6 +180,7 @@ export class UsersService {
       orderBy: { createdAt: 'desc' },
       include: {
         advances: true,
+        permissions: true,
       },
     });
 
