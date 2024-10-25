@@ -4,6 +4,7 @@ import {
   NotFoundException,
   BadRequestException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -289,6 +290,11 @@ export class UsersService {
           (permission) => !newPermissions.has(permission),
         );
 
+        // Log the IDs being connected and disconnected
+        console.log(`User ID: ${id}`);
+        console.log(`Connecting Permissions: ${permissionsToConnect}`);
+        console.log(`Disconnecting Permissions: ${permissionsToDisconnect}`);
+
         // Update user with connect and disconnect for permissions
         return this.prisma.user.update({
           where: { id },
@@ -304,12 +310,22 @@ export class UsersService {
           },
         });
       } catch (error) {
+        // Log the error details for debugging
         console.error(`Error updating permissions for user ${id}:`, error);
-        throw error;
+        throw error; // Propagate the error to the caller
       }
     });
 
-    await Promise.all(updatePromises);
+    try {
+      await Promise.all(updatePromises);
+    } catch (error) {
+      // Handle and log any errors from the Promise.all execution
+      console.error('Error in batch update:', error);
+      throw new InternalServerErrorException(
+        'Failed to update user permissions',
+      );
+    }
+
     return { message: 'Permissions updated successfully for all users' };
   }
 
