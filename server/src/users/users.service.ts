@@ -263,74 +263,47 @@ export class UsersService {
     return { message: 'User updated successfully', userUpdate };
   }
 
-  async batchUpdateUsersPermissions(
-    payloads: { id: string; permissions: string[] }[],
-  ) {
-    const updatePromises = payloads.map(async ({ id, permissions }) => {
-      try {
-        // Fetch the current permissions for the user
-        const existingUser = await this.prisma.user.findUnique({
-          where: { id },
-          include: { permissions: true },
-        });
+  async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
+    const updatePromises = ids.map(async (id) => {
+      const oldUser = await this.prisma.user.findUnique({
+        where: { id },
+        include: { permissions: true },
+      });
 
-        if (!existingUser) {
-          throw new NotFoundException(`User ${id} not found`);
-        }
+      if (!oldUser) throw new NotFoundException(`User ${id} not found`);
 
-        // Prepare sets of current and new permissions for easy comparison
-        const existingPermissions = new Set(
-          existingUser.permissions.map((p) => p.id),
-        );
-        const newPermissions = new Set(permissions);
+      const { photos, permissions, ...rest } = updateUserDto;
 
-        // Determine permissions to add and remove
-        const permissionsToConnect = Array.from(newPermissions).filter(
-          (permission) => !existingPermissions.has(permission),
-        );
-        const permissionsToDisconnect = Array.from(existingPermissions).filter(
-          (permission) => !newPermissions.has(permission),
-        );
+      const photoObjects =
+        photos?.map((photo) => ({
+          title: photo.title,
+          src: photo.src,
+        })) || [];
 
-        // Log permissions being updated for traceability
-        console.log(`Updating User ID: ${id}`);
-        console.log(`Connecting Permissions: ${permissionsToConnect}`);
-        console.log(`Disconnecting Permissions: ${permissionsToDisconnect}`);
+      const permissionsData = permissions
+        ? { set: permissions.map((permissionId) => ({ id: permissionId })) }
+        : undefined;
 
-        // Update the user's permissions using `connect` and `disconnect`
-        return this.prisma.user.update({
-          where: { id },
-          data: {
-            permissions: {
-              connect: permissionsToConnect.map((permissionId) => ({
-                id: permissionId,
-              })),
-              disconnect: permissionsToDisconnect.map((permissionId) => ({
-                id: permissionId,
-              })),
-            },
-          },
-        });
-      } catch (error) {
-        // Log detailed error information
-        console.error(
-          `Error updating permissions for user ${id}:`,
-          error.message,
-          error.stack,
-        );
-        throw error; // Re-throw error for handling in `Promise.all` context
-      }
+      const userUpdate = await this.prisma.user.update({
+        where: { id },
+        data: {
+          ...rest,
+          photos: photoObjects.length > 0 ? photoObjects : undefined,
+          permissions: permissionsData,
+        },
+      });
+
+      // Logging each user's update
+      await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+      return { message: `User ${id} updated successfully`, userUpdate };
     });
 
     try {
-      // Execute all update promises concurrently
-      await Promise.all(updatePromises);
-      return { message: 'Permissions updated successfully for all users' };
+      const results = await Promise.all(updatePromises);
+      return { message: 'All users updated successfully', results };
     } catch (error) {
-      console.error('Batch update failed:', error);
-      throw new InternalServerErrorException(
-        'Failed to update user permissions',
-      );
+      console.error('Error updating multiple users:', error);
+      throw new InternalServerErrorException('Failed to update multiple users');
     }
   }
 
