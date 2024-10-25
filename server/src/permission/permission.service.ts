@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
@@ -13,19 +17,25 @@ export class PermissionService {
 
   async create(createPermissionDto: CreatePermissionDto) {
     const { users, ...rest } = createPermissionDto;
-    const permission = await this.prisma.permission.create({
-      data: {
-        ...rest,
-        users: {
-          connect: users?.map((userId) => ({ id: userId })),
-        },
-      },
-      include: {
-        users: true,
-      },
-    });
 
-    return { message: 'Permission created successfully', permission };
+    try {
+      const permission = await this.prisma.permission.create({
+        data: {
+          ...rest,
+          users: {
+            connect: users?.map((userId) => ({ id: userId })),
+          },
+        },
+        include: {
+          users: true,
+        },
+      });
+
+      return { message: 'Permission created successfully', permission };
+    } catch (error) {
+      console.error('Error creating permission:', error);
+      throw new InternalServerErrorException('Failed to create permission');
+    }
   }
 
   async findAll(
@@ -43,6 +53,9 @@ export class PermissionService {
       skip,
       take: perPageNumber,
       orderBy: { createdAt: 'desc' },
+      include: {
+        users: true,
+      },
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
