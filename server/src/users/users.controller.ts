@@ -116,6 +116,15 @@ export class UsersController {
     return this.usersService.getUser(id);
   }
 
+  @Patch('batch-update')
+  @ApiOperation({ summary: 'Batch update multiple users' })
+  async batchUpdateUsers(
+    @Body() body: { ids: string[]; updateUserDto: UpdateUserDto },
+  ) {
+    const { ids, updateUserDto } = body;
+    return this.usersService.batchUpdateUsers(ids, updateUserDto);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
@@ -128,15 +137,6 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.updateUser(id, updateUserDto);
-  }
-
-  @Patch('batch-updatess')
-  @ApiOperation({ summary: 'Batch update multiple users' })
-  async batchUpdateUsers(
-    @Body() body: { ids: string[]; updateUserDto: UpdateUserDto },
-  ) {
-    const { ids, updateUserDto } = body;
-    return this.usersService.batchUpdateUsers(ids, updateUserDto);
   }
 
   @Get(':userId/last-visit')
