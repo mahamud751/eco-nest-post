@@ -21,56 +21,60 @@ const PermissionList: React.FC = () => {
     "permissions"
   );
 
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
   const users = userData?.data || [];
   const permissions = permissionData?.data || [];
+  const roles = Array.from(new Set(users.map((user) => user.role)));
 
-  useEffect(() => {
-    if (selectedUser) {
-      setSelectedPermissions(selectedUser.permissions?.map((p) => p.id) || []);
-    }
-  }, [selectedUser]);
+  const handleRoleChange = (role: string | null) => {
+    setSelectedRole(role);
+    setSelectedUser(null);
+  };
 
   const handleUserChange = (user: User | null) => {
     setSelectedUser(user);
+    setSelectedRole(null);
   };
 
   const handlePermissionChange = (permissionId: string) => {
-    setSelectedPermissions((prev) => {
-      if (prev.includes(permissionId)) {
-        return prev.filter((id) => id !== permissionId);
-      }
-      return [...prev, permissionId];
-    });
+    setSelectedPermissions((prev) =>
+      prev.includes(permissionId)
+        ? prev.filter((id) => id !== permissionId)
+        : [...prev, permissionId]
+    );
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!selectedUser) return;
+    const usersToUpdate = selectedRole
+      ? users.filter((user) => user.role === selectedRole)
+      : selectedUser
+      ? [selectedUser]
+      : [];
 
-    const payload = {
-      email: selectedUser.email,
+    const payloads = usersToUpdate.map((user) => ({
+      id: user.id,
+      email: user.email,
       permissions: selectedPermissions,
-    };
+    }));
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${selectedUser.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
+      await Promise.all(
+        payloads.map((payload) =>
+          fetch(`${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${payload.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: payload.email,
+              permissions: payload.permissions,
+            }),
+          })
+        )
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to update permissions");
-      }
 
       Swal.fire({
         title: "Success",
@@ -80,7 +84,6 @@ const PermissionList: React.FC = () => {
       });
     } catch (error) {
       console.error("Error updating permissions:", error);
-
       Swal.fire({
         title: "Error",
         text: "Failed to update permissions. Please try again.",
@@ -90,19 +93,55 @@ const PermissionList: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (selectedUser) {
+      const userPermissions = selectedUser.permissions?.map((p) => p.id) || [];
+      if (
+        JSON.stringify(selectedPermissions) !== JSON.stringify(userPermissions)
+      ) {
+        setSelectedPermissions(userPermissions);
+      }
+    } else if (selectedRole) {
+      const roleUsers = users.filter((user) => user.role === selectedRole);
+      const rolePermissions = new Set<string>();
+      roleUsers.forEach((user) =>
+        user.permissions?.forEach((perm) => rolePermissions.add(perm.id))
+      );
+      const rolePermissionsArray = Array.from(rolePermissions);
+      if (
+        JSON.stringify(selectedPermissions) !==
+        JSON.stringify(rolePermissionsArray)
+      ) {
+        setSelectedPermissions(rolePermissionsArray);
+      }
+    } else {
+      if (selectedPermissions.length > 0) {
+        setSelectedPermissions([]);
+      }
+    }
+  }, [selectedUser, selectedRole, users]);
+
   return (
     <div className="md:mx-24 md:p-12">
       <Paper elevation={2} className="shadow-lg">
-        <Box
-          sx={{
-            padding: {
-              xs: 1,
-              sm: 8,
-            },
-          }}
-        >
+        <Box sx={{ padding: { xs: 1, sm: 8 } }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Autocomplete
+                  options={roles}
+                  getOptionLabel={(option) => option}
+                  onChange={(event, newValue) => handleRoleChange(newValue)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select Role"
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <Autocomplete
                   options={users}
@@ -118,23 +157,21 @@ const PermissionList: React.FC = () => {
                 />
               </Grid>
 
-              {selectedUser && (
-                <Grid item xs={12}>
-                  <Typography variant="h6">Permissions</Typography>
-                  {permissions.map((permission) => (
-                    <FormControlLabel
-                      key={permission.id}
-                      control={
-                        <Checkbox
-                          checked={selectedPermissions.includes(permission.id)}
-                          onChange={() => handlePermissionChange(permission.id)}
-                        />
-                      }
-                      label={permission.name}
-                    />
-                  ))}
-                </Grid>
-              )}
+              <Grid item xs={12}>
+                <Typography variant="h6">Permissions</Typography>
+                {permissions.map((permission) => (
+                  <FormControlLabel
+                    key={permission.id}
+                    control={
+                      <Checkbox
+                        checked={selectedPermissions.includes(permission.id)}
+                        onChange={() => handlePermissionChange(permission.id)}
+                      />
+                    }
+                    label={permission.name}
+                  />
+                ))}
+              </Grid>
             </Grid>
 
             <Button
