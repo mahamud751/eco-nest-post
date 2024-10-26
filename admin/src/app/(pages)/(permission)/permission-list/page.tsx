@@ -50,59 +50,56 @@ const PermissionList: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Determine users to update based on selected role or user
     const usersToUpdate = selectedRole
       ? users.filter((user) => user.role === selectedRole)
       : selectedUser
       ? [selectedUser]
       : [];
 
-    // Prepare payloads based on selection
-    const payloads = usersToUpdate.map((user) => ({
-      id: user.id,
-      email: user.email,
-      permissions: selectedPermissions,
-    }));
+    let url = "";
+    let payload = {};
+
+    if (selectedRole) {
+      url = `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/batch-update`;
+      payload = {
+        ids: usersToUpdate.map((user) => user.id),
+        updateUserDto: {
+          permissions: selectedPermissions,
+        },
+      };
+    } else if (selectedUser) {
+      url = `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${selectedUser.id}`;
+      payload = {
+        email: selectedUser.email,
+        permissions: selectedPermissions,
+      };
+    }
 
     try {
-      // Use batch endpoint if updating multiple users by role
-      if (selectedRole) {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/batch-update`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payloads),
-          }
-        );
-        //9c577c53-d019-4a56-ae55-27c407f83e00
-      } else {
-        // Individual update for single user
-        await Promise.all(
-          payloads.map((payload) =>
-            fetch(`${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${payload.id}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: payload?.email,
-                permissions: payload.permissions,
-              }),
-            })
-          )
-        );
-      }
+      if (url) {
+        await fetch(url, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
 
-      Swal.fire({
-        title: "Success",
-        text: "Permissions updated successfully!",
-        icon: "success",
-        confirmButtonText: "Okay",
-      });
+        Swal.fire({
+          title: "Success",
+          text: `Permissions updated successfully${
+            selectedRole ? " for role!" : " for user!"
+          }`,
+          icon: "success",
+          confirmButtonText: "Okay",
+        });
+      }
     } catch (error) {
       console.error("Error updating permissions:", error);
+
       Swal.fire({
         title: "Error",
-        text: "Failed to update permissions. Please try again.",
+        text: `Failed to update permissions${
+          selectedRole ? " for role." : " for user."
+        } Please try again.`,
         icon: "error",
         confirmButtonText: "Okay",
       });
