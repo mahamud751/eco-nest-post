@@ -1,11 +1,11 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { UserProvider } from "@/services/contexts/UserProvider";
 import AppMenu from "@/components/organisms/layout/Header/AppMenu";
 import { lightTheme, darkTheme } from "@/services/theme/theme";
 import AnimatedImage from "@/components/atoms/AnimatedImage";
-import { useAuth } from "@/services/hooks/auth";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -68,18 +68,4 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       </ThemeProvider>
     </UserProvider>
   );
-}
-
-function ProtectedRoutes({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (!user && pathname !== "/login") {
-      router.push("/login");
-    }
-  }, [user, pathname, router]);
-
-  return <>{children}</>;
 }
