@@ -35,6 +35,8 @@ import { useTheme } from "@mui/material/styles";
 
 import { useAuth } from "@/services/hooks/auth";
 import styles from "../../../../css/Header.module.css";
+import UseFetch from "@/services/hooks/UseRequest";
+import { Permission, User } from "@/services/types";
 
 interface MenuItem {
   text: string;
@@ -49,6 +51,9 @@ interface UnifiedMenuProps {
 
 const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const { user } = useAuth();
+  const { data: userData } = UseFetch<{ data: User[] }>(`users/${user?.id}`);
+  console.log(userData);
+
   const router = useRouter();
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);

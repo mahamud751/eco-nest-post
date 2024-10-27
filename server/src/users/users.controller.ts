@@ -72,10 +72,11 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Users retrieved successfully.' })
   async getUsers(
     @Query('role') role?: UserRole,
+    @Query('email') email?: string,
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
   ) {
-    return this.usersService.getUsers(role, page, perPage);
+    return this.usersService.getUsers(role, email, page, perPage);
   }
 
   @Get('admin')

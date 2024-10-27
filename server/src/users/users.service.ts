@@ -164,15 +164,24 @@ export class UsersService {
 
   async getUsers(
     role?: UserRole,
+    email?: string,
     page: number = 1,
     perPage: number = 25,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
-    const totalCountPromise = this.prisma.user.count();
+    const totalCountPromise = this.prisma.user.count({
+      where: {
+        ...(role && { role }),
+        ...(email && { email: { contains: email, mode: 'insensitive' } }),
+      },
+    });
 
-    const where: Prisma.UserWhereInput = role ? { role } : {};
+    const where: Prisma.UserWhereInput = {
+      ...(role && { role }),
+      ...(email && { email: { contains: email, mode: 'insensitive' } }),
+    };
 
     const dataPromise = this.prisma.user.findMany({
       skip,
