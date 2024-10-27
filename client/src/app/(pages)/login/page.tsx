@@ -12,7 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useAuth } from "@/services/hooks/auth";
-import { signIn } from "next-auth/react";
+// import { signIn } from "next-auth/react";
 import LogInAnimation from "@/components/dynamics/animations/LogInAnimation";
 
 interface FormInputs {
@@ -47,19 +47,19 @@ const Auth: React.FC = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signIn("google");
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     const result = await signIn("google");
 
-      if (result?.error) {
-        setAuthError("Failed to sign in with Google. Please try again.");
-      } else {
-        router.push("/");
-      }
-    } catch (error) {
-      setAuthError("Failed to sign in with Google. Please try again.");
-    }
-  };
+  //     if (result?.error) {
+  //       setAuthError("Failed to sign in with Google. Please try again.");
+  //     } else {
+  //       router.push("/");
+  //     }
+  //   } catch (error) {
+  //     setAuthError("Failed to sign in with Google. Please try again.");
+  //   }
+  // };
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, email, phone, password } = data;
@@ -183,13 +183,13 @@ const Auth: React.FC = () => {
               {loading ? "Loading..." : isSignup ? "Sign Up" : "Sign In"}
             </Button>
           </form>
-          <Button
+          {/* <Button
             onClick={handleGoogleSignIn}
             className="bg-blue-600 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
             disabled={loading}
           >
             Sign In with Google
-          </Button>
+          </Button> */}
           <div className="text-center mt-4">
             <p className="text-sm">
               {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
