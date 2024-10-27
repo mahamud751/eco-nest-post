@@ -11,58 +11,24 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  CircularProgress,
 } from "@mui/material";
 import { User, Permission } from "@/services/types";
 import Swal from "sweetalert2";
 
 const PermissionList: React.FC = () => {
   const { data: userData } = UseFetch<{ data: User[] }>("users");
-
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-
-  const [loadingPermissions, setLoadingPermissions] = useState<boolean>(true);
+  const { data: permissionData } = UseFetch<{ data: Permission[] }>(
+    "permissions"
+  );
 
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const users = userData?.data || [];
+  const permissions = permissionData?.data || [];
   const roles = Array.from(new Set(users.map((user) => user.role)));
-
-  const fetchAllPermissions = async () => {
-    try {
-      let allPermissions: Permission[] = [];
-      let currentPage = 1;
-      let hasMore = true;
-
-      // Fetch permissions page by page
-      while (hasMore) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/permissions?page=${currentPage}`
-        );
-        const result = await response.json();
-        console.log(result);
-
-        // Append current page permissions to the total
-        allPermissions = [...allPermissions, ...result.data];
-
-        // If the result's length is less than 10, stop fetching
-        hasMore = result.data.length === 10;
-        currentPage++;
-      }
-
-      setPermissions(allPermissions);
-    } catch (error) {
-      console.error("Failed to fetch permissions:", error);
-    } finally {
-      setLoadingPermissions(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllPermissions();
-  }, []);
 
   const handleRoleChange = (role: string | null) => {
     setSelectedRole(role);
@@ -80,6 +46,16 @@ const PermissionList: React.FC = () => {
         ? prev.filter((id) => id !== permissionId)
         : [...prev, permissionId]
     );
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPermissions([]);
+    } else {
+      const allPermissionIds = permissions.map((perm) => perm.id);
+      setSelectedPermissions(allPermissionIds);
+    }
+    setSelectAll(!selectAll);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -207,22 +183,29 @@ const PermissionList: React.FC = () => {
 
               <Grid item xs={12}>
                 <Typography variant="h6">Permissions</Typography>
-                {loadingPermissions ? (
-                  <CircularProgress />
-                ) : (
-                  permissions.map((permission) => (
-                    <FormControlLabel
-                      key={permission.id}
-                      control={
-                        <Checkbox
-                          checked={selectedPermissions.includes(permission.id)}
-                          onChange={() => handlePermissionChange(permission.id)}
-                        />
-                      }
-                      label={permission.name}
-                    />
-                  ))
-                )}
+                <Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
+                    }
+                    label="Select All"
+                  />
+                </Box>
+                {permissions.map((permission) => (
+                  <FormControlLabel
+                    key={permission.id}
+                    control={
+                      <Checkbox
+                        checked={selectedPermissions.includes(permission.id)}
+                        onChange={() => handlePermissionChange(permission.id)}
+                      />
+                    }
+                    label={permission.name}
+                  />
+                ))}
               </Grid>
             </Grid>
 

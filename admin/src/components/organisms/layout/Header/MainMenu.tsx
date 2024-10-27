@@ -56,8 +56,6 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const { data: userData } = UseFetch<{ data: User[] }>(
     `users?email=${user?.email}`
   );
-  console.log(userData);
-
   const router = useRouter();
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -75,7 +73,6 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
     setDrawerOpen(open);
   };
 
-  // Extract user permissions for easy lookup
   const userPermissions = userData?.data?.[0]?.permissions
     ? userData.data[0].permissions.map((perm: Permission) => perm.name)
     : [];
@@ -362,8 +359,8 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const filteredMenuItems = (menuItems: MenuItem[]) =>
     menuItems.filter(
       (item) =>
-        hasPermission(item.requiredPermission) && // Check permission for main menu
-        (!item.submenus.length || // Check permission for submenus
+        hasPermission(item.requiredPermission) &&
+        (!item.submenus.length ||
           item.submenus.some((submenu) =>
             hasPermission(submenu.requiredPermission)
           ))
@@ -372,9 +369,12 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const menuItems = isClient
     ? [
         ...commonMenuItems,
-        ...(user?.role === "superAdmin"
+        ...(user?.role === "superAdmin" ||
+        user?.role === "vendor" ||
+        user?.role === "schoolManger" ||
+        user?.role === "rider"
           ? filteredMenuItems(adminMenuItems)
-          : []), // Apply filtering to other roles as well if needed
+          : []),
       ]
     : commonMenuItems;
 
