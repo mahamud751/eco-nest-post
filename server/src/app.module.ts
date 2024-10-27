@@ -21,6 +21,7 @@ import { DynamicModule } from './dynamic/dynamic.module';
 import { ReviewModule } from './review/review.module';
 import { NotificationModule } from './notification/notification.module';
 import { PermissionModule } from './permission/permission.module';
+import { VariantModule } from './variants/variant.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { PermissionModule } from './permission/permission.module';
     ReviewModule,
     NotificationModule,
     PermissionModule,
+    VariantModule,
   ],
 })
 export class AppModule {}

@@ -51,7 +51,9 @@ interface UnifiedMenuProps {
 
 const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
   const { user } = useAuth();
-  const { data: userData } = UseFetch<{ data: User[] }>(`users/${user?.id}`);
+  const { data: userData } = UseFetch<{ data: User[] }>(
+    `users?email=${user?.email}`
+  );
   console.log(userData);
 
   const router = useRouter();
