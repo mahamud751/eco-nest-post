@@ -29,6 +29,7 @@ import {
   Pages,
   ReviewsOutlined,
   ShoppingBasketOutlined,
+  Lock,
 } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
@@ -42,7 +43,8 @@ interface MenuItem {
   text: string;
   icon: React.ReactElement;
   path: string;
-  submenus: { text: string; path: string }[];
+  requiredPermission?: string;
+  submenus: { text: string; path: string; requiredPermission?: string }[];
 }
 
 interface UnifiedMenuProps {
@@ -73,6 +75,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
     setDrawerOpen(open);
   };
 
+  // Extract user permissions for easy lookup
+  const userPermissions = userData?.data?.[0]?.permissions
+    ? userData.data[0].permissions.map((perm: Permission) => perm.name)
+    : [];
+
+  const hasPermission = (requiredPermission?: string) => {
+    return requiredPermission
+      ? userPermissions.includes(requiredPermission)
+      : true;
+  };
+
   const commonMenuItems: MenuItem[] = [
     {
       text: "Home",
@@ -87,14 +100,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Banner",
       icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
       path: "/banners",
+      requiredPermission: "bannerList",
       submenus: [
         {
           text: "Add Banner",
           path: "/add-banner",
+          requiredPermission: "bannerCreate",
         },
         {
           text: "Banner List",
           path: "/banner-list",
+          requiredPermission: "bannerList",
         },
       ],
     },
@@ -102,14 +118,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Product",
       icon: <DryCleaningIcon className="text-red-500" />,
       path: "/products",
+      requiredPermission: "productList",
       submenus: [
         {
           text: "Add Product",
           path: "/add-product",
+          requiredPermission: "productCreate",
         },
         {
           text: "Product List",
           path: "/product-list",
+          requiredPermission: "productList",
         },
       ],
     },
@@ -117,28 +136,34 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Custom Order",
       icon: <InboxIcon className="text-purple-500" />,
       path: "/customOrder-list",
+      requiredPermission: "customOrderList",
       submenus: [],
     },
     {
       text: "Category",
       icon: <CategoryIcon className="text-yellow-500" />,
       path: "/category",
+      requiredPermission: "categoryList",
       submenus: [
         {
           text: "Add Category",
           path: "/add-category",
+          requiredPermission: "categoryCreate",
         },
         {
           text: "Category List",
           path: "/category-list",
+          requiredPermission: "categoryList",
         },
         {
           text: "Add SubCategory",
           path: "/add-subCategory",
+          requiredPermission: "subCategoryCreate",
         },
         {
           text: "Subcategory List",
           path: "/subCategory-list",
+          requiredPermission: "subCategoryList",
         },
       ],
     },
@@ -146,14 +171,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Blog",
       icon: <Article className="text-teal-500" />,
       path: "/blogs",
+      requiredPermission: "blogList",
       submenus: [
         {
           text: "Add Blog",
           path: "/add-blog",
+          requiredPermission: "blogCreate",
         },
         {
           text: "Blog List",
           path: "/blog-list",
+          requiredPermission: "blogList",
         },
       ],
     },
@@ -161,14 +189,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Sample Order",
       icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
       path: "/advance",
+      requiredPermission: "sampleList",
       submenus: [
         {
           text: "Add Sample",
           path: "/add-advance",
+          requiredPermission: "sampleCreate",
         },
         {
           text: "Sample List",
           path: "/advance-list",
+          requiredPermission: "sampleList",
         },
       ],
     },
@@ -180,10 +211,12 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
         {
           text: "Add Users",
           path: "/add-user",
+          requiredPermission: "userCreate",
         },
         {
           text: "User List",
           path: "/user-list",
+          requiredPermission: "userList",
         },
       ],
     },
@@ -191,22 +224,27 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Vendors & Riders",
       icon: <AddBusiness className="text-indigo-600" />,
       path: "/vendors",
+      requiredPermission: "vendorList",
       submenus: [
         {
           text: "Add Vendor & Riders",
           path: "/add-user",
+          requiredPermission: "vendorRiderCreate",
         },
         {
           text: "Vendor List",
           path: "/vendor-list",
+          requiredPermission: "vendorList",
         },
         {
           text: "Riders List",
           path: "/rider-list",
+          requiredPermission: "riderList",
         },
         {
           text: "Vendor Request List",
           path: "/vendor-list/request-list",
+          requiredPermission: "vendorRequestList",
         },
       ],
     },
@@ -214,14 +252,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Schools",
       icon: <School className="text-gray-600" />,
       path: "/schools",
+      requiredPermission: "schoolList",
       submenus: [
         {
           text: "Add School",
           path: "/add-school",
+          requiredPermission: "schoolCreate",
         },
         {
           text: "School List",
           path: "/school-list",
+          requiredPermission: "schoolList",
         },
       ],
     },
@@ -229,29 +270,40 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Measurements",
       icon: <School className="text-pink-600" />,
       path: "/measurements",
+      requiredPermission: "measurementList",
       submenus: [
         {
           text: "Add Measurement",
           path: "/add-measurement",
+          requiredPermission: "measurementCreate",
         },
         {
           text: "Measurement List",
           path: "/measurement-list",
+          requiredPermission: "measurementList",
         },
       ],
     },
     {
       text: "Permissions",
-      icon: <School className="text-pink-600" />,
+      icon: <Lock className="text-purple-600" />,
       path: "/permissions",
+      requiredPermission: "permissionList",
       submenus: [
         {
           text: "Add Permissions",
           path: "/add-permission",
+          requiredPermission: "permissionCreate",
+        },
+        {
+          text: "Permissions Assign",
+          path: "/permission-assign",
+          requiredPermission: "permissionAssign",
         },
         {
           text: "Permissions List",
-          path: "/permission-list",
+          path: "/permissions-list",
+          requiredPermission: "permissionList",
         },
       ],
     },
@@ -259,14 +311,17 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Faq",
       icon: <LiveHelp className="text-red-400 " />,
       path: "/faq",
+      requiredPermission: "faqList",
       submenus: [
         {
           text: "Add Faq",
           path: "/add-faq",
+          requiredPermission: "faqCreate",
         },
         {
           text: "Faq List",
           path: "/faq-list",
+          requiredPermission: "faqList",
         },
       ],
     },
@@ -274,81 +329,52 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
       text: "Review",
       icon: <ReviewsOutlined className="text-blue-500" />,
       path: "/review-list",
+      requiredPermission: "reviewList",
       submenus: [],
     },
     {
       text: "Order",
       icon: <ShoppingBasketOutlined className="text-purple-500" />,
       path: "/order-list",
+      requiredPermission: "orderList",
       submenus: [],
     },
     {
       text: "Dynamic",
       icon: <Pages className="text-sky-800 " />,
       path: "/dynamic",
+      requiredPermission: "dynamicList",
       submenus: [
         {
           text: "Add Dynamic",
           path: "/add-dynamic",
+          requiredPermission: "dynamicCreate",
         },
         {
           text: "Dynamic List",
           path: "/dynamic-list",
+          requiredPermission: "dynamicList",
         },
       ],
     },
   ];
 
-  const vendorMenuItems: MenuItem[] = [
-    {
-      text: "Product",
-      icon: <DryCleaningIcon className="text-red-500" />,
-      path: "/products",
-      submenus: [
-        { text: "Add Product", path: "/add-product" },
-        { text: "Product List", path: "/product-list" },
-      ],
-    },
-  ];
-
-  const riderMenuItems: MenuItem[] = [
-    {
-      text: "Order",
-      icon: <ShoppingBasketOutlined className="text-purple-500" />,
-      path: "/order-list",
-      submenus: [],
-    },
-  ];
-  const schoolMenuItems: MenuItem[] = [
-    {
-      text: "Measurements",
-      icon: <School className="text-pink-600" />,
-      path: "/measurements",
-      submenus: [
-        {
-          text: "Add Measurement",
-          path: "/add-measurement",
-        },
-        {
-          text: "Measurement List",
-          path: "/measurement-list",
-        },
-      ],
-    },
-  ];
+  const filteredMenuItems = (menuItems: MenuItem[]) =>
+    menuItems.filter(
+      (item) =>
+        hasPermission(item.requiredPermission) && // Check permission for main menu
+        (!item.submenus.length || // Check permission for submenus
+          item.submenus.some((submenu) =>
+            hasPermission(submenu.requiredPermission)
+          ))
+    );
 
   const menuItems = isClient
     ? [
         ...commonMenuItems,
         ...(user?.role === "superAdmin"
-          ? adminMenuItems
-          : user?.role === "vendor"
-          ? vendorMenuItems
-          : user?.role === "rider"
-          ? riderMenuItems
-          : user?.role === "schoolManager"
-          ? schoolMenuItems
-          : []),
+          ? filteredMenuItems(adminMenuItems)
+          : []), // Apply filtering to other roles as well if needed
       ]
     : commonMenuItems;
 
@@ -438,20 +464,24 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
               unmountOnExit
             >
               <List component="div" disablePadding>
-                {item.submenus.map((subItem) => (
-                  <ListItem key={subItem.text}>
-                    <ListItemButton
-                      onClick={() => {
-                        router.push(subItem.path);
-                        setDrawerOpen(false);
-                      }}
-                      sx={{ pl: 8 }}
-                    >
-                      <CircleIcon className="text-[6px] mx-2" />
-                      <ListItemText primary={subItem.text} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+                {item.submenus
+                  .filter((subItem) =>
+                    hasPermission(subItem.requiredPermission)
+                  )
+                  .map((subItem) => (
+                    <ListItem key={subItem.text}>
+                      <ListItemButton
+                        onClick={() => {
+                          router.push(subItem.path);
+                          setDrawerOpen(false);
+                        }}
+                        sx={{ pl: 8 }}
+                      >
+                        <CircleIcon className="text-[6px] mx-2" />
+                        <ListItemText primary={subItem.text} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
               </List>
             </Collapse>
           )}

@@ -40,10 +40,10 @@ export class PermissionService {
 
   async findAll(
     page: number = 1,
-    perPage: number = 10,
+    perPage: number = 100,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
-    const perPageNumber = Number(perPage) || 10;
+    const perPageNumber = Number(perPage) || 100;
 
     const skip = (pageNumber - 1) * perPageNumber;
 

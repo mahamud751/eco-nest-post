@@ -41,7 +41,7 @@ export class PermissionController {
   @ApiResponse({ status: 200, description: 'Return all permissions.' })
   async findAll(
     @Query('page') page: number = 1,
-    @Query('perPage') perPage: number = 10,
+    @Query('perPage') perPage: number = 100,
   ) {
     return this.bannerService.findAll(page, perPage);
   }
