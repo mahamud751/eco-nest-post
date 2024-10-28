@@ -277,7 +277,7 @@ model Order {
   bkashTrx       String?
   rocketNumber   String?
   b2b            String         @default("no")
-  discount       String
+  discount       String?
   rocketTrx      String?
   dutchNumber    String?
   dutchTrx       String?
