@@ -29,13 +29,14 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
+
       <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Min Amount"
-          name="minAmount"
+          name="min"
           fullWidth
-          defaultValue={discount?.minAmount || ""}
+          defaultValue={discount?.min || ""}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
@@ -48,9 +49,7 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           type="datetime-local"
           fullWidth
           defaultValue={
-            discount?.startDate
-              ? discount.startDate.toISOString().slice(0, 16)
-              : ""
+            discount?.startDate ? discount.startDate.slice(0, 16) : ""
           }
           InputLabelProps={{ shrink: true }}
         />
@@ -63,9 +62,7 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           name="endDate"
           type="datetime-local"
           fullWidth
-          defaultValue={
-            discount?.endDate ? discount.endDate.toISOString().slice(0, 16) : ""
-          }
+          defaultValue={discount?.endDate ? discount.endDate.slice(0, 16) : ""}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>

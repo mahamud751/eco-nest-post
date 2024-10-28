@@ -170,7 +170,7 @@ const ShoppingCartStep: React.FC<{
       </TableContainer>
     </Card>
 
-    <PriceTotal cartItems={cartItems} />
+    <PriceTotal cartItems={cartItems} currentStep="cart" />
     <div className="flex justify-end mt-6">
       <Button
         variant="contained"
@@ -187,7 +187,9 @@ const ShoppingCartStep: React.FC<{
 const CheckoutStep: React.FC<{
   cartItems: CartItem[];
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-}> = ({ cartItems, handleFormSubmit }) => {
+  discountAmount: number;
+  setDiscountAmount: (amount: number) => void;
+}> = ({ cartItems, handleFormSubmit, discountAmount, setDiscountAmount }) => {
   const { user } = useAuth();
   return (
     <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-4">
@@ -251,7 +253,12 @@ const CheckoutStep: React.FC<{
         </div>
 
         <div className="flex-1 p-0 md:p-2">
-          <PriceTotal cartItems={cartItems} />
+          <PriceTotal
+            cartItems={cartItems}
+            currentStep="checkout"
+            discountAmount={discountAmount}
+            setDiscountAmount={setDiscountAmount}
+          />
           <PaymentCheckout />
         </div>
       </div>
@@ -315,6 +322,8 @@ const CustomizedStepper: React.FC = () => {
     (state: RootState) => state.cart.cartItems
   );
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  console.log(discountAmount);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleProceedToCheckout = () => {
@@ -366,7 +375,9 @@ const CustomizedStepper: React.FC = () => {
     cartItemsFromRedux.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
       0
-    ) + vat
+    ) +
+    vat -
+    discountAmount
   ).toFixed(2);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -441,6 +452,8 @@ const CustomizedStepper: React.FC = () => {
           <CheckoutStep
             cartItems={cartItemsFromRedux}
             handleFormSubmit={handleSubmit}
+            discountAmount={discountAmount}
+            setDiscountAmount={setDiscountAmount}
           />
         )}
         {activeStep === 2 && <OrderCompleteStep />}

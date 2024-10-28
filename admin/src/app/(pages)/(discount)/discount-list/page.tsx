@@ -12,10 +12,10 @@ const DiscountList = () => {
       renderCell: (params) => <p>{"৳ " + params?.row?.amount}</p>,
     },
     {
-      field: "minAmount",
+      field: "min",
       headerName: "Min Amount",
       flex: 1,
-      renderCell: (params) => <p>{"৳ " + params?.row?.minAmount}</p>,
+      renderCell: (params) => <p>{"৳ " + params?.row?.min}</p>,
     },
     {
       field: "startDate",

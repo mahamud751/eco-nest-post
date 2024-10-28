@@ -6,7 +6,9 @@ import Swal from "sweetalert2";
 export const PriceTotal: React.FC<{
   cartItems: CartItem[];
   discountAmount?: number;
-}> = ({ cartItems, discountAmount = 0 }) => {
+  currentStep: "cart" | "checkout";
+  setDiscountAmount?: (amount: number) => void;
+}> = ({ cartItems, discountAmount = 0, currentStep, setDiscountAmount }) => {
   const [discountCode, setDiscountCode] = useState("");
   const [apiError, setApiError] = useState("");
   const [currentDiscountAmount, setCurrentDiscountAmount] =
@@ -34,8 +36,41 @@ export const PriceTotal: React.FC<{
       if (data.length > 0) {
         const discountData = data[0];
         const discountAmount = parseFloat(discountData.amount);
-        setCurrentDiscountAmount(discountAmount);
-        setDiscountCode("");
+        const minAmount = parseFloat(discountData.min);
+        const startDate = new Date(discountData.startDate);
+        const endDate = new Date(discountData.endDate);
+        const currentDate = new Date();
+
+        if (currentDate >= startDate && currentDate <= endDate) {
+          if (subtotal >= minAmount) {
+            setCurrentDiscountAmount(discountAmount);
+            setDiscountCode("");
+            if (setDiscountAmount) {
+              setDiscountAmount(discountAmount);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Discount Applied",
+              text: `You've applied a discount of ৳${discountAmount.toFixed(
+                2
+              )}.`,
+            });
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "Minimum Order Not Met",
+              text: `Your subtotal must be at least ৳${minAmount.toFixed(
+                2
+              )} to use this discount.`,
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "Discount Expired",
+            text: "This discount code is not valid anymore.",
+          });
+        }
       } else {
         Swal.fire({
           icon: "warning",
@@ -47,7 +82,7 @@ export const PriceTotal: React.FC<{
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No Discount Found",
+        text: "Something went wrong while applying the discount.",
       });
     }
   };
@@ -89,26 +124,32 @@ export const PriceTotal: React.FC<{
           <span>৳{total.toFixed(2)}</span>
         </div>
 
-        <div className="flex flex-col items-end mt-4">
-          <div className="flex gap-2">
-            <TextField
-              variant="outlined"
-              label="Discount Code"
-              value={discountCode}
-              onChange={(e) => setDiscountCode(e.target.value)}
-              sx={{ width: 200 }}
+        {currentStep === "checkout" && (
+          <div className="flex flex-col items-end mt-4">
+            <div className="flex gap-2">
+              <TextField
+                variant="outlined"
+                label="Discount Code"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+                sx={{ width: 200 }}
+              />
+              <Button
+                variant="contained"
+                onClick={handleApplyDiscount}
+                disabled={!discountCode}
+              >
+                Apply
+              </Button>
+            </div>
+            <Snackbar
+              open={!!apiError}
+              autoHideDuration={6000}
+              onClose={() => setApiError("")}
+              message={apiError}
             />
-            <Button variant="contained" onClick={handleApplyDiscount}>
-              Apply
-            </Button>
           </div>
-          <Snackbar
-            open={!!apiError}
-            autoHideDuration={6000}
-            onClose={() => setApiError("")}
-            message={apiError}
-          />
-        </div>
+        )}
       </div>
     </Card>
   );
