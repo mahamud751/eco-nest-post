@@ -44,6 +44,14 @@ export class CreateOrderDto {
   b2b?: string;
 
   @ApiProperty({
+    description: 'Total discount of the order',
+    example: '1510000',
+  })
+  @IsOptional()
+  @IsString()
+  discount?: string;
+
+  @ApiProperty({
     description: 'Selected color for the product',
     example: 'Red',
     required: false,
