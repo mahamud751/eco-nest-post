@@ -35,6 +35,14 @@ export class CreateOrderDto {
   @IsString()
   selectedSize?: string;
 
+  @ApiPropertyOptional({
+    description: 'Is the order on b2b?',
+    enum: ['yes', 'no'],
+  })
+  @IsEnum(['yes', 'no'])
+  @IsOptional()
+  b2b?: string;
+
   @ApiProperty({
     description: 'Selected color for the product',
     example: 'Red',
