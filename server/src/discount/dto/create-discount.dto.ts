@@ -32,6 +32,11 @@ export class CreateDiscountDto {
   @IsNotEmpty()
   amount: string;
 
+  @ApiProperty({ description: 'The discount min amount' })
+  @IsString()
+  @IsNotEmpty()
+  minAmount: string;
+
   @ApiProperty({ description: 'The start date of the discount' })
   @IsDate()
   @Type(() => Date)

@@ -313,6 +313,7 @@ model Discount {
   name      String   @unique
   photos    Json[]
   amount    String
+  minAmount String
   startDate DateTime
   endDate   DateTime
   createdAt DateTime @default(now())

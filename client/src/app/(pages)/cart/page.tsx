@@ -372,6 +372,7 @@ const CustomizedStepper: React.FC = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+
     const orderData = {
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
@@ -450,7 +451,7 @@ const CustomizedStepper: React.FC = () => {
 
 export default CustomizedStepper;
 
-const CustomStepper = styled(Stepper)(({ }) => ({
+const CustomStepper = styled(Stepper)(({}) => ({
   backgroundColor: "transparent",
   padding: "20px",
   position: "relative",
