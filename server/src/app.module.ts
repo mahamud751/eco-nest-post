@@ -49,7 +49,7 @@ import { DiscountService } from './discount/discount.service';
     NotificationModule,
     PermissionModule,
     VariantModule,
-    DiscountService,
+    // DiscountService,
   ],
 })
 export class AppModule {}
