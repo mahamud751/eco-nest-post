@@ -310,7 +310,7 @@ model Permission {
 
 model Discount {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
   photos    Json[]
   amount    String
   startDate DateTime

@@ -41,8 +41,9 @@ export class DiscountController {
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
+    @Query('name') name?: string,
   ) {
-    return this.discountService.findAll(page, perPage);
+    return this.discountService.findAll(page, perPage, name);
   }
 
   @Get(':id')

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDiscountDto } from './dto/create-discount.dto';
 import { UpdateDiscountDto } from './dto/update-discount.dto';
@@ -33,14 +34,22 @@ export class DiscountService {
   async findAll(
     page: number = 1,
     perPage: number = 10,
+    name?: string,
   ): Promise<{ data: any[]; total: number }> {
     const skip = (page - 1) * perPage;
-    const totalCountPromise = this.prisma.discount.count();
+
+    const whereClause = name
+      ? { name: { contains: name, mode: Prisma.QueryMode.insensitive } }
+      : {};
+
+    const totalCountPromise = this.prisma.discount.count({
+      where: whereClause,
+    });
 
     const dataPromise = this.prisma.discount.findMany({
       skip,
       take: perPage,
-      orderBy: { createdAt: 'desc' },
+      where: whereClause,
     });
 
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
