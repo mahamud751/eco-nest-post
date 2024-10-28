@@ -262,6 +262,18 @@ export interface Notification {
   status: string;
 }
 
+export interface Discount {
+  id: string;
+  name: string;
+  photos: Photo[];
+  amount: string;
+  startDate: Date;
+  endDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+}
+
 export interface GrandPrice {
   data: {
     totalGrandPrice: number;

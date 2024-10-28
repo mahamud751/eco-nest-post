@@ -268,6 +268,18 @@ export interface Notification {
   status: string;
 }
 
+export interface Discount {
+  id: string;
+  name: string;
+  amount: string;
+  photos: Photo[];
+  startDate: Date;
+  endDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+}
+
 export type OrderStatus =
   | "pending"
   | "processing"

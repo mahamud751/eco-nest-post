@@ -69,6 +69,24 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
   {
+    text: "Discount",
+    icon: <DryCleaningIcon className="text-red-500" />,
+    path: "/discount",
+    requiredPermission: "discountList",
+    submenus: [
+      {
+        text: "Add Discount",
+        path: "/add-discount",
+        requiredPermission: "discountCreate",
+      },
+      {
+        text: "Discount List",
+        path: "/discount-list",
+        requiredPermission: "discountList",
+      },
+    ],
+  },
+  {
     text: "Custom Order",
     icon: <InboxIcon className="text-purple-500" />,
     path: "/customOrder-list",
