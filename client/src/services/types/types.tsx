@@ -271,10 +271,11 @@ export interface Notification {
 export interface Discount {
   id: string;
   name: string;
-  amount: string;
   photos: Photo[];
-  startDate: Date;
-  endDate: Date;
+  amount: string;
+  minAmount: string;
+  startDate: string;
+  endDate: string;
   createdAt: Date;
   updatedAt: Date;
   status: string;

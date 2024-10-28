@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, SelectChangeEvent } from "@mui/material";
 
 import { BaseEditProps, Discount, Photo } from "@/services/types";
@@ -14,6 +14,12 @@ const EditDiscount: React.FC<BaseEditProps> = ({ params }) => {
   const [photosData, setPhotosData] = useState<Photo[]>([]);
 
   const [status, setStatus] = useState<string>("");
+  useEffect(() => {
+    if (data) {
+      setPhotosData(data?.photos || "");
+      setStatus(data.status);
+    }
+  }, [data]);
 
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     setStatus(event.target.value as string);
