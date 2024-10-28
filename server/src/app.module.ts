@@ -22,6 +22,7 @@ import { ReviewModule } from './review/review.module';
 import { NotificationModule } from './notification/notification.module';
 import { PermissionModule } from './permission/permission.module';
 import { VariantModule } from './variants/variant.module';
+import { DiscountService } from './discount/discount.service';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { VariantModule } from './variants/variant.module';
     NotificationModule,
     PermissionModule,
     VariantModule,
+    DiscountService,
   ],
 })
 export class AppModule {}
