@@ -12,6 +12,7 @@ import {
   ReviewsOutlined,
   ShoppingBasketOutlined,
   Lock,
+  Discount,
 } from "@mui/icons-material";
 
 interface MenuItem {
@@ -70,7 +71,7 @@ export const adminMenuItems: MenuItem[] = [
   },
   {
     text: "Discount",
-    icon: <DryCleaningIcon className="text-red-500" />,
+    icon: <Discount className="text-blue-600" />,
     path: "/discount",
     requiredPermission: "discountList",
     submenus: [
