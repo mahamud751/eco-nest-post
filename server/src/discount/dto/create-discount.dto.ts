@@ -34,11 +34,13 @@ export class CreateDiscountDto {
 
   @ApiProperty({ description: 'The start date of the discount' })
   @IsDate()
+  @Type(() => Date) // <-- Transform string to Date
   @IsNotEmpty()
   startDate: Date;
 
   @ApiProperty({ description: 'The end date of the discount' })
   @IsDate()
+  @Type(() => Date) // <-- Transform string to Date
   @IsNotEmpty()
   endDate: Date;
 
