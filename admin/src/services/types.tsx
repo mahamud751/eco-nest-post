@@ -267,9 +267,9 @@ export interface Discount {
   name: string;
   photos: Photo[];
   amount: string;
-  minAmount: string;
-  startDate: string;
-  endDate: string;
+  // minAmount: string;
+  startDate: Date;
+  endDate: Date;
   createdAt: Date;
   updatedAt: Date;
   status: string;
