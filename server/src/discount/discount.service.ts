@@ -12,16 +12,19 @@ export class DiscountService {
   ) {}
 
   async create(createDiscountDto: CreateDiscountDto) {
-    const { photos, ...rest } = createDiscountDto;
+    const { photos, startDate, endDate, ...rest } = createDiscountDto;
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
         src: photo.src,
       })) || [];
+
     const discount = await this.prisma.discount.create({
       data: {
         ...rest,
         photos: photoObjects,
+        startDate: startDate || new Date(),
+        endDate: endDate || new Date(),
       },
     });
     return { message: 'Discount created successfully', discount };

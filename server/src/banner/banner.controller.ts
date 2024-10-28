@@ -71,7 +71,7 @@ export class BannerController {
   @ApiResponse({ status: 200, description: 'Return the banner for user.' })
   @ApiResponse({ status: 404, description: 'Banner not found.' })
   findOneForUser(@Param('id') id: string) {
-    return this.bannerService.findOne(id); // Use findOne instead
+    return this.bannerService.findOne(id);
   }
 
   @Patch(':id')

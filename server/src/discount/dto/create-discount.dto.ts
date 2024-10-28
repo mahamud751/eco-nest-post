@@ -5,7 +5,7 @@ import {
   IsNotEmpty,
   IsArray,
   IsDate,
-  IsNumberString,
+  ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -22,32 +22,31 @@ export class CreateDiscountDto {
     type: [PhotoDto],
   })
   @IsArray()
-  @IsOptional()
+  @ValidateNested({ each: true })
   @Type(() => PhotoDto)
+  @IsOptional()
   photos?: PhotoDto[];
 
-  @ApiProperty({ description: 'The amount of the discount' })
-  @IsNumberString()
+  @ApiProperty({ description: 'The discount amount' })
+  @IsString()
   @IsNotEmpty()
   amount: string;
 
-  @ApiPropertyOptional({ description: 'Start date of the discount' })
+  @ApiProperty({ description: 'The start date of the discount' })
   @IsDate()
-  @IsOptional()
-  @Type(() => Date)
-  startDate?: Date;
+  @IsNotEmpty()
+  startDate: Date;
 
-  @ApiPropertyOptional({ description: 'End date of the discount' })
+  @ApiProperty({ description: 'The end date of the discount' })
   @IsDate()
-  @IsOptional()
-  @Type(() => Date)
-  endDate?: Date;
+  @IsNotEmpty()
+  endDate: Date;
 
   @ApiPropertyOptional({
     description: 'The status of the discount',
-    enum: ['active', 'inActive'],
+    enum: ['active', 'inactive'],
   })
-  @IsEnum(['active', 'inActive'])
+  @IsEnum(['active', 'inactive'])
   @IsOptional()
   status?: string;
 }
