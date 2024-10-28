@@ -36,7 +36,10 @@ export class DiscountService {
     perPage: number = 10,
     name?: string,
   ): Promise<{ data: any[]; total: number }> {
-    const skip = (page - 1) * perPage;
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
 
     const whereClause = name
       ? { name: { contains: name, mode: Prisma.QueryMode.insensitive } }
