@@ -35,9 +35,13 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           id="outlined-basic"
           label="Start Date"
           name="startDate"
-          type="date"
+          type="datetime-local"
           fullWidth
-          defaultValue={discount?.startDate?.toISOString().split("T")[0] || ""}
+          defaultValue={
+            discount?.startDate
+              ? discount.startDate.toISOString().slice(0, 16)
+              : ""
+          }
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
@@ -47,9 +51,11 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           id="outlined-basic"
           label="End Date"
           name="endDate"
-          type="date"
+          type="datetime-local"
           fullWidth
-          defaultValue={discount?.endDate?.toISOString().split("T")[0] || ""}
+          defaultValue={
+            discount?.endDate ? discount.endDate.toISOString().slice(0, 16) : ""
+          }
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
