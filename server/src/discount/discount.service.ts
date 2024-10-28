@@ -51,7 +51,7 @@ export class DiscountService {
 
     const dataPromise = this.prisma.discount.findMany({
       skip,
-      take: perPage,
+      take: perPageNumber,
       where: whereClause,
     });
 
