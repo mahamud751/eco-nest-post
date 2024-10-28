@@ -5,6 +5,7 @@ import { DiscountController } from './discount.controller';
 import { AuditLogService } from 'src/audit/audit.service';
 
 @Module({
+  imports: [],
   controllers: [DiscountController],
   providers: [DiscountService, PrismaService, AuditLogService],
 })

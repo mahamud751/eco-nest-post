@@ -22,7 +22,7 @@ import { ReviewModule } from './review/review.module';
 import { NotificationModule } from './notification/notification.module';
 import { PermissionModule } from './permission/permission.module';
 import { VariantModule } from './variants/variant.module';
-import { DiscountService } from './discount/discount.service';
+import { DiscountModule } from './discount/discount.module';
 
 @Module({
   imports: [
@@ -49,7 +49,7 @@ import { DiscountService } from './discount/discount.service';
     NotificationModule,
     PermissionModule,
     VariantModule,
-    // DiscountService,
+    DiscountModule,
   ],
 })
 export class AppModule {}
