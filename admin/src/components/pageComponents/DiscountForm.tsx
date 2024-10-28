@@ -29,7 +29,7 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      {/* <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4}>
         <TextField
           id="outlined-basic"
           label="Min Amount"
@@ -38,7 +38,7 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ discount }) => {
           defaultValue={discount?.minAmount || ""}
           InputLabelProps={{ shrink: true }}
         />
-      </Grid> */}
+      </Grid>
 
       <Grid item xs={12} md={4}>
         <TextField
