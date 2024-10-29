@@ -29,14 +29,15 @@ export class WishlistController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all subcategories' })
-  @ApiResponse({ status: 200, description: 'Return all subcategories.' })
+  @ApiOperation({ summary: 'Get all wishlist' })
+  @ApiResponse({ status: 200, description: 'Return all wishlist' })
   async findAll(
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('email') email?: string,
+    @Query('productId') productId?: string,
   ) {
-    return this.wishlistService.findAll(page, perPage, email);
+    return this.wishlistService.findAll(page, perPage, email, productId);
   }
 
   @Get(':id')

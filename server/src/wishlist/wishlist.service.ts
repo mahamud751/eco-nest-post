@@ -23,17 +23,24 @@ export class WishlistService {
     page: number = 1,
     perPage: number = 10,
     email?: string,
+    productId?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
     const skip = (pageNumber - 1) * perPageNumber;
 
-    const where: any = {
-      email: {
+    const where: any = {};
+
+    if (email) {
+      where.email = {
         contains: email,
         mode: 'insensitive',
-      },
-    };
+      };
+    }
+
+    if (productId) {
+      where.productId = productId;
+    }
 
     const totalCountPromise = this.prisma.wishlist.count({
       where,
@@ -48,6 +55,7 @@ export class WishlistService {
         products: true,
       },
     });
+
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
     return { data, total };
   }
