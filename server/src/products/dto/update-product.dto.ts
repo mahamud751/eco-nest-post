@@ -130,6 +130,13 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   price?: string;
 
   @ApiPropertyOptional({
+    description: 'The b2bPrice of the product',
+  })
+  @IsString()
+  @IsOptional()
+  b2bPrice?: string;
+
+  @ApiPropertyOptional({
     description: 'A list of URLs to photos of the product',
     type: [String],
   })

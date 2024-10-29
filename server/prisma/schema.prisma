@@ -64,6 +64,7 @@ model Product {
   views         Int          @default(0)
   feature       String       @default("yes")
   price         String
+  b2bPrice      String
   photos        Json[]
   branch        Branch?      @relation(fields: [branchId], references: [id])
   category      Category     @relation("CategoryProducts", fields: [categoryId], references: [id])

@@ -108,6 +108,12 @@ export class CreateProductDto {
   price: string;
 
   @ApiProperty({
+    description: 'The b2bPrice of the product',
+  })
+  @IsString()
+  b2bPrice: string;
+
+  @ApiProperty({
     description: 'The category ID the product belongs to',
   })
   @IsUUID()
