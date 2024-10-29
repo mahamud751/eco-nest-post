@@ -6,10 +6,14 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVariantDto } from './dto/create-variant.dto';
 import { UpdateVariantDto } from './dto/update-variant.dto';
+import { AuditLogService } from 'src/audit/audit.service';
 
 @Injectable()
 export class VariantService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLogService: AuditLogService,
+  ) {}
 
   async create(createVariantDto: CreateVariantDto) {
     const { ...rest } = createVariantDto;
@@ -28,8 +32,26 @@ export class VariantService {
     }
   }
 
-  async findAll() {
-    return this.prisma.variant.findMany();
+  async findAll(
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{ data: any[]; total: number }> {
+    const pageNumber = Number(page) || 1;
+    const perPageNumber = Number(perPage) || 10;
+
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const totalCountPromise = this.prisma.variant.count();
+
+    const dataPromise = this.prisma.variant.findMany({
+      skip,
+      take: perPageNumber,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
+
+    return { data, total };
   }
 
   async findOne(id: string) {
@@ -49,10 +71,21 @@ export class VariantService {
     if (!variant) {
       throw new NotFoundException(`Variant with ID ${id} not found`);
     }
-    return this.prisma.variant.update({
+    const { ...rest } = updateVariantDto;
+    const variantUpdate = await this.prisma.banner.update({
       where: { id },
-      data: updateVariantDto,
+      data: {
+        ...rest,
+      },
     });
+    await this.auditLogService.log(
+      id,
+      'Banner',
+      'UPDATE',
+      variant,
+      variantUpdate,
+    );
+    return { message: 'Variant updated successfully', variantUpdate };
   }
 
   async remove(id: string) {

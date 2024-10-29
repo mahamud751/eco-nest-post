@@ -1,82 +1,89 @@
 "use client";
+
 import React, { useState, ChangeEvent } from "react";
-import { Grid, TextField, IconButton, Button } from "@mui/material";
+import { Grid, TextField, IconButton, Button, Box } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { VariantFormProps } from "@/services/types";
 
-interface VariantFormProps {
-  variant: { name: string; options: string[] } | null;
-}
-
-const VariantForm: React.FC<VariantFormProps> = ({ variant }) => {
-  const [options, setOptions] = useState<string[]>(variant?.options || [""]);
-
-  const handleOptionChange = (
+const VariantForm: React.FC<VariantFormProps> = ({
+  variant,
+  variantOptions,
+  setVariantOptions,
+}) => {
+  const handleChangeInput = (
     index: number,
-    event: ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newOptions = [...options];
-    newOptions[index] = event.target.value;
-    setOptions(newOptions);
+    const { value } = e.target;
+    const list = [...variantOptions];
+    list[index] = value;
+    setVariantOptions(list);
   };
 
-  const handleAddOption = () => {
-    setOptions([...options, ""]);
+  const handleAddInput = () => {
+    setVariantOptions([...variantOptions, ""]);
   };
 
-  const handleRemoveOption = (index: number) => {
-    const newOptions = options.filter((_, i) => i !== index);
-    setOptions(newOptions);
+  const handleRemoveInput = (index: number) => {
+    const list = [...variantOptions];
+    list.splice(index, 1);
+    setVariantOptions(list);
   };
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>
+      <Grid item xs={12} md={8}>
         <TextField
-          id="variant-name"
+          id="outlined-basic"
           label="Variant Name"
           variant="outlined"
           name="name"
-          fullWidth
           defaultValue={variant?.name || ""}
           InputLabelProps={{ shrink: true }}
+          fullWidth
         />
       </Grid>
 
-      {options.map((option, index) => (
-        <Grid item xs={12} key={index}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={10}>
-              <TextField
-                label={`Option ${index + 1}`}
-                variant="outlined"
-                fullWidth
-                value={option}
-                onChange={(e) => handleOptionChange(index, e)}
-                name={`options[${index}]`}
-              />
-            </Grid>
-            <Grid item xs={2}>
+      <Grid item xs={12} md={6}>
+        {variantOptions.map((size, index) => (
+          <Box
+            key={index}
+            display="flex"
+            alignItems="center"
+            className="my-2 p-2 border border-gray-300 rounded-md"
+          >
+            <TextField
+              variant="outlined"
+              name="options"
+              value={size}
+              onChange={(e) => handleChangeInput(index, e)}
+              label="Options"
+              fullWidth
+              className="mr-2"
+            />
+            {variantOptions.length > 1 && (
               <IconButton
-                color="error"
-                onClick={() => handleRemoveOption(index)}
-                disabled={options.length === 1}
+                className="bg-red-500 hover:bg-red-700 text-white"
+                onClick={() => handleRemoveInput(index)}
               >
-                <RemoveCircleIcon />
+                <DeleteIcon />
               </IconButton>
-            </Grid>
-          </Grid>
-        </Grid>
-      ))}
-
-      <Grid item xs={12}>
-        <Button
-          variant="outlined"
-          startIcon={<AddCircleIcon />}
-          onClick={handleAddOption}
-        >
-          Add Option
-        </Button>
+            )}
+          </Box>
+        ))}
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            variant="contained"
+            className="mt-2 bg-blue-500 hover:bg-blue-700"
+            startIcon={<AddCircleIcon />}
+            onClick={handleAddInput}
+          >
+            Add options
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );

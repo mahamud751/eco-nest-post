@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { VariantService } from './variant.service';
@@ -32,8 +33,11 @@ export class VariantController {
   @ApiOperation({ summary: 'Get all variants' })
   @ApiResponse({ status: 200, description: 'Returns a list of all variants.' })
   @ApiResponse({ status: 404, description: 'No variants found.' })
-  findAll() {
-    return this.variantService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('perPage') perPage: number = 10,
+  ) {
+    return this.variantService.findAll(page, perPage);
   }
 
   @Get(':id')

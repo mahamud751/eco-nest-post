@@ -82,6 +82,15 @@ export interface Product {
   updatedAt: Date;
 }
 
+export interface Variant {
+  id: string;
+  name: string;
+  options: string[];
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Review {
   id: string;
   productId: string;
@@ -347,6 +356,12 @@ export interface ProductFormProps {
   setLatest: React.Dispatch<React.SetStateAction<string>>;
   discountType: string;
   setDiscountType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface VariantFormProps {
+  variant: Variant | null;
+  variantOptions: string[];
+  setVariantOptions: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface UserFormProps {

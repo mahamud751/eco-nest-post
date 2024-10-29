@@ -127,7 +127,7 @@ const AddForm: React.FC<AddFormProps> = ({
 
     const data: { [key: string]: any } = {};
     formData.forEach((value, key) => {
-      if (key === "sizes" || key === "colors") {
+      if (key === "sizes" || key === "colors" || key === "options") {
         try {
           data[key] = JSON.parse(value as string);
         } catch (e) {
