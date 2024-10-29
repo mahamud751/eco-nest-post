@@ -15,8 +15,10 @@ import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 import theme from "@/services/theme/theme";
 import SessionWraper from "@/components/SessionWrapper";
 import dynamic from "next/dynamic";
-const CartSummary = dynamic(() => import('@/components/templates/shared/CartSummary'), { ssr: false });
-
+const CartSummary = dynamic(
+  () => import("@/components/templates/shared/CartSummary"),
+  { ssr: false }
+);
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -74,7 +76,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               {showHeader && <Footer />}
 
               <CartSummary />
-
             </SnackbarProvider>
           </UserProvider>
         </Provider>
