@@ -60,6 +60,28 @@ export class WishlistService {
     return { data, total };
   }
 
+  async findOneByProductAndEmail(
+    productId: string,
+    email?: string,
+  ): Promise<any> {
+    const where: any = {
+      productId: productId,
+    };
+
+    if (email) {
+      where.email = email; // Add email filter if provided
+    }
+
+    const wishList = await this.prisma.wishlist.findFirst({
+      where,
+      include: {
+        products: true,
+      },
+    });
+
+    return wishList;
+  }
+
   findOne(id: string) {
     return this.prisma.wishlist.findUnique({
       where: { id },

@@ -40,6 +40,16 @@ export class WishlistController {
     return this.wishlistService.findAll(page, perPage, email, productId);
   }
 
+  @Get('/myWishlist')
+  @ApiOperation({ summary: 'Get all subcategories' })
+  @ApiResponse({ status: 200, description: 'Return all subcategories.' })
+  async findEmail(
+    @Query('productId') productId: string,
+    @Query('email') email?: string,
+  ) {
+    return this.wishlistService.findOneByProductAndEmail(productId, email);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a wishlist by id' })
   @ApiParam({ name: 'id', description: 'ID of the wishlist to retrieve' })
