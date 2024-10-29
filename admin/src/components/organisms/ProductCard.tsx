@@ -30,8 +30,11 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const { user } = useAuth();
   const MySwal = withReactContent(Swal);
   const { openSnackbar } = useSnackbar();
-  const { data: wishlist, reFetch: wishlistRefetch } =
-    UseFetch<WishlistItem[]>(`wishlist`);
+  const { data: wishlist, reFetch: wishlistRefetch } = UseFetch<WishlistItem[]>(
+    `wishlist/myWishlist?email=${user?.email}&productId=${product?.id}`
+  );
+
+  console.log(wishlist);
 
   const handleAddToWishlist = async () => {
     if (!user) {
@@ -59,20 +62,15 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       MySwal.fire("Error", "Something went wrong!", "error");
     }
   };
-  const email = user?.email;
-  const exactWishList = wishlist?.filter(
-    (wishListItem) => wishListItem?.productId === product.id
-  );
-  const userWishList = exactWishList?.find(
-    (wishListItem) => wishListItem?.email === email
-  );
+
   const handleRemoveFromWishlist = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${userWishList?.id}`
+        //@ts-ignore
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${wishlist?.id}`
       );
       openSnackbar(
         `${product.name} Item removed from wishlist!`,
@@ -117,26 +115,24 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             <div className="relative group">
               <IconButton
                 className={`bg-[#e8f6ea] rounded-full p-2 shadow-md transition-transform duration-300 ease-in-out  group-hover:scale-110 ${
-                  userWishList
+                  wishlist
                     ? "group-hover:bg-[#e8f6ea]"
                     : "group-hover:bg-[#088178]"
                 }`}
                 onClick={
-                  userWishList ? handleRemoveFromWishlist : handleAddToWishlist
+                  wishlist ? handleRemoveFromWishlist : handleAddToWishlist
                 }
               >
                 <Favorite
-                  className={`${
-                    userWishList ? "text-red-500" : "text-[#088178]"
-                  } ${
-                    userWishList
+                  className={`${wishlist ? "text-red-500" : "text-[#088178]"} ${
+                    wishlist
                       ? "group-hover:text-red-500"
                       : "group-hover:text-white"
                   } `}
                 />
               </IconButton>
               <span className="absolute -mt-24 top-full left-1/2 transform -translate-x-1/2 bg-[#088178] text-white text-xs font-bold px-4 py-2 rounded transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 w-[120px] text-center">
-                {userWishList ? "Remove from Wishlist" : "Add to Wishlist"}
+                {wishlist ? "Remove from Wishlist" : "Add to Wishlist"}
                 <span className="block absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-t-[#088178] border-l-transparent border-r-transparent"></span>
               </span>
             </div>
