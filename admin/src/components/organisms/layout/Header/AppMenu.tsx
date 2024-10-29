@@ -269,6 +269,7 @@ export default function AppMenu({
                   background: "transparent",
                 },
                 marginRight: 8,
+                marginLeft: 2,
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             >

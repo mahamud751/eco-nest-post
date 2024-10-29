@@ -399,6 +399,7 @@ const CustomizedStepper: React.FC = () => {
       rocketNumber: formData.get("rocketNumber"),
       grandPrice: grandTotal,
       getState: cartItemsFromRedux,
+      discount: discountAmount.toString(),
     };
 
     try {
