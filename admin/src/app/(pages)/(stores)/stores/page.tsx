@@ -2,7 +2,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -43,6 +42,7 @@ const CategoryDetails = () => {
     priceRange: { min: 0, max: 1000 },
     color: "",
     size: "",
+    categoryId: "",
   });
   const [openFilters, setOpenFilters] = useState(false);
 
@@ -56,6 +56,10 @@ const CategoryDetails = () => {
 
       if (filters.size) {
         queryParams.append("size", filters.size);
+      }
+
+      if (filters.categoryId) {
+        queryParams.append("categoryId", filters.categoryId);
       }
 
       const response = await axios.get<{
@@ -126,11 +130,17 @@ const CategoryDetails = () => {
   const handleCloseFilters = () => {
     setOpenFilters(false);
   };
+  const handleCategoryChange = (categoryId: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      categoryId,
+    }));
+  };
 
   return (
     <Box className="container mx-auto py-10 p-2 md:p-0">
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-12 md:col-span-3">
+        <div className="col-span-12 md:col-span-3 py-12">
           <Button
             variant="outlined"
             onClick={handleOpenFilters}
@@ -142,9 +152,24 @@ const CategoryDetails = () => {
           <div className="max-h-[80vh] overflow-y-auto scrollbar-custom hidden md:block">
             <Card className="border">
               <CardContent>
+                <div className="flex justify-center">
+                  <Button
+                    variant="contained"
+                    onClick={() => handleCategoryChange("")}
+                    className="py-2 px-8 cursor-pointer bg-slate-800 hover:bg-slate-400"
+                  >
+                    <Typography variant="body2">Select All</Typography>
+                  </Button>
+                </div>
                 {response?.data &&
                   response.data.map((category) => (
-                    <Link href={`${category?.id}`} key={category?.id}>
+                    <div
+                      key={category?.id}
+                      onClick={() => handleCategoryChange(category?.id)}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
                       <div className="flex items-center space-x-4 mt-6">
                         <Image
                           src={category.photos[0]?.src || "/default-image.jpg"}
@@ -155,7 +180,7 @@ const CategoryDetails = () => {
                         />
                         <Typography variant="body2">{category.name}</Typography>
                       </div>
-                    </Link>
+                    </div>
                   ))}
               </CardContent>
             </Card>

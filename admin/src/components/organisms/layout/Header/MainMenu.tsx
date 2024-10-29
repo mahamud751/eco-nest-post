@@ -26,6 +26,7 @@ import styles from "../../../../css/Header.module.css";
 import UseFetch from "@/services/hooks/UseRequest";
 import { Permission, User } from "@/services/types";
 import { adminMenuItems, commonMenuItems } from "./MenuItems";
+import Link from "next/link";
 
 interface MenuItem {
   text: string;
@@ -129,13 +130,16 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
             borderBottom: "1px solid #ccc",
           }}
         >
-          <Image
-            src={"https://i.ibb.co/CMkLbff/Icon.png"}
-            width={20}
-            height={20}
-            alt="icon"
-            className="ml-2"
-          />
+          <Link href={"/"}>
+            {" "}
+            <Image
+              src={"https://i.ibb.co/CMkLbff/Icon.png"}
+              width={20}
+              height={20}
+              alt="icon"
+              className="ml-2"
+            />
+          </Link>
 
           <IconButton onClick={toggleDrawer(false)}>
             <CloseIcon />

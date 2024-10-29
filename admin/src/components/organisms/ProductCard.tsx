@@ -10,16 +10,8 @@ import toast from "react-hot-toast";
 
 import { useAuth } from "@/services/hooks/auth";
 import UseFetch from "@/services/hooks/UseRequest";
-import { WishlistItem } from "@/services/types";
+import { Product, WishlistItem } from "@/services/types";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-
-interface Product {
-  id: string;
-  name: string;
-  fulldesc: string;
-  price: number;
-  photos: { src: string }[];
-}
 
 interface ProductCardProps {
   product: Product;
@@ -28,6 +20,7 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const [hover, setHover] = useState(false);
   const { user } = useAuth();
+
   const MySwal = withReactContent(Swal);
   const { openSnackbar } = useSnackbar();
   const { data: wishlist, reFetch: wishlistRefetch } = UseFetch<WishlistItem[]>(
@@ -99,9 +92,9 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         <Image
           src={hover ? product.photos[1]?.src : product.photos[0]?.src}
           alt={product.name}
-          width={400}
-          height={400}
-          className="absolute inset-0 transition-opacity duration-500 ease-in-out h-[200px]"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0 transition-opacity duration-500 ease-in-out"
         />
 
         <div
@@ -173,7 +166,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
                 color="textSecondary"
                 className="mb-2 text-[#088178] font-extrabold"
               >
-                ৳ {product.price}
+                ৳ {product.b2bPrice}
               </Typography>
             </div>
             <div className="relative group">

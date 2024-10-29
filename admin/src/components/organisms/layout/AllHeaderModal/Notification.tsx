@@ -60,8 +60,8 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
         setHasMore(false);
       }
 
-      setData((prevData) => ({
-        data: [...(prevData?.data || []), ...response.data.data],
+      setData(() => ({
+        data: [...response.data.data],
         total: response.data.total,
         perPage: response.data.perPage,
       }));
@@ -76,6 +76,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
   useEffect(() => {
     fetchOrders();
   }, [page]);
+  console.log(data);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
@@ -169,7 +170,10 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
                             color: "black",
                           }}
                         >
-                          Order Id : <Link href={`/order-show/${notification.orderId}`}>{notification.orderId}</Link>
+                          Order Id :{" "}
+                          <Link href={`/order-show/${notification.orderId}`}>
+                            {notification.orderId}
+                          </Link>
                         </Typography>
                         <Typography
                           variant="caption"

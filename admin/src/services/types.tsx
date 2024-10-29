@@ -61,6 +61,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  b2bPrice: number;
   category: Category;
   subcategory: Subcategory;
   subcategoryId: string;
@@ -77,6 +78,7 @@ export interface Product {
   discountPrice: number;
   userInfo?: any;
   createdAt: Date;
+  views: number;
   updatedAt: Date;
 }
 

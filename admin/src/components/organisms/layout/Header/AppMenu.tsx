@@ -8,6 +8,7 @@ import {
   CssBaseline,
   Divider,
   IconButton,
+  Badge,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
   useMediaQuery,
@@ -28,6 +29,14 @@ import ProfileMenu from "./ProfileMenu";
 import LanguageModal from "../AllHeaderModal/Language";
 import CartModal from "../AllHeaderModal/CartModal";
 import NotificationModal from "../AllHeaderModal/Notification";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/reducers";
+import { useSnackbar } from "@/services/contexts/useSnackbar";
+import { useAppDispatch } from "@/services/hooks/useAppDispatch";
+import { delete_item } from "@/app/redux/actions/cartAction";
+import UseFetch from "@/services/hooks/UseRequest";
+import { useAuth } from "@/services/hooks/auth";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -107,8 +116,9 @@ const MainContent = styled(Box, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  width: `calc(100% - ${open ? drawerWidth : `calc(${theme.spacing(7)} + 1px)`
-    })`,
+  width: `calc(100% - ${
+    open ? drawerWidth : `calc(${theme.spacing(7)} + 1px)`
+  })`,
   height: "100vh",
 }));
 
@@ -124,14 +134,22 @@ export default function AppMenu({
   toggleDarkMode,
 }: AppMenuProps) {
   const theme = useTheme();
+  const { user } = useAuth();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(!isSmallScreen);
   const [openLanguageModal, setOpenLanguageModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
+  const { openSnackbar } = useSnackbar();
+  const dispatch = useAppDispatch();
   const [openNotificationModal, setOpenNotificationModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElLanguage, setAnchorElLanguage] = useState<null | HTMLElement>(
     null
+  );
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const cartItemsFromRedux = useSelector(
+    (state: RootState) => state.cart.cartItems
   );
   const [anchorElNotification, setAnchorElNotification] =
     useState<null | HTMLElement>(null);
@@ -143,23 +161,6 @@ export default function AppMenu({
     setOpen(false);
   };
 
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      image:
-        "https://i.ibb.co.com/Sx1t5ZZ/2024-Luxury-Clothing-Men-s-Genuine-Linen-Shirt-Man-Shirts-High-Quality-Fashion-Blouses-Social-T-jpg.jpg",
-      name: "Item 1",
-      price: 10,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      image: "https://i.ibb.co.com/d6rGWKR/product-3-1.jpg",
-      name: "Item 2",
-      price: 20,
-      quantity: 2,
-    },
-  ]);
   const handleToggleCartModal = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setOpenCartModal((prev) => !prev);
@@ -175,9 +176,21 @@ export default function AppMenu({
     setOpenNotificationModal((prev) => !prev);
   };
 
-  const handleRemoveItem = (id: number) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeItem = (index: number) => {
+    if (index < 0 || index >= cartItemsFromRedux.length) return;
+    const item = cartItemsFromRedux[index];
+    if (item) {
+      dispatch(delete_item(item.product.id, item.size, item.color));
+      openSnackbar(
+        `${item.product.name} Item removed from cart!`,
+        "success",
+        "#f44336"
+      );
+    }
   };
+  const { total: totalNotification } = UseFetch<Notification>(
+    `notifications?email=${user?.email}&page=${page}&perPage=${rowsPerPage}`
+  );
 
   return (
     <Box className="flex" sx={{ height: "100vh", margin: 0 }}>
@@ -220,6 +233,7 @@ export default function AppMenu({
             >
               <Language />
             </IconButton>
+
             <IconButton
               onClick={handleToggleCartModal}
               sx={{
@@ -230,7 +244,9 @@ export default function AppMenu({
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             >
-              <ShoppingCart />
+              <Badge badgeContent={cartItemsFromRedux?.length} color="error">
+                <ShoppingCart />
+              </Badge>
             </IconButton>
             <IconButton
               onClick={handleNotificationModalOpen}
@@ -242,7 +258,9 @@ export default function AppMenu({
                 color: theme.palette.mode === "dark" ? "white" : "black",
               }}
             >
-              <Notifications />
+              <Badge badgeContent={totalNotification} color="error">
+                <Notifications />
+              </Badge>
             </IconButton>
             <IconButton
               onClick={toggleDarkMode}
@@ -271,8 +289,7 @@ export default function AppMenu({
               open={openCartModal}
               anchorEl={anchorEl}
               onClose={() => setOpenCartModal(false)}
-              cartItems={cartItems}
-              onRemoveItem={handleRemoveItem}
+              removeItem={removeItem}
             />
             <NotificationModal
               open={openNotificationModal}
@@ -285,13 +302,16 @@ export default function AppMenu({
       {!isSmallScreen && (
         <Drawer variant="permanent" open={open}>
           <DrawerHeader className="flex justify-between p-4">
-            <Image
-              src={"https://i.ibb.co/CMkLbff/Icon.png"}
-              width={20}
-              height={20}
-              alt="icon"
-              className="ml-2"
-            />
+            <Link href={"/"}>
+              <Image
+                src={"https://i.ibb.co/CMkLbff/Icon.png"}
+                width={20}
+                height={20}
+                alt="icon"
+                className="ml-2"
+              />
+            </Link>
+
             <div className="flex items-center">
               <IconButton
                 onClick={open ? handleDrawerClose : handleDrawerOpen}
@@ -305,10 +325,11 @@ export default function AppMenu({
                   <MenuIcon
                     className={`relative flex items-center justify-center flex-shrink-0 font-sans cursor-pointer rounded-md w-[24px] h-[34px] 
                     text-[1.2rem] overflow-hidden transition-transform duration-200 ease-in-out
-                    ${theme.palette.mode === "dark"
+                    ${
+                      theme.palette.mode === "dark"
                         ? "bg-transparent text-white"
                         : "bg-purple-50 text-purple-700"
-                      }`}
+                    }`}
                   />
                 ) : (
                   <ChevronRightIcon
