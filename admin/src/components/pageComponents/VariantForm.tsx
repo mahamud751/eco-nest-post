@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React from "react";
 import { Grid, TextField, IconButton, Button, Box } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { VariantFormProps } from "@/services/types";
 
 const VariantForm: React.FC<VariantFormProps> = ({

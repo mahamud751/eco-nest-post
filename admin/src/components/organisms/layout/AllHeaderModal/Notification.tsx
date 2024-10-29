@@ -76,7 +76,6 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
   useEffect(() => {
     fetchOrders();
   }, [page]);
-  console.log(data);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;

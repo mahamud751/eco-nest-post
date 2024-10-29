@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
-import { getCommonColumns } from "@/components/templates/CommonColums";
+import { GridColDef } from "@mui/x-data-grid";
 
 const VariantList = () => {
-  const columns = getCommonColumns([
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
     {
       field: "options",
       headerName: "Options",
@@ -14,7 +16,7 @@ const VariantList = () => {
           <p key={index}>{item}</p>
         )),
     },
-  ]);
+  ];
 
   return (
     <DataTable
