@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Category, Subcategory, ProductFormProps } from "@/services/types";
+import {
+  Category,
+  Subcategory,
+  ProductFormProps,
+  Variant,
+} from "@/services/types";
 import {
   FormControl,
   Grid,
@@ -10,6 +15,8 @@ import {
   Box,
   Button,
   IconButton,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -37,6 +44,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
   discountType,
   setDiscountType,
 }) => {
+  const { data: variantData } = useFetch<{ data: Variant[] }>("variants");
+  console.log(variantData);
+
   const {
     data: responseData,
     loading: categoriesLoading,
@@ -50,6 +60,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const categories = responseData?.data || [];
   const subcategories = responseSubCategoryData?.data || [];
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
   const [, setCategoryName] = useState("");
   const [, setSubCategoryName] = useState("");
@@ -140,6 +152,24 @@ const ProductForm: React.FC<ProductFormProps> = ({
     setSubCategoryName(selectedSubCategoryObj?.name || "");
   };
 
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (event.target.checked) {
+      setSizes((prevSizes) => [...prevSizes, value]);
+    } else {
+      setSizes((prevSizes) => prevSizes.filter((size) => size !== value));
+    }
+  };
+
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (event.target.checked) {
+      setColors((prevColors) => [...prevColors, value]);
+    } else {
+      setColors((prevColors) => prevColors.filter((color) => color !== value));
+    }
+  };
+
   return (
     <>
       <Grid item xs={12} md={8}>
@@ -191,80 +221,44 @@ const ProductForm: React.FC<ProductFormProps> = ({
         />
       </Grid>
       <Grid item xs={12} md={6}>
-        {sizes.map((size, index) => (
-          <Box
-            key={index}
-            display="flex"
-            alignItems="center"
-            className="my-2 p-2 border border-gray-300 rounded-md"
-          >
-            <TextField
-              variant="outlined"
-              name="sizes"
-              value={size}
-              onChange={(e) => handleChangeInput(index, e)}
-              label="Size"
-              fullWidth
-              className="mr-2"
-            />
-            {sizes.length > 1 && (
-              <IconButton
-                className="bg-red-500 hover:bg-red-700 text-white"
-                onClick={() => handleRemoveInput(index)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
-          </Box>
-        ))}
-        <Box display="flex" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            className="mt-2 bg-blue-500 hover:bg-blue-700"
-            startIcon={<AddCircleIcon />}
-            onClick={handleAddInput}
-          >
-            Add Size
-          </Button>
-        </Box>
+        <FormControl component="fieldset">
+          <Box component="legend">Sizes</Box>
+          {variantData?.data
+            ?.find((variant) => variant.name === "size")
+            ?.options.map((size: string, index: number) => (
+              <FormControlLabel
+                key={index}
+                control={
+                  <Checkbox
+                    value={size}
+                    checked={sizes.includes(size)}
+                    onChange={handleSizeChange}
+                  />
+                }
+                label={size}
+              />
+            ))}
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
-        {colors.map((color, index) => (
-          <Box
-            key={index}
-            display="flex"
-            alignItems="center"
-            className="my-2 p-2 border border-gray-300 rounded-md"
-          >
-            <TextField
-              variant="outlined"
-              name="colors"
-              value={color}
-              onChange={(e) => handleChangeInputColor(index, e)}
-              label="Color"
-              fullWidth
-              className="mr-2"
-            />
-            {colors.length > 1 && (
-              <IconButton
-                className="bg-red-500 hover:bg-red-700 text-white"
-                onClick={() => handleRemoveInputColor(index)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
-          </Box>
-        ))}
-        <Box display="flex" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            className="mt-2 bg-blue-500 hover:bg-blue-700"
-            startIcon={<AddCircleIcon />}
-            onClick={handleAddInputColor}
-          >
-            Add Color
-          </Button>
-        </Box>
+        <FormControl component="fieldset">
+          <Box component="legend">Colors</Box>
+          {variantData?.data
+            ?.find((variant) => variant.name === "Color")
+            ?.options.map((color: string, index: number) => (
+              <FormControlLabel
+                key={index}
+                control={
+                  <Checkbox
+                    value={color}
+                    checked={colors.includes(color)}
+                    onChange={handleColorChange}
+                  />
+                }
+                label={color}
+              />
+            ))}
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
@@ -340,6 +334,17 @@ const ProductForm: React.FC<ProductFormProps> = ({
           name="price"
           fullWidth
           defaultValue={subCategory?.price || ""}
+          InputLabelProps={{ shrink: true }}
+        />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <TextField
+          id="b2bPrice"
+          label="B2B Price"
+          variant="outlined"
+          name="b2bPrice"
+          fullWidth
+          defaultValue={subCategory?.b2bPrice || ""}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>

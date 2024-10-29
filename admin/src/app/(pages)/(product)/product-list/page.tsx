@@ -25,8 +25,9 @@ const ProductList = () => {
     },
 
     { field: "price", headerName: "Price", flex: 1 },
+    { field: "b2bPrice", headerName: "B2B Price", flex: 1 },
     { field: "discountPrice", headerName: "Discount Price", flex: 1 },
-    { field: "flashsale", headerName: "Flashsale", flex: 1 },
+
     {
       field: "sizes",
       headerName: "Sizes",
