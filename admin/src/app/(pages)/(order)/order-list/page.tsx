@@ -49,6 +49,12 @@ const OrderList = () => {
     },
     { field: "email", headerName: "Email", flex: 1 },
     { field: "phone", headerName: "Phone", flex: 1 },
+    {
+      field: "b2b",
+      headerName: "IsB2B",
+      flex: 1,
+      renderCell: (params) => <StatusButton status={params.value} />,
+    },
 
     {
       field: "status",
