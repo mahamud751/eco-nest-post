@@ -14,6 +14,7 @@ import {
   Lock,
   Discount,
   Store,
+  Sell,
 } from "@mui/icons-material";
 
 interface MenuItem {
@@ -52,31 +53,7 @@ export const adminMenuItems: MenuItem[] = [
       },
     ],
   },
-  {
-    text: "B2B Stores",
-    icon: <Store className="text-purple-500" />,
-    path: "/stores",
-    requiredPermission: "storeList",
-    submenus: [],
-  },
-  {
-    text: "Product",
-    icon: <DryCleaningIcon className="text-red-500" />,
-    path: "/products",
-    requiredPermission: "productList",
-    submenus: [
-      {
-        text: "Add Product",
-        path: "/add-product",
-        requiredPermission: "productCreate",
-      },
-      {
-        text: "Product List",
-        path: "/product-list",
-        requiredPermission: "productList",
-      },
-    ],
-  },
+
   {
     text: "Discount",
     icon: <Discount className="text-blue-600" />,
@@ -96,13 +73,6 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
 
-  {
-    text: "Custom Order",
-    icon: <InboxIcon className="text-purple-500" />,
-    path: "/customOrder-list",
-    requiredPermission: "customOrderList",
-    submenus: [],
-  },
   {
     text: "Category",
     icon: <CategoryIcon className="text-yellow-500" />,
@@ -130,6 +100,49 @@ export const adminMenuItems: MenuItem[] = [
         requiredPermission: "subCategoryList",
       },
     ],
+  },
+  {
+    text: "Variant",
+    icon: <Sell className="text-blue-600" />,
+    path: "/variant",
+    requiredPermission: "variantList",
+    submenus: [
+      {
+        text: "Add Variant",
+        path: "/add-variant",
+        requiredPermission: "variantCreate",
+      },
+      {
+        text: "Variant List",
+        path: "/variant-list",
+        requiredPermission: "variantList",
+      },
+    ],
+  },
+  {
+    text: "Product",
+    icon: <DryCleaningIcon className="text-red-500" />,
+    path: "/products",
+    requiredPermission: "productList",
+    submenus: [
+      {
+        text: "Add Product",
+        path: "/add-product",
+        requiredPermission: "productCreate",
+      },
+      {
+        text: "Product List",
+        path: "/product-list",
+        requiredPermission: "productList",
+      },
+    ],
+  },
+  {
+    text: "B2B Stores",
+    icon: <Store className="text-purple-500" />,
+    path: "/stores",
+    requiredPermission: "storeList",
+    submenus: [],
   },
   {
     text: "Blog",
@@ -294,6 +307,13 @@ export const adminMenuItems: MenuItem[] = [
     icon: <ReviewsOutlined className="text-blue-500" />,
     path: "/review-list",
     requiredPermission: "reviewList",
+    submenus: [],
+  },
+  {
+    text: "Custom Order",
+    icon: <InboxIcon className="text-green-500" />,
+    path: "/customOrder-list",
+    requiredPermission: "customOrderList",
     submenus: [],
   },
   {
