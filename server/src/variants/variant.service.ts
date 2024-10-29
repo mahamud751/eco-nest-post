@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVariantDto } from './dto/create-variant.dto';
 import { UpdateVariantDto } from './dto/update-variant.dto';
@@ -8,9 +12,20 @@ export class VariantService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createVariantDto: CreateVariantDto) {
-    return this.prisma.variant.create({
-      data: createVariantDto,
-    });
+    const { ...rest } = createVariantDto;
+
+    try {
+      const variant = await this.prisma.variant.create({
+        data: {
+          ...rest,
+        },
+      });
+
+      return { message: 'Variant created successfully', variant };
+    } catch (error) {
+      console.error('Error creating Variant:', error);
+      throw new InternalServerErrorException('Failed to create Variant');
+    }
   }
 
   async findAll() {
