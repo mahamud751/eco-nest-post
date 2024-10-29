@@ -94,6 +94,7 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
             <MenuItem value="vendor">Vendor</MenuItem>
             <MenuItem value="rider">Rider</MenuItem>
             <MenuItem value="schoolManager">School Manager</MenuItem>
+            <MenuItem value="b2bManager">B2B User</MenuItem>
           </Select>
         </FormControl>
       </Grid>

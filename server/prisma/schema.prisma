@@ -377,6 +377,7 @@ enum UserRole {
   vendor
   schoolManager
   rider
+  b2bManager
 }
 
 enum UserStatus {

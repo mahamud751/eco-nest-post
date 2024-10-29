@@ -301,7 +301,8 @@ export type UserRole =
   | "manager"
   | "vendor"
   | "schoolManager"
-  | "rider";
+  | "rider"
+  | "b2bManager";
 
 export type UserStatus = "active" | "deactive" | "blocked";
 
