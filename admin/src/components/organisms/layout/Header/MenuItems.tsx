@@ -13,6 +13,7 @@ import {
   ShoppingBasketOutlined,
   Lock,
   Discount,
+  Store,
 } from "@mui/icons-material";
 
 interface MenuItem {
@@ -52,6 +53,13 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
   {
+    text: "B2B Stores",
+    icon: <Store className="text-purple-500" />,
+    path: "/stores",
+    requiredPermission: "storeList",
+    submenus: [],
+  },
+  {
     text: "Product",
     icon: <DryCleaningIcon className="text-red-500" />,
     path: "/products",
@@ -87,6 +95,7 @@ export const adminMenuItems: MenuItem[] = [
       },
     ],
   },
+
   {
     text: "Custom Order",
     icon: <InboxIcon className="text-purple-500" />,

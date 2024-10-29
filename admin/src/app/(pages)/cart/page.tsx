@@ -10,7 +10,6 @@ import {
   Step,
   StepLabel,
   Button,
-  Card,
   Table,
   TableBody,
   TableCell,
@@ -70,7 +69,7 @@ const ShoppingCartStep: React.FC<{
   onRemove: (index: number) => void;
   onProceedToCheckout: () => void;
 }> = ({ cartItems, onUpdate, onRemove, onProceedToCheckout }) => (
-  <Paper elevation={2} className="shadow-lg">
+  <Paper elevation={2} className="p-4 rounded-3xl">
     <>
       <TableContainer>
         <Table>
@@ -193,7 +192,7 @@ const CheckoutStep: React.FC<{
 }> = ({ cartItems, handleFormSubmit, discountAmount, setDiscountAmount }) => {
   const { user } = useAuth();
   return (
-    <Paper elevation={2} className="shadow-lg">
+    <Paper elevation={2} className="shadow-lg rounded-2xl">
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 p-2">
