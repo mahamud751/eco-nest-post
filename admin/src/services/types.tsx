@@ -15,6 +15,16 @@ export interface Banner {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface WishlistItem {
+  id: string;
+  productId: string;
+  product: Product;
+  userName: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 export interface Faq {
   id: string;
   title: string;

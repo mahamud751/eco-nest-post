@@ -8,6 +8,7 @@ import AnimatedImage from "@/components/atoms/AnimatedImage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { SnackbarProvider } from "@/services/contexts/useSnackbar";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -55,20 +56,22 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       <UserProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <ProtectedRoutes>
-            {pathname !== "/login" ? (
-              <Suspense fallback={<div>Loading...</div>}>
-                <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
-                  {children}
-                </AppMenu>
-              </Suspense>
-            ) : (
-              children
-            )}
-          </ProtectedRoutes>
-        </ThemeProvider>
+        <SnackbarProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ProtectedRoutes>
+              {pathname !== "/login" ? (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
+                    {children}
+                  </AppMenu>
+                </Suspense>
+              ) : (
+                children
+              )}
+            </ProtectedRoutes>
+          </ThemeProvider>
+        </SnackbarProvider>
       </UserProvider>
     </Provider>
   );
