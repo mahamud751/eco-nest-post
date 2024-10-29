@@ -34,8 +34,6 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
     `wishlist/myWishlist?email=${user?.email}&productId=${product?.id}`
   );
 
-  console.log(wishlist);
-
   const handleAddToWishlist = async () => {
     if (!user) {
       MySwal.fire("Please login first", "", "error");
@@ -95,15 +93,15 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       </span>
 
       <div
-        className="relative h-64 overflow-hidden m-4"
+        className="relative h-52 overflow-hidden m-4"
         style={{ borderTopLeftRadius: "25px", borderTopRightRadius: "25px" }}
       >
         <Image
           src={hover ? product.photos[1]?.src : product.photos[0]?.src}
           alt={product.name}
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 transition-opacity duration-500 ease-in-out"
+          width={400}
+          height={400}
+          className="absolute inset-0 transition-opacity duration-500 ease-in-out h-[200px]"
         />
 
         <div

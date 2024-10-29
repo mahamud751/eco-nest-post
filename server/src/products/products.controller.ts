@@ -48,6 +48,7 @@ export class ProductController {
     @Query('flashsale') flashsale?: string,
     @Query('email') email?: string,
     @Query('name') name?: string,
+    @Query('categoryId') categoryId?: string,
   ): Promise<PaginatedResult<Product>> {
     return this.productService.findAll(
       page,
@@ -56,6 +57,7 @@ export class ProductController {
       flashsale,
       email,
       name,
+      categoryId,
     );
   }
 

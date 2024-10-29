@@ -29,7 +29,8 @@ import { Category, Product } from "@/services/types";
 import ProductCard from "@/components/organisms/ProductCard";
 
 const CategoryDetails = () => {
-  const { data: categories } = UseFetch<Category[]>("categories");
+  const { data: response } = UseFetch<{ data: Category[] }>("categories");
+
   const [categoryData, setCategoryData] = useState<{
     data: Product[];
     total: number;
@@ -141,20 +142,21 @@ const CategoryDetails = () => {
           <div className="max-h-[80vh] overflow-y-auto scrollbar-custom hidden md:block">
             <Card className="border">
               <CardContent>
-                {/* {categories?.map((category) => (
-                  <Link href={`${category?.id}`} key={category?.id}>
-                    <div className="flex items-center space-x-4 mt-6">
-                      <Image
-                        src={category.photos[0]?.src || "/default-image.jpg"}
-                        alt={category.photos[0]?.title || category.name}
-                        width={20}
-                        height={20}
-                        className="rounded-full"
-                      />
-                      <Typography variant="body2">{category.name}</Typography>
-                    </div>
-                  </Link>
-                ))} */}
+                {response?.data &&
+                  response.data.map((category) => (
+                    <Link href={`${category?.id}`} key={category?.id}>
+                      <div className="flex items-center space-x-4 mt-6">
+                        <Image
+                          src={category.photos[0]?.src || "/default-image.jpg"}
+                          alt={category.photos[0]?.title || category.name}
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        <Typography variant="body2">{category.name}</Typography>
+                      </div>
+                    </Link>
+                  ))}
               </CardContent>
             </Card>
 

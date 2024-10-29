@@ -79,6 +79,7 @@ export class ProductService {
     flashsale?: string,
     email?: string,
     name?: string,
+    categoryId?: string,
   ): Promise<PaginatedResult<Product>> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -91,11 +92,16 @@ export class ProductService {
     if (flashsale) {
       where.flashsale = flashsale;
     }
+
     if (name) {
       where.name = {
         contains: name,
         mode: 'insensitive',
       };
+    }
+
+    if (categoryId) {
+      where.categoryId = categoryId;
     }
 
     const totalCountPromise = this.prisma.product.count({ where });

@@ -1,4 +1,5 @@
 export interface Category {
+  data: any;
   id: string;
   name: string;
   photos: Photo[];
