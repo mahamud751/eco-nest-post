@@ -15,6 +15,7 @@ import {
   Discount,
   Store,
   Sell,
+  Redeem,
 } from "@mui/icons-material";
 
 interface MenuItem {
@@ -56,7 +57,7 @@ export const adminMenuItems: MenuItem[] = [
 
   {
     text: "Discount",
-    icon: <Discount className="text-blue-600" />,
+    icon: <Redeem className="text-pink-600" />,
     path: "/discount",
     requiredPermission: "discountList",
     submenus: [

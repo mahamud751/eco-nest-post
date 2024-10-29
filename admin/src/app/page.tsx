@@ -1,5 +1,5 @@
 "use client";
-import { Grid } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import React from "react";
 import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
@@ -159,10 +159,15 @@ const Page = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <LatestProduct />
+          <Paper elevation={2} className="shadow-lg">
+            <LatestProduct />
+          </Paper>
         </Grid>
+
         <Grid item xs={12} md={6}>
-          <LatestOrders />
+          <Paper elevation={2} className="shadow-lg">
+            <LatestOrders />
+          </Paper>
         </Grid>
       </Grid>
     </>
