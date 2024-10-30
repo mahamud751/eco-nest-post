@@ -16,6 +16,7 @@ import {
   FormControlLabel,
   Checkbox,
   Paper,
+  Autocomplete,
 } from "@mui/material";
 
 import useFetch from "@/services/hooks/UseRequest";
@@ -157,22 +158,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
     setSubCategoryName(selectedSubCategoryObj?.name || "");
   };
 
-  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (event.target.checked) {
-      setSizes((prevSizes) => [...prevSizes, value]);
-    } else {
-      setSizes((prevSizes) => prevSizes.filter((size) => size !== value));
-    }
+  const handleSizeChange = (
+    event: React.SyntheticEvent,
+    newValue: string[]
+  ) => {
+    setSizes(newValue);
   };
 
-  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (event.target.checked) {
-      setColors((prevColors) => [...prevColors, value]);
-    } else {
-      setColors((prevColors) => prevColors.filter((color) => color !== value));
-    }
+  const handleColorChange = (
+    event: React.SyntheticEvent,
+    newValue: string[]
+  ) => {
+    setColors(newValue);
   };
 
   return (
@@ -333,45 +330,41 @@ const ProductForm: React.FC<ProductFormProps> = ({
       <Grid item xs={12} md={4} className="mt-5 md:mt-10">
         <Paper elevation={2} className=" bg-slate-50 ">
           <Grid container spacing={2} p={5}>
-            <Grid item xs={12} md={6}>
-              <FormControl component="fieldset">
-                <Box component="legend">Sizes</Box>
-                {variantData?.data
-                  ?.find((variant) => variant.name === "size")
-                  ?.options.map((size: string, index: number) => (
-                    <FormControlLabel
-                      key={index}
-                      control={
-                        <Checkbox
-                          value={size}
-                          checked={sizes.includes(size)}
-                          onChange={handleSizeChange}
-                        />
-                      }
-                      label={size}
-                    />
-                  ))}
-              </FormControl>
+            <Grid item xs={12} md={12}>
+              <Autocomplete
+                multiple
+                options={
+                  variantData?.data?.find((variant) => variant.name === "size")
+                    ?.options || []
+                }
+                value={sizes}
+                onChange={handleSizeChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Sizes"
+                  />
+                )}
+              />
             </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl component="fieldset">
-                <Box component="legend">Colors</Box>
-                {variantData?.data
-                  ?.find((variant) => variant.name === "Color")
-                  ?.options.map((color: string, index: number) => (
-                    <FormControlLabel
-                      key={index}
-                      control={
-                        <Checkbox
-                          value={color}
-                          checked={colors.includes(color)}
-                          onChange={handleColorChange}
-                        />
-                      }
-                      label={color}
-                    />
-                  ))}
-              </FormControl>
+            <Grid item xs={12} md={12}>
+              <Autocomplete
+                multiple
+                options={
+                  variantData?.data?.find((variant) => variant.name === "Color")
+                    ?.options || []
+                }
+                value={colors}
+                onChange={handleColorChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Colors"
+                  />
+                )}
+              />
             </Grid>
           </Grid>
         </Paper>
