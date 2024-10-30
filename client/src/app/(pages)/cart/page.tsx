@@ -175,7 +175,7 @@ const ShoppingCartStep: React.FC<{
       <Button
         variant="contained"
         color="primary"
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+        className="bg-[#088178]  text-white px-6 py-2 rounded-lg"
         onClick={onProceedToCheckout}
       >
         Proceed to Checkout
@@ -268,7 +268,7 @@ const CheckoutStep: React.FC<{
           variant="contained"
           color="primary"
           type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+          className="bg-[#088178] text-white px-6 py-2 rounded-lg"
         >
           Place Order
         </Button>

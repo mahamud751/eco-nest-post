@@ -34,6 +34,7 @@ import {
   AccountCircle,
   Search,
   DensityMedium,
+  Person,
 } from "@mui/icons-material";
 
 import { HiOutlineShoppingBag } from "react-icons/hi2";
@@ -203,9 +204,16 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <IconButton color="inherit" onClick={toggleCart}>
+              <IconButton
+                onClick={toggleCart}
+                sx={{
+                  "&:hover": {
+                    background: "transparent",
+                  },
+                }}
+              >
                 <Badge badgeContent={cartItemsFromRedux?.length} color="error">
-                  <HiOutlineShoppingBag />
+                  <HiOutlineShoppingBag style={{ color: "black" }} />
                 </Badge>
               </IconButton>
             </div>
@@ -244,11 +252,8 @@ export default function Navbar() {
                 {user ? (
                   <div className="flex items-center space-x-4">
                     <span>
-                      <Link
-                        href={"/account"}
-                        className="text-red-500 uppercase"
-                      >
-                        {user.name}
+                      <Link href={"/account"}>
+                        <Person />
                       </Link>
                     </span>
                     <span
@@ -512,7 +517,11 @@ export default function Navbar() {
           </List>
         </div>
       </Drawer>
-      <CartDrawer open={cartOpen} onClose={toggleCart} removeItem={removeItem} />
+      <CartDrawer
+        open={cartOpen}
+        onClose={toggleCart}
+        removeItem={removeItem}
+      />
     </>
   );
 }

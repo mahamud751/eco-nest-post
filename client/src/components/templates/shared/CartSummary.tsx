@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { ShoppingCart as CartIcon } from "@mui/icons-material";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Odometer from "react-odometerjs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/reducers";
@@ -57,7 +55,7 @@ const CartSummary = () => {
       onClick={toggleCart}
     >
       <div className="text-center text-white">
-        <div className="px-3 py-5 bg-[#1F9F7F] rounded-tl-[10%] rounded-bl-[10%]">
+        <div className="px-3 py-5 bg-[#088178] rounded-tl-[10%] rounded-bl-[10%]">
           <div className="flex">
             <LocalMallIcon sx={{ color: "#FFFFFF", fontSize: 18 }} />
             <Typography
@@ -67,7 +65,7 @@ const CartSummary = () => {
               {cartItemCount} Items
             </Typography>
           </div>
-          <div className="bg-[#F0F0F0] py-1 text-[#1F9F7F] rounded-[7%] mt-3 font-extrabold text-[12px]">
+          <div className="bg-[#F0F0F0] py-1 text-[#088178] rounded-[7%] mt-3 font-extrabold text-[12px]">
             <Typography variant="caption" className="mx-1 ">
               ৳
             </Typography>
