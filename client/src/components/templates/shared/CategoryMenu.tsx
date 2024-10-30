@@ -24,11 +24,7 @@ interface CategoryMenuProps {
 }
 
 export const CategoryMenu = ({ setCategoriesOpen }: CategoryMenuProps) => {
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
+  const { data: categories } = UseFetch<Category[]>("categories");
 
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
   const [hoverCategory, setHoverCategory] = useState<number | null>(null);
@@ -51,19 +47,12 @@ export const CategoryMenu = ({ setCategoriesOpen }: CategoryMenuProps) => {
     setCategoriesOpen(false);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading categories</div>;
-
-  if (!categories || categories.length === 0) {
-    return <div>No categories available</div>;
-  }
-
   return (
     <Paper
       className="absolute top-full mt-1 z-50 bg-white shadow-lg"
       style={{ width: "300px", height: "400px" }}
     >
-      {categories.map((category, index) => (
+      {categories?.map((category, index) => (
         <div
           key={category.id}
           onMouseEnter={() => handleMouseEnter(index)}
