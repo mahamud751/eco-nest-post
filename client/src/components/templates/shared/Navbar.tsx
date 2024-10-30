@@ -61,11 +61,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [, setSearchResults] = useState([]);
   const [value, setValue] = useState(0);
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
+  const { data: categories } = UseFetch<Category[]>("categories");
 
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
