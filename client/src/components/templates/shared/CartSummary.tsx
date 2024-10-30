@@ -22,7 +22,7 @@ const CartSummary = () => {
   const toggleCart = () => setCartOpen(!cartOpen);
 
   const grandTotal = cartItemsFromRedux
-    .reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+    .reduce((acc, item) => acc + item.product.discountPrice * item.quantity, 0)
     .toFixed(2);
 
   const cartItemCount = cartItemsFromRedux.length;

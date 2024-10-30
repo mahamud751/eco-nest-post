@@ -15,7 +15,7 @@ export const PriceTotal: React.FC<{
     useState(discountAmount);
 
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
+    (acc, item) => acc + item.product.discountPrice * item.quantity,
     0
   );
   const vat = 40;

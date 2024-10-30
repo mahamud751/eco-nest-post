@@ -249,7 +249,8 @@ export default function Navbar() {
                   <div className="flex items-center space-x-4">
                     <span>
                       <Link href={"/account"}>
-                        <Person />
+                        <Person style={{ marginRight: 5 }} />
+                        {user?.name}
                       </Link>
                     </span>
                     <span

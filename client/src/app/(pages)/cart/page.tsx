@@ -150,7 +150,7 @@ const ShoppingCartStep: React.FC<{
                 </TableCell>
 
                 <TableCell>
-                  {(item.product.price * item.quantity).toFixed(2)}
+                  {(item.product.discountPrice * item.quantity).toFixed(2)}
                 </TableCell>
                 <TableCell>
                   <IconButton
@@ -323,7 +323,6 @@ const CustomizedStepper: React.FC = () => {
   );
   const [activeStep, setActiveStep] = useState<number>(0);
   const [discountAmount, setDiscountAmount] = useState<number>(0);
-  console.log(discountAmount);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleProceedToCheckout = () => {
@@ -373,7 +372,7 @@ const CustomizedStepper: React.FC = () => {
   const vat = 40;
   const grandTotal = (
     cartItemsFromRedux.reduce(
-      (acc, item) => acc + item.product.price * item.quantity,
+      (acc, item) => acc + item.product.discountPrice * item.quantity,
       0
     ) +
     vat -
