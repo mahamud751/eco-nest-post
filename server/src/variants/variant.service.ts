@@ -72,7 +72,7 @@ export class VariantService {
       throw new NotFoundException(`Variant with ID ${id} not found`);
     }
     const { ...rest } = updateVariantDto;
-    const variantUpdate = await this.prisma.banner.update({
+    const variantUpdate = await this.prisma.variant.update({
       where: { id },
       data: {
         ...rest,
@@ -80,7 +80,7 @@ export class VariantService {
     });
     await this.auditLogService.log(
       id,
-      'Banner',
+      'Variant',
       'UPDATE',
       variant,
       variantUpdate,
