@@ -434,7 +434,7 @@ const CustomizedStepper: React.FC = () => {
             <CustomStep key={index} onClick={() => handleStepClick(index)}>
               <CustomStepButton>
                 {step.icon}
-                <StepLabel className="ms-5">{step.label}</StepLabel>
+                <StepLabel className="ms-3 -mt-4">{step.label}</StepLabel>
               </CustomStepButton>
             </CustomStep>
           ))}
