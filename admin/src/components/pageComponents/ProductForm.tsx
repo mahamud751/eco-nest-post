@@ -12,9 +12,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Box,
-  FormControlLabel,
-  Checkbox,
   Paper,
   Autocomplete,
 } from "@mui/material";

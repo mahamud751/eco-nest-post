@@ -199,10 +199,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                         alt={img.title}
                         width={100}
                         height={100}
-                        className={`border-2 ${selectedImage === img.src
+                        className={`border-2 ${
+                          selectedImage === img.src
                             ? "border-blue-500"
                             : "border-gray-300"
-                          } rounded-lg`}
+                        } rounded-lg`}
                         onClick={() => handleImageSelect(img.src)}
                       />
                     </div>
@@ -225,6 +226,22 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                       <p className="ms-3 mt-[2px]">
                         ({averageRating.toFixed(1)} / 5)
                       </p>
+                    </div>
+                    <div className="flex">
+                      <Typography
+                        variant="h6"
+                        color="textSecondary"
+                        className="mb-2 text-[#088178] font-extrabold"
+                      >
+                        ৳ {product?.discountPrice}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        className="mb-2 ms-2 mt-1 text-[#adb1b1] font-bold line-through"
+                      >
+                        ৳ {product?.price}
+                      </Typography>
                     </div>
                     <Typography variant="h6" className="font-bold my-4">
                       Category: {categoryName}
@@ -254,10 +271,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                           {colors.map((clr) => (
                             <button
                               key={clr}
-                              className={`w-8 h-8 rounded-full border-2 transition-all duration-300 ${color === clr
+                              className={`w-8 h-8 rounded-full border-2 transition-all duration-300 ${
+                                color === clr
                                   ? "border-blue-500 ring-2 ring-blue-200"
                                   : "border-gray-300"
-                                }`}
+                              }`}
                               style={{ backgroundColor: clr }}
                               onClick={() => setColor(clr)}
                             ></button>
@@ -278,10 +296,11 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                           {sizes.map((sz) => (
                             <button
                               key={sz}
-                              className={`w-10 h-10 text-sm font-bold border-2 transition-all duration-300 ${size === sz
+                              className={`w-10 h-10 text-sm font-bold border-2 transition-all duration-300 ${
+                                size === sz
                                   ? "border-blue-500 bg-blue-100"
                                   : "border-gray-300"
-                                } rounded-lg`}
+                              } rounded-lg`}
                               onClick={() => setSize(sz)}
                             >
                               {sz}
@@ -342,8 +361,9 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                           className="focus:outline-none"
                         >
                           <FavoriteIcon
-                            className={`transition-all duration-300 ${userWishList ? "text-red-500" : "text-gray-300"
-                              }`}
+                            className={`transition-all duration-300 ${
+                              userWishList ? "text-red-500" : "text-gray-300"
+                            }`}
                           />
                         </IconButton>
                       </Button>
