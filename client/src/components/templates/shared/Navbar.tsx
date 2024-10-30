@@ -382,8 +382,6 @@ export default function Navbar() {
             Categories
           </Typography>
 
-          {loading && <div>Loading...</div>}
-          {error && <div>Error loading categories</div>}
           {categories &&
             categories.map((category) => (
               <div key={category.id} className="flex items-center mb-2">

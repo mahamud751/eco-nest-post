@@ -10,14 +10,9 @@ import { Blog } from "@/services/types/types";
 import Link from "next/link";
 
 const Blogs = () => {
-  const { data: blogs, loading, error } = UseFetch<Blog[]>("blogs");
+  const { data: blogs } = UseFetch<Blog[]>("blogs");
 
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
-  if (loading) return <div>Loading blogs...</div>;
-  if (error || !blogs || blogs.length === 0) {
-    return <div>Failed to load blogs or no blogs available</div>;
-  }
 
   return (
     <Box className="container mx-auto py-10">
@@ -54,7 +49,7 @@ const Blogs = () => {
               <ArrowForwardIosIcon className="swiper-button-prev p-3" />
               <ArrowBackIosIcon className="swiper-button-next p-3" />
             </div>
-            {blogs.map((item) => (
+            {blogs?.map((item) => (
               <SwiperSlide key={item.id}>
                 <Link href={`blogDetails/${item.id}`} className="mt-16">
                   <div

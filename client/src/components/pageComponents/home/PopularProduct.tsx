@@ -58,14 +58,7 @@ const ProductCard: FC<{
 };
 
 const PopularProduct: FC = () => {
-  const {
-    data: products,
-    loading,
-    error,
-  } = UseFetch<Product[]>("products/popular");
-
-  if (loading) return <div>Loading products...</div>;
-  if (error) return <div>Failed to load products</div>;
+  const { data: products } = UseFetch<Product[]>("products/popular");
 
   return (
     <div>

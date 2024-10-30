@@ -26,12 +26,7 @@ const CommonSlider = <T extends { id: string }>({
   showTitle = true,
   renderSlide,
 }: CommonSliderProps<T>) => {
-  const { data: items, loading, error } = UseFetch<T[]>(endpoint);
-
-  if (loading) return <p>Loading...</p>;
-  if (error || !items || items.length === 0) {
-    return <div>Failed to load items or no items available</div>;
-  }
+  const { data: items } = UseFetch<T[]>(endpoint);
 
   return (
     <div>

@@ -33,11 +33,7 @@ const categoryBackgroundColors = [
 ];
 
 const CategoryProduct = () => {
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
+  const { data: categories } = UseFetch<Category[]>("categories");
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
 
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
@@ -46,12 +42,7 @@ const CategoryProduct = () => {
     setSelectedCategoryIndex(newIndex);
   };
 
-  if (loading) return <div>Loading categories...</div>;
-  if (error || !categories || categories.length === 0) {
-    return <div>Failed to load categories or no categories available</div>;
-  }
-
-  const selectedCategory = categories[selectedCategoryIndex];
+  const selectedCategory = categories && categories[selectedCategoryIndex];
 
   return (
     <Box className="container mx-auto py-10">
@@ -75,7 +66,7 @@ const CategoryProduct = () => {
           scrollButtons={isSmallScreen ? "auto" : false}
           allowScrollButtonsMobile={true}
         >
-          {categories.map((category, index) => (
+          {categories?.map((category, index) => (
             <Tab
               key={index}
               label={category.name}
@@ -92,7 +83,7 @@ const CategoryProduct = () => {
         </Tabs>
 
         <Box sx={{ marginLeft: isSmallScreen ? 0 : 3, marginTop: 5 }}>
-          {selectedCategory?.products?.length > 0 ? (
+          {selectedCategory && selectedCategory?.products?.length > 0 ? (
             <Swiper
               modules={[Autoplay, Navigation, Pagination]}
               spaceBetween={30}

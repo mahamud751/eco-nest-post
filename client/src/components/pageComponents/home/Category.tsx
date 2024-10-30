@@ -47,14 +47,7 @@ const CategoryCard: FC<{ photos: string; categoryName: string }> = ({
 };
 
 const CategoriesPage: FC = () => {
-  const {
-    data: categories,
-    loading,
-    error,
-  } = UseFetch<Category[]>("categories");
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Failed to load categories</div>;
+  const { data: categories } = UseFetch<Category[]>("categories");
 
   return (
     <div className="container mx-auto py-10 relative">

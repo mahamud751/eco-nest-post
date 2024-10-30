@@ -38,16 +38,9 @@ const getTimeComponents = (countdown: number) => {
 };
 
 const Flashsale = () => {
-  const {
-    data: products,
-    loading,
-    error,
-  } = UseFetch<Product[]>(`products?flashsale=yes`);
+  const { data: products } = UseFetch<Product[]>(`products?flashsale=yes`);
 
   const countdown = useCountdown("2024-10-01T00:00:00");
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Failed to load products</div>;
 
   return (
     <div className="container mx-auto py-10">

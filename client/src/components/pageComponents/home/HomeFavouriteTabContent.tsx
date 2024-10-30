@@ -15,10 +15,7 @@ const HomeFavouriteTabContent = ({
   apiEndpoint: string;
   hasCountdown?: boolean;
 }) => {
-  const { data: products, loading, error } = UseFetch<Product[]>(apiEndpoint);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Failed to load products</div>;
+  const { data: products } = UseFetch<Product[]>(apiEndpoint);
 
   return (
     <div className="container mx-auto py-10">
