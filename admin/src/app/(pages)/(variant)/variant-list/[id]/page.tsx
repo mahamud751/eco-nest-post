@@ -32,6 +32,9 @@ const EditVariant: React.FC<BaseEditProps> = ({ params }) => {
         endpoint={`${process.env.NEXT_PUBLIC_BASEURL}/v1/variants/${params.id}`}
         id={params.id}
         additionalFields={additionalFields}
+        additionalData={{
+          options: variantOptions,
+        }}
         buttonText="Edit Variant"
         photosData={[]}
         link="variant-list"
