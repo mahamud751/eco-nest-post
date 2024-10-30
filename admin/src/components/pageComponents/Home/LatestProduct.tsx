@@ -34,10 +34,6 @@ const LatestProduct = () => {
 
   return (
     <>
-      {" "}
-      <div className="mt-6 p-6">
-        <h1 className="text-center text-2xl uppercase">Latest Products</h1>{" "}
-      </div>
       <DataTable
         fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products/latest`}
         deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/products`}

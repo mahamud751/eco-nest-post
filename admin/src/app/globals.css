@@ -64,6 +64,57 @@ body.dark .css-1ue1bo9-MuiDataGrid-root {
   scrollbar-color: #888 #f1f1f1;
 }
 
+/* Custom Swiper Styles */
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 42px;
+  height: 42px;
+  color: #088178;
+  background-color: #e8f6ea;
+  border-radius: 50%;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #e8f6ea;
+  background-color: #088178;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: white;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: white;
+}
+
+/* Dark Mode Styles for Swiper */
+/* Dark Mode Styles for Swiper */
+body.dark .swiper-button-next,
+body.dark .swiper-button-prev {
+  color: #15e534;
+  background-color: #2d3748;
+}
+
+body.dark .swiper-button-next:hover,
+body.dark .swiper-button-prev:hover {
+  color: #2d3748;
+  background-color: #000000;
+}
+
+body.dark .swiper-pagination-bullet,
+body.dark .swiper-pagination-bullet-active {
+  background-color: #000000;
+}
+
 @keyframes bounce {
   0%,
   20%,

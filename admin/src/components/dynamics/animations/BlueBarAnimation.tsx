@@ -1,8 +1,8 @@
 import React from "react";
 import Lottie from "lottie-react";
-import animationData from "./LottieAnimation.json";
+import animationData from "./BlueBarAnimation.json";
 
-const LottieAnimation: React.FC = () => {
+const BlueBarAnimation: React.FC = () => {
   return (
     <Lottie
       animationData={animationData}
@@ -13,4 +13,4 @@ const LottieAnimation: React.FC = () => {
   );
 };
 
-export default LottieAnimation;
+export default BlueBarAnimation;
