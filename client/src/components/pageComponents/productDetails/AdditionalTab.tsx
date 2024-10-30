@@ -42,7 +42,7 @@ const AdditionalTab = ({ product }: AdditionalTabProps) => {
               className="object-cover"
             />
             <div className="p-2 md:p-0 md:ms-12">
-              <Typography variant="body1">{product?.fulldesc}</Typography>
+              <div dangerouslySetInnerHTML={{ __html: product?.fulldesc }} />
             </div>
           </div>
         );

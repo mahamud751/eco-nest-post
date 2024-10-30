@@ -22,6 +22,7 @@ const EditProduct: React.FC<BaseEditProps> = ({ params }) => {
   const [flashsale, setFlashsale] = useState<string>("");
   const [latest, setLatest] = useState<string>("");
   const [discountType, setDiscountType] = useState<string>("");
+  const [fulldesc, setFullDesc] = useState(data?.fulldesc);
 
   useEffect(() => {
     if (data) {
@@ -62,6 +63,7 @@ const EditProduct: React.FC<BaseEditProps> = ({ params }) => {
         setLatest={setLatest}
         discountType={discountType}
         setDiscountType={setDiscountType}
+        onDetailsChange={(newDetails) => setFullDesc(newDetails)}
       />
 
       <Grid item xs={4}>
@@ -78,6 +80,7 @@ const EditProduct: React.FC<BaseEditProps> = ({ params }) => {
         additionalData={{
           sizes: sizes,
           colors: colors,
+          fulldesc,
         }}
         buttonText="Edit Products"
         id={params.id}

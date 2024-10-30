@@ -16,7 +16,7 @@ import { useSnackbar } from "@/services/contexts/useSnackbar";
 interface Product {
   id: string;
   name: string;
-  fulldesc: string;
+  desc: string;
   price: number;
   photos: { src: string }[];
 }
@@ -170,7 +170,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             {product.name.slice(0, 20)} ...
           </Typography>
           <Typography variant="body2" color="textSecondary" className="mb-2">
-            {product.fulldesc.slice(0, 50)} ...
+            {product.desc.slice(0, 50)} ...
           </Typography>
           <div className="flex items-center justify-around">
             <div>

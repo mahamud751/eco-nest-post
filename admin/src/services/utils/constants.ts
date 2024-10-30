@@ -4,14 +4,8 @@ export const TINY_MCE_EDITOR_INIT: InitOptions = {
   placeholder: "Type here...",
   height: 600,
 
-  content_style: `
-  body { 
-    font-family:Helvetica,Arial,sans-serif; 
-    font-size:14px;
-    background-color: var(--editor-background, white); 
-    color: var(--editor-text-color, black);
-  }
-`,
+  content_style:
+    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
   importcss_append: true,
   template_cdate_format: "[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]",
   template_mdate_format: "[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]",
