@@ -17,6 +17,7 @@ const AddProduct: React.FC = () => {
   const [flashsale, setFlashsale] = useState<string>("");
   const [latest, setLatest] = useState<string>("");
   const [discountType, setDiscountType] = useState<string>("");
+  const [fulldesc, setFullDesc] = useState("");
   const photosData: { title: string; src: string }[] = [];
 
   const additionalFields = (
@@ -38,6 +39,7 @@ const AddProduct: React.FC = () => {
       setLatest={setLatest}
       discountType={discountType}
       setDiscountType={setDiscountType}
+      onDetailsChange={(newDetails) => setFullDesc(newDetails)}
     />
   );
 
@@ -61,6 +63,7 @@ const AddProduct: React.FC = () => {
           sizes: sizes,
           colors: colors,
           userInfo: user,
+          fulldesc,
         }}
         buttonText="Add Product"
         resetFields={resetFields}

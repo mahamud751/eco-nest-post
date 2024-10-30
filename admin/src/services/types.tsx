@@ -357,6 +357,7 @@ export interface ProductFormProps {
   setLatest: React.Dispatch<React.SetStateAction<string>>;
   discountType: string;
   setDiscountType: React.Dispatch<React.SetStateAction<string>>;
+  onDetailsChange: (desc: string) => void;
 }
 
 export interface VariantFormProps {
