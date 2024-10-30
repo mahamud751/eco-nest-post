@@ -54,9 +54,12 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                     <p className="font-medium text-gray-800">
                       {item.product.name}
                     </p>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-800">
                       <span>{item.quantity}</span> x{" "}
                       <span>৳{item.product.discountPrice}</span>
+                      <span className="text-gray-400 line-through ms-2">
+                        ৳{item.product.price}
+                      </span>
                     </div>
                   </div>
 

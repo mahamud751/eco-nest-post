@@ -7,6 +7,7 @@ export const UPDATE_QUANTITY = "UPDATE_QUANTITY";
 interface Product {
   id: string;
   name: string;
+  price: number;
   discountPrice: number;
   fulldesc: string;
   photos: { src: string }[];
