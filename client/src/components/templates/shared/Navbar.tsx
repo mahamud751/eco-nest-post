@@ -66,6 +66,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
+  const [isSticky, setIsSticky] = useState(false);
 
   const toggleCart = () => setCartOpen(!cartOpen);
   const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
@@ -78,6 +79,24 @@ export default function Navbar() {
   const handleLogOut = () => {
     logoutUser();
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > 100) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const removeItem = (index: number) => {
     if (index < 0 || index >= cartItemsFromRedux.length) return;
@@ -127,6 +146,7 @@ export default function Navbar() {
     setCategoryModalOpen(false);
     setCategoriesOpen(false);
   };
+
   return (
     <>
       <AppBar
@@ -154,7 +174,7 @@ export default function Navbar() {
           </Box>
         </Toolbar>
 
-        <Toolbar className="flex justify-between">
+        <Toolbar className="flex justify-between mb-0 md:mb-5">
           <Box className="container mx-auto">
             <div className="flex justify-between">
               <Link href="/" className="flex mt-5">
@@ -216,7 +236,11 @@ export default function Navbar() {
           </Box>
         </Toolbar>
 
-        <Toolbar className="bg-gray-100 mt-5 hidden sm:flex justify-between">
+        <Toolbar
+          className={`bg-gray-100 hidden sm:flex justify-between ${
+            isSticky ? "fixed top-0 left-0 right-0 z-50" : ""
+          }`}
+        >
           <Box className="container mx-auto">
             <div className="flex justify-between">
               <div className="flex">

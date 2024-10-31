@@ -14,7 +14,6 @@ const Footer: React.FC = () => {
       >
         <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Brand Section */}
             <div className="text-center sm:text-left block flex-col sm:flex-row justify-center sm:justify-start">
               <Link
                 href="/"
@@ -40,9 +39,6 @@ const Footer: React.FC = () => {
               <p className="mt-4 text-sm font-bold ">Dhaka 1216</p>
             </div>
 
-            {/* Information & Account Sections for Small Devices */}
-
-            {/* Information Section */}
             <div className="text-center sm:text-left">
               <p className="font-extrabold text-xl sm:text-2xl">Information</p>
               <nav className="flex flex-col mt-4 space-y-3 text-sm font-bold">
@@ -83,7 +79,6 @@ const Footer: React.FC = () => {
               </nav>
             </div>
 
-            {/* Contact Section */}
             <div className="text-center sm:text-left block flex-col sm:flex-row justify-center sm:justify-start">
               <p className="font-extrabold text-xl sm:text-2xl">Contact</p>
 
