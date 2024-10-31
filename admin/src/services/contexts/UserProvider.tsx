@@ -9,15 +9,20 @@ import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 
+interface Permission {
+  id: string;
+  name: string;
+}
+
 interface User {
   id: string;
   name: string;
   email: string;
   role?: string;
+  permissions?: Permission[]; // Added permissions array to User interface
 }
 
 export interface AuthContextType {
-  // Export the type here
   user: User | null;
   token: string | null;
   loginUser: (email: string, password: string) => Promise<void>;
@@ -44,6 +49,7 @@ interface UserProviderProps {
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const MySwal = withReactContent(Swal);
+
   const [user, setUser] = useState<User | null>(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
@@ -62,13 +68,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && user) {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token || "");
     }
   }, [user, token]);
 
   const loginUser = async (email: string, password: string) => {
+    setLoading(true); // Start loading
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/login`,
@@ -77,8 +84,24 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
       if (response.status === 201) {
         const { data } = response;
-        setUser(data.user);
+
+        // Save user and token, including permissions
+        setUser({
+          ...data.user,
+          permissions: data.permissions, // Assuming permissions come in response
+        });
         setToken(data.token);
+
+        // Save user with permissions in local storage
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...data.user,
+            permissions: data.permissions,
+          })
+        );
+        localStorage.setItem("token", data.token);
+
         setLoading(false);
       } else {
         throw new Error("Invalid email or password");
@@ -92,6 +115,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Login Error",
         text: errorMessage,
       });
+      setLoading(false); // Stop loading
     }
   };
 
@@ -104,21 +128,41 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     photos: string,
     role?: string
   ) => {
+    setLoading(true); // Start loading
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/users`, {
-        name,
-        email,
-        phone,
-        password,
-        refferCode,
-        photos,
-        role,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users`,
+        {
+          name,
+          email,
+          phone,
+          password,
+          refferCode,
+          photos,
+          role,
+        }
+      );
 
       if (response.status === 200) {
         const { data } = response;
-        setUser(data.user);
+
+        // Save user and token, including permissions
+        setUser({
+          ...data.user,
+          permissions: data.permissions, // Assuming permissions come in response
+        });
         setToken(data.token);
+
+        // Save user with permissions in local storage
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...data.user,
+            permissions: data.permissions,
+          })
+        );
+        localStorage.setItem("token", data.token);
+
         setLoading(false);
       } else {
         throw new Error("Registration failed");
@@ -132,6 +176,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Registration Error",
         text: errorMessage,
       });
+      setLoading(false); // Stop loading
     }
   };
 

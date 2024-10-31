@@ -70,9 +70,13 @@ export class UsersService {
     loginUserDto: LoginUserDto,
   ): Promise<{ token: string; user: Partial<any> }> {
     const { email, password } = loginUserDto;
+
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { branch: true },
+      include: {
+        branch: true,
+        permissions: true,
+      },
     });
 
     if (!user) {
@@ -98,12 +102,17 @@ export class UsersService {
       address: user.address,
       role: user.role,
       branch: user.branch,
+      permissions: user.permissions.map((permission) => ({
+        id: permission.id,
+        name: permission.name,
+      })),
     };
 
     const token = jwt.sign(
       { userId: user.id },
       this.configService.get('JWT_SECRET'),
     );
+
     return { token, user: userData };
   }
 
