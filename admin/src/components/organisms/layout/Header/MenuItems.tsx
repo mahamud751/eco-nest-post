@@ -39,7 +39,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Permissions",
     icon: <Lock className="text-purple-600" />,
     path: "/permissions",
-    requiredPermission: "permissionList",
+    requiredPermission: "permissionMenu",
     submenus: [
       {
         text: "Add Permissions",
@@ -82,6 +82,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Users",
     icon: <ManageAccounts className="text-blue-600" />,
     path: "/users",
+    requiredPermission: "userMenu",
     submenus: [
       {
         text: "Add Users",
@@ -99,7 +100,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Vendors & Riders",
     icon: <AddBusiness className="text-indigo-600" />,
     path: "/vendors",
-    requiredPermission: "vendorList",
+    requiredPermission: "vendorMenu",
     submenus: [
       {
         text: "Add Vendor & Riders",
@@ -127,7 +128,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Product",
     icon: <DryCleaningIcon className="text-red-500" />,
     path: "/products",
-    requiredPermission: "productList",
+    requiredPermission: "productMenu",
     submenus: [
       {
         text: "Add Product",
@@ -146,7 +147,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Category",
     icon: <CategoryIcon className="text-yellow-500" />,
     path: "/category",
-    requiredPermission: "categoryList",
+    requiredPermission: "categoryMenu",
     submenus: [
       {
         text: "Add Category",
@@ -174,7 +175,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Variant",
     icon: <Sell className="text-blue-600" />,
     path: "/variant",
-    requiredPermission: "variantList",
+    requiredPermission: "variantMenu",
     submenus: [
       {
         text: "Add Variant",
@@ -192,7 +193,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Discount",
     icon: <Redeem className="text-pink-600" />,
     path: "/discount",
-    requiredPermission: "discountList",
+    requiredPermission: "discountMenu",
     submenus: [
       {
         text: "Add Discount",
@@ -211,7 +212,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Sample Order",
     icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
     path: "/advance",
-    requiredPermission: "sampleList",
+    requiredPermission: "sampleMenu",
     submenus: [
       {
         text: "Add Sample",
@@ -237,7 +238,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Schools",
     icon: <School className="text-gray-600" />,
     path: "/schools",
-    requiredPermission: "schoolList",
+    requiredPermission: "schoolMenu",
     submenus: [
       {
         text: "Add School",
@@ -255,7 +256,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Measurements",
     icon: <School className="text-pink-600" />,
     path: "/measurements",
-    requiredPermission: "measurementList",
+    requiredPermission: "measurementMenu",
     submenus: [
       {
         text: "Add Measurement",
@@ -273,7 +274,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Banner",
     icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
     path: "/banners",
-    requiredPermission: "bannerList",
+    requiredPermission: "bannerMenu",
     submenus: [
       {
         text: "Add Banner",
@@ -291,7 +292,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Blog",
     icon: <Article className="text-teal-500" />,
     path: "/blogs",
-    requiredPermission: "blogList",
+    requiredPermission: "blogMenu",
     submenus: [
       {
         text: "Add Blog",
@@ -309,7 +310,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Faq",
     icon: <LiveHelp className="text-red-400 " />,
     path: "/faq",
-    requiredPermission: "faqList",
+    requiredPermission: "faqMenu",
     submenus: [
       {
         text: "Add Faq",
@@ -335,7 +336,7 @@ export const adminMenuItems: MenuItem[] = [
     text: "Dynamic",
     icon: <Pages className="text-sky-800 " />,
     path: "/dynamic",
-    requiredPermission: "dynamicList",
+    requiredPermission: "dynamicMenu",
     submenus: [
       {
         text: "Add Dynamic",

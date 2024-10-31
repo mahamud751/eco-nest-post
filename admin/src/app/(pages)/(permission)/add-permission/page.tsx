@@ -97,7 +97,7 @@ const AddPermission: React.FC = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              {/* <Grid item xs={12} md={8}>
                 <FormControl fullWidth>
                   <InputLabel id="user-select-label">Select Users</InputLabel>
                   <Select
@@ -123,7 +123,7 @@ const AddPermission: React.FC = () => {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
             </Grid>
 
             <Button

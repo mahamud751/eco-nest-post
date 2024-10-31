@@ -37,6 +37,7 @@ import { delete_item } from "@/app/redux/actions/cartAction";
 import UseFetch from "@/services/hooks/UseRequest";
 import { useAuth } from "@/services/hooks/auth";
 import Link from "next/link";
+import ProtectedRoutes from "@/app/ProtectedRoutes";
 
 const drawerWidth = 240;
 
@@ -348,7 +349,7 @@ export default function AppMenu({
       )}
       <MainContent open={open}>
         <DrawerHeader />
-        {children}
+        <ProtectedRoutes> {children}</ProtectedRoutes>
       </MainContent>
     </Box>
   );

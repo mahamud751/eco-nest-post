@@ -19,7 +19,7 @@ interface User {
   name: string;
   email: string;
   role?: string;
-  permissions?: Permission[]; // Added permissions array to User interface
+  permissions?: Permission[];
 }
 
 export interface AuthContextType {
@@ -75,7 +75,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   }, [user, token]);
 
   const loginUser = async (email: string, password: string) => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/login`,
@@ -85,19 +85,17 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       if (response.status === 201) {
         const { data } = response;
 
-        // Save user and token, including permissions
         setUser({
           ...data.user,
-          permissions: data.permissions, // Assuming permissions come in response
+          permissions: data?.user?.permissions,
         });
         setToken(data.token);
 
-        // Save user with permissions in local storage
         localStorage.setItem(
           "user",
           JSON.stringify({
             ...data.user,
-            permissions: data.permissions,
+            permissions: data?.user?.permissions,
           })
         );
         localStorage.setItem("token", data.token);
@@ -115,7 +113,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Login Error",
         text: errorMessage,
       });
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -128,7 +126,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     photos: string,
     role?: string
   ) => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/users`,
@@ -146,19 +144,17 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       if (response.status === 200) {
         const { data } = response;
 
-        // Save user and token, including permissions
         setUser({
           ...data.user,
-          permissions: data.permissions, // Assuming permissions come in response
+          permissions: data?.user?.permissions,
         });
         setToken(data.token);
 
-        // Save user with permissions in local storage
         localStorage.setItem(
           "user",
           JSON.stringify({
             ...data.user,
-            permissions: data.permissions,
+            permissions: data?.user?.permissions,
           })
         );
         localStorage.setItem("token", data.token);
@@ -176,7 +172,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Registration Error",
         text: errorMessage,
       });
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
