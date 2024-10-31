@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { adminMenuItems } from "@/components/organisms/layout/Header/MenuItems";
-import { useAuth } from "@/services/hooks/auth";
 
 interface MenuItem {
   text: string;
@@ -31,16 +30,15 @@ const createRoutePermissionsMap = (menuItems: MenuItem[]) => {
 const ProtectedRoutes: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   const [userPermissions, setUserPermissions] = useState<string[]>([]);
 
   const routePermissionsMap = createRoutePermissionsMap(adminMenuItems);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    if (!user) {
+    if (!token) {
       router.push("/login");
       return;
     }
@@ -53,7 +51,7 @@ const ProtectedRoutes: React.FC<{ children: React.ReactNode }> = ({
     } else {
       setUserPermissions([]);
     }
-  }, [user]);
+  }, [token]);
 
   const checkPermissions = (path: string) => {
     const requiredPermissions = routePermissionsMap[path] || [];
