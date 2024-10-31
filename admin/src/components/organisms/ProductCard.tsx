@@ -157,16 +157,23 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             {product.name.slice(0, 20)} ...
           </Typography>
           <Typography variant="body2" color="textSecondary" className="mb-2">
-            {product.fulldesc.slice(0, 50)} ...
+            {product.desc.slice(0, 50)} ...
           </Typography>
           <div className="flex items-center justify-around">
-            <div>
+            <div className="flex">
               <Typography
-                variant="h6"
+                variant="body1"
                 color="textSecondary"
                 className="mb-2 text-[#088178] font-extrabold"
               >
-                ৳ {product.b2bPrice}
+                ৳ {product?.b2bPrice}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                className="mb-2 ms-2 mt-1 text-[#adb1b1] font-bold line-through"
+              >
+                ৳ {product.price}
               </Typography>
             </div>
             <div className="relative group">

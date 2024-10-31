@@ -15,7 +15,7 @@ import {
 import { User, Permission } from "@/services/types";
 import Swal from "sweetalert2";
 
-const PermissionList: React.FC = () => {
+const UserPermissionList: React.FC = () => {
   const { data: userData } = UseFetch<{ data: User[] }>("users");
   const { data: permissionData } = UseFetch<{ data: Permission[] }>(
     "permissions"
@@ -151,7 +151,7 @@ const PermissionList: React.FC = () => {
         <Box sx={{ padding: { xs: 1, sm: 8 } }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Autocomplete
                   options={roles}
                   getOptionLabel={(option) => option}
@@ -164,7 +164,7 @@ const PermissionList: React.FC = () => {
                     />
                   )}
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12}>
                 <Autocomplete
@@ -226,4 +226,4 @@ const PermissionList: React.FC = () => {
   );
 };
 
-export default PermissionList;
+export default UserPermissionList;

@@ -214,12 +214,21 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                       <Typography variant="h6" className="font-bold my-4">
                         Category: {categoryName}
                       </Typography>
-                      <Typography
-                        variant="body1"
-                        className="font-bold my-4 text-red-500"
-                      >
-                        B2B Price: {product?.b2bPrice}
-                      </Typography>
+                      <div className="flex">
+                        <Typography
+                          variant="body1"
+                          className="font-bold text-red-500"
+                        >
+                          B2B Price: {product?.b2bPrice}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          className="mb-2 ms-2 text-[#adb1b1] font-bold line-through"
+                        >
+                          ৳ {product?.price}
+                        </Typography>
+                      </div>
                       <Typography
                         variant="body1"
                         className="text-gray-600 mb-4"

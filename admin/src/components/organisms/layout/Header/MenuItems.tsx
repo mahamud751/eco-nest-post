@@ -12,7 +12,6 @@ import {
   ReviewsOutlined,
   ShoppingBasketOutlined,
   Lock,
-  Discount,
   Store,
   Sell,
   Redeem,
@@ -37,39 +36,108 @@ export const commonMenuItems: MenuItem[] = [
 
 export const adminMenuItems: MenuItem[] = [
   {
-    text: "Banner",
-    icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
-    path: "/banners",
-    requiredPermission: "bannerList",
+    text: "Permissions",
+    icon: <Lock className="text-purple-600" />,
+    path: "/permissions",
+    requiredPermission: "permissionList",
     submenus: [
       {
-        text: "Add Banner",
-        path: "/add-banner",
-        requiredPermission: "bannerCreate",
+        text: "Add Permissions",
+        path: "/add-permission",
+        requiredPermission: "permissionCreate",
+      },
+
+      {
+        text: "Permissions List",
+        path: "/permissions-list",
+        requiredPermission: "permissionList",
       },
       {
-        text: "Banner List",
-        path: "/banner-list",
-        requiredPermission: "bannerList",
+        text: "Role Permissions",
+        path: "/role-assign",
+        requiredPermission: "permissionAssign",
+      },
+      {
+        text: "User Permissions",
+        path: "/user-assign",
+        requiredPermission: "permissionAssign",
       },
     ],
   },
-
   {
-    text: "Discount",
-    icon: <Redeem className="text-pink-600" />,
-    path: "/discount",
-    requiredPermission: "discountList",
+    text: "B2B Stores",
+    icon: <Store className="text-red-500" />,
+    path: "/stores",
+    requiredPermission: "storeList",
+    submenus: [],
+  },
+  {
+    text: "Order",
+    icon: <ShoppingBasketOutlined className="text-purple-500" />,
+    path: "/order-list",
+    requiredPermission: "orderList",
+    submenus: [],
+  },
+  {
+    text: "Users",
+    icon: <ManageAccounts className="text-blue-600" />,
+    path: "/users",
     submenus: [
       {
-        text: "Add Discount",
-        path: "/add-discount",
-        requiredPermission: "discountCreate",
+        text: "Add Users",
+        path: "/add-user",
+        requiredPermission: "userCreate",
       },
       {
-        text: "Discount List",
-        path: "/discount-list",
-        requiredPermission: "discountList",
+        text: "User List",
+        path: "/user-list",
+        requiredPermission: "userList",
+      },
+    ],
+  },
+  {
+    text: "Vendors & Riders",
+    icon: <AddBusiness className="text-indigo-600" />,
+    path: "/vendors",
+    requiredPermission: "vendorList",
+    submenus: [
+      {
+        text: "Add Vendor & Riders",
+        path: "/add-user",
+        requiredPermission: "vendorRiderCreate",
+      },
+      {
+        text: "Vendor List",
+        path: "/vendor-list",
+        requiredPermission: "vendorList",
+      },
+      {
+        text: "Riders List",
+        path: "/rider-list",
+        requiredPermission: "riderList",
+      },
+      {
+        text: "Vendor Request List",
+        path: "/vendor-list/request-list",
+        requiredPermission: "vendorRequestList",
+      },
+    ],
+  },
+  {
+    text: "Product",
+    icon: <DryCleaningIcon className="text-red-500" />,
+    path: "/products",
+    requiredPermission: "productList",
+    submenus: [
+      {
+        text: "Add Product",
+        path: "/add-product",
+        requiredPermission: "productCreate",
+      },
+      {
+        text: "Product List",
+        path: "/product-list",
+        requiredPermission: "productList",
       },
     ],
   },
@@ -121,48 +189,24 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
   {
-    text: "Product",
-    icon: <DryCleaningIcon className="text-red-500" />,
-    path: "/products",
-    requiredPermission: "productList",
+    text: "Discount",
+    icon: <Redeem className="text-pink-600" />,
+    path: "/discount",
+    requiredPermission: "discountList",
     submenus: [
       {
-        text: "Add Product",
-        path: "/add-product",
-        requiredPermission: "productCreate",
+        text: "Add Discount",
+        path: "/add-discount",
+        requiredPermission: "discountCreate",
       },
       {
-        text: "Product List",
-        path: "/product-list",
-        requiredPermission: "productList",
+        text: "Discount List",
+        path: "/discount-list",
+        requiredPermission: "discountList",
       },
     ],
   },
-  {
-    text: "B2B Stores",
-    icon: <Store className="text-purple-500" />,
-    path: "/stores",
-    requiredPermission: "storeList",
-    submenus: [],
-  },
-  {
-    text: "Blog",
-    icon: <Article className="text-teal-500" />,
-    path: "/blogs",
-    requiredPermission: "blogList",
-    submenus: [
-      {
-        text: "Add Blog",
-        path: "/add-blog",
-        requiredPermission: "blogCreate",
-      },
-      {
-        text: "Blog List",
-        path: "/blog-list",
-        requiredPermission: "blogList",
-      },
-    ],
-  },
+
   {
     text: "Sample Order",
     icon: <PhotoLibraryOutlinedIcon className="text-orange-500" />,
@@ -182,50 +226,13 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
   {
-    text: "Users",
-    icon: <ManageAccounts className="text-blue-600" />,
-    path: "/users",
-    submenus: [
-      {
-        text: "Add Users",
-        path: "/add-user",
-        requiredPermission: "userCreate",
-      },
-      {
-        text: "User List",
-        path: "/user-list",
-        requiredPermission: "userList",
-      },
-    ],
+    text: "Custom Order",
+    icon: <InboxIcon className="text-green-500" />,
+    path: "/customOrder-list",
+    requiredPermission: "customOrderList",
+    submenus: [],
   },
-  {
-    text: "Vendors & Riders",
-    icon: <AddBusiness className="text-indigo-600" />,
-    path: "/vendors",
-    requiredPermission: "vendorList",
-    submenus: [
-      {
-        text: "Add Vendor & Riders",
-        path: "/add-user",
-        requiredPermission: "vendorRiderCreate",
-      },
-      {
-        text: "Vendor List",
-        path: "/vendor-list",
-        requiredPermission: "vendorList",
-      },
-      {
-        text: "Riders List",
-        path: "/rider-list",
-        requiredPermission: "riderList",
-      },
-      {
-        text: "Vendor Request List",
-        path: "/vendor-list/request-list",
-        requiredPermission: "vendorRequestList",
-      },
-    ],
-  },
+
   {
     text: "Schools",
     icon: <School className="text-gray-600" />,
@@ -263,25 +270,38 @@ export const adminMenuItems: MenuItem[] = [
     ],
   },
   {
-    text: "Permissions",
-    icon: <Lock className="text-purple-600" />,
-    path: "/permissions",
-    requiredPermission: "permissionList",
+    text: "Banner",
+    icon: <PhotoLibraryOutlinedIcon className="text-blue-500" />,
+    path: "/banners",
+    requiredPermission: "bannerList",
     submenus: [
       {
-        text: "Add Permissions",
-        path: "/add-permission",
-        requiredPermission: "permissionCreate",
+        text: "Add Banner",
+        path: "/add-banner",
+        requiredPermission: "bannerCreate",
       },
       {
-        text: "Permissions Assign",
-        path: "/permission-assign",
-        requiredPermission: "permissionAssign",
+        text: "Banner List",
+        path: "/banner-list",
+        requiredPermission: "bannerList",
+      },
+    ],
+  },
+  {
+    text: "Blog",
+    icon: <Article className="text-teal-500" />,
+    path: "/blogs",
+    requiredPermission: "blogList",
+    submenus: [
+      {
+        text: "Add Blog",
+        path: "/add-blog",
+        requiredPermission: "blogCreate",
       },
       {
-        text: "Permissions List",
-        path: "/permissions-list",
-        requiredPermission: "permissionList",
+        text: "Blog List",
+        path: "/blog-list",
+        requiredPermission: "blogList",
       },
     ],
   },
@@ -310,20 +330,7 @@ export const adminMenuItems: MenuItem[] = [
     requiredPermission: "reviewList",
     submenus: [],
   },
-  {
-    text: "Custom Order",
-    icon: <InboxIcon className="text-green-500" />,
-    path: "/customOrder-list",
-    requiredPermission: "customOrderList",
-    submenus: [],
-  },
-  {
-    text: "Order",
-    icon: <ShoppingBasketOutlined className="text-purple-500" />,
-    path: "/order-list",
-    requiredPermission: "orderList",
-    submenus: [],
-  },
+
   {
     text: "Dynamic",
     icon: <Pages className="text-sky-800 " />,

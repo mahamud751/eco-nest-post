@@ -14,13 +14,18 @@ const StyledButton = styled(Button)<{ status: string }>(({ theme, status }) => {
 
   switch (status) {
     case "active":
-    case "delivered":
     case "approve":
+    case "approved":
     case "yes":
       backgroundColor = isDarkMode
         ? "rgb(20,170,156)"
         : "rgba(185, 246, 202, 0.6)";
       color = isDarkMode ? "#fcfffe" : "rgb(20,170,156)";
+      break;
+
+    case "delivered":
+      backgroundColor = isDarkMode ? "#23B182" : "#23B182";
+      color = "#FFFFFF";
       break;
     case "processing":
       backgroundColor = isDarkMode ? "#0288d1" : "#006C9C";

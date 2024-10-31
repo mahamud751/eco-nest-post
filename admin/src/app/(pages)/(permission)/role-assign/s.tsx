@@ -15,7 +15,7 @@ import {
 import { User, Permission } from "@/services/types";
 import Swal from "sweetalert2";
 
-const PermissionList: React.FC = () => {
+const UserPermissionList: React.FC = () => {
   const { data: userData } = UseFetch<{ data: User[] }>("users");
   const { data: permissionData } = UseFetch<{ data: Permission[] }>(
     "permissions"
@@ -24,6 +24,7 @@ const PermissionList: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const users = userData?.data || [];
   const permissions = permissionData?.data || [];
@@ -47,6 +48,16 @@ const PermissionList: React.FC = () => {
     );
   };
 
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPermissions([]);
+    } else {
+      const allPermissionIds = permissions.map((perm) => perm.id);
+      setSelectedPermissions(allPermissionIds);
+    }
+    setSelectAll(!selectAll);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -56,37 +67,50 @@ const PermissionList: React.FC = () => {
       ? [selectedUser]
       : [];
 
-    const payloads = usersToUpdate.map((user) => ({
-      id: user.id,
-      email: user.email,
-      permissions: selectedPermissions,
-    }));
+    let url = "";
+    let payload = {};
+
+    if (selectedRole) {
+      url = `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/batch-update`;
+      payload = {
+        ids: usersToUpdate.map((user) => user.id),
+        updateUserDto: {
+          permissions: selectedPermissions,
+        },
+      };
+    } else if (selectedUser) {
+      url = `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${selectedUser.id}`;
+      payload = {
+        email: selectedUser.email,
+        permissions: selectedPermissions,
+      };
+    }
 
     try {
-      await Promise.all(
-        payloads.map((payload) =>
-          fetch(`${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${payload.id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: payload.email,
-              permissions: payload.permissions,
-            }),
-          })
-        )
-      );
+      if (url) {
+        await fetch(url, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
 
-      Swal.fire({
-        title: "Success",
-        text: "Permissions updated successfully!",
-        icon: "success",
-        confirmButtonText: "Okay",
-      });
+        Swal.fire({
+          title: "Success",
+          text: `Permissions updated successfully${
+            selectedRole ? " for role!" : " for user!"
+          }`,
+          icon: "success",
+          confirmButtonText: "Okay",
+        });
+      }
     } catch (error) {
       console.error("Error updating permissions:", error);
+
       Swal.fire({
         title: "Error",
-        text: "Failed to update permissions. Please try again.",
+        text: `Failed to update permissions${
+          selectedRole ? " for role." : " for user."
+        } Please try again.`,
         icon: "error",
         confirmButtonText: "Okay",
       });
@@ -159,6 +183,17 @@ const PermissionList: React.FC = () => {
 
               <Grid item xs={12}>
                 <Typography variant="h6">Permissions</Typography>
+                <Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
+                    }
+                    label="Select All"
+                  />
+                </Box>
                 {permissions.map((permission) => (
                   <FormControlLabel
                     key={permission.id}
@@ -191,4 +226,4 @@ const PermissionList: React.FC = () => {
   );
 };
 
-export default PermissionList;
+export default UserPermissionList;

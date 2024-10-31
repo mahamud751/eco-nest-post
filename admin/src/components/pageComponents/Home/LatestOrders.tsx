@@ -1,24 +1,36 @@
 "use client";
 import React from "react";
 import DataTable from "@/components/templates/DataTable";
-import { getCommonColumns } from "@/components/templates/CommonColums";
+import StatusButton from "@/components/atoms/StatusButton";
+import { GridColDef } from "@mui/x-data-grid";
 
 const LatestOrders = () => {
-  const columns = getCommonColumns([
+  const columns: GridColDef[] = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "User Name",
       flex: 1,
       renderCell: (params) => (
-        <div>
-          <p>{params.row.firstName}</p>
-          <p>{params.row.lastName}</p>
-        </div>
+        <p>
+          {params.row?.firstName} {params.row?.lastName}
+        </p>
       ),
     },
-
     { field: "email", headerName: "Email", flex: 1 },
-  ]);
+    { field: "phone", headerName: "Phone", flex: 1 },
+    {
+      field: "b2b",
+      headerName: "IsB2B",
+      flex: 1,
+      renderCell: (params) => <StatusButton status={params.value} />,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => <StatusButton status={params.value} />,
+    },
+  ];
 
   return (
     <>

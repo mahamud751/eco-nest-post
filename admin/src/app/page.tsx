@@ -3,22 +3,30 @@ import { Grid, Paper } from "@mui/material";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import UseFetch from "@/services/hooks/UseRequest";
-import { Advance, GrandPrice, Order, School, Student } from "@/services/types";
+import {
+  Advance,
+  GrandPrice,
+  Order,
+  OrderStatus,
+  School,
+  Student,
+} from "@/services/types";
 import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
-import LatestProducts from "@/components/pageComponents/Home/LatestProducts";
-import LottieAnimation from "@/components/dynamics/animations/LottieAnimation";
 import SchoolAnimation from "@/components/dynamics/animations/SchoolAnimation";
 import TotalEcommerceAnimation from "@/components/dynamics/animations/TotalEcommerceAnimation";
 import TotalCustomOrderAnimation from "@/components/dynamics/animations/TotalCustomOrderAnimation";
 import TotalAmountAnimation from "@/components/dynamics/animations/TotalAmountAnimation";
 import GreenBarAnimation from "@/components/dynamics/animations/GreenBarAnimation";
 import DeliveryAnimation from "@/components/dynamics/animations/DeliveryAnimation";
-import DeliveryVanAnimation from "@/components/dynamics/animations/DeliveryVanAnimation";
 import OrderAnimation from "@/components/dynamics/animations/OrderAnimation";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
+import { PieChart } from "@mui/x-charts";
 
 const Page = () => {
-  const { total: orderTotal } = UseFetch<Order>(`orders`);
+  const { data: orderData, total: orderTotal } = UseFetch<{ data: Order[] }>(
+    `orders`
+  );
+
   const { data: totalGrandPrice } = UseFetch<GrandPrice>(
     `orders/totalGrandPrice`
   );
@@ -32,6 +40,53 @@ const Page = () => {
     );
 
   const theme = useTheme();
+
+  const statusCount =
+    orderData?.data.reduce((acc: any, order: Order) => {
+      acc[order.status] = (acc[order.status] || 0) + 1;
+      return acc;
+    }, {}) || {};
+
+  const orderStatusColors: Record<OrderStatus, string> = {
+    pending: "#FF9800",
+    processing: "#2196F3",
+    approved: "#4CAF50",
+    delivered: "#126C5A",
+    canceled: "#F44336",
+  };
+
+  const pieChartData = [
+    {
+      id: 0,
+      value: statusCount?.pending || 0,
+      label: "Pending",
+      color: orderStatusColors.pending,
+    },
+    {
+      id: 1,
+      value: statusCount?.processing || 0,
+      label: "Processing",
+      color: orderStatusColors.processing,
+    },
+    {
+      id: 2,
+      value: statusCount?.approved || 0,
+      label: "Approved",
+      color: orderStatusColors.approved,
+    },
+    {
+      id: 3,
+      value: statusCount?.delivered || 0,
+      label: "Delivered",
+      color: orderStatusColors.delivered,
+    },
+    {
+      id: 4,
+      value: statusCount?.canceled || 0,
+      label: "Canceled",
+      color: orderStatusColors.canceled,
+    },
+  ];
 
   return (
     <>
@@ -173,10 +228,27 @@ const Page = () => {
           </div>
         </Grid>
       </Grid>
-      <div className="flex items-center justify-center text-white">
-        <TotalCustomOrderAnimation />
-      </div>
 
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <div className="flex items-center justify-center text-white">
+            <TotalCustomOrderAnimation />
+          </div>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <div className="flex items-center justify-center h-[600px]">
+            <PieChart
+              series={[
+                {
+                  data: pieChartData,
+                },
+              ]}
+              width={600}
+              height={400}
+            />
+          </div>
+        </Grid>
+      </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
           <Paper elevation={2} className="shadow-lg">

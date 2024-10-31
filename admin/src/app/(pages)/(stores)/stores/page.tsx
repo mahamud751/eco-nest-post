@@ -140,7 +140,7 @@ const CategoryDetails = () => {
   return (
     <Box className="container mx-auto py-10 p-2 md:p-0">
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-12 md:col-span-3 py-12">
+        <div className="col-span-12 md:col-span-3 py-12 flex justify-center">
           <Button
             variant="outlined"
             onClick={handleOpenFilters}
@@ -149,8 +149,8 @@ const CategoryDetails = () => {
             Open Filters
           </Button>
 
-          <div className="max-h-[80vh] overflow-y-auto scrollbar-custom hidden md:block">
-            <Card className="border">
+          <div className="fixed md:w-1/6 top-24 max-h-[85vh] overflow-y-auto scrollbar-custom hidden md:block w-full">
+            <Card className="border shadow-md">
               <CardContent>
                 <div className="flex justify-center">
                   <Button
@@ -169,8 +169,9 @@ const CategoryDetails = () => {
                       style={{
                         cursor: "pointer",
                       }}
+                      className="mt-6"
                     >
-                      <div className="flex items-center space-x-4 mt-6">
+                      <div className="flex items-center space-x-4">
                         <Image
                           src={category.photos[0]?.src || "/default-image.jpg"}
                           alt={category.photos[0]?.title || category.name}
@@ -185,7 +186,7 @@ const CategoryDetails = () => {
               </CardContent>
             </Card>
 
-            <Card className="mt-5 border">
+            <Card className="mt-5 border shadow-md">
               <CardContent>
                 <h2 className="text-lg font-bold">Filters</h2>
 
@@ -219,7 +220,7 @@ const CategoryDetails = () => {
               </CardContent>
             </Card>
 
-            <Card className="mt-5 border">
+            <Card className="mt-5 border shadow-md">
               <CardContent>
                 <h2 className="text-lg font-bold mt-4">Size</h2>
                 <div className="flex items-center space-x-4">
