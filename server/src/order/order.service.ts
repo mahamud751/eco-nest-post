@@ -34,17 +34,16 @@ export class OrderService {
     email?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
-    const perPageNumber = Number(perPage) || 10;
-
-    const skip = (pageNumber - 1) * perPageNumber;
+    const perPageNumber = perPage ? Number(perPage) : null;
+    const skip = (pageNumber - 1) * (perPageNumber || 0);
 
     const totalCountPromise = this.prisma.order.count();
 
     const where: any = {};
 
     const dataPromise = this.prisma.order.findMany({
-      skip,
-      take: perPageNumber,
+      skip: perPageNumber ? skip : undefined,
+      take: perPageNumber || undefined,
       where,
       orderBy: { createdAt: 'desc' },
     });
