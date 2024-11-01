@@ -11,10 +11,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import { useAuth } from "@/services/hooks/auth";
 import { Notification } from "@/services/types";
 import Link from "next/link";
+import { io } from "socket.io-client";
+import { debounce } from "lodash";
 
 interface NotificationPopperProps {
   open: boolean;
@@ -29,16 +30,12 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
 }) => {
   const theme = useTheme();
   const { user } = useAuth();
-  const [data, setData] = useState<{
-    data: Notification[];
-    total: number;
-    perPage: number;
-  } | null>(null);
-
-  const [page, setPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage] = useState<number>(10);
+  const [socket, setSocket] = useState<any>(null);
 
   const fetchOrders = async () => {
     if (!user || !user.email) {
@@ -60,14 +57,9 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
         setHasMore(false);
       }
 
-      setData(() => ({
-        data: [...response.data.data],
-        total: response.data.total,
-        perPage: response.data.perPage,
-      }));
+      setNotifications((prev) => [...prev, ...response.data.data]);
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      setData(null);
+      console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -77,13 +69,34 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
     fetchOrders();
   }, [page]);
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    const socketClient = io(process.env.NEXT_PUBLIC_BASEURL);
+
+    socketClient.on("notification", (notification: Notification) => {
+      setNotifications((prev) => [notification, ...prev]);
+    });
+
+    socketClient.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    return () => {
+      socketClient.disconnect();
+    };
+  }, []);
+
+  const handleScroll = debounce((event: React.UIEvent<HTMLDivElement>) => {
+    if (!event.currentTarget) {
+      console.warn("currentTarget is null");
+      return;
+    }
+
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
 
-    if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !loading) {
+    if (scrollTop + clientHeight >= scrollHeight - 3 && hasMore && !loading) {
       setPage((prevPage) => prevPage + 1);
     }
-  };
+  }, 200);
 
   const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
@@ -122,7 +135,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Notifications
             </Typography>
-            {data?.data.length === 0 ? (
+            {notifications.length === 0 ? (
               <Typography
                 variant="body2"
                 align="center"
@@ -134,7 +147,7 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
               </Typography>
             ) : (
               <Grid container spacing={2}>
-                {data?.data.map((notification, index) => (
+                {notifications.map((notification, index) => (
                   <Grid item xs={12} key={index} container alignItems="center">
                     <Grid item xs>
                       <Box
@@ -145,6 +158,10 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
                           borderRadius: "8px",
                           padding: "10px",
                           marginBottom: "10px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          // Handle click event to mark as read or navigate
                         }}
                       >
                         <Typography

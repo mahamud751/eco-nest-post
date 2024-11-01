@@ -23,8 +23,10 @@ import { NotificationModule } from './notification/notification.module';
 import { PermissionModule } from './permission/permission.module';
 import { VariantModule } from './variants/variant.module';
 import { DiscountModule } from './discount/discount.module';
+import { SocketService } from './socket.service';
 
 @Module({
+  providers: [SocketService],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
