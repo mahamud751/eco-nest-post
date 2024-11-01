@@ -354,7 +354,7 @@ const DataTable: React.FC<DataTableProps> = ({
   ];
 
   return (
-    <>
+    <div className="md:mt-14 md:ms-12">
       {isJustCreateData && (
         <div className="flex justify-end items-center mb-4">
           {" "}
@@ -370,7 +370,7 @@ const DataTable: React.FC<DataTableProps> = ({
         </div>
       )}
 
-      <Paper className="p-6 m-2 md:m-6 shadow-xl rounded-lg">
+      <Paper className="p-6 m-2 md:m-6 shadow-xl rounded-lg md:w-[92%]">
         <div className="flex justify-between items-center mb-6">
           <TextField
             variant="outlined"
@@ -514,7 +514,7 @@ const DataTable: React.FC<DataTableProps> = ({
           </Box>
         </Modal>
       </Paper>
-    </>
+    </div>
   );
 };
 

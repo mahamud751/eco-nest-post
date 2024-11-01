@@ -7,13 +7,15 @@ const BannerList = () => {
   const columns = getCommonColumns([]);
 
   return (
-    <DataTable
-      fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/banners`}
-      deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/banners`}
-      columns={columns}
-      searchField="name"
-      link="banner-list"
-    />
+    <>
+      <DataTable
+        fetchUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/banners`}
+        deleteUrl={`${process.env.NEXT_PUBLIC_BASEURL}/v1/banners`}
+        columns={columns}
+        searchField="name"
+        link="banner-list"
+      />
+    </>
   );
 };
 
