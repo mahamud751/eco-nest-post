@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,10 +17,14 @@ import {
   ApiQuery,
   ApiBody,
 } from '@nestjs/swagger';
+
 import { BannerService } from './banner.service';
 import { CreateBannerDto } from './dto/create-banner.dto';
 import { UpdateBannerDto } from './dto/update-banner.dto';
 
+import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
+
+// @UseGuards(JwtAuthGuard)
 @ApiTags('banners')
 @Controller('banners')
 export class BannerController {
@@ -88,6 +93,7 @@ export class BannerController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminRoleGuard)
   @ApiOperation({ summary: 'Delete a banner' })
   @ApiParam({ name: 'id', description: 'ID of the banner to delete' })
   @ApiResponse({
