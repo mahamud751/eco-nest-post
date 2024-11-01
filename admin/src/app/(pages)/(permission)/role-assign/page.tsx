@@ -250,6 +250,8 @@ const RolePermissionList: React.FC = () => {
             transform: "translate(-50%, -50%)",
             width: { xs: "90%", sm: 500, md: 800 },
             maxWidth: "90%",
+            maxHeight: "90vh",
+            overflowY: "auto",
             boxShadow: 24,
             outline: 0,
           }}

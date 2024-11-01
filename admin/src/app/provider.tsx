@@ -1,3 +1,4 @@
+"use client";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { usePathname } from "next/navigation";
