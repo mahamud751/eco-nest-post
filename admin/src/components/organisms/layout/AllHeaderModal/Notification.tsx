@@ -87,14 +87,6 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
 
   const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
-  if (loading && page === 1) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <CircularProgress />
-      </div>
-    );
-  }
-
   return (
     <Popper
       open={open}
