@@ -14,7 +14,6 @@ import { SocketService } from './socket.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
   app.useGlobalFilters(new AllExceptionsFilter());
@@ -54,11 +53,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const httpServer = createServer(app.getHttpAdapter().getInstance());
-  const io = new Server(httpServer);
+  const server = app.getHttpServer();
+  const io = new Server(server);
 
   const socketService = app.get(SocketService);
   socketService.setServer(io);
+
   io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
     socket.on('disconnect', () => {
@@ -66,7 +66,7 @@ async function bootstrap() {
     });
   });
 
-  await httpServer.listen(port, () => {
+  await app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
 }
