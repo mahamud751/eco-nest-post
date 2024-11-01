@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateNotificationDto, UpdateNotificationStatusDto } from './dto/create-notification.dto';
+import {
+  CreateNotificationDto,
+  UpdateNotificationStatusDto,
+} from './dto/create-notification.dto';
+import { NotificationGateway } from './notification.gateway';
 
 @Injectable()
 export class NotificationService {
-  constructor(private readonly prisma: PrismaService) { }
-
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => NotificationGateway))
+    private readonly notificationGateway: NotificationGateway,
+  ) {}
 
   async createNotification(createNotificationDto: CreateNotificationDto) {
     const { userEmail, message, ...rest } = createNotificationDto;
@@ -13,9 +20,11 @@ export class NotificationService {
       data: {
         userEmail,
         message,
-        ...rest
+        ...rest,
       },
     });
+
+    this.notificationGateway.server.emit('notification', notification);
 
     return notification;
   }
@@ -62,7 +71,10 @@ export class NotificationService {
     });
   }
 
-  async updateNotificationStatus(id: string, updateStatusDto: UpdateNotificationStatusDto) {
+  async updateNotificationStatus(
+    id: string,
+    updateStatusDto: UpdateNotificationStatusDto,
+  ) {
     return this.prisma.notification.update({
       where: { id },
       data: { status: updateStatusDto.status },
