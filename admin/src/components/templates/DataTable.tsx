@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import {
   DataGrid,
@@ -204,8 +204,21 @@ const DataTable: React.FC<DataTableProps> = ({
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
         setTotalRows((prevTotal) => prevTotal - 1);
       } catch (error) {
-        console.error("Error deleting data:", error);
-        MySwal.fire("Error", "Failed to delete", "error");
+        if (error instanceof AxiosError && error.response) {
+          if (error.response.status === 403) {
+            MySwal.fire(
+              "Access Denied",
+              "You do not have permission to perform this action.",
+              "error"
+            );
+          } else {
+            const errorMessage =
+              error.response.data?.message || "Failed to delete";
+            MySwal.fire("Error", errorMessage, "error");
+          }
+        } else {
+          MySwal.fire("Error", "An unexpected error occurred", "error");
+        }
       }
     }
   };
