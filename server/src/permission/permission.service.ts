@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -16,11 +17,22 @@ export class PermissionService {
   ) {}
 
   async create(createPermissionDto: CreatePermissionDto) {
-    const { users, ...rest } = createPermissionDto;
+    const { users, name, ...rest } = createPermissionDto;
+
+    const existingPermission = await this.prisma.permission.findUnique({
+      where: {
+        name,
+      },
+    });
+
+    if (existingPermission) {
+      throw new BadRequestException('Permission with this name already exists');
+    }
 
     try {
       const permission = await this.prisma.permission.create({
         data: {
+          name,
           ...rest,
           users: {
             connect: users?.map((userId) => ({ id: userId })),

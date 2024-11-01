@@ -129,6 +129,33 @@ const RolePermissionList: React.FC = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
+
+        if (selectedUser) {
+          const updatedUser = {
+            ...selectedUser,
+            permissions: selectedPermissions.map((permId) =>
+              permissions.find((perm) => perm.id === permId)
+            ),
+          };
+          localStorage.setItem(
+            `user_${updatedUser.id}`,
+            JSON.stringify(updatedUser)
+          );
+        } else if (selectedRole) {
+          usersToUpdate.forEach((user) => {
+            const updatedUser = {
+              ...user,
+              permissions: selectedPermissions.map((permId) =>
+                permissions.find((perm) => perm.id === permId)
+              ),
+            };
+            localStorage.setItem(
+              `user_${updatedUser.id}`,
+              JSON.stringify(updatedUser)
+            );
+          });
+        }
+
         setModalOpen(false);
         Swal.fire({
           title: "Success",
