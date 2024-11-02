@@ -38,6 +38,7 @@ export class NotificationService {
     page: number = 1,
     perPage: number = 10,
     email?: string,
+    status?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
     const perPageNumber = Number(perPage) || 10;
@@ -50,6 +51,10 @@ export class NotificationService {
       },
     };
 
+    if (status) {
+      where.status = status;
+    }
+
     const totalCountPromise = this.prisma.notification.count({
       where,
     });
@@ -60,6 +65,7 @@ export class NotificationService {
       where,
       orderBy: { createdAt: 'desc' },
     });
+
     const [total, data] = await Promise.all([totalCountPromise, dataPromise]);
     return { data, total };
   }

@@ -39,8 +39,9 @@ export class NotificationController {
     @Query('page') page: number = 1,
     @Query('perPage') perPage: number = 10,
     @Query('email') email?: string,
+    @Query('status') status?: string,
   ) {
-    return this.notificationService.findAll(page, perPage, email);
+    return this.notificationService.findAll(page, perPage, email, status);
   }
 
   @Get(':id')
