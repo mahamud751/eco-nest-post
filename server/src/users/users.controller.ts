@@ -136,6 +136,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found.' })
   async updateUser(
     @Param('id') id: string,
+
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() currentUser: any, // Use 'any' or the appropriate type for currentUser
   ) {

@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   InternalServerErrorException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -325,6 +326,21 @@ export class UsersService {
       };
     } catch (error) {
       console.error('Error updating user:', error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // Handle known Prisma errors
+        switch (error.code) {
+          case 'P2002': // Unique constraint failed
+            throw new ConflictException(
+              'A user with this information already exists.',
+            );
+          case 'P2025': // Record not found
+            throw new NotFoundException('User not found for update.');
+          default:
+            throw new InternalServerErrorException(
+              'An unexpected error occurred.',
+            );
+        }
+      }
       throw new InternalServerErrorException('Error updating user');
     }
   }
