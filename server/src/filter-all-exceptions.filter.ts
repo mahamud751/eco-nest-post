@@ -28,8 +28,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     } else {
       console.error('Unhandled exception:', exception);
-      // Log the stack trace for better debugging
-      console.error(exception);
     }
 
     response.status(status).json({

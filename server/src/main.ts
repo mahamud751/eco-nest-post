@@ -8,7 +8,6 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import * as express from 'express';
 import { AllExceptionsFilter } from './filter-all-exceptions.filter';
-import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { SocketService } from './socket.service';
 
@@ -65,9 +64,6 @@ async function bootstrap() {
       console.log('Client disconnected:', socket.id);
     });
   });
-  if (process.env.NODE_ENV !== 'production') {
-    app.useGlobalFilters(new AllExceptionsFilter()); // Custom exception filter for detailed logging
-  }
 
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
