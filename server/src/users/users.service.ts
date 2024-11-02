@@ -5,7 +5,6 @@ import {
   BadRequestException,
   UnauthorizedException,
   InternalServerErrorException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -256,7 +255,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto, currentUser: any) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
@@ -268,11 +267,6 @@ export class UsersService {
 
     const { photos, permissions, role, ...rest } = updateUserDto;
 
-    // Check if the current user is allowed to update the role
-    if (role && currentUser.role !== 'superAdmin') {
-      throw new ForbiddenException('You are not authorized to update roles');
-    }
-
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
@@ -281,8 +275,7 @@ export class UsersService {
 
     let permissionsData = undefined;
 
-    // If role is being updated and it's allowed, set new permissions based on the new role
-    if (role && role !== oldUser.role && currentUser.role === 'superAdmin') {
+    if (role && role !== oldUser.role) {
       const newRolePermissions = await this.prisma.user.findFirst({
         where: { role },
         include: { permissions: true },
@@ -304,7 +297,7 @@ export class UsersService {
       where: { id },
       data: {
         ...rest,
-        role: currentUser.role === 'superAdmin' ? role : oldUser.role, // Only allow superAdmin to update the role
+        role,
         photos: photoObjects.length > 0 ? photoObjects : undefined,
         permissions: permissionsData,
       },
