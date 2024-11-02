@@ -63,41 +63,42 @@ const UserForm: React.FC<UserFormProps> = ({ user, role, setRole }) => {
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-
-      <>
-        {/* <Grid item xs={12} md={4}>
-          <TextField
-            id="outlined-basic"
-            label="Password"
-            name="password"
-            fullWidth
-            defaultValue={user?.password || ""}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid> */}
-        <Grid item xs={12} md={4}>
-          <FormControl fullWidth>
-            <InputLabel id="role-label">Role</InputLabel>
-            <Select
-              labelId="role-label"
-              id="role-select"
-              label="Select Role"
-              name="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <MenuItem value="superAdmin">Super Admin</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="user">User</MenuItem>
-              <MenuItem value="manager">Manager</MenuItem>
-              <MenuItem value="vendor">Vendor</MenuItem>
-              <MenuItem value="rider">Rider</MenuItem>
-              <MenuItem value="schoolManager">School Manager</MenuItem>
-              <MenuItem value="b2bManager">B2B User</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </>
+      {!user?.id && (
+        <>
+          <Grid item xs={12} md={4}>
+            <TextField
+              id="outlined-basic"
+              label="Password"
+              name="password"
+              fullWidth
+              defaultValue={user?.password || ""}
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          {/* <Grid item xs={12} md={4}>
+            <FormControl fullWidth>
+              <InputLabel id="role-label">Role</InputLabel>
+              <Select
+                labelId="role-label"
+                id="role-select"
+                label="Select Role"
+                name="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <MenuItem value="superAdmin">Super Admin</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="manager">Manager</MenuItem>
+                <MenuItem value="vendor">Vendor</MenuItem>
+                <MenuItem value="rider">Rider</MenuItem>
+                <MenuItem value="schoolManager">School Manager</MenuItem>
+                <MenuItem value="b2bManager">B2B User</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid> */}
+        </>
+      )}
     </>
   );
 };
