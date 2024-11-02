@@ -15,6 +15,7 @@ import {
   Store,
   Sell,
   Redeem,
+  Notifications,
 } from "@mui/icons-material";
 
 interface MenuItem {
@@ -331,7 +332,13 @@ export const adminMenuItems: MenuItem[] = [
     requiredPermission: "reviewList",
     submenus: [],
   },
-
+  {
+    text: "Notification",
+    icon: <Notifications className="text-purple-500" />,
+    path: "/notification-list",
+    requiredPermission: "notificationList",
+    submenus: [],
+  },
   {
     text: "Dynamic",
     icon: <Pages className="text-sky-800 " />,
