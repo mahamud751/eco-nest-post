@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateNotificationDto,
@@ -79,5 +84,17 @@ export class NotificationService {
       where: { id },
       data: { status: updateStatusDto.status },
     });
+  }
+
+  async remove(id: string) {
+    const notification = await this.prisma.notification.findUnique({
+      where: { id },
+    });
+
+    if (!notification) {
+      throw new NotFoundException('Notification not found');
+    }
+
+    return this.prisma.notification.delete({ where: { id } });
   }
 }
