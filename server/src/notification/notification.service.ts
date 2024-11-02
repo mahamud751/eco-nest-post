@@ -41,8 +41,8 @@ export class NotificationService {
     status?: string,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
-    const perPageNumber = Number(perPage) || 10;
-    const skip = (pageNumber - 1) * perPageNumber;
+    const perPageNumber = perPage ? Number(perPage) : null;
+    const skip = (pageNumber - 1) * (perPageNumber || 0);
 
     const where: any = {
       userEmail: {
@@ -60,8 +60,8 @@ export class NotificationService {
     });
 
     const dataPromise = this.prisma.notification.findMany({
-      skip,
-      take: perPageNumber,
+      skip: perPageNumber ? skip : undefined,
+      take: perPageNumber || undefined,
       where,
       orderBy: { createdAt: 'desc' },
     });
