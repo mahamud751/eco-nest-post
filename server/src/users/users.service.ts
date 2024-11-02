@@ -5,8 +5,6 @@ import {
   BadRequestException,
   UnauthorizedException,
   InternalServerErrorException,
-  ForbiddenException,
-  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -257,41 +255,17 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(
-    id: string,
-    updateUserDto: UpdateUserDto,
-    currentUserId: string,
-  ) {
-    console.log(
-      `Updating user with ID: ${id} by current user ID: ${currentUserId}`,
-    );
-
-    const currentUser = await this.prisma.user.findUnique({
-      where: { id: currentUserId },
-    });
-    if (!currentUser) {
-      console.log('Current user not found');
-      throw new NotFoundException('Current user not found');
-    }
-
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
     });
+
     if (!oldUser) {
-      console.log('User to be updated not found');
-      throw new NotFoundException('User to be updated not found');
+      throw new NotFoundException('User not found');
     }
 
     const { photos, permissions, role, ...rest } = updateUserDto;
-
-    console.log('Update user DTO:', updateUserDto);
-
-    // Role check logic
-    if (role && currentUser.role !== 'superAdmin') {
-      console.log('User is not authorized to change roles');
-      throw new ForbiddenException('You are not authorized to update roles');
-    }
 
     const photoObjects =
       photos?.map((photo) => ({
@@ -299,50 +273,38 @@ export class UsersService {
         src: photo.src,
       })) || [];
 
-    let permissionsData;
-    if (permissions) {
+    let permissionsData = undefined;
+
+    if (role && role !== oldUser.role) {
+      const newRolePermissions = await this.prisma.user.findFirst({
+        where: { role },
+        include: { permissions: true },
+      });
+
+      const permissionIdsToSet =
+        newRolePermissions?.permissions?.map((perm) => perm.id) || [];
+
+      permissionsData = {
+        set: permissionIdsToSet.map((id) => ({ id })),
+      };
+    } else if (permissions) {
       permissionsData = {
         set: permissions.map((permissionId) => ({ id: permissionId })),
       };
     }
 
-    try {
-      const userUpdate = await this.prisma.user.update({
-        where: { id },
-        data: {
-          ...rest,
-          role: currentUser.role === 'superAdmin' ? role : oldUser.role,
-          photos: photoObjects.length > 0 ? photoObjects : undefined,
-          permissions: permissionsData,
-        },
-      });
+    const userUpdate = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...rest,
+        role,
+        photos: photoObjects.length > 0 ? photoObjects : undefined,
+        permissions: permissionsData,
+      },
+    });
 
-      await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
-      console.log('User updated successfully:', userUpdate);
-
-      return {
-        message: 'User updated successfully',
-        userUpdate,
-      };
-    } catch (error) {
-      console.error('Error updating user:', error);
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // Handle known Prisma errors
-        switch (error.code) {
-          case 'P2002': // Unique constraint failed
-            throw new ConflictException(
-              'A user with this information already exists.',
-            );
-          case 'P2025': // Record not found
-            throw new NotFoundException('User not found for update.');
-          default:
-            throw new InternalServerErrorException(
-              'An unexpected error occurred.',
-            );
-        }
-      }
-      throw new InternalServerErrorException('Error updating user');
-    }
+    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+    return { message: 'User updated successfully', userUpdate };
   }
 
   async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
