@@ -22,14 +22,14 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
-// import RolesGuard from '../auth/roles.guard';
+import RolesGuard from '../auth/roles.guard';
 import { Product, UserRole } from '@prisma/client';
 import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
 
 @ApiTags('users')
 @Controller('users')
-// @UseGuards(RolesGuard)
-// @ApiBearerAuth()
+@UseGuards(RolesGuard)
+@ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -142,7 +142,7 @@ export class UsersController {
   }
 
   @Patch(':id/update-role')
-  @UseGuards(AdminRoleGuard)
+  // @UseGuards(AdminRoleGuard)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
