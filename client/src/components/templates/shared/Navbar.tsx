@@ -45,7 +45,7 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { RootState } from "@/app/redux/reducers";
 import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
-import { Category } from "@/services/types/types";
+import { Category, User } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
 import { useSession } from "next-auth/react";
 import CartDrawer from "./CartDrawer";
@@ -75,6 +75,23 @@ export default function Navbar() {
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
+
+  const [data, setData] = useState<User | null>(null);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<User>(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${user?.id}`
+      );
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setData(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [user?.id]);
 
   const handleLogOut = () => {
     logoutUser();
@@ -274,7 +291,7 @@ export default function Navbar() {
                     <span>
                       <Link href={"/account"}>
                         <Person style={{ marginRight: 5 }} />
-                        {user?.name}
+                        {data?.name}
                       </Link>
                     </span>
                     <span
