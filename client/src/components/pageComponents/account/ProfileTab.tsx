@@ -35,7 +35,7 @@ const ProfileTab: React.FC = () => {
     const formData = new FormData(event.currentTarget);
     const orderData = {
       name: formData.get("name"),
-      email: formData.get("email"),
+      email: user?.email,
       phone: formData.get("phone"),
       address: formData.get("address"),
     };
@@ -85,6 +85,7 @@ const ProfileTab: React.FC = () => {
               required
               defaultValue={data?.email}
               InputLabelProps={{ shrink: true }}
+              disabled
             />
           </div>
         </div>
