@@ -1,12 +1,22 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Box, Paper, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Tabs,
+  Tab,
+  Box,
+  Paper,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import {
   Home,
   Settings,
   Info,
   ShoppingCart,
   PowerSettingsNew,
+  Notifications,
+  AccountCircle,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { styled } from "@mui/material/styles";
@@ -15,8 +25,10 @@ import Wishlist from "@/components/pageComponents/account/Wishlist";
 import { useAuth } from "@/services/hooks/auth";
 import Feedback from "@/components/pageComponents/account/Feedback";
 import Dashboard from "@/components/pageComponents/account/Dashboard";
+import NotificationTab from "@/components/pageComponents/account/NotificationTab";
+import ProfileTab from "@/components/pageComponents/account/ProfileTab";
 
-const StyledTab = styled(Tab)(({ }) => ({
+const StyledTab = styled(Tab)(({}) => ({
   minWidth: 150,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -30,7 +42,7 @@ const StyledTab = styled(Tab)(({ }) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({ }) => ({
+const StyledIconButton = styled(IconButton)(({}) => ({
   color: "#F44336",
   marginLeft: 8,
 }));
@@ -100,6 +112,22 @@ const Account: React.FC = () => {
           <StyledTab
             label={
               <StyledTabLabel>
+                <StyledIcon as={AccountCircle} color="#4CAF50" />
+                <StyledTabText>Profile</StyledTabText>
+              </StyledTabLabel>
+            }
+          />
+          <StyledTab
+            label={
+              <StyledTabLabel>
+                <StyledIcon as={Notifications} color="#FF0000" />
+                <StyledTabText>Notification</StyledTabText>
+              </StyledTabLabel>
+            }
+          />
+          <StyledTab
+            label={
+              <StyledTabLabel>
                 <StyledIcon as={ShoppingCart} color="#9C27B0" />
                 <StyledTabText>Orders</StyledTabText>
               </StyledTabLabel>
@@ -140,15 +168,25 @@ const Account: React.FC = () => {
           )}
           {selectedTab === 1 && (
             <div>
-              <OrderDetails />
+              <ProfileTab />
             </div>
           )}
           {selectedTab === 2 && (
             <div>
-              <Wishlist />
+              <NotificationTab />
             </div>
           )}
           {selectedTab === 3 && (
+            <div>
+              <OrderDetails />
+            </div>
+          )}
+          {selectedTab === 4 && (
+            <div>
+              <Wishlist />
+            </div>
+          )}
+          {selectedTab === 5 && (
             <div>
               <Feedback photosData={photosData} />
             </div>
