@@ -64,7 +64,7 @@ export class PermissionService {
     const dataPromise = this.prisma.permission.findMany({
       skip,
       take: perPageNumber,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'desc' },
       include: {
         users: true,
       },
