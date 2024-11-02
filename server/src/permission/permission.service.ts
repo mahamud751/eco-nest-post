@@ -55,15 +55,14 @@ export class PermissionService {
     perPage: number = 100,
   ): Promise<{ data: any[]; total: number }> {
     const pageNumber = Number(page) || 1;
-    const perPageNumber = Number(perPage) || 100;
-
-    const skip = (pageNumber - 1) * perPageNumber;
+    const perPageNumber = perPage ? Number(perPage) : null;
+    const skip = (pageNumber - 1) * (perPageNumber || 0);
 
     const totalCountPromise = this.prisma.permission.count();
 
     const dataPromise = this.prisma.permission.findMany({
-      skip,
-      take: perPageNumber,
+      skip: perPageNumber ? skip : undefined,
+      take: perPageNumber || undefined,
       orderBy: { name: 'desc' },
       include: {
         users: true,
