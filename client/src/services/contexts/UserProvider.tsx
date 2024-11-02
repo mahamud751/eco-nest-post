@@ -9,13 +9,7 @@ import React, {
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role?: string;
-}
+import { User } from "../types/types";
 
 interface ApiError {
   message: string;

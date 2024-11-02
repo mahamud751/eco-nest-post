@@ -167,7 +167,7 @@ export default function Navbar() {
                   Order Request
                 </Link> */}
                 <Link href="/vendor" className="font-bold ms-10">
-                  Vendor Request
+                  Become A Vendor
                 </Link>
               </div>
             </div>
