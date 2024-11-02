@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
   Patch,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,6 +17,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -136,8 +138,10 @@ export class UsersController {
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request,
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    const currentUser = req.user;
+    return this.usersService.updateUser(id, updateUserDto, currentUser);
   }
 
   @Get(':userId/last-visit')

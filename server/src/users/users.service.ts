@@ -255,7 +255,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto, currentUser: any) {
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
@@ -265,7 +265,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const { photos, permissions, ...rest } = updateUserDto;
+    const { photos, permissions, role, ...rest } = updateUserDto;
 
     const photoObjects =
       photos?.map((photo) => ({
@@ -273,16 +273,37 @@ export class UsersService {
         src: photo.src,
       })) || [];
 
-    const permissionsData = permissions
-      ? {
-          set: permissions.map((permissionId) => ({ id: permissionId })),
-        }
-      : undefined;
+    let permissionsData = undefined;
+
+    if (role && role !== oldUser.role) {
+      if (currentUser.role !== 'admin' && currentUser.role !== 'superAdmin') {
+        throw new UnauthorizedException(
+          'Only admin or superAdmin can change roles',
+        );
+      }
+
+      const newRolePermissions = await this.prisma.user.findFirst({
+        where: { role },
+        include: { permissions: true },
+      });
+
+      const permissionIdsToSet =
+        newRolePermissions?.permissions?.map((perm) => perm.id) || [];
+
+      permissionsData = {
+        set: permissionIdsToSet.map((id) => ({ id })),
+      };
+    } else if (permissions) {
+      permissionsData = {
+        set: permissions.map((permissionId) => ({ id: permissionId })),
+      };
+    }
 
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
         ...rest,
+        role,
         photos: photoObjects.length > 0 ? photoObjects : undefined,
         permissions: permissionsData,
       },
