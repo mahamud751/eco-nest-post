@@ -141,8 +141,8 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
-  @UseGuards(AdminRoleGuard)
   @Patch(':id/update-role')
+  @UseGuards(AdminRoleGuard)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
