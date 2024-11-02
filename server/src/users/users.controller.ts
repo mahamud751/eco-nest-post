@@ -24,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
 import { Product, UserRole } from '@prisma/client';
+import { CurrentUser } from './dto/currentUser';
 
 @ApiTags('users')
 @Controller('users')
@@ -136,8 +137,10 @@ export class UsersController {
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @CurrentUser() currentUser: any, // Use 'any' or the appropriate type for currentUser
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    // Pass the current user's ID along with the other parameters
+    return this.usersService.updateUser(id, updateUserDto, currentUser.id);
   }
 
   @Get(':userId/last-visit')

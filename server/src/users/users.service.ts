@@ -5,6 +5,7 @@ import {
   BadRequestException,
   UnauthorizedException,
   InternalServerErrorException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -255,7 +256,21 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    currentUserId: string,
+  ) {
+    // Retrieve the current user (who is performing the update)
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id: currentUserId },
+    });
+
+    if (!currentUser) {
+      throw new NotFoundException('Current user not found');
+    }
+
+    // Retrieve the user to be updated
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
@@ -267,6 +282,12 @@ export class UsersService {
 
     const { photos, permissions, role, ...rest } = updateUserDto;
 
+    // Allow role updates only if the current user is a superAdmin
+    if (role && currentUser.role !== 'superAdmin') {
+      throw new ForbiddenException('Only superAdmin can update user roles');
+    }
+
+    // Handle photo objects
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
@@ -275,7 +296,8 @@ export class UsersService {
 
     let permissionsData = undefined;
 
-    if (role && role !== oldUser.role) {
+    // Update permissions based on the role or provided permission list
+    if (role && role !== oldUser.role && currentUser.role === 'superAdmin') {
       const newRolePermissions = await this.prisma.user.findFirst({
         where: { role },
         include: { permissions: true },
@@ -297,13 +319,15 @@ export class UsersService {
       where: { id },
       data: {
         ...rest,
-        role,
+        role, // Role will only update if current user is superAdmin
         photos: photoObjects.length > 0 ? photoObjects : undefined,
         permissions: permissionsData,
       },
     });
 
+    // Log the audit for the update
     await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+
     return { message: 'User updated successfully', userUpdate };
   }
 
