@@ -65,6 +65,9 @@ async function bootstrap() {
       console.log('Client disconnected:', socket.id);
     });
   });
+  if (process.env.NODE_ENV !== 'production') {
+    app.useGlobalFilters(new AllExceptionsFilter()); // Custom exception filter for detailed logging
+  }
 
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
