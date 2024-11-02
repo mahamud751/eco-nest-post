@@ -45,6 +45,15 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUserWithRole = await this.prisma.user.findFirst({
+      where: { role: role as UserRole },
+      include: { permissions: true }, // Include permissions
+    });
+
+    // Extract permission IDs (if an existing user with the role was found)
+    const permissionIdsToCopy =
+      existingUserWithRole?.permissions?.map((perm) => perm.id) || [];
+
     const user = await this.prisma.user.create({
       data: {
         name,
@@ -55,6 +64,9 @@ export class UsersService {
         password: hashedPassword,
         branchId: branch,
         photos: photoObjects,
+        permissions: {
+          connect: permissionIdsToCopy.map((id) => ({ id })), // Use connect to link existing permissions
+        },
       },
     });
 
@@ -282,9 +294,6 @@ export class UsersService {
   }
 
   async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
-    console.log('Received ids:', ids);
-    console.log('Received updateUserDto:', updateUserDto);
-
     const updatePromises = ids.map(async (id) => {
       try {
         const oldUser = await this.prisma.user.findUnique({
