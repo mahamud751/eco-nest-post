@@ -24,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
 import { Product, UserRole } from '@prisma/client';
+import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
 
 @ApiTags('users')
 @Controller('users')
@@ -140,6 +141,7 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
+  @UseGuards(AdminRoleGuard)
   @Patch(':id/update-role')
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
