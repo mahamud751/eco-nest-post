@@ -29,27 +29,32 @@ export class UsersService {
   ): Promise<{ user: any; token: string }> {
     const { name, address, email, phone, password, role, branch, photos } =
       createUserDto;
-
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
         src: photo.src,
       })) || [];
-
-    // Check if a user with the same email already exists
     const existingUser = await this.prisma.user.findUnique({
-      where: { email: email },
+      where: {
+        email: email,
+      },
     });
 
     if (existingUser) {
       throw new BadRequestException('User with email already exists');
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUserWithRole = await this.prisma.user.findFirst({
+      where: { role: role as UserRole },
+      include: { permissions: true }, // Include permissions
+    });
 
-    // Create the new user
-    const newUser = await this.prisma.user.create({
+    // Extract permission IDs (if an existing user with the role was found)
+    const permissionIdsToCopy =
+      existingUserWithRole?.permissions?.map((perm) => perm.id) || [];
+
+    const user = await this.prisma.user.create({
       data: {
         name,
         address,
@@ -59,41 +64,18 @@ export class UsersService {
         password: hashedPassword,
         branchId: branch,
         photos: photoObjects,
+        permissions: {
+          connect: permissionIdsToCopy.map((id) => ({ id })), // Use connect to link existing permissions
+        },
       },
     });
 
-    // Find permissions of other users with the same role
-    const usersWithSameRole = await this.prisma.user.findMany({
-      where: { role: role as UserRole },
-      include: { permissions: true },
-    });
-
-    // Collect all permission IDs from users with the same role
-    const permissionIdsToCopy = usersWithSameRole.flatMap((user) =>
-      user.permissions.map((permission) => permission.id),
-    );
-
-    // If there are permissions to copy, update the new user's permissions
-    if (permissionIdsToCopy.length > 0) {
-      await this.prisma.user.update({
-        where: { id: newUser.id },
-        data: {
-          permissions: {
-            set: permissionIdsToCopy.map((id) => ({ id })), // Set permissions for the new user
-          },
-        },
-      });
-    }
-
-    // Generate a token for the new user
     const token = jwt.sign(
-      { name: newUser.name, id: newUser.id },
+      { name: user.name, id: user.id },
       this.configService.get('JWT_SECRET'),
       { expiresIn: '1h' },
     );
-
-    // Return the newly created user and the token
-    return { user: newUser, token };
+    return { user, token };
   }
 
   async loginUser(
