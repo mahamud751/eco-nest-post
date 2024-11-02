@@ -14,6 +14,7 @@ const StyledButton = styled(Button)<{ status: string }>(({ theme, status }) => {
 
   switch (status) {
     case "active":
+    case "read":
     case "approve":
     case "approved":
     case "yes":
