@@ -255,7 +255,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto, currentUser: any) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
@@ -276,12 +276,6 @@ export class UsersService {
     let permissionsData = undefined;
 
     if (role && role !== oldUser.role) {
-      if (currentUser.role !== 'admin' && currentUser.role !== 'superAdmin') {
-        throw new UnauthorizedException(
-          'Only admin or superAdmin can change roles',
-        );
-      }
-
       const newRolePermissions = await this.prisma.user.findFirst({
         where: { role },
         include: { permissions: true },
