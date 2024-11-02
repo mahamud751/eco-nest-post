@@ -8,6 +8,5 @@ import { AuditLogService } from 'src/audit/audit.service';
 @Module({
   controllers: [UsersController],
   providers: [UsersService, PrismaService, AuditLogService],
-  exports: [UsersService],
 })
 export class UsersModule {}
