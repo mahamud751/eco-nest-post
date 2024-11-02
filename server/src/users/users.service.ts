@@ -259,45 +259,45 @@ export class UsersService {
   async updateUser(
     id: string,
     updateUserDto: UpdateUserDto,
-    currentUserId: string, // The ID of the authenticated user making the request
+    currentUserId: string,
   ) {
-    // Retrieve the current user making the request
+    console.log(
+      `Updating user with ID: ${id} by current user ID: ${currentUserId}`,
+    );
+
     const currentUser = await this.prisma.user.findUnique({
       where: { id: currentUserId },
     });
-
     if (!currentUser) {
+      console.log('Current user not found');
       throw new NotFoundException('Current user not found');
     }
 
-    // Retrieve the user to be updated
     const oldUser = await this.prisma.user.findUnique({
       where: { id },
       include: { permissions: true },
     });
-
     if (!oldUser) {
+      console.log('User to be updated not found');
       throw new NotFoundException('User to be updated not found');
     }
 
     const { photos, permissions, role, ...rest } = updateUserDto;
 
-    // Step 1: Handle role updates
-    if (role) {
-      if (currentUser.role !== 'superAdmin') {
-        // Only superAdmin can update user roles
-        throw new ForbiddenException('You are not authorized to update roles');
-      }
+    console.log('Update user DTO:', updateUserDto);
+
+    // Role check logic
+    if (role && currentUser.role !== 'superAdmin') {
+      console.log('User is not authorized to change roles');
+      throw new ForbiddenException('You are not authorized to update roles');
     }
 
-    // Step 2: Handle photos
     const photoObjects =
       photos?.map((photo) => ({
         title: photo.title,
         src: photo.src,
       })) || [];
 
-    // Step 3: Handle permission updates
     let permissionsData;
     if (permissions) {
       permissionsData = {
@@ -305,24 +305,28 @@ export class UsersService {
       };
     }
 
-    // Step 4: Perform the update
-    const userUpdate = await this.prisma.user.update({
-      where: { id },
-      data: {
-        ...rest,
-        role: currentUser.role === 'superAdmin' ? role : oldUser.role, // Update role if superAdmin, otherwise retain old role
-        photos: photoObjects.length > 0 ? photoObjects : undefined,
-        permissions: permissionsData,
-      },
-    });
+    try {
+      const userUpdate = await this.prisma.user.update({
+        where: { id },
+        data: {
+          ...rest,
+          role: currentUser.role === 'superAdmin' ? role : oldUser.role,
+          photos: photoObjects.length > 0 ? photoObjects : undefined,
+          permissions: permissionsData,
+        },
+      });
 
-    // Step 5: Log audit for the update
-    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+      await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+      console.log('User updated successfully:', userUpdate);
 
-    return {
-      message: 'User updated successfully',
-      userUpdate,
-    };
+      return {
+        message: 'User updated successfully',
+        userUpdate,
+      };
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException('Error updating user');
+    }
   }
 
   async batchUpdateUsers(ids: string[], updateUserDto: UpdateUserDto) {
