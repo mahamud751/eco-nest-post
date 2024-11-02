@@ -265,40 +265,26 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const { photos, permissions, role, ...rest } = updateUserDto;
-
-    const photoObjects =
-      photos?.map((photo) => ({
-        title: photo.title,
-        src: photo.src,
-      })) || [];
+    const { name, email, address, phone, status, permissions } = updateUserDto; // Directly destructuring allowed fields
 
     let permissionsData = undefined;
 
-    if (role && role !== oldUser.role) {
-      const newRolePermissions = await this.prisma.user.findFirst({
-        where: { role },
-        include: { permissions: true },
-      });
-
-      const permissionIdsToSet =
-        newRolePermissions?.permissions?.map((perm) => perm.id) || [];
-
-      permissionsData = {
-        set: permissionIdsToSet.map((id) => ({ id })),
-      };
-    } else if (permissions) {
+    // Only update permissions if provided
+    if (permissions) {
       permissionsData = {
         set: permissions.map((permissionId) => ({ id: permissionId })),
       };
     }
 
+    // Update user with only specified fields
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
-        ...rest,
-        role,
-        photos: photoObjects.length > 0 ? photoObjects : undefined,
+        name: name || oldUser.name, // Keep old value if not provided
+        email: email || oldUser.email,
+        address: address || oldUser.address,
+        phone: phone || oldUser.phone,
+        status: status || oldUser.status,
         permissions: permissionsData,
       },
     });
