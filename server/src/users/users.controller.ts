@@ -140,6 +140,20 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
+  @Patch(':id/update-role')
+  @ApiOperation({ summary: 'Update user details' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async updateUserRole(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUserRole(id, updateUserDto);
+  }
+
   @Get(':userId/last-visit')
   async getLastVisitedProducts(
     @Param('userId') userId: string,

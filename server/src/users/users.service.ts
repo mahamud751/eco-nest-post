@@ -265,26 +265,76 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const { name, email, address, phone, status, permissions } = updateUserDto; // Directly destructuring allowed fields
+    const { photos, name, email, address, phone, status, permissions } =
+      updateUserDto;
+
+    const photoObjects =
+      photos?.map((photo) => ({
+        title: photo.title,
+        src: photo.src,
+      })) || [];
 
     let permissionsData = undefined;
 
-    // Only update permissions if provided
     if (permissions) {
       permissionsData = {
         set: permissions.map((permissionId) => ({ id: permissionId })),
       };
     }
 
-    // Update user with only specified fields
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
-        name: name || oldUser.name, // Keep old value if not provided
+        name: name || oldUser.name,
         email: email || oldUser.email,
         address: address || oldUser.address,
         phone: phone || oldUser.phone,
         status: status || oldUser.status,
+        photos: photoObjects.length > 0 ? photoObjects : undefined,
+        permissions: permissionsData,
+      },
+    });
+
+    await this.auditLogService.log(id, 'User', 'UPDATE', oldUser, userUpdate);
+    return { message: 'User updated successfully', userUpdate };
+  }
+
+  async updateUserRole(id: string, updateUserDto: UpdateUserDto) {
+    const oldUser = await this.prisma.user.findUnique({
+      where: { id },
+      include: { permissions: true },
+    });
+
+    if (!oldUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { permissions, role } = updateUserDto;
+
+    let permissionsData = undefined;
+
+    if (role && role !== oldUser.role) {
+      const newRolePermissions = await this.prisma.user.findFirst({
+        where: { role },
+        include: { permissions: true },
+      });
+
+      const permissionIdsToSet =
+        newRolePermissions?.permissions?.map((perm) => perm.id) || [];
+
+      permissionsData = {
+        set: permissionIdsToSet.map((id) => ({ id })),
+      };
+    } else if (permissions) {
+      permissionsData = {
+        set: permissions.map((permissionId) => ({ id: permissionId })),
+      };
+    }
+
+    const userUpdate = await this.prisma.user.update({
+      where: { id },
+      data: {
+        role,
         permissions: permissionsData,
       },
     });
