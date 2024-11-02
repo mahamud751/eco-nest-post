@@ -14,8 +14,6 @@ import { useTheme } from "@mui/material/styles";
 import { useAuth } from "@/services/hooks/auth";
 import { Notification } from "@/services/types";
 import Link from "next/link";
-import { io } from "socket.io-client";
-import { debounce } from "lodash";
 
 interface NotificationPopperProps {
   open: boolean;
@@ -30,73 +28,101 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
 }) => {
   const theme = useTheme();
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
+  const [filteredNotifications, setFilteredNotifications] = useState<
+    Notification[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
-  const [rowsPerPage] = useState<number>(10);
-  const [socket, setSocket] = useState<any>(null);
+  const [filter, setFilter] = useState<string>("all");
+  const [readCount, setReadCount] = useState<number>(0);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
 
-  const fetchOrders = async () => {
+  const fetchNotifications = async () => {
     if (!user || !user.email) {
       console.error("User is not logged in");
       return;
     }
 
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await axios.get<{
         data: Notification[];
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user.email}`
       );
 
-      if (response.data.data.length < rowsPerPage) {
-        setHasMore(false);
-      }
+      const notifications = response.data.data;
+      setAllNotifications(notifications);
 
-      setNotifications((prev) => [...prev, ...response.data.data]);
+      const read = notifications.filter(
+        (notification) => notification.status === "read"
+      ).length;
+      const unread = notifications.filter(
+        (notification) => notification.status === "unread"
+      ).length;
+
+      setReadCount(read);
+      setUnreadCount(unread);
+
+      setFilteredNotifications(notifications);
     } catch (error) {
       console.error("Error fetching notifications:", error);
+      setAllNotifications([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, [page]);
-
-  useEffect(() => {
-    const socketClient = io(process.env.NEXT_PUBLIC_BASEURL);
-
-    socketClient.on("notification", (notification: Notification) => {
-      setNotifications((prev) => [notification, ...prev]);
-    });
-
-    socketClient.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-    });
-
-    return () => {
-      socketClient.disconnect();
-    };
+    fetchNotifications();
   }, []);
 
-  const handleScroll = debounce((event: React.UIEvent<HTMLDivElement>) => {
-    if (!event.currentTarget) {
-      console.warn("currentTarget is null");
+  useEffect(() => {
+    let filteredData = allNotifications;
+
+    if (filter === "read") {
+      filteredData = allNotifications.filter(
+        (notification) => notification.status === "read"
+      );
+    } else if (filter === "unread") {
+      filteredData = allNotifications.filter(
+        (notification) => notification.status === "unread"
+      );
+    }
+
+    setFilteredNotifications(filteredData);
+  }, [filter, allNotifications]);
+
+  const handleFilterChange = (status: string) => {
+    setFilter(status);
+  };
+
+  const handleShowAll = () => {
+    setFilter("all");
+  };
+
+  const markNotificationAsRead = async (notificationId: string) => {
+    if (!user || !user.email) {
+      console.error("User is not logged in");
       return;
     }
 
-    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    try {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications/${notificationId}`,
+        {
+          status: "read",
+        }
+      );
 
-    if (scrollTop + clientHeight >= scrollHeight - 3 && hasMore && !loading) {
-      setPage((prevPage) => prevPage + 1);
+      fetchNotifications();
+      onClose();
+    } catch (error) {
+      console.error("Error updating notification status:", error);
     }
-  }, 200);
+  };
 
   const textColor = theme.palette.mode === "dark" ? "white" : "black";
 
@@ -125,17 +151,78 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
               marginTop: 1,
               boxShadow: 3,
               borderRadius: 3,
-              color: theme.palette.mode === "dark" ? "white" : "black",
+              color: textColor,
               overflow: "auto",
               maxHeight: 400,
               width: 300,
             }}
-            onScroll={handleScroll}
           >
             <Typography variant="h6" gutterBottom sx={{ color: textColor }}>
               Notifications
             </Typography>
-            {notifications.length === 0 ? (
+
+            <Grid container spacing={1} mb={2}>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={handleShowAll}
+                  sx={{
+                    background: "linear-gradient(45deg, #ff7e5f, #feb47b)",
+                    color: "white",
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #feb47b, #ff7e5f)",
+                    },
+                    borderRadius: "8px",
+                    height: "48px",
+                  }}
+                >
+                  All
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => handleFilterChange("read")}
+                  sx={{
+                    background: "linear-gradient(45deg, #6a82fb, #fc5c7d)",
+                    color: "white",
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #5a72db, #e04b6e)",
+                    },
+                    borderRadius: "8px",
+                    height: "48px",
+                  }}
+                >
+                  Read ({readCount})
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => handleFilterChange("unread")}
+                  sx={{
+                    background: "linear-gradient(45deg, #00c6ff, #0072ff)",
+                    color: "white",
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #0072ff, #00c6ff)",
+                    },
+                    borderRadius: "8px",
+                    height: "48px",
+                  }}
+                >
+                  Unread ({unreadCount})
+                </Button>
+              </Grid>
+            </Grid>
+
+            {loading ? (
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <CircularProgress />
+              </Box>
+            ) : filteredNotifications.length === 0 ? (
               <Typography
                 variant="body2"
                 align="center"
@@ -147,60 +234,57 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
               </Typography>
             ) : (
               <Grid container spacing={2}>
-                {notifications.map((notification, index) => (
-                  <Grid item xs={12} key={index} container alignItems="center">
+                {filteredNotifications.map((notification) => (
+                  <Grid
+                    item
+                    xs={12}
+                    key={notification.orderId}
+                    container
+                    alignItems="center"
+                  >
                     <Grid item xs>
-                      <Box
-                        sx={{
-                          backgroundColor: notification.status
-                            ? "#f0f0f0"
-                            : "#d1f5d3",
-                          borderRadius: "8px",
-                          padding: "10px",
-                          marginBottom: "10px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          // Handle click event to mark as read or navigate
-                        }}
+                      <Link
+                        href={`/order-show/${notification.orderId}`}
+                        onClick={() => markNotificationAsRead(notification.id)}
                       >
-                        <Typography
-                          variant="body1"
+                        <Box
                           sx={{
-                            color: "black",
+                            backgroundColor:
+                              notification.status === "read"
+                                ? "#f0f0f0"
+                                : "#d1f5d3",
+                            borderRadius: "8px",
+                            padding: "10px",
+                            marginBottom: "10px",
                           }}
                         >
-                          {notification.message}
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: "black",
-                          }}
-                        >
-                          Order Id :{" "}
-                          <Link href={`/order-show/${notification.orderId}`}>
-                            {notification.orderId}
-                          </Link>
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          color={
-                            notification?.status === "unread"
-                              ? "textSecondary"
-                              : "primary"
-                          }
-                          sx={{ color: "black" }}
-                        >
-                          {notification.status ? "Read" : "Unread"}
-                        </Typography>
-                      </Box>
+                          <Typography variant="body1" sx={{ color: "black" }}>
+                            {notification.message}
+                          </Typography>
+                          <Typography variant="body1" sx={{ color: "black" }}>
+                            Order Id : {notification.orderId}
+                          </Typography>
+
+                          <Typography variant="body1" sx={{ color: "gray" }}>
+                            {new Date(notification.createdAt).toLocaleString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </Typography>
+                        </Box>
+                      </Link>
                     </Grid>
                   </Grid>
                 ))}
-                {loading && <CircularProgress />}
               </Grid>
             )}
+
             <Button
               onClick={onClose}
               fullWidth
@@ -208,6 +292,15 @@ const NotificationPopper: React.FC<NotificationPopperProps> = ({
             >
               Close
             </Button>
+            <Link href={"/notification-list"}>
+              <Button
+                className="bg-violet-500 hover:bg-violet-500"
+                fullWidth
+                sx={{ marginTop: 1, color: "white" }}
+              >
+                View All Notifications
+              </Button>
+            </Link>
           </Paper>
         </Fade>
       )}
