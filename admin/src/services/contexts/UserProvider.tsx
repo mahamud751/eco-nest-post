@@ -105,7 +105,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           })
         );
         localStorage.setItem("token", data.token);
-        console.log("Stored Token:", localStorage.getItem("token"));
       } else {
         throw new Error("Invalid email or password");
       }
