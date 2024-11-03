@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { GridColDef } from "@mui/x-data-grid";
+import { Edit } from "@mui/icons-material";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import BackupIcon from "@mui/icons-material/Backup";
 import DataTable from "@/components/templates/DataTable";
 import { useAuth } from "@/services/hooks/auth";
 import DemoSubmitModal from "@/components/pageComponents/DemoSubmitModal";
-import { Edit } from "@mui/icons-material";
 
 const CustomVendorOrder: React.FC = () => {
   const { user } = useAuth();
@@ -90,7 +90,7 @@ const CustomVendorOrder: React.FC = () => {
           open={open}
           handleClose={handleClose}
           orderId={selectedOrderId}
-          refetch={() => { }}
+          refetch={() => {}}
         />
       )}
     </>
