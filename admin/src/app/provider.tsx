@@ -7,8 +7,9 @@ import AppMenu from "@/components/organisms/layout/Header/AppMenu";
 import { lightTheme, darkTheme } from "@/services/theme/theme";
 import AnimatedImage from "@/components/atoms/AnimatedImage";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+
 import { SnackbarProvider } from "@/services/contexts/useSnackbar";
+import store from "./redux/store";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
