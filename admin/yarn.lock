@@ -113,7 +113,7 @@
     source-map "^0.5.7"
     stylis "4.2.0"
 
-"@emotion/cache@^11.11.0", "@emotion/cache@^11.13.0":
+"@emotion/cache@^11.11.0", "@emotion/cache@^11.13.0", "@emotion/cache@^11.13.1":
   version "11.13.1"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-11.13.1.tgz"
   integrity sha512-iqouYkuEblRcXmylXIwwOodiEK5Ifl7JcX7o6V4jI3iW4mLXX3dmt5xwBtIkJiQEXFAI+pC8X0i67yiPkH9Ucw==
@@ -141,7 +141,7 @@
   resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.9.0.tgz"
   integrity sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==
 
-"@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.13.0", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0", "@emotion/react@^11.9.0":
+"@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.11.4", "@emotion/react@^11.13.0", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0", "@emotion/react@^11.9.0":
   version "11.13.0"
   resolved "https://registry.npmjs.org/@emotion/react/-/react-11.13.0.tgz"
   integrity sha512-WkL+bw1REC2VNV1goQyfxjx1GYJkcc23CRQkXX+vZNLINyfI7o+uUn/rTGPt/xJ3bJHd5GcljgnxHf4wRw5VWQ==
@@ -309,6 +309,13 @@
   integrity sha512-bn88xxU/J9UV0s6+eutq7o3TTOrOlbCX+KshFb8kxgIxJZZfYz3JbAXVMivvoMF4Md6jCVUzM9HEkf4Ajab4tw==
   dependencies:
     "@babel/runtime" "^7.23.9"
+
+"@mui/material-nextjs@^6.1.6":
+  version "6.1.6"
+  resolved "https://registry.npmjs.org/@mui/material-nextjs/-/material-nextjs-6.1.6.tgz"
+  integrity sha512-54eTTQgUY6UgXPsR781dMF4R0p9YAkPF8OreiXq6G/1hF7m6D5FiMHBmfzRIaZQ1BkS8RluoSu38m0PBU9YBTA==
+  dependencies:
+    "@babel/runtime" "^7.26.0"
 
 "@mui/material@^5.0.0", "@mui/material@^5.15.14", "@mui/material@^5.15.14 || ^6.0.0", "@mui/material@^5.16.5":
   version "5.16.5"
@@ -2623,7 +2630,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-next@14.2.5:
+"next@^13.0.0 || ^14.0.0 || ^15.0.0", next@14.2.5:
   version "14.2.5"
   resolved "https://registry.npmjs.org/next/-/next-14.2.5.tgz"
   integrity sha512-0f8aRfBVL+mpzfBjYfQuLWh2WyAwtJXCRfkPF4UJ5qd2YwrHczsrSzXU4tRMV0OAxR8ZJZWPFn6uhSC56UTsLA==

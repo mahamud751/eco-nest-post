@@ -4,20 +4,23 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { AuthService } from './auth.service'; // Ensure the correct import path
-
+import { Request } from 'express';
 @Injectable()
 export class AdminRoleGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<Request>();
+    const user = request.user;
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const user = await this.authService.verifyToken(request);
-    if (user && user.isAdmin) {
-      request.user = user; // Attach user info to request
-      return true;
-    } else {
-      throw new ForbiddenException('You are not authorized!');
+    if (!user) {
+      throw new ForbiddenException('User not found.');
     }
+
+    console.log('User Role:', user.role); // Debugging
+
+    if (user.role === 'superAdmin' || user.role === 'admin') {
+      return true;
+    }
+
+    throw new ForbiddenException('Access denied. Admins only.');
   }
 }

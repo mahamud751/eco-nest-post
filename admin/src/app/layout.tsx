@@ -1,12 +1,14 @@
 import { Public_Sans } from "next/font/google";
 import Providers from "./provider";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
-import "./globals.css";
+
 import { Metadata } from "next";
+import "./globals.css";
 
 const roboto = Public_Sans({ subsets: ["latin"] });
 
@@ -50,7 +52,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Providers>{children}</Providers>
+        <AppRouterCacheProvider options={{ prepend: true }}>
+          <Providers>{children}</Providers>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
