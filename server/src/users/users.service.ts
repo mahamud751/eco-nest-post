@@ -120,8 +120,9 @@ export class UsersService {
     };
 
     const token = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, email: user.email }, 
       this.configService.get('JWT_SECRET'),
+      { expiresIn: '1h' }, 
     );
 
     return { token, user: userData };

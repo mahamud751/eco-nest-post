@@ -23,6 +23,7 @@ import { CreateBannerDto } from './dto/create-banner.dto';
 import { UpdateBannerDto } from './dto/update-banner.dto';
 
 import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 // @UseGuards(JwtAuthGuard)
 @ApiTags('banners')
@@ -93,15 +94,17 @@ export class BannerController {
   }
 
   @Delete(':id')
-  @UseGuards(AdminRoleGuard)
-  @ApiOperation({ summary: 'Delete a banner' })
-  @ApiParam({ name: 'id', description: 'ID of the banner to delete' })
-  @ApiResponse({
-    status: 200,
-    description: 'The banner has been successfully deleted.',
-  })
-  @ApiResponse({ status: 404, description: 'banner not found.' })
-  remove(@Param('id') id: string) {
-    return this.bannerService.remove(id);
-  }
+  @UseGuards(JwtAuthGuard, AdminRoleGuard)
+@ApiOperation({ summary: 'Delete a banner' })
+@ApiParam({ name: 'id', description: 'ID of the banner to delete' })
+@ApiResponse({
+  status: 200,
+  description: 'The banner has been successfully deleted.',
+})
+@ApiResponse({ status: 404, description: 'Banner not found.' })
+remove(@Param('id') id: string) {
+  return this.bannerService.remove(id);
+}
+
+  
 }

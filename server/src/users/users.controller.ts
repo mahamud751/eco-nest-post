@@ -25,6 +25,7 @@ import Roles from '../auth/roles.decorator';
 import RolesGuard from '../auth/roles.guard';
 import { Product, UserRole } from '@prisma/client';
 import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -142,7 +143,7 @@ export class UsersController {
   }
 
   @Patch(':id/update-role')
-  // @UseGuards(AdminRoleGuard)
+  @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
