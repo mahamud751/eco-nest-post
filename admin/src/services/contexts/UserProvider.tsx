@@ -14,14 +14,16 @@ interface Permission {
   name: string;
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
   role?: string;
   permissions?: Permission[];
+  token?: string;
 }
 
+// Note: Token should not be a part of User interface
 export interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -68,8 +70,12 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && user) {
-      localStorage.setItem("user", JSON.stringify(user));
+    if (typeof window !== "undefined") {
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("user");
+      }
       localStorage.setItem("token", token || "");
     }
   }, [user, token]);
@@ -88,8 +94,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         setUser({
           ...data.user,
           permissions: data?.user?.permissions,
+          token: data.token,
         });
         setToken(data.token);
+        console.log("Set Token:", data.token);
 
         localStorage.setItem(
           "user",
@@ -99,8 +107,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           })
         );
         localStorage.setItem("token", data.token);
-
-        setLoading(false);
+        console.log("Stored Token:", localStorage.getItem("token"));
       } else {
         throw new Error("Invalid email or password");
       }
@@ -113,6 +120,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Login Error",
         text: errorMessage,
       });
+    } finally {
       setLoading(false);
     }
   };
@@ -158,8 +166,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           })
         );
         localStorage.setItem("token", data.token);
-
-        setLoading(false);
       } else {
         throw new Error("Registration failed");
       }
@@ -172,6 +178,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         title: "Registration Error",
         text: errorMessage,
       });
+    } finally {
       setLoading(false);
     }
   };
@@ -179,10 +186,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const logoutUser = () => {
     setUser(null);
     setToken(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (

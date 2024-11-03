@@ -109,6 +109,7 @@ const DataTable: React.FC<DataTableProps> = ({
 }) => {
   const theme = useTheme();
   const { user } = useAuth();
+
   const customStyles = {
     header: {
       backgroundColor: theme.palette.mode === "dark" ? "#333" : "#F4F6F8",
@@ -199,7 +200,11 @@ const DataTable: React.FC<DataTableProps> = ({
 
     if (confirmation.isConfirmed) {
       try {
-        await axios.delete(`${deleteUrl}/${id}`);
+        await axios.delete(`${deleteUrl}/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
         MySwal.fire("Deleted!", "The item has been deleted.", "success");
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
         setTotalRows((prevTotal) => prevTotal - 1);
