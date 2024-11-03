@@ -23,7 +23,6 @@ export interface User {
   token?: string;
 }
 
-// Note: Token should not be a part of User interface
 export interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -97,7 +96,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           token: data.token,
         });
         setToken(data.token);
-        console.log("Set Token:", data.token);
 
         localStorage.setItem(
           "user",
