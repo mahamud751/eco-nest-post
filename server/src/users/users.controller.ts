@@ -142,7 +142,7 @@ export class UsersController {
   }
 
   @Patch(':id/update-role')
-  // @UseGuards(AdminRoleGuard)
+  @UseGuards(AdminRoleGuard)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
