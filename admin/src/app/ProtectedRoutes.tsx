@@ -32,6 +32,7 @@ const ProtectedRoutes: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [loading, setLoading] = useState(true);
 
   const [userPermissions, setUserPermissions] = useState<string[]>([]);
 
@@ -51,12 +52,17 @@ const ProtectedRoutes: React.FC<{ children: React.ReactNode }> = ({
     } else {
       setUserPermissions([]);
     }
-  }, [token]);
+    setLoading(false);
+  }, [token, router]);
 
   const checkPermissions = (path: string) => {
     const requiredPermissions = routePermissionsMap[path] || [];
     return requiredPermissions.every((perm) => userPermissions.includes(perm));
   };
+
+  if (loading) {
+    return null;
+  }
 
   if (!checkPermissions(pathname)) {
     return <div>No Access</div>;
