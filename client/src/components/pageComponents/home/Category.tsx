@@ -22,8 +22,8 @@ const CategoryCard: FC<{ photos: string; categoryName: string }> = ({
   return (
     <div className="flex flex-col items-center mt-20">
       <Card
-        className="relative overflow-hidden transition-transform duration-300 ease-in-out border-2 border-[#cce7d0] hover:border-[#088178]"
-        style={{ borderRadius: "50%", width: 140, height: 140 }}
+        className="relative overflow-hidden transition-transform duration-300 ease-in-out border-2 border-[#cce7d0] hover:border-[#088178] w-[90px] md:w-[140px] h-[90px] md:h-[140px]"
+        style={{ borderRadius: "50%" }}
       >
         <div className="relative w-full h-full">
           <Image

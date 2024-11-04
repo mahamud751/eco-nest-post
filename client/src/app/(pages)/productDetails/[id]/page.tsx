@@ -247,7 +247,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
                       Category: {categoryName}
                     </Typography>
                     <Typography variant="body1" className="text-gray-600 mb-4">
-                      {product?.desc.slice(0, 300)}...
+                      {product?.desc.slice(0, 100)}...
                     </Typography>
                     <Box className="flex items-center space-x-2 mb-6">
                       <VisibilityIcon className="text-[#286156]" />

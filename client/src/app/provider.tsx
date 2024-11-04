@@ -26,6 +26,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const showHeader = pathname !== "/login" && pathname !== "/signup" && (
     <Suspense fallback={<div>Loading...</div>}>
       <Navbar />
+      <CartSummary />
     </Suspense>
   );
 
@@ -71,11 +72,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                   boxShadow: "none",
                 }}
               />
+
               {showHeader}
               {children}
               {showHeader && <Footer />}
-
-              <CartSummary />
             </SnackbarProvider>
           </UserProvider>
         </Provider>

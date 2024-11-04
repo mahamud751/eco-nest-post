@@ -2,6 +2,7 @@
 
 import CommonSlider from "@/components/dynamics/CommonSlider";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface Product {
   id: string;
@@ -10,9 +11,31 @@ interface Product {
 }
 
 const ProductsPage = () => {
+  useEffect(() => {
+    const swiperNextButton = document.querySelector(".swiper-button-next");
+    const swiperPrevButton = document.querySelector(".swiper-button-prev");
+
+    const handleResize = () => {
+      if (window.innerWidth <= 640) {
+        if (swiperNextButton) swiperNextButton.classList.add("mt-3");
+        if (swiperPrevButton) swiperPrevButton.classList.add("mt-3");
+      } else {
+        if (swiperNextButton) swiperNextButton.classList.remove("mt-10");
+        if (swiperPrevButton) swiperPrevButton.classList.remove("mt-10");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call it initially to set the correct class on load.
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const renderSlide = (product: Product) => {
     return (
-      <div className="mt-5 p-1 md:p-0">
+      <div className="mt-20 md:mt-5 p-1 md:p-0">
         <Image
           width={2000}
           height={640}
