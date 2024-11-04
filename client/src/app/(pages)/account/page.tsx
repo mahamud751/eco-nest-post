@@ -96,10 +96,12 @@ const Account: React.FC = () => {
           orientation={isSmallScreen ? "horizontal" : "vertical"}
           value={selectedTab}
           onChange={handleTabChange}
-          aria-label="Vertical tabs"
           TabIndicatorProps={{ className: "bg-blue-900 rounded-full" }}
           className="space-y-2"
-          variant="fullWidth"
+          variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
+          aria-label="scrollable force tabs example"
         >
           <StyledTab
             label={
