@@ -143,7 +143,7 @@ export class UsersController {
   }
 
   @Patch(':id/update-role')
-  @UseGuards(JwtAuthGuard, AdminRoleGuard)
+  // @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
