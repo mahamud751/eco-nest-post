@@ -26,6 +26,7 @@ import {
 import ProductCard from "@/components/organisms/Product/ProductCard";
 import { Category, Product } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
+import NoDataAnimationFound from "@/components/dynamics/animations/NoDataAnimationFound";
 
 interface CategoryDetailsProps {
   params: {
@@ -138,7 +139,7 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
           <Button
             variant="outlined"
             onClick={handleOpenFilters}
-            className="md:hidden mb-4"
+            className="md:hidden mt-12"
           >
             Open Filters
           </Button>
@@ -247,45 +248,54 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
                 </Select>
               </FormControl>
             </div>
-
-            <div>
-              <Grid container spacing={3}>
-                {filteredProducts.map((product) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
-                    <ProductCard product={product} />
+            {filteredProducts?.length > 0 ? (
+              <>
+                <div>
+                  <Grid container spacing={3}>
+                    {filteredProducts.map((product) => (
+                      <Grid
+                        size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                        key={product.id}
+                      >
+                        <ProductCard product={product} />
+                      </Grid>
+                    ))}
                   </Grid>
-                ))}
-              </Grid>
-            </div>
-
-            <div className="flex justify-center mt-10 md:block mb-12">
-              <Pagination
-                count={categoryData?.totalPages || 0}
-                page={page}
-                onChange={handleChangePage}
-                variant="outlined"
-                shape="rounded"
-                className="pagination"
-                sx={{
-                  "& .MuiPaginationItem-root": {
-                    backgroundColor: "rgba(0, 0, 0, 0.54)",
-                    color: "white",
-                    border: "none",
-                    "&:hover": {
-                      backgroundColor: "#888888",
-                    },
-                  },
-                  "& .Mui-selected": {
-                    backgroundColor: "#088178",
-                    color: "white",
-                    border: "none",
-                    "&:hover": {
-                      backgroundColor: "#088178",
-                    },
-                  },
-                }}
-              />
-            </div>
+                </div>
+                <div className="flex justify-center mt-10 md:block mb-12">
+                  <Pagination
+                    count={categoryData?.totalPages || 0}
+                    page={page}
+                    onChange={handleChangePage}
+                    variant="outlined"
+                    shape="rounded"
+                    className="pagination"
+                    sx={{
+                      "& .MuiPaginationItem-root": {
+                        backgroundColor: "rgba(0, 0, 0, 0.54)",
+                        color: "white",
+                        border: "none",
+                        "&:hover": {
+                          backgroundColor: "#888888",
+                        },
+                      },
+                      "& .Mui-selected": {
+                        backgroundColor: "#088178",
+                        color: "white",
+                        border: "none",
+                        "&:hover": {
+                          backgroundColor: "#088178",
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex justify-center items-center h-[300px] md:h-[600px]">
+                <NoDataAnimationFound />
+              </div>
+            )}
           </div>
         </div>
       </div>

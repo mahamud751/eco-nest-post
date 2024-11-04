@@ -192,7 +192,7 @@ export default function Navbar() {
           </Box>
         </Toolbar>
 
-        <Toolbar className="flex justify-between mb-0 md:mb-5 px-5 pt-4 md:px-0 md:pt-0 fixed top-0 left-0 w-full z-50 bg-white shadow-md md:static">
+        <Toolbar className="flex justify-between mb-0 md:mb-5 px-5 pt-0 md:px-0 md:pt-0 fixed top-0 left-0 w-full z-50 bg-white shadow-md md:static">
           <Box className="container mx-auto">
             <div className="flex justify-between">
               <Link href="/" className="flex mt-5">

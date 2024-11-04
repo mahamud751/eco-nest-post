@@ -90,7 +90,7 @@ const Account: React.FC = () => {
     <Box className="container mx-auto py-10 flex flex-col md:flex-row gap-8">
       <Paper
         elevation={3}
-        className="w-full md:w-1/4 p-4 rounded-xl shadow-md border border-gray-200"
+        className="w-full md:w-1/4 p-4 rounded-xl shadow-md border border-gray-200 mt-10 md:mt-0"
       >
         <Tabs
           orientation={isSmallScreen ? "horizontal" : "vertical"}

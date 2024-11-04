@@ -426,7 +426,7 @@ const CustomizedStepper: React.FC = () => {
   };
 
   return (
-    <Box className="container mx-auto py-10">
+    <Box className="container mx-auto py-10 mt-10 md:mt-0">
       <CustomStepper activeStep={activeStep} alternativeLabel>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {steps.map((step, index) => (
