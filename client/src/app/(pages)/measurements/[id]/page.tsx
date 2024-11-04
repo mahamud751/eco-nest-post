@@ -25,7 +25,7 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
   const fetchData = async () => {
     try {
       const response = await axios.get<School>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/schools/${id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/schools/${id}`
       );
       setData(response.data);
     } catch (error) {
@@ -73,7 +73,7 @@ const MeasuremenDetails = ({ params: { id } }: MeasuremenDetailsProps) => {
         schoolId: id,
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/students`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/students`,
         {
           method: "POST",
           headers: {

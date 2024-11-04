@@ -9,6 +9,7 @@ import React, {
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie"; // Use js-cookie for better cookie management
 import { User } from "../types/types";
 
 interface ApiError {
@@ -24,8 +25,8 @@ export interface AuthContextType {
     email: string,
     phone: string,
     password: string,
-    refferCode: string,
-    photos: string,
+    refferCode?: string,
+    photos?: string,
     role?: string
   ) => Promise<void>;
   logoutUser: () => void;
@@ -42,6 +43,7 @@ interface UserProviderProps {
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const MySwal = withReactContent(Swal);
+
   const [user, setUser] = useState<User | null>(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
@@ -67,9 +69,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   }, [user, token]);
 
   const loginUser = async (email: string, password: string) => {
+    setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/login`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`,
         { email, password }
       );
 
@@ -77,12 +80,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
-        document.cookie = `authToken=${data.token}; path=/; max-age=3600`;
+        Cookies.set("authToken", data.token, { expires: 1, path: "/" }); // Set token in cookie
         setLoading(false);
       } else {
         throw new Error("Invalid email or password");
       }
     } catch (error: unknown) {
+      setLoading(false);
       const errorMessage = isApiError(error)
         ? error.message
         : "An error occurred. Please try again later.";
@@ -98,16 +102,23 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     name: string,
     email: string,
     phone: string,
-    password: string
+    password: string,
+    refferCode?: string,
+    photos?: string,
+    role?: string
   ) => {
+    setLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/register`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/register`,
         {
           name,
           email,
           phone,
           password,
+          refferCode,
+          photos,
+          role,
         }
       );
 
@@ -115,12 +126,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
-        document.cookie = `authToken=${data.token}; path=/; max-age=3600`;
+        Cookies.set("authToken", data.token, { expires: 1, path: "/" });
         setLoading(false);
       } else {
         throw new Error("Registration failed");
       }
     } catch (error: unknown) {
+      setLoading(false);
       const errorMessage = isApiError(error)
         ? error.message
         : "An error occurred. Please try again later.";
@@ -142,6 +154,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+      Cookies.remove("authToken"); // Clear token from cookies
     }
   };
 

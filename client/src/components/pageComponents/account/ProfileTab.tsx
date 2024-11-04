@@ -15,7 +15,7 @@ const ProfileTab: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get<User>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${user?.id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${user?.id}`
       );
       setData(response.data);
     } catch (error) {
@@ -42,7 +42,7 @@ const ProfileTab: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${user?.id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${user?.id}`,
         {
           method: "PATCH",
           headers: {

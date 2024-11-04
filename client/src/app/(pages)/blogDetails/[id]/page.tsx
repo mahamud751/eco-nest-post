@@ -19,7 +19,7 @@ const ProductDetails = ({ params: { id } }: BlogDetailsProps) => {
   const fetchData = async () => {
     try {
       const response = await axios.get<Blog>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/blogs/${id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/blogs/${id}`
       );
       setData(response.data);
     } catch (error) {

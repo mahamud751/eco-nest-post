@@ -52,6 +52,7 @@ import CartDrawer from "./CartDrawer";
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
+
   const { data: session } = useSession();
 
   const [cartOpen, setCartOpen] = useState(false);
@@ -80,7 +81,7 @@ export default function Navbar() {
   const fetchData = async () => {
     try {
       const response = await axios.get<User>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${user?.id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${user?.id}`
       );
       setData(response.data);
     } catch (error) {

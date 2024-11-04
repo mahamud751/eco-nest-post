@@ -45,7 +45,7 @@ const History: React.FC<InvoiceProps> = ({ selectedOrder }) => {
     const fetchLogs = async () => {
       try {
         const response = await axios.get<AuditLog[]>(
-          `https://api.korbojoy.shop/v1/audit-logs?entityId=${entityId}`
+          `https://api.korbojoy.shop/audit-logs?entityId=${entityId}`
         );
         setLogs(response.data);
       } catch (error) {

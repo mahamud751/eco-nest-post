@@ -21,7 +21,7 @@ const Vendor: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/vendors`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendors`,
         {
           method: "POST",
           headers: {

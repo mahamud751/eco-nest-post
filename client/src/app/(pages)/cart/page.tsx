@@ -403,7 +403,7 @@ const CustomizedStepper: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/orders`,
         {
           method: "POST",
           headers: {

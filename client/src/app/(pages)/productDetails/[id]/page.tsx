@@ -70,7 +70,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get<Product>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/products/${id}?status=active`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/${id}?status=active`
       );
       setProduct(response.data);
       calculateAverageRating(response.data.reviews);
@@ -104,7 +104,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
         email,
       };
       await axios.post(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist`,
         wishlistItem
       );
       openSnackbar(
@@ -124,7 +124,7 @@ const ProductDetails = ({ params: { id } }: ProductDetailsProps) => {
     event.preventDefault();
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${userWishList?.id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/${userWishList?.id}`
       );
       openSnackbar(
         `${product?.name} Item removed from wishlist!`,

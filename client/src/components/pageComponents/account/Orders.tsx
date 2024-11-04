@@ -54,7 +54,7 @@ const OrderDetails = () => {
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/myBooking?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/myBooking?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
       );
       setData(response.data);
     } catch (error) {

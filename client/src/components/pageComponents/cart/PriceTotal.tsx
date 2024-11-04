@@ -24,7 +24,7 @@ export const PriceTotal: React.FC<{
   const handleApplyDiscount = async () => {
     try {
       const discountResponse = await fetch(
-        `https://api.korbojoy.shop/v1/discounts?page=1&perPage=10&name=${discountCode}`
+        `https://api.korbojoy.shop/discounts?page=1&perPage=10&name=${discountCode}`
       );
 
       if (!discountResponse.ok) {

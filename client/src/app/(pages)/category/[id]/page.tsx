@@ -69,8 +69,8 @@ const CategoryDetails = ({ params: { id } }: CategoryDetailsProps) => {
         totalPages: number;
       }>(
         `${
-          process.env.NEXT_PUBLIC_BASEURL
-        }/v1/categories/${id}/products?page=${page}&perPage=${sort}&${queryParams.toString()}`
+          process.env.NEXT_PUBLIC_API_BASE_URL
+        }/categories/${id}/products?page=${page}&perPage=${sort}&${queryParams.toString()}`
       );
       setCategoryData(response.data);
     } catch (error) {

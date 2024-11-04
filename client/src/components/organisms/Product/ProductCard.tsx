@@ -47,7 +47,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         email: user.email,
       };
       await axios.post(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist`,
         wishlistItem
       );
       openSnackbar(
@@ -73,7 +73,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
     event.preventDefault();
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist/${userWishList?.id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/${userWishList?.id}`
       );
       openSnackbar(
         `${product.name} Item removed from wishlist!`,

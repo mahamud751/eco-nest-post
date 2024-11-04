@@ -37,7 +37,7 @@ const NotificationTab = () => {
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user.email}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications?email=${user.email}`
       );
 
       const notifications = response.data.data;
@@ -98,7 +98,7 @@ const NotificationTab = () => {
 
     try {
       await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications/${notificationId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/notifications/${notificationId}`,
         {
           status: "read",
         }

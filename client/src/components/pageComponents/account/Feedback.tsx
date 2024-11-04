@@ -67,7 +67,7 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders/myBooking?email=${user.email}&allOrder=yes&page=${page}&perPage=${rowsPerPage}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/orders/myBooking?email=${user.email}&allOrder=yes&page=${page}&perPage=${rowsPerPage}`
       );
       setData(response.data);
     } catch (error) {
@@ -142,7 +142,7 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
           uploadData.append("upload_preset", "upload");
 
           const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/dtpvtjiry/image/upload",
+            "https://api.cloudinary.com_1/dtpvtjiry/image/upload",
             uploadData
           );
 
@@ -170,7 +170,10 @@ const Feedback: React.FC<AddFormProps> = ({ photosData }) => {
         rating,
         photos: combinedPhotos,
       };
-      await axios.post(`${process.env.NEXT_PUBLIC_BASEURL}/v1/reviews`, data2);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/reviews`,
+        data2
+      );
 
       Swal.fire("Good job!", "Successfully added", "success");
       handleClose();

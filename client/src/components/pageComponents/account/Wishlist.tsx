@@ -41,7 +41,7 @@ const Wishlist = () => {
         total: number;
         perPage: number;
       }>(
-        `${process.env.NEXT_PUBLIC_BASEURL}/v1/wishlist?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist?email=${user.email}&page=${page}&perPage=${rowsPerPage}`
       );
       setData(response.data);
     } catch (error) {
