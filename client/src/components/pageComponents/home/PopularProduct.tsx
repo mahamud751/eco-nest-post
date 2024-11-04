@@ -1,12 +1,12 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import UseFetch from "@/services/hooks/useFetch";
+import axios from "axios";
 
 interface Product {
   id: string;
@@ -58,7 +58,25 @@ const ProductCard: FC<{
 };
 
 const PopularProduct: FC = () => {
-  const { data: products } = UseFetch<Product[]>("products/popular");
+  const [data, setData] = useState<{
+    data: Product[];
+  } | null>(null);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<{
+        data: Product[];
+      }>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/popular`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setData(null);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -104,7 +122,7 @@ const PopularProduct: FC = () => {
             autoplay={{ delay: 1000, disableOnInteraction: false }}
             style={{ height: 600 }}
           >
-            {products?.map((product) => (
+            {data?.data.map((product) => (
               <SwiperSlide key={product.id} style={{ height: 90 }}>
                 <ProductCard
                   photo={product?.photos[0]?.src || ""}
