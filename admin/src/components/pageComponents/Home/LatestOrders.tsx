@@ -10,24 +10,27 @@ const LatestOrders = () => {
       field: "name",
       headerName: "User Name",
       flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
         <p>
           {params.row?.firstName} {params.row?.lastName}
         </p>
       ),
     },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "phone", headerName: "Phone", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 200 },
+    { field: "phone", headerName: "Phone", flex: 1, minWidth: 200 },
     {
       field: "b2b",
       headerName: "IsB2B",
       flex: 1,
+      minWidth: 200,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 200,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
   ];

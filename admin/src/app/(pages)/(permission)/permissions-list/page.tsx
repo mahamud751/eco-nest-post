@@ -7,12 +7,13 @@ import { Edit } from "@mui/icons-material";
 
 const PermissionsAssign: React.FC = () => {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 200 },
+    { field: "name", headerName: "Name", flex: 1, minWidth: 200 },
     {
       field: "assign",
       headerName: "Assign",
       flex: 1,
+      minWidth: 200,
       renderCell: (params: { id: { toString: () => string } }) => (
         <div>
           <Link href={`permission-assign`}>

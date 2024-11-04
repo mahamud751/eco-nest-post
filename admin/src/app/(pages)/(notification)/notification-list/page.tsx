@@ -12,12 +12,13 @@ const NotificationList = () => {
   const fetchUrl = `${process.env.NEXT_PUBLIC_BASEURL}/v1/notifications?email=${user?.email}`;
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "userEmail", headerName: "Email", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
+    { field: "userEmail", headerName: "Email", flex: 1, minWidth: 160 },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
   ];

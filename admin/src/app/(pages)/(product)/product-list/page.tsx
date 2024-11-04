@@ -17,6 +17,7 @@ const ProductList = () => {
       field: "categoryName",
       headerName: "Category Name",
       flex: 1,
+      minWidth: 120,
       renderCell: (params) => (
         <div>
           <p>{params.row.category?.name}</p>
@@ -24,14 +25,20 @@ const ProductList = () => {
       ),
     },
 
-    { field: "price", headerName: "Price", flex: 1 },
-    { field: "b2bPrice", headerName: "B2B Price", flex: 1 },
-    { field: "discountPrice", headerName: "Discount Price", flex: 1 },
+    { field: "price", headerName: "Price", flex: 1, minWidth: 120 },
+    { field: "b2bPrice", headerName: "B2B Price", flex: 1, minWidth: 120 },
+    {
+      field: "discountPrice",
+      headerName: "Discount Price",
+      flex: 1,
+      minWidth: 120,
+    },
 
     {
       field: "sizes",
       headerName: "Sizes",
       flex: 1,
+      minWidth: 120,
       valueParser: (params) =>
         params?.value?.map((item: any, index: number) => (
           <p key={index}>{item}</p>
@@ -42,6 +49,7 @@ const ProductList = () => {
       field: "colors",
       headerName: "Colors",
       flex: 1,
+      minWidth: 120,
       valueParser: (params) =>
         params?.value?.map((item: any, index: number) => (
           <p key={index}>{item}</p>

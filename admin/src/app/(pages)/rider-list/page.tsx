@@ -5,9 +5,9 @@ import { getCommonColumns } from "@/components/templates/CommonColums";
 
 const RiderList = () => {
   const columns = getCommonColumns([
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "phone", headerName: "Phone", flex: 1 },
-    { field: "role", headerName: "Role", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 160 },
+    { field: "phone", headerName: "Phone", flex: 1, minWidth: 160 },
+    { field: "role", headerName: "Role", flex: 1, minWidth: 160 },
   ]);
 
   return (

@@ -6,14 +6,15 @@ import StatusButton from "@/components/atoms/StatusButton";
 
 const FaqList = () => {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "title", headerName: "Title", flex: 1 },
-    { field: "desc", headerName: "Description", flex: 1 },
-    { field: "position", headerName: "Position", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
+    { field: "title", headerName: "Title", flex: 1, minWidth: 160 },
+    { field: "desc", headerName: "Description", flex: 1, minWidth: 160 },
+    { field: "position", headerName: "Position", flex: 1, minWidth: 160 },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
   ];

@@ -345,6 +345,7 @@ const DataTable: React.FC<DataTableProps> = ({
             field: "action",
             headerName: "Action",
             flex: 1,
+            minWidth: 160,
             renderCell: (params: { id: { toString: () => string } }) => (
               <div>
                 {isJustEditData && (

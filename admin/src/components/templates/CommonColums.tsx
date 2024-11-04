@@ -12,14 +12,17 @@ export const getCommonColumns = (
       field: "id",
       headerName: "No",
       filterable: false,
+      minWidth: 100,
+      flex: 1,
       renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
 
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "name", headerName: "Name", minWidth: 200, flex: 1 },
   ];
   const photoColumn: GridColDef = {
     field: "photos",
     headerName: "Photos",
+    minWidth: 200,
     flex: 1,
     renderCell: (params) => (
       <div className="my-2 flex">
@@ -37,6 +40,7 @@ export const getCommonColumns = (
     field: "status",
     headerName: "Status",
     flex: 1,
+    minWidth: 200,
     renderCell: (params) => <StatusButton status={params.value} />,
   };
 

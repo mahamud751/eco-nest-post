@@ -25,12 +25,13 @@ const CustomVendorOrder: React.FC = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
+    { field: "name", headerName: "Name", flex: 1, minWidth: 160 },
     {
       field: "files",
       headerName: "File Information",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => {
         const fileDetails = params.row.files?.map(
           (detail: { src: string; id: string | null | undefined }) => (
@@ -53,6 +54,7 @@ const CustomVendorOrder: React.FC = () => {
       field: "demo",
       headerName: "Demo",
       flex: 1,
+      minWidth: 160,
       renderCell: (params: { id: { toString: () => string } }) => (
         <div>
           <Link href={`customOrderDemos-details/${params.id}`}>
@@ -65,6 +67,7 @@ const CustomVendorOrder: React.FC = () => {
       field: "submit",
       headerName: "Demo Submit",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <Button
           startIcon={<BackupIcon />}

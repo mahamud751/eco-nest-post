@@ -9,13 +9,15 @@ const LatestProduct = () => {
       field: "categoryName",
       headerName: "Category Name",
       flex: 1,
+      minWidth: 200,
       renderCell: (params) => <p>{params.row.category?.name}</p>,
     },
-    { field: "price", headerName: "Price", flex: 1 },
+    { field: "price", headerName: "Price", flex: 1, minWidth: 200 },
     {
       field: "sizes",
       headerName: "Sizes",
       flex: 1,
+      minWidth: 200,
       valueParser: (params) =>
         params?.value?.map((item: any, index: number) => (
           <p key={index}>{item}</p>
@@ -25,6 +27,7 @@ const LatestProduct = () => {
       field: "colors",
       headerName: "Colors",
       flex: 1,
+      minWidth: 200,
       valueParser: (params) =>
         params?.value?.map((item: any, index: number) => (
           <p key={index}>{item}</p>

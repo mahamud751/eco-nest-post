@@ -16,18 +16,20 @@ const AdvanceList = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
+    { field: "name", headerName: "Name", flex: 1, minWidth: 160 },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
     {
       field: "files",
       headerName: "File Information",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => {
         const fileDetails = params.row.files?.map(
           (detail: { src: any; id: React.Key | null | undefined }) => (
@@ -50,6 +52,7 @@ const AdvanceList = () => {
       field: "demo",
       headerName: "Demo",
       flex: 1,
+      minWidth: 160,
       renderCell: (params: { id: { toString: () => string } }) => (
         <div>
           <Link href={`demo-details/${params.id}`}>
@@ -62,6 +65,7 @@ const AdvanceList = () => {
       field: "assignVendor",
       headerName: "Assign Vendor",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <button
           className="mt-4 flex justify-center items-center bg-red-500 text-white rounded w-[80px] h-[25px]"

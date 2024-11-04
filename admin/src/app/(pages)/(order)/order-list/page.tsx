@@ -36,23 +36,25 @@ const OrderList = () => {
       : `${process.env.NEXT_PUBLIC_BASEURL}/v1/orders`;
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
     {
       field: "name",
       headerName: "User Name",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <p>
           {params.row?.firstName} {params.row?.lastName}
         </p>
       ),
     },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "phone", headerName: "Phone", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 160 },
+    { field: "phone", headerName: "Phone", flex: 1, minWidth: 160 },
     {
       field: "b2b",
       headerName: "IsB2B",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
 
@@ -60,12 +62,14 @@ const OrderList = () => {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
     {
       field: "invoice",
       headerName: "Invoice",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <button
           className="mt-3 flex justify-center items-center bg-red-500 text-white px-4 rounded"
@@ -82,6 +86,7 @@ const OrderList = () => {
       field: "assignRider",
       headerName: "Assign Rider",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <button
           className="mt-3 flex justify-center items-center bg-gray-700 text-white rounded w-[80px] h-[28px]"

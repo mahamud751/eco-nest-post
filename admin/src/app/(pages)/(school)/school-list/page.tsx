@@ -6,12 +6,13 @@ import Link from "next/link";
 
 const SchoolList = () => {
   const columns = getCommonColumns([
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "location", headerName: "Location", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 160 },
+    { field: "location", headerName: "Location", flex: 1, minWidth: 160 },
     {
       field: "link",
       headerName: "Link",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <div>
           <Link
@@ -29,6 +30,7 @@ const SchoolList = () => {
       field: "measurement",
       headerName: "All Measurement",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <div>
           <Link

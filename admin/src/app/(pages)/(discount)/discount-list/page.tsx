@@ -9,18 +9,21 @@ const DiscountList = () => {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <p>{"৳ " + params?.row?.amount}</p>,
     },
     {
       field: "min",
       headerName: "Min Amount",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <p>{"৳ " + params?.row?.min}</p>,
     },
     {
       field: "startDate",
       headerName: "Start Date",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <div>
           <p>
@@ -41,6 +44,7 @@ const DiscountList = () => {
       field: "endDate",
       headerName: "End Date",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <div>
           <p>

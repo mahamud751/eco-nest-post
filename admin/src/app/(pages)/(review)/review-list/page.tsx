@@ -8,14 +8,15 @@ import StatusButton from "@/components/atoms/StatusButton";
 
 const ReviewList = () => {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
-    { field: "userName", headerName: "User Name", flex: 1 },
-    { field: "comment", headerName: "Comment", flex: 1 },
-    { field: "rating", headerName: "Rating", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 160 },
+    { field: "userName", headerName: "User Name", flex: 1, minWidth: 160 },
+    { field: "comment", headerName: "Comment", flex: 1, minWidth: 160 },
+    { field: "rating", headerName: "Rating", flex: 1, minWidth: 160 },
     {
       field: "photos",
       headerName: "Photos",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => (
         <div className="my-2 flex">
           {params.value?.map(
@@ -37,6 +38,7 @@ const ReviewList = () => {
       field: "status",
       headerName: "Status",
       flex: 1,
+      minWidth: 160,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
   ];
