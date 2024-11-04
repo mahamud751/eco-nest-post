@@ -65,7 +65,6 @@ const HomeFavouriteTabContent = ({
           1024: { slidesPerView: 3, spaceBetween: 30 },
           1280: { slidesPerView: 3, spaceBetween: 30 },
           1440: { slidesPerView: 4, spaceBetween: 30 },
-          1441: { slidesPerView: 4, spaceBetween: 30 },
         }}
       >
         <div

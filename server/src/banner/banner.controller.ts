@@ -95,16 +95,14 @@ export class BannerController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
-@ApiOperation({ summary: 'Delete a banner' })
-@ApiParam({ name: 'id', description: 'ID of the banner to delete' })
-@ApiResponse({
-  status: 200,
-  description: 'The banner has been successfully deleted.',
-})
-@ApiResponse({ status: 404, description: 'Banner not found.' })
-remove(@Param('id') id: string) {
-  return this.bannerService.remove(id);
-}
-
-  
+  @ApiOperation({ summary: 'Delete a banner' })
+  @ApiParam({ name: 'id', description: 'ID of the banner to delete' })
+  @ApiResponse({
+    status: 200,
+    description: 'The banner has been successfully deleted.',
+  })
+  @ApiResponse({ status: 404, description: 'Banner not found.' })
+  remove(@Param('id') id: string) {
+    return this.bannerService.remove(id);
+  }
 }

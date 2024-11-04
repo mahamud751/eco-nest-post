@@ -25,6 +25,8 @@ import VendorAnimation from "@/components/dynamics/animations/VendorAnimation";
 import RiderAnimation from "@/components/dynamics/animations/RiderAnimation";
 import B2BMangerAnimation from "@/components/dynamics/animations/B2BMangerAnimation";
 import UserAnimation from "@/components/dynamics/animations/UserAnimation";
+import ManagerAnimation from "@/components/dynamics/animations/ManagerAnimation";
+import AdminAnimation from "@/components/dynamics/animations/AdminAnimation";
 
 const roleStyles = {
   user: {
@@ -50,6 +52,14 @@ const roleStyles = {
   b2bManager: {
     gradient: "linear-gradient(to right, #040404, #a83bc8)",
     animation: <B2BMangerAnimation />,
+  },
+  manager: {
+    gradient: "linear-gradient(to right, #040404, #a83bc8)",
+    animation: <ManagerAnimation />,
+  },
+  admin: {
+    gradient: "linear-gradient(to right, #040404, #a83bc8)",
+    animation: <AdminAnimation />,
   },
 
   default: {
