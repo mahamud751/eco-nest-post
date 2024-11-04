@@ -12,6 +12,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { User } from "@/services/types";
+import { useAuth } from "@/services/hooks/auth";
 
 interface CustomerRoleUpdateModalProps {
   data: User;
@@ -22,6 +23,7 @@ const CustomerRoleUpdate: React.FC<CustomerRoleUpdateModalProps> = ({
   data,
   onClose,
 }) => {
+  const { user } = useAuth();
   const MySwal = withReactContent(Swal);
   const [role, setRole] = useState<string>("");
   useEffect(() => {
@@ -34,7 +36,12 @@ const CustomerRoleUpdate: React.FC<CustomerRoleUpdateModalProps> = ({
     try {
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/${data.id}/update-role`,
-        { role, email: data.email }
+        { role, email: data.email },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
       );
 
       if (response.status === 200) {

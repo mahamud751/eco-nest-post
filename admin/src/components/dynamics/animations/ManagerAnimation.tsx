@@ -8,7 +8,7 @@ const ManagerAnimation: React.FC = () => {
       animationData={animationData}
       loop
       autoplay
-      style={{ height: "120px", width: "120px" }}
+      style={{ height: "250px", width: "400px" }}
     />
   );
 };
