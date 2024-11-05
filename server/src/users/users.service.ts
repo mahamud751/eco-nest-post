@@ -15,7 +15,6 @@ import { ConfigService } from '@nestjs/config';
 import { Prisma, Product, UserRole } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuditLogService } from 'src/audit/audit.service';
-import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -129,20 +128,27 @@ export class UsersService {
     return { token, user: userData };
   }
 
-  async updatePassword(
-    updatePasswordDto: UpdatePasswordDto,
-    userId: string,
-  ): Promise<{ message: string }> {
-    const { currentPassword, newPassword } = updatePasswordDto;
+  async updatePassword(updatePasswordDto: any): Promise<{ message: string }> {
+    const {
+      userId,
+      currentPassword,
+      newPassword,
+      name,
+      email,
+      phone,
+      address,
+    } = updatePasswordDto;
 
-    // Fetch the user based on the provided userId from the authenticated session
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // Verify current password
+    // if (user.role !== 'admin') {
+    //   throw new UnauthorizedException('Unauthorized access');
+    // }
+
     if (currentPassword) {
       const passwordMatch = await bcrypt.compare(
         currentPassword,
@@ -161,11 +167,15 @@ export class UsersService {
     await this.prisma.user.update({
       where: { id: userId },
       data: {
+        name,
+        email,
+        phone,
+        address,
         password: user.password,
       },
     });
 
-    return { message: 'Password updated successfully' };
+    return { message: 'User data updated successfully' };
   }
 
   async deleteUser(id: string): Promise<string> {

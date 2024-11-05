@@ -9,7 +9,6 @@ import {
   Query,
   UseGuards,
   Patch,
-  Request,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -55,15 +54,12 @@ export class UsersController {
   }
 
   @Patch('password')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user password' })
   @ApiResponse({ status: 200, description: 'Password updated successfully.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async updatePassword(
-    @Body() updatePasswordDto: UpdatePasswordDto,
-    @Request() req,
-  ): Promise<{ message: string }> {
-    const userId = req.user.id; // Get the authenticated user's ID from the request
-    return this.usersService.updatePassword(updatePasswordDto, userId);
+  async updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.usersService.updatePassword(updatePasswordDto);
   }
 
   @Delete(':id')

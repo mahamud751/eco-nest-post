@@ -161,6 +161,7 @@ export interface User {
   updatedAt: Date;
   photos: Photo[];
   advances?: Advance[];
+  token?: string;
 }
 
 export interface School {

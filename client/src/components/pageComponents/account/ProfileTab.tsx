@@ -72,8 +72,8 @@ const ProfileTab: React.FC = () => {
       return;
     }
 
+    // Prepare the password data without the user ID
     const passwordData = {
-      userId: user?.id,
       currentPassword,
       newPassword,
     };
@@ -85,6 +85,7 @@ const ProfileTab: React.FC = () => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify(passwordData),
         }
