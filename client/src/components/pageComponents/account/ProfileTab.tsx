@@ -72,8 +72,8 @@ const ProfileTab: React.FC = () => {
       return;
     }
 
-    // Prepare the password data without the user ID
     const passwordData = {
+      userId: user?.id,
       currentPassword,
       newPassword,
     };
