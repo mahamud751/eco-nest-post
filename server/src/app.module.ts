@@ -53,7 +53,7 @@ import { MessagesModule } from './message/message.module';
     PermissionModule,
     VariantModule,
     DiscountModule,
-    MessagesModule,
+    // MessagesModule,
   ],
 })
 export class AppModule {}

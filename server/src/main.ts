@@ -53,7 +53,15 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const server = app.getHttpServer();
-  const io = new Server(server);
+
+  // Socket.IO Initialization with CORS
+  const io = new Server(server, {
+    cors: {
+      origin: 'http://localhost:3004',
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
+  });
 
   const socketService = app.get(SocketService);
   socketService.setServer(io);

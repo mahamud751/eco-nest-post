@@ -32,7 +32,7 @@ export class NotificationGateway {
       createNotificationDto,
     );
 
-    this.server.emit('notification', notification);
+    this.server.emit('notification', notification); // Broadcast to all clients
     return notification;
   }
 

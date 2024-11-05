@@ -26,8 +26,12 @@ const NotificationTab = () => {
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
   useEffect(() => {
+    // Create the socket instance
     const socket: Socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
       transports: ["websocket"],
+      reconnection: true, // Enable automatic reconnection
+      reconnectionAttempts: 5, // Try reconnecting 5 times
+      reconnectionDelay: 1000, // Wait 1 second before attempting to reconnect
     });
 
     // Listen for 'notification' events from the server
@@ -38,10 +42,20 @@ const NotificationTab = () => {
       ]);
     });
 
+    // Add error handling for socket connection
+    socket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    socket.on("reconnect_failed", () => {
+      console.warn("Socket reconnection failed after 5 attempts.");
+    });
+
+    // Cleanup function to disconnect socket on component unmount
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [allNotifications]);
 
   const fetchNotifications = async () => {
     if (!user || !user.email) {
