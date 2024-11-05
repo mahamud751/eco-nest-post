@@ -67,7 +67,7 @@ const Auth: React.FC = () => {
     setAuthError("");
     try {
       if (isSignup) {
-        await registerUser(name!, email, phone!, password, "", "");
+        await registerUser(name!, email, phone!, password);
         router.push("/");
       } else {
         await loginUser(email, password);

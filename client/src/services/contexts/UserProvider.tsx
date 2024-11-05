@@ -24,10 +24,7 @@ export interface AuthContextType {
     name: string,
     email: string,
     phone: string,
-    password: string,
-    refferCode?: string,
-    photos?: string,
-    role?: string
+    password: string
   ) => Promise<void>;
   logoutUser: () => void;
   loading: boolean;
@@ -102,10 +99,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     name: string,
     email: string,
     phone: string,
-    password: string,
-    refferCode?: string,
-    photos?: string,
-    role?: string
+    password: string
   ) => {
     setLoading(true);
     try {
@@ -116,9 +110,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           email,
           phone,
           password,
-          refferCode,
-          photos,
-          role,
         }
       );
 
