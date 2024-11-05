@@ -333,6 +333,15 @@ model Notification {
   order     Order    @relation(fields: [orderId], references: [id])
 }
 
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String?
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Dynamic {
   id        String   @id @default(uuid())
   name      String
