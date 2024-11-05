@@ -30,7 +30,12 @@ export class NotificationGateway {
     const notification = await this.notificationService.createNotification(
       createNotificationDto,
     );
+
     this.server.emit('notification', notification);
     return notification;
+  }
+
+  emitNotification(notification: any) {
+    this.server.emit('notification', notification);
   }
 }

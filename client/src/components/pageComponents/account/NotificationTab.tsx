@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { io, Socket } from "socket.io-client";
 import { useAuth } from "@/services/hooks/auth";
 import Link from "next/link";
 import { Notification } from "@/services/types/types";
@@ -23,6 +24,24 @@ const NotificationTab = () => {
   const [filter, setFilter] = useState<string>("all");
   const [readCount, setReadCount] = useState<number>(0);
   const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  useEffect(() => {
+    const socket: Socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
+      transports: ["websocket"],
+    });
+
+    // Listen for 'notification' events from the server
+    socket.on("notification", (notification: Notification) => {
+      setAllNotifications((prevNotifications) => [
+        notification,
+        ...prevNotifications,
+      ]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const fetchNotifications = async () => {
     if (!user || !user.email) {

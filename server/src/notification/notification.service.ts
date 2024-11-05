@@ -29,7 +29,7 @@ export class NotificationService {
       },
     });
 
-    this.notificationGateway.server.emit('notification', notification);
+    this.notificationGateway.emitNotification(notification);
 
     return notification;
   }
