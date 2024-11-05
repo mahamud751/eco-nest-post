@@ -17,7 +17,7 @@ const UserList = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1, minWidth: 200 },
+    { field: "id", headerName: "ID", flex: 1, minWidth: 120 },
     {
       field: "name",
       headerName: "User Name",
@@ -25,15 +25,15 @@ const UserList = () => {
       minWidth: 200,
       renderCell: (params) => <p>{params.row?.name}</p>,
     },
-    { field: "email", headerName: "Email", flex: 1, minWidth: 200 },
-    { field: "phone", headerName: "Phone", flex: 1, minWidth: 200 },
-    { field: "role", headerName: "Role", flex: 1, minWidth: 200 },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 120 },
+    { field: "phone", headerName: "Phone", flex: 1, minWidth: 120 },
+    { field: "role", headerName: "Role", flex: 1, minWidth: 120 },
 
     {
       field: "status",
       headerName: "Status",
       flex: 1,
-      minWidth: 200,
+      minWidth: 120,
       renderCell: (params) => <StatusButton status={params.value} />,
     },
   ];
@@ -42,7 +42,7 @@ const UserList = () => {
       field: "roleUpdate",
       headerName: "Role Update",
       flex: 1,
-      minWidth: 200,
+      minWidth: 120,
       renderCell: (params) => (
         <button
           className="mt-3 flex justify-center items-center bg-gray-700 text-white rounded w-[80px] h-[28px]"

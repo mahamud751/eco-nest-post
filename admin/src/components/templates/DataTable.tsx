@@ -345,7 +345,7 @@ const DataTable: React.FC<DataTableProps> = ({
             field: "action",
             headerName: "Action",
             flex: 1,
-            minWidth: 160,
+            minWidth: 100,
             renderCell: (params: { id: { toString: () => string } }) => (
               <div>
                 {isJustEditData && (
@@ -374,23 +374,22 @@ const DataTable: React.FC<DataTableProps> = ({
 
   return (
     <div className="md:mt-14 md:ms-12">
-      {isJustCreateData && (
-        <div className="flex justify-end items-center mb-4">
-          {" "}
-          <Link href={`/add-${firstPart}`}>
-            <Button
-              variant="contained"
-              startIcon={<AddCircleOutlined />}
-              className=" bg-neutral-950 text-white hover:bg-neutral-700"
-            >
-              Create
-            </Button>
-          </Link>
-        </div>
-      )}
-
       <Paper className="p-6 m-2 md:m-6 shadow-xl rounded-lg md:w-[92%]">
-        <div className="flex justify-between items-center mb-6">
+        {isJustCreateData && (
+          <div className="flex justify-end mb-4">
+            {" "}
+            <Link href={`/add-${firstPart}`}>
+              <Button
+                variant="contained"
+                startIcon={<AddCircleOutlined />}
+                className=" bg-neutral-950 text-white hover:bg-neutral-700"
+              >
+                Create
+              </Button>
+            </Link>
+          </div>
+        )}
+        <div className="block md:flex justify-between items-center mb-6">
           <TextField
             variant="outlined"
             size="small"
@@ -399,7 +398,7 @@ const DataTable: React.FC<DataTableProps> = ({
             InputProps={{
               startAdornment: <Search className="mr-2" />,
             }}
-            className="mr-4"
+            className="mr-4 mb-5 md:mb-0"
           />
           {isJustEditData && (
             <div>

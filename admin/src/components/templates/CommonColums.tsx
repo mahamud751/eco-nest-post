@@ -22,7 +22,7 @@ export const getCommonColumns = (
   const photoColumn: GridColDef = {
     field: "photos",
     headerName: "Photos",
-    minWidth: 200,
+    minWidth: 120,
     flex: 1,
     renderCell: (params) => (
       <div className="my-2 flex">
@@ -40,7 +40,7 @@ export const getCommonColumns = (
     field: "status",
     headerName: "Status",
     flex: 1,
-    minWidth: 200,
+    minWidth: 100,
     renderCell: (params) => <StatusButton status={params.value} />,
   };
 
