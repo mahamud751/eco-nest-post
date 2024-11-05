@@ -24,6 +24,7 @@ import { PermissionModule } from './permission/permission.module';
 import { VariantModule } from './variants/variant.module';
 import { DiscountModule } from './discount/discount.module';
 import { SocketService } from './socket.service';
+import { MessagesModule } from './message/message.module';
 
 @Module({
   providers: [SocketService],
@@ -52,6 +53,7 @@ import { SocketService } from './socket.service';
     PermissionModule,
     VariantModule,
     DiscountModule,
+    MessagesModule,
   ],
 })
 export class AppModule {}
