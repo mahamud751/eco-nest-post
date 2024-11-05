@@ -120,9 +120,9 @@ export class UsersService {
     };
 
     const token = jwt.sign(
-      { userId: user.id, email: user.email }, 
+      { userId: user.id, email: user.email },
       this.configService.get('JWT_SECRET'),
-      { expiresIn: '1h' }, 
+      { expiresIn: '1h' },
     );
 
     return { token, user: userData };
@@ -145,9 +145,9 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.role !== 'admin') {
-      throw new UnauthorizedException('Unauthorized access');
-    }
+    // if (user.role !== 'admin') {
+    //   throw new UnauthorizedException('Unauthorized access');
+    // }
 
     if (currentPassword) {
       const passwordMatch = await bcrypt.compare(
