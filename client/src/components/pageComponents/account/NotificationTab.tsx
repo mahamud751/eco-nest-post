@@ -8,7 +8,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { io, Socket } from "socket.io-client";
 import { useAuth } from "@/services/hooks/auth";
 import Link from "next/link";
 import { Notification } from "@/services/types/types";
@@ -24,38 +23,6 @@ const NotificationTab = () => {
   const [filter, setFilter] = useState<string>("all");
   const [readCount, setReadCount] = useState<number>(0);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-
-  useEffect(() => {
-    // Create the socket instance
-    const socket: Socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
-      transports: ["websocket"],
-      reconnection: true, // Enable automatic reconnection
-      reconnectionAttempts: 5, // Try reconnecting 5 times
-      reconnectionDelay: 1000, // Wait 1 second before attempting to reconnect
-    });
-
-    // Listen for 'notification' events from the server
-    socket.on("notification", (notification: Notification) => {
-      setAllNotifications((prevNotifications) => [
-        notification,
-        ...prevNotifications,
-      ]);
-    });
-
-    // Add error handling for socket connection
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-    });
-
-    socket.on("reconnect_failed", () => {
-      console.warn("Socket reconnection failed after 5 attempts.");
-    });
-
-    // Cleanup function to disconnect socket on component unmount
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
 
   const fetchNotifications = async () => {
     if (!user || !user.email) {
