@@ -54,7 +54,7 @@ export class UsersController {
   }
 
   @Patch('password')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user password' })
   @ApiResponse({ status: 200, description: 'Password updated successfully.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
