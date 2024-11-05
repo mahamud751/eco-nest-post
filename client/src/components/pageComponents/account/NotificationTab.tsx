@@ -55,7 +55,7 @@ const NotificationTab = () => {
     return () => {
       socket.disconnect();
     };
-  }, [allNotifications]);
+  }, []);
 
   const fetchNotifications = async () => {
     if (!user || !user.email) {
