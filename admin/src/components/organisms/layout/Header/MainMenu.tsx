@@ -87,7 +87,9 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
         ...commonMenuItems,
         ...(user?.role === "superAdmin" ||
         user?.role === "vendor" ||
-        user?.role === "schoolManger" ||
+        user?.role === "schoolManager" ||
+        user?.role === "manager" ||
+        user?.role === "admin" ||
         user?.role === "rider"
           ? filteredMenuItems(adminMenuItems)
           : []),
