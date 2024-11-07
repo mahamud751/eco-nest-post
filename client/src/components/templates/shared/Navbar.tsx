@@ -36,6 +36,7 @@ import {
   DensityMedium,
   Person,
 } from "@mui/icons-material";
+import { useSession } from "next-auth/react";
 
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 
@@ -47,7 +48,7 @@ import { delete_item } from "@/app/redux/actions/cartAction";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import { Category, User } from "@/services/types/types";
 import UseFetch from "@/services/hooks/useFetch";
-import { useSession } from "next-auth/react";
+
 import CartDrawer from "./CartDrawer";
 
 export default function Navbar() {
