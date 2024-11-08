@@ -54,7 +54,6 @@ async function bootstrap() {
 
   const server = app.getHttpServer();
 
-  // Socket.IO Initialization with CORS
   const io = new Server(server, {
     cors: {
       origin: 'http://localhost:3004',
