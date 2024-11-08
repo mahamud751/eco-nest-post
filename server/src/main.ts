@@ -56,7 +56,6 @@ async function bootstrap() {
   // Start HTTP server
   const server = app.getHttpServer();
 
-  // Ensure Socket.IO is attached to the server only once
   const io = new Server(server, {
     cors: {
       origin: 'http://localhost:3002', // Update the origin accordingly
