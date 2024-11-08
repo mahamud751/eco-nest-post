@@ -11,7 +11,12 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3004',
+    origin: [
+      'http://localhost:3004',
+      'https://korbojoy.shop',
+      'https://admin.korbojoy.shop',
+      'http://localhost:3001',
+    ],
     credentials: true,
   },
 })
@@ -32,7 +37,7 @@ export class NotificationGateway {
       createNotificationDto,
     );
 
-    this.server.emit('notification', notification); // Broadcast to all clients
+    this.server.emit('notification', notification);
     return notification;
   }
 
