@@ -58,7 +58,7 @@ async function bootstrap() {
 
   const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3002', // Update the origin accordingly
+      origin: 'http://localhost:3002',
       methods: ['GET', 'POST'],
       credentials: true,
     },
