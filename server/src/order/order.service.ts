@@ -1,16 +1,18 @@
+import * as nodemailer from 'nodemailer';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import * as nodemailer from 'nodemailer';
 import { NotificationService } from 'src/notification/notification.service';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { AuditLogService } from 'src/audit/audit.service';
+import { NotificationGateway } from 'src/notification/notification.gateway';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly notificationGateway: NotificationGateway,
     private readonly auditLogService: AuditLogService,
   ) {}
 
@@ -18,11 +20,15 @@ export class OrderService {
     const order = await this.prisma.order.create({
       data: { ...createOrderDto },
     });
-    await this.notificationService.createNotification({
+
+    const notification = await this.notificationService.createNotification({
       userEmail: order.email,
       orderId: order.id,
       message: `Your order has been placed successfully.`,
     });
+
+    this.notificationGateway.emitNotification(notification);
+
     await this.sendOrderEmail(createOrderDto.email);
 
     return order;
