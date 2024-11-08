@@ -40,3 +40,13 @@ export const AdminAnimation = dynamic(
   () => import("@/components/dynamics/animations/AdminAnimation"),
   { ssr: false }
 );
+
+export const NotFoundAnimation = dynamic(
+  () => import("@/components/dynamics/animations/NotFoundAnimation"),
+  { ssr: false }
+);
+
+export const SuccessAnimation = dynamic(
+  () => import("@/components/dynamics/animations/SuccessAnimation"),
+  { ssr: false }
+);

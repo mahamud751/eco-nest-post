@@ -2,14 +2,7 @@
 
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-
-const NotFoundAnimation = dynamic(
-  () => import("@/components/dynamics/animations/NotFoundAnimation"),
-  {
-    ssr: false,
-  }
-);
+import { NotFoundAnimation } from "@/services/utils/dynamicAnimations";
 
 const NotFound: React.FC = () => {
   return (

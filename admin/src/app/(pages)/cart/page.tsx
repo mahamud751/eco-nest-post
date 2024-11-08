@@ -5,6 +5,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import IconButton from "@mui/material/IconButton";
+import { RootState } from "@/app/redux/reducers";
+import { CartItem } from "@/app/redux/types";
 import {
   Stepper,
   Step,
@@ -29,12 +34,7 @@ import {
   CheckCircle,
   KeyboardArrowDown,
 } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 
-import { RootState } from "@/app/redux/reducers";
-import { CartItem } from "@/app/redux/types";
 import {
   clear_cart,
   delete_item,
@@ -45,12 +45,8 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 import { PriceTotal } from "@/components/pageComponents/cart/PriceTotal";
-const SuccessAnimation = dynamic(
-  () => import("@/components/dynamics/animations/SuccessAnimation"),
-  { ssr: false }
-);
 import { useAuth } from "@/services/hooks/auth";
-import dynamic from "next/dynamic";
+import { SuccessAnimation } from "@/services/utils/dynamicAnimations";
 
 const steps = [
   {
