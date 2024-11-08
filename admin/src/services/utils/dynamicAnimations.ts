@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 
-// Dynamically import animations with SSR disabled
 export const SuperAdminAnimation = dynamic(
   () => import("@/components/dynamics/animations/SuperAdminAnimation"),
   { ssr: false }
