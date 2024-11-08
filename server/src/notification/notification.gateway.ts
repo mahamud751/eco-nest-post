@@ -11,7 +11,7 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3002',
+    origin: 'http://localhost:3004',
     credentials: true,
   },
 })
@@ -24,10 +24,6 @@ export class NotificationGateway {
     private readonly notificationService: NotificationService,
   ) {}
 
-  emitNotification(notification: any) {
-    this.server.emit('notification', notification);
-  }
-
   @SubscribeMessage('createNotification')
   async handleCreateNotification(
     @MessageBody() createNotificationDto: CreateNotificationDto,
@@ -36,7 +32,11 @@ export class NotificationGateway {
       createNotificationDto,
     );
 
-    this.server.emit('notification', notification);
+    this.server.emit('notification', notification); // Broadcast to all clients
     return notification;
+  }
+
+  emitNotification(notification: any) {
+    this.server.emit('notification', notification);
   }
 }
