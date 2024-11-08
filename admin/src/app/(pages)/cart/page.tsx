@@ -45,8 +45,12 @@ import { useAppDispatch } from "@/services/hooks/useAppDispatch";
 import { useSnackbar } from "@/services/contexts/useSnackbar";
 import PaymentCheckout from "@/components/pageComponents/cart/PaymentCheckout";
 import { PriceTotal } from "@/components/pageComponents/cart/PriceTotal";
-import SuccessAnimation from "@/components/dynamics/animations/SuccessAnimation";
+const SuccessAnimation = dynamic(
+  () => import("@/components/dynamics/animations/SuccessAnimation"),
+  { ssr: false }
+);
 import { useAuth } from "@/services/hooks/auth";
+import dynamic from "next/dynamic";
 
 const steps = [
   {

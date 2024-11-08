@@ -11,16 +11,45 @@ import {
   School,
   Student,
 } from "@/services/types";
-import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
-import SchoolAnimation from "@/components/dynamics/animations/SchoolAnimation";
-import TotalEcommerceAnimation from "@/components/dynamics/animations/TotalEcommerceAnimation";
-import TotalCustomOrderAnimation from "@/components/dynamics/animations/TotalCustomOrderAnimation";
-import TotalAmountAnimation from "@/components/dynamics/animations/TotalAmountAnimation";
-import GreenBarAnimation from "@/components/dynamics/animations/GreenBarAnimation";
-import DeliveryAnimation from "@/components/dynamics/animations/DeliveryAnimation";
-import OrderAnimation from "@/components/dynamics/animations/OrderAnimation";
 import LatestProduct from "@/components/pageComponents/Home/LatestProduct";
 import { PieChart } from "@mui/x-charts";
+import LatestOrders from "@/components/pageComponents/Home/LatestOrders";
+import dynamic from "next/dynamic";
+
+const SchoolAnimation = dynamic(
+  () => import("@/components/dynamics/animations/SchoolAnimation"),
+  { ssr: false }
+);
+
+const TotalEcommerceAnimation = dynamic(
+  () => import("@/components/dynamics/animations/TotalEcommerceAnimation"),
+  { ssr: false }
+);
+
+const TotalCustomOrderAnimation = dynamic(
+  () => import("@/components/dynamics/animations/TotalCustomOrderAnimation"),
+  { ssr: false }
+);
+
+const TotalAmountAnimation = dynamic(
+  () => import("@/components/dynamics/animations/TotalAmountAnimation"),
+  { ssr: false }
+);
+
+const GreenBarAnimation = dynamic(
+  () => import("@/components/dynamics/animations/GreenBarAnimation"),
+  { ssr: false }
+);
+
+const DeliveryAnimation = dynamic(
+  () => import("@/components/dynamics/animations/DeliveryAnimation"),
+  { ssr: false }
+);
+
+const OrderAnimation = dynamic(
+  () => import("@/components/dynamics/animations/OrderAnimation"),
+  { ssr: false }
+);
 
 const Page = () => {
   const { data: orderData, total: orderTotal } = UseFetch<{ data: Order[] }>(

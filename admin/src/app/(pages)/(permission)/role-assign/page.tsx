@@ -17,16 +17,49 @@ import {
 } from "@mui/material";
 import { User, Permission } from "@/services/types";
 import Swal from "sweetalert2";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import CloseIcon from "@mui/icons-material/Close";
-import SuperAdminAnimation from "@/components/dynamics/animations/SuperAdminAnimation";
-import EducAnimation from "@/components/dynamics/animations/EducAnimation";
-import VendorAnimation from "@/components/dynamics/animations/VendorAnimation";
-import RiderAnimation from "@/components/dynamics/animations/RiderAnimation";
-import B2BMangerAnimation from "@/components/dynamics/animations/B2BMangerAnimation";
-import UserAnimation from "@/components/dynamics/animations/UserAnimation";
-import ManagerAnimation from "@/components/dynamics/animations/ManagerAnimation";
-import AdminAnimation from "@/components/dynamics/animations/AdminAnimation";
+import dynamic from "next/dynamic";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+
+const SuperAdminAnimation = dynamic(
+  () => import("@/components/dynamics/animations/SuperAdminAnimation"),
+  { ssr: false }
+);
+
+const EducAnimation = dynamic(
+  () => import("@/components/dynamics/animations/EducAnimation"),
+  { ssr: false }
+);
+
+const VendorAnimation = dynamic(
+  () => import("@/components/dynamics/animations/VendorAnimation"),
+  { ssr: false }
+);
+
+const RiderAnimation = dynamic(
+  () => import("@/components/dynamics/animations/RiderAnimation"),
+  { ssr: false }
+);
+
+const B2BMangerAnimation = dynamic(
+  () => import("@/components/dynamics/animations/B2BMangerAnimation"),
+  { ssr: false }
+);
+
+const UserAnimation = dynamic(
+  () => import("@/components/dynamics/animations/UserAnimation"),
+  { ssr: false }
+);
+
+const ManagerAnimation = dynamic(
+  () => import("@/components/dynamics/animations/ManagerAnimation"),
+  { ssr: false }
+);
+
+const AdminAnimation = dynamic(
+  () => import("@/components/dynamics/animations/AdminAnimation"),
+  { ssr: false }
+);
 
 const roleStyles = {
   user: {

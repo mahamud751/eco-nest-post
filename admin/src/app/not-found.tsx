@@ -2,17 +2,22 @@
 
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
-import NotFoundAnimation from "@/components/dynamics/animations/NotFoundAnimation";
+import dynamic from "next/dynamic";
 
-export default function NotFound() {
+const NotFoundAnimation = dynamic(
+  () => import("@/components/dynamics/animations/NotFoundAnimation"),
+  {
+    ssr: false,
+  }
+);
+
+const NotFound: React.FC = () => {
   return (
     <Box className="flex flex-col justify-center items-center pb-10">
       <NotFoundAnimation />
-
       <Typography variant="h4" className="text-center text-gray-700">
         Oops! Page not found.
       </Typography>
-
       <Link href="/">
         <Button
           variant="contained"
@@ -23,4 +28,6 @@ export default function NotFound() {
       </Link>
     </Box>
   );
-}
+};
+
+export default NotFound;
