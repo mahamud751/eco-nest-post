@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import {
   Box,
@@ -38,11 +38,9 @@ import UseFetch from "@/services/hooks/UseRequest";
 import { useAuth } from "@/services/hooks/auth";
 import Link from "next/link";
 import ProtectedRoutes from "@/app/ProtectedRoutes";
-import { io } from "socket.io-client";
 
 const drawerWidth = 240;
 
-const socket = io("https://api.korbojoy.shopss");
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -142,10 +140,9 @@ export default function AppMenu({
   const [open, setOpen] = React.useState(!isSmallScreen);
   const [openLanguageModal, setOpenLanguageModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
-
+  const { openSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
   const [openNotificationModal, setOpenNotificationModal] = useState(false);
-  const [totalNotification, setTotalNotification] = useState<number>(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElLanguage, setAnchorElLanguage] = useState<null | HTMLElement>(
     null
@@ -155,8 +152,6 @@ export default function AppMenu({
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.cartItems
   );
-  console.log(totalNotification);
-
   const [anchorElNotification, setAnchorElNotification] =
     useState<null | HTMLElement>(null);
   const handleDrawerOpen = () => {
@@ -194,31 +189,9 @@ export default function AppMenu({
       );
     }
   };
-  const { total } = UseFetch<Notification>(
+  const { total: totalNotification } = UseFetch<Notification>(
     `notifications?email=${user?.email}&page=${page}&perPage=${rowsPerPage}`
   );
-
-  const { openSnackbar } = useSnackbar();
-
-  // Update state with the fetched total notification count
-  useEffect(() => {
-    if (total !== null && total !== undefined) {
-      setTotalNotification(total); // Set the fetched notification count
-    } else {
-      setTotalNotification(0); // Default to 0 if total is null/undefined
-    }
-  }, [total]);
-
-  // Socket.IO for real-time updates
-  useEffect(() => {
-    socket.on("notification", (data: { totalNotifications: number }) => {
-      setTotalNotification(data.totalNotifications); // Update with real-time data
-    });
-
-    return () => {
-      socket.off("notification"); // Cleanup the socket listener
-    };
-  }, [totalNotification]);
 
   return (
     <Box className="flex" sx={{ height: "100vh", margin: 0 }}>
