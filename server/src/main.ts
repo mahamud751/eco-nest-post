@@ -8,8 +8,6 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import * as express from 'express';
 import { AllExceptionsFilter } from './filter-all-exceptions.filter';
-import { Server } from 'socket.io';
-import { SocketService } from './socket.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -51,31 +49,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  const server = app.getHttpServer();
-
-  const io = new Server(server, {
-    cors: {
-      origin: [
-        'http://localhost:3004',
-        'https://korbojoy.shop',
-        'https://admin.korbojoy.shop',
-        'http://localhost:3001',
-      ],
-      methods: ['GET', 'POST'],
-      credentials: true,
-    },
-  });
-
-  const socketService = app.get(SocketService);
-  socketService.setServer(io);
-
-  io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
-    socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
-    });
-  });
 
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
