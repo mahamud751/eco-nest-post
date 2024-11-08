@@ -236,7 +236,7 @@ const UnifiedMenu: React.FC<UnifiedMenuProps> = ({ isDrawer = false }) => {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        <Box sx={{ width: 340 }}>{renderMenuItems()}</Box>
+        <Box sx={{ width: 240 }}>{renderMenuItems()}</Box>
       </SwipeableDrawer>
     </>
   ) : (
