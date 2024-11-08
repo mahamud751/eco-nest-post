@@ -15,6 +15,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
+
+  // Global error handling and parsers
   app.useGlobalFilters(new AllExceptionsFilter());
   app.use(cors());
   app.use(cookieParser());
@@ -22,7 +24,10 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
   app.use('/uploads', express.static('public/uploads'));
 
+  // Set Global Prefix for routes
   app.setGlobalPrefix('v1');
+
+  // Validation settings
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -42,19 +47,21 @@ async function bootstrap() {
     }),
   );
 
-  const config = new DocumentBuilder()
+  // Swagger Documentation
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('The API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
+  // Start the server
   const server = app.getHttpServer();
 
-  // Socket.IO Initialization with CORS
+  // Initialize Socket.IO after HTTP server starts
   const io = new Server(server, {
     cors: {
       origin: 'http://localhost:3004',
@@ -63,16 +70,20 @@ async function bootstrap() {
     },
   });
 
+  // Get the SocketService and attach the Socket.IO server
   const socketService = app.get(SocketService);
   socketService.setServer(io);
 
+  // Handle Socket.IO events
   io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
+
     socket.on('disconnect', () => {
       console.log('Client disconnected:', socket.id);
     });
   });
 
+  // Listen on configured port
   await app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
