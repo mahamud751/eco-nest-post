@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<LoginFormInputs>();
-  const router = useRouter();
+
   const [loginError, setLoginError] = useState("");
   const { loginUser } = useAuth();
 
@@ -38,7 +38,6 @@ const Login: React.FC = () => {
     try {
       const { email, password } = data;
       await loginUser(email, password);
-      router.push("/"); // Navigate to the homepage on successful login
     } catch (error) {
       setLoginError("Failed to login. Please check your credentials.");
     }

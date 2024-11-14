@@ -8,6 +8,7 @@ import React, {
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 interface Permission {
   id: string;
@@ -50,7 +51,7 @@ interface UserProviderProps {
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const MySwal = withReactContent(Swal);
-
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
@@ -105,6 +106,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
           })
         );
         localStorage.setItem("token", data.token);
+        router.push("/");
       } else {
         throw new Error("Invalid email or password");
       }
