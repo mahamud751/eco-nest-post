@@ -9,8 +9,9 @@ import React, {
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import Cookies from "js-cookie"; // Use js-cookie for better cookie management
+import Cookies from "js-cookie";
 import { User } from "../types/types";
+import { useRouter } from "next/navigation";
 
 interface ApiError {
   message: string;
@@ -40,7 +41,7 @@ interface UserProviderProps {
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const MySwal = withReactContent(Swal);
-
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(() => {
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
@@ -77,8 +78,9 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data.user);
         setToken(data.token);
-        Cookies.set("authToken", data.token, { expires: 1, path: "/" }); // Set token in cookie
+        Cookies.set("authToken", data.token, { expires: 1, path: "/" });
         setLoading(false);
+        router.push("/");
       } else {
         throw new Error("Invalid email or password");
       }
@@ -119,6 +121,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         setToken(data.token);
         Cookies.set("authToken", data.token, { expires: 1, path: "/" });
         setLoading(false);
+        router.push("/");
       } else {
         throw new Error("Registration failed");
       }
@@ -145,7 +148,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      Cookies.remove("authToken"); // Clear token from cookies
+      Cookies.remove("authToken");
     }
   };
 

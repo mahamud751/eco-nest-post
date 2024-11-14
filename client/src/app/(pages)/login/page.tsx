@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import TextField from "@mui/material/TextField";
@@ -29,7 +28,6 @@ const Auth: React.FC = () => {
     handleSubmit,
   } = useForm<FormInputs>();
 
-  const router = useRouter();
   const [authError, setAuthError] = useState("");
   const { loginUser, registerUser } = useAuth();
 
@@ -68,10 +66,8 @@ const Auth: React.FC = () => {
     try {
       if (isSignup) {
         await registerUser(name!, email, phone!, password);
-        router.push("/");
       } else {
         await loginUser(email, password);
-        router.push("/");
       }
     } catch (error) {
       console.error(error);
@@ -92,7 +88,6 @@ const Auth: React.FC = () => {
         </div>
       </div>
 
-      {/* Right side with the form */}
       <div className="flex justify-center items-center bg-gray-100">
         <div className="bg-white shadow-lg rounded-lg p-12 w-full max-w-lg">
           <div className="flex justify-center mb-8">
