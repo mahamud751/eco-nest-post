@@ -128,6 +128,57 @@ export class UsersService {
     return { token, user: userData };
   }
 
+  async loginAdmin(
+    loginUserDto: LoginUserDto,
+  ): Promise<{ token: string; user: Partial<any> }> {
+    const { email, password } = loginUserDto;
+
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        branch: true,
+        permissions: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.status === 'blocked' || user.status === 'deactive') {
+      throw new UnauthorizedException(
+        'User is blocked or deactivated and cannot log in',
+      );
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      role: user.role,
+      branch: user.branch,
+      permissions: user.permissions.map((permission) => ({
+        id: permission.id,
+        name: permission.name,
+      })),
+    };
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      this.configService.get('JWT_SECRET'),
+      { expiresIn: '1h' },
+    );
+
+    return { token, user: userData };
+  }
+
   async updatePassword(updatePasswordDto: any): Promise<{ message: string }> {
     const {
       userId,
