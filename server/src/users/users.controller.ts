@@ -26,7 +26,6 @@ import RolesGuard from '../auth/roles.guard';
 import { Product, UserRole } from '@prisma/client';
 import { AdminRoleGuard } from 'src/auth/AdminRoleGuard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { AdminLoginRoleGuard } from 'src/auth/AdminLoginRoleGuard';
 
 @ApiTags('users')
 @Controller('users')
@@ -55,7 +54,6 @@ export class UsersController {
   }
 
   @Post('login/admin')
-  @UseGuards(AdminLoginRoleGuard)
   @ApiOperation({ summary: 'Login a admin' })
   @ApiResponse({ status: 200, description: 'admin logged in successfully.' })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
