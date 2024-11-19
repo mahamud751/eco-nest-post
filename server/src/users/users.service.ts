@@ -151,13 +151,13 @@ export class UsersService {
       );
     }
     if (
-      user?.role === 'admin' ||
-      user?.role === 'superAdmin' ||
-      user?.role === 'manager' ||
-      user?.role === 'vendor' ||
-      user?.role === 'rider' ||
-      user?.role === 'schoolManager' ||
-      user?.role === 'b2bManager'
+      user.role === 'admin' ||
+      user.role === 'superAdmin' ||
+      user.role === 'manager' ||
+      user.role === 'vendor' ||
+      user.role === 'rider' ||
+      user.role === 'schoolManager' ||
+      user.role === 'b2bManager'
     ) {
       throw new UnauthorizedException('User has no access');
     }
