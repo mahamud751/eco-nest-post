@@ -85,12 +85,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASEURL}/v1/users/login/admin`,
-        { email, password },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
+        { email, password }
       );
 
       if (response.status === 201) {

@@ -55,7 +55,7 @@ export class UsersController {
   }
 
   @Post('login/admin')
-  @UseGuards(JwtAuthGuard, AdminLoginRoleGuard)
+  @UseGuards(AdminLoginRoleGuard)
   @ApiOperation({ summary: 'Login a admin' })
   @ApiResponse({ status: 200, description: 'admin logged in successfully.' })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
