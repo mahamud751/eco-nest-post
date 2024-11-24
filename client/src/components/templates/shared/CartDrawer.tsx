@@ -51,8 +51,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                   )}
 
                   <div className="flex-1 mx-3">
-                    <p className="font-medium text-gray-800">
-                      {item.product.name}
+                    <p className="text-gray-800 text-[14px]">
+                      {item.product.name.slice(0, 40)}
                     </p>
                     <div className="text-sm text-gray-800">
                       <span>{item.quantity}</span> x{" "}
